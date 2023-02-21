@@ -22,4 +22,3 @@ private:
 	Matrix S,R,T;
 	Matrix world;
 };
-

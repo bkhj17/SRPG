@@ -18,6 +18,9 @@ public:
     void RenderText(wstring text, Float2 pos, Float2 size = Float2());
     void RenderText(string text, Float2 pos, Float2 size = Float2());
 
+    void RenderTextLeft(wstring text, Float2 pos, Float2 size = Float2());
+    void RenderTextLeft(string text, Float2 pos, Float2 size = Float2());
+
     ID2D1DeviceContext* GetDC() { return context; }
 
     wstring ChangeWString(string value);

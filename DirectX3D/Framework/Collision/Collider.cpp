@@ -2,8 +2,8 @@
 
 Collider::Collider()
 {
-    vertexShader = Shader::AddVS(L"VertexPos.hlsl");
-    pixelShader = Shader::AddPS(L"PixelPos.hlsl");
+    vertexShader = Shader::AddVS(L"Pos.hlsl");
+    pixelShader = Shader::AddPS(L"Pos.hlsl");
 
     worldBuffer = new MatrixBuffer();
     colorBuffer = new ColorBuffer();
@@ -33,7 +33,7 @@ void Collider::Render()
 
     DC->Draw(vertices.size(), 0);
 }
-
+/*
 bool Collider::IsCollision(Collider* collider)
 {
     if (!Active()) return false;
@@ -49,3 +49,4 @@ bool Collider::IsCollision(Collider* collider)
 
     return false;
 }
+*/

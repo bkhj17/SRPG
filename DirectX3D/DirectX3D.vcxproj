@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)Libraries\ImGui;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Libraries\ImGui;$(ProjectDir)Libraries\DirectXTex;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)Libraries\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -138,6 +138,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Framework\Collision\Collider.h" />
+    <ClInclude Include="Framework\Collision\LineCollider.h" />
+    <ClInclude Include="Homework\230221\Grid230221.h" />
+    <ClInclude Include="Homework\230221\Cube230221.h" />
+    <ClInclude Include="Framework\Environment\Camera.h" />
+    <ClInclude Include="Framework\Render\Texture.h" />
+    <ClInclude Include="Framework\Utilities\Font.h" />
+    <ClInclude Include="Objects\Basic\Cube.h" />
+    <ClInclude Include="Framework\Math\GameMath.h" />
+    <ClInclude Include="Framework\Math\Transform.h" />
+    <ClInclude Include="Framework\Math\Vector2.h" />
+    <ClInclude Include="Framework\Utilities\BinaryReader.h" />
+    <ClInclude Include="Framework\Utilities\BinaryWriter.h" />
+    <ClInclude Include="Framework\Utilities\Observer.h" />
+    <ClInclude Include="Framework\Utilities\tinyxml2.h" />
+    <ClInclude Include="Framework\Utilities\Utility.h" />
+    <ClInclude Include="Objects\Basic\GameObject.h" />
+    <ClInclude Include="Homework\230221\Scene230221.h" />
+    <ClInclude Include="Homework\230221\Planet230221.h" />
+    <ClInclude Include="Scenes\CubeScene.h" />
     <ClInclude Include="Homework\Cube230220.h" />
     <ClInclude Include="DirectX3D.h" />
     <ClInclude Include="framework.h" />
@@ -160,8 +180,28 @@
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Scenes\TutorialScene.h" />
+    <ClInclude Include="Framework\Math\Vector3.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Framework\Collision\Collider.cpp" />
+    <ClCompile Include="Framework\Collision\LineCollider.cpp" />
+    <ClCompile Include="Homework\230221\Grid230221.cpp" />
+    <ClCompile Include="Homework\230221\Cube230221.cpp" />
+    <ClCompile Include="Framework\Environment\Camera.cpp" />
+    <ClCompile Include="Framework\Render\Texture.cpp" />
+    <ClCompile Include="Framework\Utilities\Font.cpp" />
+    <ClCompile Include="Objects\Basic\Cube.cpp" />
+    <ClCompile Include="Framework\Math\GameMath.cpp" />
+    <ClCompile Include="Framework\Math\Transform.cpp" />
+    <ClCompile Include="Framework\Utilities\BinaryReader.cpp" />
+    <ClCompile Include="Framework\Utilities\BinaryWriter.cpp" />
+    <ClCompile Include="Framework\Utilities\Observer.cpp" />
+    <ClCompile Include="Framework\Utilities\tinyxml2.cpp" />
+    <ClCompile Include="Framework\Utilities\Utility.cpp" />
+    <ClCompile Include="Objects\Basic\GameObject.cpp" />
+    <ClCompile Include="Homework\230221\Scene230221.cpp" />
+    <ClCompile Include="Homework\230221\Planet230221.cpp" />
+    <ClCompile Include="Scenes\CubeScene.cpp" />
     <ClCompile Include="Homework\Cube230220.cpp" />
     <ClCompile Include="DirectX3D.cpp" />
     <ClCompile Include="framework.cpp">
@@ -197,6 +237,18 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shaders\UV230221.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\Pos.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

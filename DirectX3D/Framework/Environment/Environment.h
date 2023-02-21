@@ -9,13 +9,15 @@ private:
     ~Environment();
 
 public:
+    void RenderUI();
+
     void SetAlphaBlend();
     void SetAdditiveBlend();
 
     void SetViewport(UINT width = WIN_WIDTH, UINT height = WIN_HEIGHT);
     void SetProjection();
 
-    //Camera* GetMainCamera() { return mainCamera; }
+    Camera* GetMainCamera() { return mainCamera; }
 
 private:
     void CreateProjection();
@@ -26,14 +28,13 @@ private:
 private:
     MatrixBuffer* projectionBuffer;
 
-    MatrixBuffer* viewBuffer;
 
     ID3D11SamplerState* samplerState;
     ID3D11BlendState* alphaBlendState;
     ID3D11BlendState* additiveBlendState;
     ID3D11RasterizerState* rasterizerState;
 
-    //Camera* mainCamera;
+    Camera* mainCamera;
 
     D3D11_VIEWPORT viewport;
 };

@@ -130,6 +130,33 @@ void Font::RenderText(string text, Float2 pos, Float2 size)
 		curFormat, &rectF, curBrush);
 }
 
+void Font::RenderTextLeft(wstring text, Float2 pos, Float2 size)
+{
+	if (size.x == 0.0f && size.y == 0.0f)
+	{
+		size.x = text.size() * curFormat->GetFontSize();
+		size.y = curFormat->GetFontSize();
+	}
+
+	Float2 halfSize = { size.x * 0.5f, size.y * 0.5f };
+
+	pos.y = WIN_HEIGHT - pos.y;
+
+	D2D1_RECT_F rectF;
+	rectF.left = pos.x;
+	rectF.right = pos.x + size.x;
+	rectF.top = pos.y - halfSize.y;
+	rectF.bottom = pos.y + halfSize.y;
+
+	context->DrawTextW(text.c_str(), text.size(),
+		curFormat, &rectF, curBrush);
+}
+
+void Font::RenderTextLeft(string text, Float2 pos, Float2 size)
+{
+	RenderTextLeft(ChangeWString(text), pos, size);
+}
+
 wstring Font::ChangeWString(string value)
 {
 	int nLen = MultiByteToWideChar(CP_ACP, 0, &value[0], value.size(), nullptr, 0);

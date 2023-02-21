@@ -4,16 +4,21 @@ Environment::Environment()
 {
     CreateProjection();
     CreateSamplerState();
-    CreateBlendState();
-    CreateRasterizerState();
+    //CreateBlendState();
+    //CreateRasterizerState();
 
-    //mainCamera = new Camera();
+    mainCamera = new Camera();
 }
 
 Environment::~Environment()
 {
     delete projectionBuffer;
-    //delete mainCamera;
+    delete mainCamera;
+}
+
+void Environment::RenderUI()
+{
+    mainCamera->RenderUI();
 }
 
 void Environment::SetAlphaBlend()
@@ -42,35 +47,25 @@ void Environment::SetViewport(UINT width, UINT height)
 
 void Environment::SetProjection()
 {
-    viewBuffer->SetVS(1);
     projectionBuffer->SetVS(2);
 }
 
 void Environment::CreateProjection()
 {
     /*
-    Matrix orthographic = XMMatrixOrthographicOffCenterLH(
-        0.0f, WIN_WIDTH, 0.0f, WIN_HEIGHT, -1.0f, 1.0f);
+    Matrix orthographic = XMMatrixOrthographicOffCenterLH(0.0f, WIN_WIDTH, 0.0f, WIN_HEIGHT, -1.0f, 1.0f);
     */
     Matrix perspective = XMMatrixPerspectiveFovLH(XM_PIDIV4, (float)WIN_WIDTH / WIN_HEIGHT, 0.1f, 1000.0f);
 
     projectionBuffer = new MatrixBuffer();
     //projectionBuffer->Set(orthographic);    
     projectionBuffer->Set(perspective);    
-
-    viewBuffer = new MatrixBuffer;
-    Vector4 eye = XMVectorSet(10, 10,-10.0f, 0);
-    Vector4 focus = XMVectorSet(0, 0, 0, 0);
-    Vector4 up = XMVectorSet(0, 1.0f, 0, 0);
-
-    Matrix view = XMMatrixLookAtLH(eye, focus, up);
-    viewBuffer->Set(view);
 }
 
 void Environment::CreateSamplerState()
 {
     D3D11_SAMPLER_DESC samplerDesc = {};
-    samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+    samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
     samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
     samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
     samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;;        

@@ -24,7 +24,7 @@ private:
 	float timeScale = 0.0f;
 	float elapsedTime = 0.0f;
 	float oneSecCount = 0.0f;
-	float deltaScale = 1.0f;	
+	float deltaScale = 1.0f;
 
 	__int64 curTime = 0;
 	__int64 lastTime = 0;

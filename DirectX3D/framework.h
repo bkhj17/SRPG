@@ -11,6 +11,15 @@
 
 #define DEVICE Device::Get()->GetDevice()
 #define DC Device::Get()->GetDeviceContext()
+
+#define DELTA Timer::Get()->GetElapsedTime()
+
+#define KEY_DOWN(k) Keyboard::Get()->Down(k)
+#define KEY_UP(k) Keyboard::Get()->Up(k)
+#define KEY_PRESS(k) Keyboard::Get()->Press(k)
+
+#define CAM Environment::Get()->GetMainCamera()
+
 // Windows 헤더 파일
 #include <windows.h>
 // C 런타임 헤더 파일입니다.
@@ -34,6 +43,7 @@
 #include <thread>
 #include <mutex>
 
+//DirectX
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include <d3dcompiler.h>
@@ -42,6 +52,9 @@
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "dxguid.lib")
 
+//DirectXTex
+#include <DirectXTex.h>
+#pragma comment(lib, "DirectXTex.lib")
 
 //ImGui
 #include <ImGui.h>
@@ -54,6 +67,13 @@
 
 #pragma comment(lib, "ImGui.lib")
 
+//DirectWrite
+#include <d2d1_2.h>
+#include <dwrite.h>
+
+#pragma comment(lib, "d2d1.lib")
+#pragma comment(lib, "dwrite.lib")
+
 using namespace std;
 using namespace DirectX;
 
@@ -63,7 +83,19 @@ typedef XMFLOAT4 Float4;
 typedef XMVECTOR Vector4;
 typedef XMMATRIX Matrix;
 
+typedef function<void()> Event;
+typedef function<void(void*)> ParamEvent;
+typedef function<void(int)> IntParamEvent;
+
 #include "Framework/Utilities/Singleton.h"
+#include "Framework/Utilities/BinaryReader.h"
+#include "Framework/Utilities/BinaryWriter.h"
+#include "Framework/Utilities/Keyboard.h"
+#include "Framework/Utilities/Timer.h"
+#include "Framework/Utilities/tinyxml2.h"
+#include "Framework/Utilities/Font.h"
+#include "Framework/Utilities/Observer.h"
+#include "Framework/Utilities/Utility.h"
 
 #include "Framework/System/Device.h"
 
@@ -73,18 +105,31 @@ typedef XMMATRIX Matrix;
 #include "Framework/Buffer/VertexLayouts.h"
 #include "Framework/Buffer/GlobalBuffer.h"
 
+
 #include "Framework/Shader/Shader.h"
 #include "Framework/Shader/VertexShader.h"
 #include "Framework/Shader/PixelShader.h"
 
+#include "Framework/Math/Vector2.h"
+#include "Framework/Math/Vector3.h"
+#include "Framework/Math/Transform.h"
+#include "Framework/Math/GameMath.h"
+
+using namespace GameMath;
+
+#include "Framework/Render/Texture.h"
+
+#include "Framework/Collision/Collider.h"
+#include "Framework/Collision/LineCollider.h"
+
+#include "Framework/Environment/Camera.h"
 #include "Framework/Environment/Environment.h"
 
-#include "Framework/Utilities/Keyboard.h"
-#include "Framework/Utilities/Timer.h"
+#include "Objects/Basic/GameObject.h"
+#include "Objects/Basic/Cube.h"
 
 #include "Scenes/Scene.h"
 #include "Manager/SceneManager.h"
 #include "Manager/GameManager.h"
-
 
 extern HWND hWnd;

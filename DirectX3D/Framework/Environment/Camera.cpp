@@ -6,11 +6,15 @@ Camera::Camera()
 
     viewBuffer = new MatrixBuffer();
     viewBuffer->SetVS(1);
+
+    Load();
 }
 
 Camera::~Camera()
 {
     delete viewBuffer;
+
+    Save();
 }
 
 void Camera::Update()
@@ -20,6 +24,19 @@ void Camera::Update()
     else
         FreeMode();
 
+    if (Rot().x > 360.0f) {
+        Rot().x -= 360.0f;
+    }
+    if (Rot().x < -360.0f) {
+        Rot().x += 360.0f;
+    }
+
+    if (Rot().y > 360.0f) {
+        Rot().y -= 360.0f;
+    }
+    if (Rot().y < -360.0f) {
+        Rot().y += 360.0f;
+    }
     SetView();
 }
 
@@ -33,69 +50,63 @@ void Camera::SetView()
     viewBuffer->SetVS(1);
 }
 
-Vector2 Camera::ScreenToWorld(Vector2 pos)
+Vector3 Camera::ScreenToWorld(Vector3 pos)
 {
-    return pos * world;
+    return XMVector3TransformCoord(pos, world);
 }
 
-Vector2 Camera::WorldToScreen(Vector2 pos)
+Vector3 Camera::WorldToScreen(Vector3 pos)
 {
-    return pos * view;
+    return XMVector3TransformCoord(pos, view);
 }
-
-bool Camera::ContainFrustum(Vector2 pos, Vector2 size)
+void Camera::RenderUI()
 {
-    float left = pos.x - size.x * 0.5f;
-    float right = pos.x + size.x * 0.5f;
-    float top = pos.y + size.y * 0.5f;
-    float bottom = pos.y - size.y * 0.5f;
+    __super::RenderUI();
+    if (ImGui::TreeNode("CameraOption")) {
+        ImGui::DragFloat("MoveSpeed", &moveSpeed);
+        ImGui::DragFloat("RotSpeed", &rotSpeed);
 
-    if (Pos().x < right && Pos().x + deviceSize.x > left)
-    {
-        if (Pos().y < top && Pos().y + deviceSize.y > bottom)
-            return true;
+        __super::RenderUI();
+        ImGui::TreePop();
     }
-
-    return false;
 }
-
 void Camera::FreeMode()
 {
     if (KEY_PRESS(VK_RBUTTON))
     {
-        if (KEY_PRESS('W'))
-            Pos().y += speed * DELTA;
-        if (KEY_PRESS('S'))
-            Pos().y -= speed * DELTA;
-        if (KEY_PRESS('A'))
-            Pos().x -= speed * DELTA;
-        if (KEY_PRESS('D'))
-            Pos().x += speed * DELTA;
+        if (KEY_PRESS('W')) {
+            Pos() = Pos() + Forward() * moveSpeed * DELTA;
+            //Pos().z += moveSpeed * DELTA;
+        }
+        if (KEY_PRESS('S')) {
+            Pos() = Pos() - Forward() * moveSpeed * DELTA;
+            //Pos().z -= moveSpeed * DELTA;
+        }
+        if (KEY_PRESS('A')) {
+            Pos() = Pos() - Right() * moveSpeed *DELTA;
+            //Pos().x -= moveSpeed * DELTA;
+        }
+        if (KEY_PRESS('D')) {
+            Pos() = Pos() + Right() * moveSpeed * DELTA;
+            //Pos().x += moveSpeed * DELTA;
+        }
+        if (KEY_PRESS('Q')) {
+            Pos() = Pos() + Up() * moveSpeed * DELTA;
+            //Pos().y += moveSpeed * DELTA;
+        }
+        if (KEY_PRESS('E')) {
+            Pos() = Pos() - Up() * moveSpeed * DELTA;
+            //Pos().y -= moveSpeed * DELTA;
+        }
+        ImVec2 delta = ImGui::GetIO().MouseDelta;
+        Rot().x += delta.y * rotSpeed * DELTA;
+        Rot().y += delta.x * rotSpeed * DELTA;
+
     }
 
-    FixPosition(localPosition);
+
 }
 
 void Camera::FollowMode()
 {
-    Vector2 targetPos = target->GlobalPos() - targetOffset;
-
-    FixPosition(targetPos);
-
-    localPosition = Lerp(localPosition, targetPos, speed * DELTA);
-}
-
-void Camera::FixPosition(Vector2& position)
-{
-    if (position.x < leftBottom.x)
-        position.x = leftBottom.x;
-
-    if (position.x > rightTop.x - deviceSize.x)
-        position.x = rightTop.x - deviceSize.x;
-
-    if (position.y < leftBottom.y)
-        position.y = leftBottom.y;
-
-    if (position.y > rightTop.y - deviceSize.y)
-        position.y = rightTop.y - deviceSize.y;
 }

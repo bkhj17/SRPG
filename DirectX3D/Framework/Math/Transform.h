@@ -4,24 +4,26 @@ class Transform
 {
 public:
     Transform();
-    ~Transform() = default;
+    virtual ~Transform() = default;
 
     void UpdateWorld();
     void RenderUI();
 
-    Vector2 Right() { return right.GetNormalized(); }
-    Vector2 Left() { return right.GetNormalized() * -1.0f; }
-    Vector2 Up() { return up.GetNormalized(); }
-    Vector2 Down() { return up.GetNormalized() * -1.0f; }
+    Vector3 Right() { return right.GetNormalized(); }
+    Vector3 Left() { return right.GetNormalized() * -1.0f; }
+    Vector3 Up() { return up.GetNormalized(); }
+    Vector3 Down() { return up.GetNormalized() * -1.0f; }
+    Vector3 Forward() { return forward.GetNormalized(); }
+    Vector3 Back() { return forward.GetNormalized() * -1.0f; }
 
-    Vector2 GlobalPos() { return globalPosition; }
-    Vector2 GlobalScale() { return globalScale; }
+    Vector3 GlobalPos() { return globalPosition; }
+    Vector3 GlobalScale() { return globalScale; }
 
     Transform* GetParent();
     Matrix GetWorld() { return world; }
 
     void SetParent(Transform* transform) { parent = transform; }
-    void SetPivot(Vector2 pivot) { this->pivot = pivot; }
+    void SetPivot(Vector3 pivot) { this->pivot = pivot; }
 
     bool Active();
     bool ActiveSelf() { return isActive; }
@@ -30,9 +32,9 @@ public:
 
     void SetTag(string tag) { this->tag = tag; }
 
-    Vector2& Pos() { return localPosition; }
-    Float3& Rot() { return localRotation; }
-    Vector2& Scale() { return localScale; }
+    Vector3& Pos() { return localPosition; }
+    Vector3& Rot() { return localRotation; }
+    Vector3& Scale() { return localScale; }
 
     void Save();
     void Load();
@@ -40,9 +42,9 @@ public:
 protected:
     string tag;
 
-    Vector2 localPosition;
-    Float3 localRotation = { 0, 0, 0 };
-    Vector2 localScale = { 1, 1 };
+    Vector3 localPosition;
+    Vector3 localRotation;
+    Vector3 localScale = { 1, 1, 1 };
 
     bool isActive = true;    
 
@@ -50,13 +52,14 @@ protected:
 
 private:
     Transform* parent = nullptr;
-
+    /*
     Matrix S, R, T;
     Matrix P, IP;
-    Vector2 pivot;
-
-    Vector2 right, up;
-    Vector2 globalPosition, globalScale;
+    */
+    Vector3 pivot;
+    
+    Vector3 right, up, forward;
+    Vector3 globalPosition, globalScale;
 
     XMFLOAT4X4 matWorld;
     

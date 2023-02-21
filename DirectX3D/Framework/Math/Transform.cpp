@@ -7,29 +7,26 @@ Transform::Transform()
 
 void Transform::UpdateWorld()
 {
-    S = XMMatrixScaling(localScale.x, localScale.y, 1.0f);
-    R = XMMatrixRotationRollPitchYaw(localRotation.x,
-        localRotation.y, localRotation.z);
-    T = XMMatrixTranslation(localPosition.x, localPosition.y, 0.0f);
-
-    P = XMMatrixTranslation(pivot.x, pivot.y, 0.0f);
-    IP = XMMatrixInverse(nullptr, P);
-
-    world = IP * S * R * T * P;
+    //world = IP * S * R * T * P;
+    world = XMMatrixTransformation(pivot, 
+        XMQuaternionIdentity(), localScale, pivot, 
+        XMQuaternionRotationRollPitchYawFromVector(localRotation), 
+        localPosition);
 
     if (parent)
         world *= parent->world;
 
     XMStoreFloat4x4(&matWorld, world);
-    right = Vector2(matWorld._11, matWorld._12);
-    up = Vector2(matWorld._21, matWorld._22);
+    right = Vector3(matWorld._11, matWorld._12, matWorld._13);
+    up = Vector3(matWorld._21, matWorld._22, matWorld._23);
+    forward = Vector3(matWorld._31, matWorld._32, matWorld._33);
 
     XMVECTOR outS, outR, outT;
     XMMatrixDecompose(&outS, &outR, &outT, world);
 
-    Float2 tempPos, tempScale;
-    XMStoreFloat2(&tempPos, outT);
-    XMStoreFloat2(&tempScale, outS);
+    Float3 tempPos, tempScale;
+    XMStoreFloat3(&tempPos, outT);
+    XMStoreFloat3(&tempScale, outS);
 
     globalPosition = tempPos;
     globalScale = tempScale;
@@ -44,7 +41,7 @@ void Transform::RenderUI()
         ImGui::Checkbox("Active", &isActive);
 
         string temp = tag + "_Pos";
-        ImGui::DragFloat2(temp.c_str(), (float*)&localPosition, 1.0f);
+        ImGui::DragFloat3(temp.c_str(), (float*)&localPosition, 0.1f);
 
         temp = tag + "_Rot";
         Float3 rot;
@@ -59,7 +56,7 @@ void Transform::RenderUI()
         localRotation.z = XMConvertToRadians(rot.z);
 
         temp = tag + "_Scale";
-        ImGui::DragFloat2(temp.c_str(), (float*)&localScale, 0.1f);
+        ImGui::DragFloat3(temp.c_str(), (float*)&localScale, 0.1f);
 
         if (ImGui::Button("Save"))
             Save();
@@ -98,6 +95,7 @@ void Transform::Save()
 
     writer->Float(localPosition.x);
     writer->Float(localPosition.y);
+    writer->Float(localPosition.z);
 
     writer->Float(localRotation.x);
     writer->Float(localRotation.y);
@@ -105,6 +103,7 @@ void Transform::Save()
     
     writer->Float(localScale.x);
     writer->Float(localScale.y);
+    writer->Float(localScale.z);
 
     delete writer;
 }
@@ -117,6 +116,7 @@ void Transform::Load()
 
     localPosition.x = reader->Float();
     localPosition.y = reader->Float();
+    localPosition.z = reader->Float();
 
     localRotation.x = reader->Float();
     localRotation.y = reader->Float();
@@ -124,6 +124,7 @@ void Transform::Load()
 
     localScale.x = reader->Float();
     localScale.y = reader->Float();
+    localScale.z = reader->Float();
 
     delete reader;
 }

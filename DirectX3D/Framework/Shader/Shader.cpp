@@ -9,11 +9,11 @@ Shader::~Shader()
 
 VertexShader* Shader::AddVS(wstring file)
 {    
-    if (shaders.count(file+L"VS") > 0)
-        return (VertexShader*)shaders[file];
+    wstring key = file + L"VS";
+    if (shaders.count(key) > 0)
+        return (VertexShader*)shaders[key];
 
     wstring path = L"Shaders/" + file;
-    wstring key = file + L"VS";
     shaders[key] = new VertexShader(path);
 
     return (VertexShader*)shaders[key];
@@ -21,11 +21,11 @@ VertexShader* Shader::AddVS(wstring file)
 
 PixelShader* Shader::AddPS(wstring file)
 {
-    if (shaders.count(file+L"PS") > 0)
-        return (PixelShader*)shaders[file];
+    wstring key = file + L"PS";
+    if (shaders.count(key) > 0)
+        return (PixelShader*)shaders[key];
 
     wstring path = L"Shaders/" + file;
-    wstring key = file + L"PS";
     shaders[key] = new PixelShader(path);
 
     return (PixelShader*)shaders[key];
