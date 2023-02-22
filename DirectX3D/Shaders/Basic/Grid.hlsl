@@ -1,23 +1,5 @@
-cbuffer WorldBuffer : register(b0)
-{
-    matrix world;
-}
-
-cbuffer ViewBuffer : register(b1)
-{
-    matrix view;
-}
-
-cbuffer ProjectionBuffer : register(b2)
-{
-    matrix projection;
-}
-
-struct VertexInput
-{
-    float4 pos : POSITION;
-    float4 color : COLOR;
-};
+#include "../VertexHeader.hlsli"
+#include "../PixelHeader.hlsli"
 
 struct PixelInput
 {
@@ -25,7 +7,7 @@ struct PixelInput
     float4 color : COLOR;
 };
 
-PixelInput VS(VertexInput input)
+PixelInput VS(VertexColor input)
 {
     PixelInput output;
     output.pos = mul(input.pos, world);
@@ -38,4 +20,4 @@ PixelInput VS(VertexInput input)
 float4 PS(PixelInput input) : SV_TARGET
 {
     return input.color;
-}
+} 

@@ -38,8 +38,10 @@ public:
 		return result;
 	}
 
-	
-
+	void operator+=(const Vector3& v) { value += v.value; }
+	void operator-=(const Vector3& v) {	value -= v.value; }
+	void operator*=(const Vector3& v) { value *= v.value; }
+	void operator/=(const Vector3& v) {	value /= v.value; }
 
 	Vector3 GetNormalized() const { return XMVector3Normalize(value); }
 	void Normalize() { value = XMVector3Normalize(value); }

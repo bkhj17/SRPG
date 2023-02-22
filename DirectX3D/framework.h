@@ -19,7 +19,7 @@
 #define KEY_PRESS(k) Keyboard::Get()->Press(k)
 
 #define CAM Environment::Get()->GetMainCamera()
-
+#define DIALOG ImGuiFileDialog::Instance()
 // Windows 헤더 파일
 #include <windows.h>
 // C 런타임 헤더 파일입니다.
@@ -42,6 +42,7 @@
 #include <sstream>
 #include <thread>
 #include <mutex>
+#include <assert.h>
 
 //DirectX
 #include <d3d11.h>
@@ -97,6 +98,8 @@ typedef function<void(int)> IntParamEvent;
 #include "Framework/Utilities/Observer.h"
 #include "Framework/Utilities/Utility.h"
 
+using namespace Utility;
+
 #include "Framework/System/Device.h"
 
 #include "Framework/Buffer/VertexBuffer.h"
@@ -110,6 +113,10 @@ typedef function<void(int)> IntParamEvent;
 #include "Framework/Shader/VertexShader.h"
 #include "Framework/Shader/PixelShader.h"
 
+#include "Framework/State/RasterizerState.h"
+#include "Framework/State/SamplerState.h"
+
+
 #include "Framework/Math/Vector2.h"
 #include "Framework/Math/Vector3.h"
 #include "Framework/Math/Transform.h"
@@ -118,6 +125,8 @@ typedef function<void(int)> IntParamEvent;
 using namespace GameMath;
 
 #include "Framework/Render/Texture.h"
+#include "Framework/Render/Material.h"
+#include "Framework/Render/Mesh.h"
 
 #include "Framework/Collision/Collider.h"
 #include "Framework/Collision/LineCollider.h"
@@ -127,6 +136,8 @@ using namespace GameMath;
 
 #include "Objects/Basic/GameObject.h"
 #include "Objects/Basic/Cube.h"
+
+#include "Objects/LandScape/Terrain.h"
 
 #include "Scenes/Scene.h"
 #include "Manager/SceneManager.h"

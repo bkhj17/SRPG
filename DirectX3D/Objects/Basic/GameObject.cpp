@@ -2,8 +2,7 @@
 
 GameObject::GameObject(wstring shaderFile)
 {
-    SetShader(shaderFile);
-
+    material = new Material(shaderFile);
     worldBuffer = new MatrixBuffer();
 }
 
@@ -17,12 +16,11 @@ void GameObject::SetRender()
     worldBuffer->Set(world);
     worldBuffer->SetVS(0);    
 
-    vertexShader->Set();
-    pixelShader->Set();    
+    material->Set();
 }
 
-void GameObject::SetShader(wstring shaderFile)
+void GameObject::RenderUI()
 {
-    pixelShader = Shader::AddPS(shaderFile);
-    vertexShader = Shader::AddVS(shaderFile);
+    __super::RenderUI();
+    material->RenderUI();
 }

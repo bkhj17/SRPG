@@ -8,12 +8,6 @@ public:
 	virtual void Update();
 	virtual void Render();
 private:
-	VertexBuffer* vertexBuffer;
-	IndexBuffer* indexBuffer;
-
-	vector<VertexUV> vertices;
-	vector<UINT> indices;
-
-	Texture* texture;
+	Mesh<VertexUV>* mesh;
 };
 

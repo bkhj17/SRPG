@@ -3,17 +3,16 @@
 class GameObject : public Transform
 {
 public:
-    GameObject(wstring shaderFile = L"Tutorial.hlsl");
-    //GameObject(wstring shaderFile = L"UV.hlsl");
+    GameObject(wstring shaderFile = L"Basic/Texture.hlsl");
     virtual ~GameObject();
 
     virtual void Render() {};
     virtual void SetRender();
 
-    void SetShader(wstring shaderFile);
+    virtual void RenderUI();
 
+    Material* GetMaterial() { return material; }
 protected:
-    VertexShader* vertexShader;
-    PixelShader* pixelShader;    
+    Material* material;
     MatrixBuffer* worldBuffer;
 };

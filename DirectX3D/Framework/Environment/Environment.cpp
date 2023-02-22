@@ -3,9 +3,7 @@
 Environment::Environment()
 {
     CreateProjection();
-    CreateSamplerState();
-    //CreateBlendState();
-    //CreateRasterizerState();
+    CreateState();
 
     mainCamera = new Camera();
 }
@@ -16,11 +14,27 @@ Environment::~Environment()
     delete mainCamera;
 }
 
+void Environment::Update()
+{
+    if (KEY_DOWN(VK_F1))
+        isWireMode = !isWireMode;
+
+    mainCamera->Update();
+}
+
 void Environment::RenderUI()
 {
     mainCamera->RenderUI();
 }
 
+void Environment::Set()
+{
+    SetViewport();
+    SetProjection();
+
+    raterizerState[isWireMode ? 1 : 0]->SetState();        
+}
+/*
 void Environment::SetAlphaBlend()
 {
     float blendFactor[4] = {};
@@ -32,7 +46,7 @@ void Environment::SetAdditiveBlend()
     float blendFactor[4] = {};
     DC->OMSetBlendState(additiveBlendState, blendFactor, 0xffffffff);
 }
-
+*/
 void Environment::SetViewport(UINT width, UINT height)
 {
     viewport.Width = width;
@@ -62,23 +76,17 @@ void Environment::CreateProjection()
     projectionBuffer->Set(perspective);    
 }
 
-void Environment::CreateSamplerState()
+void Environment::CreateState()
 {
-    D3D11_SAMPLER_DESC samplerDesc = {};
-    samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-    samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;;        
-    samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;      
-    samplerDesc.MinLOD = 0;
-    samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-    //LOD(Level Of Detail) : 카메라의 거리에 따라서 퀄리티를 다르게 하는 것
+    samplerState = new SamplerState;
+    samplerState->SetState();
 
-    DEVICE->CreateSamplerState(&samplerDesc, &samplerState);
-
-    DC->PSSetSamplers(0, 1, &samplerState);
+    raterizerState[0] = new RasterizerState();
+    raterizerState[1] = new RasterizerState();
+    raterizerState[1]->FillMode(D3D11_FILL_WIREFRAME);
 }
 
+/*
 void Environment::CreateBlendState()
 {
     D3D11_BLEND_DESC blendDesc = {};    
@@ -102,14 +110,4 @@ void Environment::CreateBlendState()
 
     DEVICE->CreateBlendState(&blendDesc, &additiveBlendState);
 }
-
-void Environment::CreateRasterizerState()
-{
-    D3D11_RASTERIZER_DESC rasterizerDesc = {};
-    rasterizerDesc.CullMode = D3D11_CULL_BACK;
-    rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-
-    DEVICE->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
-
-    DC->RSSetState(rasterizerState);
-}
+*/

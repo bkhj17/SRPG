@@ -28,8 +28,8 @@ Cube230220::Cube230220()
 		4, 5, 0, 0, 5, 1
 	};
 
-	vertexBuffer = new VertexBuffer(vertices.data(), sizeof(VertexColor), vertices.size());
-	indexBuffer = new IndexBuffer(indices.data(), indices.size());
+	vertexBuffer = new VertexBuffer(vertices.data(), sizeof(VertexColor), (UINT)vertices.size());
+	indexBuffer = new IndexBuffer(indices.data(), (UINT)indices.size());
 
 	worldBuffer = new MatrixBuffer;
 }

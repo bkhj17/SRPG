@@ -4,52 +4,79 @@
 Cube::Cube(Vector3 size)
 {
 	tag = "Cube";
+	mesh = new Mesh<VertexType>;
 
-	vertices.emplace_back(-size.x, -size.y, -size.z, 1.0f, 0.0f, 0.0f); //0
-	vertices.emplace_back(-size.x, +size.y, -size.z, 1.0f, 1.0f, 0.0f);	//1
-	vertices.emplace_back(+size.x, -size.y, -size.z, 0.0f, 1.0f, 1.0f);	//2
-	vertices.emplace_back(+size.x, +size.y, -size.z, 0.0f, 0.0f, 1.0f);	//3
-	vertices.emplace_back(-size.x, -size.y, +size.z, 1.0f, 0.0f, 0.0f);	//4
-	vertices.emplace_back(-size.x, +size.y, +size.z, 1.0f, 1.0f, 0.0f);	//5
-	vertices.emplace_back(+size.x, -size.y, +size.z, 0.0f, 1.0f, 1.0f);	//6
-	vertices.emplace_back(+size.x, +size.y, +size.z, 0.0f, 0.0f, 1.0f);	//7
-
-	indices = {
-		//Front
-		0, 1, 2, 2, 1, 3,
-		//Up
-		1, 5, 3, 3, 5, 7,
-		//Right
-		2, 3, 6, 6, 3, 7,
-		//Back
-		4, 6, 5, 5, 6, 7,
-		//Down
-		4, 0, 6, 6, 0, 2,
-		//Left
-		4, 5, 0, 0, 5, 1
+	vector<Vector3> points = {
+		{-1, -1, -1},	//0
+		{-1, +1, -1},	//1
+		{+1, -1, -1},	//2
+		{+1, +1, -1},	//3
+		{-1, -1, +1},	//4
+		{-1, +1, +1},	//5
+		{+1, -1, +1},	//6
+		{+1, +1, +1}	//7
 	};
 
-	vertexBuffer = new VertexBuffer(vertices.data(), sizeof(VertexColor), vertices.size());
-	indexBuffer = new IndexBuffer(indices.data(), indices.size());
+	vector<vector<int>> squares = {
+		{0,1,2,3},	//Front
+		{1,5,3,7},	//Up
+		{2,3,6,7},	//Right
+		{6,7,4,5},	//Back
+		{4,0,6,2},	//Bottom
+		{4,5,0,1}	//Left
+	};
+
+	vector<Float2> uvs = {
+		{0.0f, 1.0f},
+		{0.0f, 0.0f},
+		{1.0f, 1.0f},
+		{1.0f, 0.0f}
+	};
+
+	vector<VertexType>& vertices = mesh->GetVertices();
+	vertices.reserve(4 * 6);
+
+	for (auto& square : squares) {
+		for (int i = 0; i < 4; i++) {
+			vertices.emplace_back(
+				size.x * points[square[i]].x, 
+				size.y * points[square[i]].y, 
+				size.z * points[square[i]].z, 
+				uvs[i].x, uvs[i].y);
+		}
+	}
+
+	vector<UINT>& indices = mesh->GetIndices();
+	vertices.reserve(6 * 6);
+	for (int i = 0; i < 6; i++) {
+		indices.push_back(i * 4);
+		indices.push_back(i * 4 + 1);
+		indices.push_back(i * 4 + 2);
+		indices.push_back(i * 4 + 2);
+		indices.push_back(i * 4 + 1);
+		indices.push_back(i * 4 + 3);
+	}
+	mesh->CreateMesh();
 }
 
 Cube::~Cube()
 {
-	delete vertexBuffer;
-	delete indexBuffer;
+	delete mesh;
 }
 
 void Cube::Update()
 {
+	if (!isActive)
+		return;
+
 	UpdateWorld();
 }
 
 void Cube::Render()
 {
+	if (!isActive)
+		return;
+
 	SetRender();
-
-	vertexBuffer->Set();
-	indexBuffer->Set();
-
-	DC->DrawIndexed(indices.size(), 0, 0);
+	mesh->Draw();
 }

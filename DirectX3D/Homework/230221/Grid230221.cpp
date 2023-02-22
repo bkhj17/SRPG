@@ -4,7 +4,7 @@
 Grid230221::Grid230221()
 {
 	int maxGrid = 110;
-	grids.resize(maxGrid * 6);
+	grids.resize(maxGrid * 6);	
 	for (int i = 0; i < maxGrid; i++) {
 		grids[i] = new LineCollider(Vector3(-1000.0f, 0.0f, (i - maxGrid / 2) * 10.0f), Vector3(1000.0f, 0.0f, (i - maxGrid / 2) * 10.0f));
 		grids[i]->GetColor() = { 1.0f, 0.0f, 0.0f, 1.0f };

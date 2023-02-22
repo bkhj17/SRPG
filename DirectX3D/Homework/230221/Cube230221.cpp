@@ -2,11 +2,14 @@
 #include "Cube230221.h"
 
 Cube230221::Cube230221(wstring fileName, Vector3 size)
-	: texture(Texture::Add(fileName))
 {
 	tag = "Cube";
-	SetShader(L"UV230221.hlsl");
+	material->SetShader(L"UV230221.hlsl");
+	material->SetDiffuseMap(fileName);
 
+	mesh = new Mesh<VertexUV>;
+	vector<VertexUV>& vertices = mesh->GetVertices();
+	vertices.reserve(24);
 	//front : 0123
 	vertices.emplace_back(-size.x, -size.y, -size.z, 0.0f, 1.0f);	//0
 	vertices.emplace_back(-size.x, +size.y, -size.z, 0.0f, 0.0f);	//1
@@ -38,6 +41,7 @@ Cube230221::Cube230221(wstring fileName, Vector3 size)
 	vertices.emplace_back(-size.x, -size.y, -size.z, 1.0f, 1.0f);	//0
 	vertices.emplace_back(-size.x, +size.y, -size.z, 1.0f, 0.0f);	//1
 
+	vector<UINT>& indices = mesh->GetIndices();
 	indices.reserve(36);
 	for (int i = 0; i < 6; i++) {
 		indices.push_back(i * 4);
@@ -47,15 +51,12 @@ Cube230221::Cube230221(wstring fileName, Vector3 size)
 		indices.push_back(i * 4 + 1);
 		indices.push_back(i * 4 + 3);
 	}
-	
-	vertexBuffer = new VertexBuffer(vertices.data(), sizeof(VertexUV), vertices.size());
-	indexBuffer = new IndexBuffer(indices.data(), indices.size());
+	mesh->CreateMesh();
 }
 
 Cube230221::~Cube230221()
 {
-	delete vertexBuffer;
-	delete indexBuffer;
+	delete mesh;
 }
 
 void Cube230221::Update()
@@ -66,11 +67,5 @@ void Cube230221::Update()
 void Cube230221::Render()
 {
 	SetRender();
-
-	vertexBuffer->Set();
-	indexBuffer->Set();
-
-	texture->PSSet(0);
-
-	DC->DrawIndexed(indices.size(), 0, 0);
+	mesh->Draw();
 }

@@ -22,15 +22,17 @@ Texture* Texture::Add(wstring file)
     if (textures.count(file) > 0)
         return textures[file];
 
+    wstring path = file;
+
     ScratchImage image;
-    LoadFromWICFile(file.c_str(), WIC_FLAGS_NONE, nullptr, image);
+    assert(SUCCEEDED(LoadFromWICFile(path.c_str(), WIC_FLAGS_NONE, nullptr, image)));
 
     ID3D11ShaderResourceView* srv;
 
     CreateShaderResourceView(DEVICE, image.GetImages(), image.GetImageCount(),
         image.GetMetadata(), &srv);
 
-    textures[file] = new Texture(srv, image, file);
+    textures[file] = new Texture(srv, image, path);
 
     return textures[file];
 }

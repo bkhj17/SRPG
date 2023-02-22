@@ -15,6 +15,5 @@ public:
 
 private:
     Cube* cube;
-    Cube* cube2;
 };
 

@@ -1,7 +1,11 @@
 #include "Framework.h"
 #include "Scenes/TutorialScene.h"
 #include "Scenes/CubeScene.h"
+#include "Scenes/GridScene.h"
+#include "Scenes/TerrainScene.h"
 #include "Homework/230221/Scene230221.h"
+#include "Homework/230222/GridScene230222.h"
+#include "Homework/230222/TerrainScene230222.h"
 
 GameManager::GameManager()
 {
@@ -9,7 +13,11 @@ GameManager::GameManager()
 
     //SceneManager::Get()->Create("Start", new TutorialScene());
     //SceneManager::Get()->Create("Start", new CubeScene());
-    SceneManager::Get()->Create("Start", new Scene230221());
+    //SceneManager::Get()->Create("Grid", new GridScene());
+    SceneManager::Get()->Create("Grid", new GridScene230222());
+    SceneManager::Get()->Create("Start", new TerrainScene230222);
+    //SceneManager::Get()->Create("Start", new Scene230221());
+    SceneManager::Get()->Add("Grid");
     SceneManager::Get()->Add("Start");
 }
 
@@ -23,9 +31,10 @@ void GameManager::Update()
     Keyboard::Get()->Update();
     Timer::Get()->Update();
 
+
     SceneManager::Get()->Update();
 
-    CAM->Update();
+    Environment::Get()->Update();
 }
 
 void GameManager::Render()
@@ -34,8 +43,7 @@ void GameManager::Render()
     
     Device::Get()->Clear();
     
-    Environment::Get()->SetViewport();
-    Environment::Get()->SetProjection();
+    Environment::Get()->Set();
     
     CAM->SetView();
     SceneManager::Get()->Render();

@@ -75,27 +75,27 @@ void Camera::FreeMode()
     if (KEY_PRESS(VK_RBUTTON))
     {
         if (KEY_PRESS('W')) {
-            Pos() = Pos() + Forward() * moveSpeed * DELTA;
+            Pos() += Forward() * moveSpeed * DELTA;
             //Pos().z += moveSpeed * DELTA;
         }
         if (KEY_PRESS('S')) {
-            Pos() = Pos() - Forward() * moveSpeed * DELTA;
+            Pos() += Back() * moveSpeed * DELTA;
             //Pos().z -= moveSpeed * DELTA;
         }
         if (KEY_PRESS('A')) {
-            Pos() = Pos() - Right() * moveSpeed *DELTA;
+            Pos() += Left() * moveSpeed *DELTA;
             //Pos().x -= moveSpeed * DELTA;
         }
         if (KEY_PRESS('D')) {
-            Pos() = Pos() + Right() * moveSpeed * DELTA;
+            Pos() += Right() * moveSpeed * DELTA;
             //Pos().x += moveSpeed * DELTA;
         }
         if (KEY_PRESS('Q')) {
-            Pos() = Pos() + Up() * moveSpeed * DELTA;
+            Pos() += Down() * moveSpeed * DELTA;
             //Pos().y += moveSpeed * DELTA;
         }
         if (KEY_PRESS('E')) {
-            Pos() = Pos() - Up() * moveSpeed * DELTA;
+            Pos() += Up() * moveSpeed * DELTA;
             //Pos().y -= moveSpeed * DELTA;
         }
         ImVec2 delta = ImGui::GetIO().MouseDelta;

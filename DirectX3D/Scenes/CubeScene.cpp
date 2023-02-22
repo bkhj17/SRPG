@@ -4,8 +4,7 @@
 CubeScene::CubeScene()
 {
 	cube = new Cube();
-	cube2 = new Cube();
-	cube2->SetTag("Cube2");
+	cube->GetMaterial()->SetDiffuseMap(L"Textures/Planets/Sun.jpg");
 }
 
 CubeScene::~CubeScene()
@@ -20,7 +19,6 @@ void CubeScene::Update()
 	if (KEY_PRESS(VK_LEFT))
 		cube->Rot().y -= DELTA;
 	cube->Update();
-	cube2->Update();
 }
 
 void CubeScene::PreRender()
@@ -30,7 +28,6 @@ void CubeScene::PreRender()
 void CubeScene::Render()
 {
 	cube->Render();
-	cube2->Render();
 }
 
 void CubeScene::PostRender()
@@ -40,5 +37,5 @@ void CubeScene::PostRender()
 void CubeScene::GUIRender()
 {
 	cube->RenderUI();
-	cube2->RenderUI();
+	cube->GetMaterial()->RenderUI();
 }
