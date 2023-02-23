@@ -49,7 +49,7 @@ Vector2 GameMath::SLerp(const Vector2& start, const Vector2& end, float t)
 
     return start + (end - start) * (t * t);
 }
-
+/*
 float GameMath::Cross(const Vector2& vec1, const Vector2& vec2)
 {
     return vec1.x * vec2.y - vec2.x * vec1.y;
@@ -58,6 +58,16 @@ float GameMath::Cross(const Vector2& vec1, const Vector2& vec2)
 float GameMath::Dot(const Vector2& vec1, const Vector2& vec2)
 {
     return vec1.x * vec2.x + vec1.y * vec2.y;
+}
+*/
+Vector3 GameMath::Cross(Vector3& vec1, Vector3& vec2)
+{
+    return XMVector3Cross(vec1, vec2);
+}
+
+float GameMath::Dot(Vector3& vec1, Vector3& vec2)
+{
+    return XMVectorGetX(XMVector3Dot(vec1, vec2));
 }
 
 float GameMath::Distance(const Vector2& vec1, const Vector2& vec2)

@@ -32,16 +32,32 @@ public:
 	__declspec(property(get = GetZ, put = SetZ)) float z;
 
 	operator Vector4() { return value; }
-	operator Float3() { 
-		Float3 result; 
+	operator Float3()
+	{
+		Float3 result;
 		XMStoreFloat3(&result, value);
+
 		return result;
 	}
 
+	Vector3 operator+(const Vector3& v) const { return value + v.value; }
+	Vector3 operator-(const Vector3& v) const { return value - v.value; }
+	Vector3 operator*(const Vector3& v) const { return value * v.value; }
+	Vector3 operator/(const Vector3& v) const { return value / v.value; }
+
+	Vector3 operator*(const float& s) const { return value * s; }
+	Vector3 operator/(const float& s) const { return value / s; }
+
 	void operator+=(const Vector3& v) { value += v.value; }
-	void operator-=(const Vector3& v) {	value -= v.value; }
+	void operator-=(const Vector3& v) { value -= v.value; }
 	void operator*=(const Vector3& v) { value *= v.value; }
-	void operator/=(const Vector3& v) {	value /= v.value; }
+	void operator/=(const Vector3& v) { value /= v.value; }
+
+	void operator*=(const float& s) { value *= s; }
+	void operator/=(const float& s) { value /= s; }
+
+	bool operator==(const Vector3& v) {	return XMVector3Equal(value, v.value); }
+	bool operator!=(const Vector3& v) {	return !XMVector3Equal(value, v.value); }
 
 	Vector3 GetNormalized() const { return XMVector3Normalize(value); }
 	void Normalize() { value = XMVector3Normalize(value); }

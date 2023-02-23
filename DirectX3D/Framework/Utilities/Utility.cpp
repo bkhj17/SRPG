@@ -35,3 +35,9 @@ vector<string> Utility::SplitString(string origin, const string& tok)
 
     return result;
 }
+
+wstring Utility::GetExtension(wstring file)
+{
+    size_t index = file.find_last_of('.');
+    return file.substr(index + 1, file.length());
+}

@@ -21,6 +21,12 @@ void GameObject::SetRender()
 
 void GameObject::RenderUI()
 {
-    __super::RenderUI();
-    material->RenderUI();
+    if (ImGui::TreeNode(tag.c_str())) {
+
+        __super::RenderUI();
+        material->RenderUI();
+
+        ImGui::TreePop();
+    }
+
 }

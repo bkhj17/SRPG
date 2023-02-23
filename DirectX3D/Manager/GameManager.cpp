@@ -6,6 +6,7 @@
 #include "Homework/230221/Scene230221.h"
 #include "Homework/230222/GridScene230222.h"
 #include "Homework/230222/TerrainScene230222.h"
+#include "Homework/230223/Scene230223.h"
 
 GameManager::GameManager()
 {
@@ -13,12 +14,14 @@ GameManager::GameManager()
 
     //SceneManager::Get()->Create("Start", new TutorialScene());
     //SceneManager::Get()->Create("Start", new CubeScene());
-    //SceneManager::Get()->Create("Grid", new GridScene());
-    SceneManager::Get()->Create("Grid", new GridScene230222());
-    SceneManager::Get()->Create("Start", new TerrainScene230222);
+    SceneManager::Get()->Create("Grid", new GridScene());
+    //SceneManager::Get()->Create("Grid", new GridScene230222());
+    //SceneManager::Get()->Create("Start", new TerrainScene);
+    SceneManager::Get()->Create("Start", new Scene230223);
     //SceneManager::Get()->Create("Start", new Scene230221());
     SceneManager::Get()->Add("Grid");
     SceneManager::Get()->Add("Start");
+
 }
 
 GameManager::~GameManager()

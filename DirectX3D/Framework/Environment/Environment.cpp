@@ -6,12 +6,19 @@ Environment::Environment()
     CreateState();
 
     mainCamera = new Camera();
+    lightBuffer = new LightBuffer;
 }
 
 Environment::~Environment()
 {
     delete projectionBuffer;
     delete mainCamera;
+
+    delete lightBuffer;
+
+    delete samplerState;
+    delete raterizerState[0];
+    delete raterizerState[1];
 }
 
 void Environment::Update()
@@ -24,7 +31,13 @@ void Environment::Update()
 
 void Environment::RenderUI()
 {
-    mainCamera->RenderUI();
+    if (ImGui::TreeNode("Environment")) {
+        mainCamera->RenderUI();
+        ImGui::Text("LightOption");
+        ImGui::SliderFloat3("LightDir", (float*)&lightBuffer->Get().direction, -1, 1);
+        ImGui::SliderFloat("Shininess", (float*)&lightBuffer->Get().shininess, 1, 50);
+        ImGui::TreePop();
+    }
 }
 
 void Environment::Set()
@@ -32,7 +45,9 @@ void Environment::Set()
     SetViewport();
     SetProjection();
 
-    raterizerState[isWireMode ? 1 : 0]->SetState();        
+    raterizerState[(int)isWireMode]->SetState();        
+
+    lightBuffer->SetPS(0);
 }
 /*
 void Environment::SetAlphaBlend()

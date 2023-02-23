@@ -2,21 +2,6 @@
 
 //정점 : 3차원 공간에서의 한 점
 
-struct VertexUV
-{    
-    Float3 pos;
-    Float2 uv;
-
-    VertexUV() : pos(0, 0, 0), uv(0, 0)
-    {
-    }
-
-    VertexUV(float x, float y, float z, float u, float v)
-        : pos(x, y, z), uv(u, v)
-    {     
-    }
-};
-
 struct Vertex
 {
     Float3 pos;
@@ -32,6 +17,21 @@ struct Vertex
     }
 };
 
+struct VertexUV
+{    
+    Float3 pos;
+    Float2 uv;
+
+    VertexUV() : pos(0, 0, 0), uv(0, 0)
+    {
+    }
+
+    VertexUV(float x, float y, float z, float u, float v)
+        : pos(x, y, z), uv(u, v)
+    {     
+    }
+};
+
 struct VertexColor
 {
     Float3 pos;
@@ -44,6 +44,18 @@ struct VertexColor
 
     VertexColor(float x, float y, float z, float r, float g, float b)
         : pos(x, y, z), color(r, g, b, 1)
+    {
+    }
+};
+
+struct VertexUVNormal
+{
+
+    Float3 pos;
+    Float2 uv;
+    Float3 normal;
+
+    VertexUVNormal() : pos(0, 0, 0), uv(0, 0), normal(0, 0, 0)
     {
     }
 };

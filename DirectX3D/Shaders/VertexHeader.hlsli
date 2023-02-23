@@ -7,6 +7,7 @@ cbuffer WorldBuffer : register(b0)
 cbuffer ViewBuffer : register(b1)
 {
     matrix view;
+    matrix invView;
 }
 
 cbuffer ProjectionBuffer : register(b2)
@@ -24,4 +25,11 @@ struct VertexColor
 {
     float4 pos : POSITION;
     float4 color : COLOR;
+};
+
+struct VertexUVNormal
+{
+    float4 pos : POSITION;
+    float2 uv : UV;
+    float3 normal : NORMAL;
 };

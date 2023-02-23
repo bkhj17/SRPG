@@ -20,7 +20,7 @@ private:
     void FollowMode();
 
 private:
-    MatrixBuffer* viewBuffer;
+    ViewBuffer* viewBuffer;
     Matrix view;
 
     float moveSpeed = 100.0f;

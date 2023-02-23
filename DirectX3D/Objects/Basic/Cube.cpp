@@ -47,7 +47,7 @@ Cube::Cube(Vector3 size)
 	}
 
 	vector<UINT>& indices = mesh->GetIndices();
-	vertices.reserve(6 * 6);
+	indices.reserve(6 * 6);
 	for (int i = 0; i < 6; i++) {
 		indices.push_back(i * 4);
 		indices.push_back(i * 4 + 1);

@@ -28,6 +28,8 @@ private:
 
 private:
     MatrixBuffer* projectionBuffer;
+    Camera* mainCamera;
+    LightBuffer* lightBuffer;
 
     SamplerState* samplerState;
     /*
@@ -36,9 +38,9 @@ private:
     */
     RasterizerState* raterizerState[2];
 
-    Camera* mainCamera;
 
     D3D11_VIEWPORT viewport;
 
     bool isWireMode = false;
+
 };

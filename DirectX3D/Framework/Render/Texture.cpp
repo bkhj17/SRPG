@@ -17,6 +17,22 @@ void Texture::PSSet(UINT slot)
     DC->PSSetShaderResources(slot, 1, &srv);
 }
 
+void Texture::ReadPixels(vector<Float4>& pixels)
+{
+    uint8_t* colors = image.GetPixels();
+    UINT size = image.GetPixelsSize();
+
+    pixels.resize(size / 4);
+
+    float scale = 1.0f / 255.0f;
+    for (UINT i = 0; i < pixels.size(); i++) {
+        pixels[i].x = colors[i * 4 + 0] * scale;
+        pixels[i].y = colors[i * 4 + 1] * scale;
+        pixels[i].z = colors[i * 4 + 2] * scale;
+        pixels[i].w = colors[i * 4 + 3] * scale;
+    }
+}
+
 Texture* Texture::Add(wstring file)
 {
     if (textures.count(file) > 0)
@@ -25,7 +41,17 @@ Texture* Texture::Add(wstring file)
     wstring path = file;
 
     ScratchImage image;
-    assert(SUCCEEDED(LoadFromWICFile(path.c_str(), WIC_FLAGS_NONE, nullptr, image)));
+    HRESULT result;
+
+    wstring extension = GetExtension(file);
+    if (extension.compare(L"tga") == 0) {
+        result = LoadFromTGAFile(path.c_str(), nullptr, image);
+    } else if(extension.compare(L"dds") == 0)
+        result = LoadFromDDSFile(path.c_str(), DDS_FLAGS_NONE, nullptr, image);
+    else //기타 등등
+        result = LoadFromWICFile(path.c_str(), WIC_FLAGS_NONE, nullptr, image);
+
+    assert(SUCCEEDED(result));
 
     ID3D11ShaderResourceView* srv;
 

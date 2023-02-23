@@ -2,7 +2,7 @@
 class GridScene230222 : public Scene
 {
 private:
-	const int MAX_VALUE = 300;
+	const int DEFAULT_VALUE = 200;
 public:
 	GridScene230222();
 	~GridScene230222();
@@ -22,6 +22,7 @@ private:
 	Material* material;
 	Mesh<VertexColor>* mesh;
 
+	UINT maxSize;
 	UINT width, height;
 
 	MatrixBuffer* worldBuffer;

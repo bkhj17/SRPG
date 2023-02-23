@@ -4,6 +4,9 @@
 TerrainScene::TerrainScene()
 {
 	terrain = new Terrain;
+	terrain->Pos() = { -128, 0, -128 };
+	terrain->SetPivot({ 128, 0, 128 });
+	terrain->UpdateWorld();
 }
 
 TerrainScene::~TerrainScene()
@@ -13,6 +16,7 @@ TerrainScene::~TerrainScene()
 
 void TerrainScene::Update()
 {
+	//terrain->Rot().y += DELTA;
 }
 
 void TerrainScene::PreRender()

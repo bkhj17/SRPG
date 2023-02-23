@@ -2,7 +2,7 @@
 #include "Terrain230222.h"
 
 Terrain230222::Terrain230222()
-	: width(MAX_VALUE), height(MAX_VALUE)
+	: width(DEFAULT_VALUE), height(DEFAULT_VALUE)
 {
 	material->SetDiffuseMap(L"Textures/Landscape/Dirt.png");
 
@@ -23,15 +23,25 @@ void Terrain230222::Render()
 void Terrain230222::RenderUI()
 {
 	if (ImGui::TreeNode("TerrainOption")) {
-		int postWidth = width;
-		int postHeight = height;
-		ImGui::DragInt("Width", (int*)&width, 1.0f, 1, MAX_VALUE);
-		ImGui::DragInt("Height", (int*)&height, 1.0f, 1, MAX_VALUE);
+		int pastWidth = width;
+		int pastHeight = height;
+		ImGui::DragInt("Width", (int*)&width, 1.0f, 1);
+		ImGui::DragInt("Height", (int*)&height, 1.0f, 1);
 
-		if (width != postWidth || height != postHeight) {
+		material->RenderUI();
+
+		if (width != pastWidth || height != pastHeight) {
 			//메시 업데이트
 			UpdateMesh();
 		}
+
+		if (ImGui::Button("Save"))
+			Save();
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Load"))
+			Load();
 
 		ImGui::TreePop();
 	}
@@ -40,22 +50,53 @@ void Terrain230222::RenderUI()
 void Terrain230222::CreateMesh()
 {
 	mesh = new Mesh<VertexType>;
-
 	SetupVertices(mesh->GetVertices(), mesh->GetIndices());
-
 	mesh->CreateMesh();
 }
 
 void Terrain230222::UpdateMesh()
 {
-	SetupVertices(mesh->GetVertices(), mesh->GetIndices());
+	if (width * height > maxSize) {
+		delete mesh;
+		CreateMesh();
+	}
+	else {
+		SetupVertices(mesh->GetVertices(), mesh->GetIndices());
 
-	mesh->UpdateVertex(mesh->GetVertices().data(), (UINT)mesh->GetVertices().size());
-	mesh->UpdateIndices(mesh->GetIndices().data(), (UINT)mesh->GetIndices().size());
+		mesh->UpdateVertex();
+		mesh->UpdateIndex();
+	}
+}
+
+void Terrain230222::Save()
+{
+	BinaryWriter* writer = new BinaryWriter("TextData/Transforms/" + tag + ".srt");
+
+	writer->UInt(width);
+	writer->UInt(height);
+
+	delete writer;
+}
+
+void Terrain230222::Load()
+{
+
+	BinaryReader* reader = new BinaryReader("TextData/Transforms/" + tag + ".srt");
+
+	if (reader->IsFailed()) 
+		return;
+
+	width = reader->UInt();
+	height = reader->UInt();
+
+	UpdateMesh();
+
+	delete reader;
 }
 
 void Terrain230222::SetupVertices(vector<VertexType>& vertices, vector<UINT>& indices)
 {
+	maxSize = max(maxSize, width * height);
 
 	vertices.resize((size_t)width * height);
 

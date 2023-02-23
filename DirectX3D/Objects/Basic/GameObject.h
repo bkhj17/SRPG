@@ -3,7 +3,7 @@
 class GameObject : public Transform
 {
 public:
-    GameObject(wstring shaderFile = L"Basic/Texture.hlsl");
+    GameObject(wstring shaderFile = L"Light/SpecularLight.hlsl");
     virtual ~GameObject();
 
     virtual void Render() {};

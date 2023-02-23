@@ -2,10 +2,14 @@
 #include "GridScene.h"
 
 GridScene::GridScene()
-	: width(100), height(100)
+	: curWidth(MAX_VALUE), curHeight(MAX_VALUE), fixWidth(MAX_VALUE), fixHeight(MAX_VALUE)
 {
 	material = new Material(L"Basic/Grid.hlsl");
-	CreateMesh();
+
+	mesh = new Mesh<VertexColor>();
+	MakeMesh();
+	mesh->CreateMesh();
+
 	worldBuffer = new MatrixBuffer();
 }
 
@@ -18,6 +22,21 @@ GridScene::~GridScene()
 
 void GridScene::Update()
 {
+	bool check = false;
+	check |= (curWidth != fixWidth || curHeight != fixHeight);
+	check |= curGridColor != fixGridColor;
+
+	if (check) return;
+
+	fixWidth = curWidth;
+	fixHeight = curHeight;
+
+	fixGridColor = curGridColor;
+
+	if (curWidth != fixWidth || curHeight != fixHeight) {
+		MakeMesh();
+		mesh->UpdateVertex();
+	}
 }
 
 void GridScene::PreRender()
@@ -39,36 +58,33 @@ void GridScene::PostRender()
 void GridScene::GUIRender()
 {
 	if (ImGui::TreeNode("GridOption")) {
-		ImGui::DragInt("Width", (int*)&width, 1.0f, 0, MAX_VALUE);
-		ImGui::DragInt("Height", (int*)&height, 1.0f, 0, MAX_VALUE);
+		ImGui::DragInt("Width", (int*)&curWidth, 1.0f, 0, MAX_VALUE);
+		ImGui::DragInt("Height", (int*)&curHeight, 1.0f, 0, MAX_VALUE);
 
 		ImGui::TreePop();
 	}
 }
 
-void GridScene::CreateMesh()
+void GridScene::MakeMesh()
 {
-	int halfW = width / 2;
-	int halfH = height / 2;
+	int halfW = curWidth / 2;
+	int halfH = curHeight / 2;
 
-	mesh = new Mesh<VertexColor>();
 	vector<VertexColor>& vertices = mesh->GetVertices();
-
-
+	vertices.clear();
 
 	for (int x = -halfH; x <= halfH; x++) {
 		if (x == 0)
 			continue;
-
-		vertices.emplace_back(x, 0, -halfH, 0.5f, 0.5f, 0.5f);
-		vertices.emplace_back(x, 0, +halfH, 0.5f, 0.5f, 0.5f);
+		vertices.emplace_back(x, 0, -halfW, 0.5f, 0.5f, 0.5f);
+		vertices.emplace_back(x, 0, +halfW, 0.5f, 0.5f, 0.5f);
 	}
 
 	for (int z = -halfW; z <= halfW; z++) {
 		if (z == 0)
 			continue;
-		vertices.emplace_back(-halfW, 0, z, 0.5f, 0.5f, 0.5f);
-		vertices.emplace_back(+halfW, 0, z, 0.5f, 0.5f, 0.5f);
+		vertices.emplace_back(-halfH, 0, z, 0.5f, 0.5f, 0.5f);
+		vertices.emplace_back(+halfH, 0, z, 0.5f, 0.5f, 0.5f);
 	}
 
 	vertices.emplace_back(-MAX_VALUE, 0, 0, 1, 0, 0);
@@ -79,7 +95,4 @@ void GridScene::CreateMesh()
 
 	vertices.emplace_back(0, 0, -MAX_VALUE, 0, 0, 1);
 	vertices.emplace_back(0, 0, +MAX_VALUE, 0, 0, 1);
-
-
-	mesh->CreateMesh();
 }

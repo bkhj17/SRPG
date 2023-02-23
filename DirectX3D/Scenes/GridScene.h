@@ -15,15 +15,18 @@ public:
 	virtual void GUIRender() override;
 
 private:
-	void CreateMesh();
+	void MakeMesh();
 
 private:
 	Material* material;
 	Mesh<VertexColor>* mesh;
 
-	UINT width, height;
+	UINT curWidth, curHeight;
+	UINT fixWidth, fixHeight;
 
 	MatrixBuffer* worldBuffer;
 
+	Vector3 curGridColor = { 0.5f, 0.5f, 0.5f };
+	Vector3 fixGridColor = { 0.5f, 0.5f, 0.5f };
 };
 

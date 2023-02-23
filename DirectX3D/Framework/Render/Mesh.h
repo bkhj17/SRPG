@@ -11,9 +11,8 @@ public:
 	void Draw(D3D11_PRIMITIVE_TOPOLOGY type = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	void CreateMesh();
-	void UpdateVertex(void* data, UINT count);
-	//임의 추가
-	void UpdateIndices(void* data, UINT count);
+	void UpdateVertex();
+	void UpdateIndex();
 
 	vector<T>& GetVertices() { return vertices; }
 	vector<UINT>& GetIndices() { return indices; }
@@ -59,13 +58,13 @@ inline void Mesh<T>::CreateMesh()
 }
 
 template<typename T>
-inline void Mesh<T>::UpdateVertex(void* data, UINT count)
+inline void Mesh<T>::UpdateVertex()
 {
-	vertexBuffer->Update(data, count);
+	vertexBuffer->Update(vertices.data(), vertices.size());
 }
 
 template<typename T>
-inline void Mesh<T>::UpdateIndices(void* data, UINT count)
+inline void Mesh<T>::UpdateIndex()
 {
-	indexBuffer->Update(data, count);
+	indexBuffer->Update(indices.data(), indices.size());
 }
