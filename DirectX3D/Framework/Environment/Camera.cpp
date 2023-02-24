@@ -103,8 +103,6 @@ void Camera::FreeMode()
         Rot().y += delta.x * rotSpeed * DELTA;
 
     }
-
-
 }
 
 void Camera::FollowMode()

@@ -41,9 +41,10 @@ void Terrain230224::GetHeight(Vector3& pos, Vector3& rot)
 	VertexType& v0 = vertices[z * width + x];
 	VertexType& v1 = vertices[(z + 1) * width + x];
 	VertexType& v2 = vertices[z * width + x+1];
+	VertexType& v3 = vertices[(z + 1) * width + (x + 1)];
 
 	Vector3 normal;
-	pos.y = interpolateHeight(pos, normal, v0, v1, v2);
+	pos.y = interpolateHeight(pos, normal, v0, v1, v2, v3);
 
 	Vector3 yAxis(0,1,0);
 
@@ -58,26 +59,45 @@ void Terrain230224::GetHeight(Vector3& pos, Vector3& rot)
 	rot = XMQuaternionInverse(rot);
 }
 
-float Terrain230224::interpolateHeight(Vector3& pos, Vector3& normal, VertexType& v0, VertexType& v1, VertexType& v2)
+float Terrain230224::interpolateHeight(Vector3& pos, Vector3& normal, VertexType& v0, VertexType& v1, VertexType& v2, VertexType& v3)
 {
+	float dx = pos.x - v0.pos.x;
+	float dz = pos.z - v0.pos.z;
+
+	float D = 0.0f;
+	if (dx + dz > 1.0f) {
+		dx = 1.0f - dx;
+		dz = 1.0f - dz;
+
+		float sum = dx + dz;
+		float rx = dx / sum;
+		float rz = dz / sum;
+
+		float f1 = (v1.pos.x - v3.pos.x < FLT_EPSILON) ? 0.0f : dx / (v1.pos.x - v3.pos.x);
+		float f2 = (v1.pos.z - v3.pos.z < FLT_EPSILON) ? 0.0f : dz / (v2.pos.z - v3.pos.z);
+
+		Vector3 n1 = Lerp((Vector3&)v3.normal, (Vector3&)v1.normal, f1);
+		Vector3 n2 = Lerp((Vector3&)v3.normal, (Vector3&)v2.normal, f2);
+
+		normal = (n1 + n2).GetNormalized();
+
+		D = -(normal.x * v3.pos.x + normal.y * v3.pos.y + normal.z * v3.pos.z);
+	}
+	else {
+		float sum = dx + dz;
+		float rx = dx / sum;
+		float rz = dz / sum;
 	
-	Vector3 v01 = (Vector3)v1.pos - v0.pos;
-	Vector3 v02 = (Vector3)v2.pos - v0.pos;
+		float f1 = (v1.pos.x - v0.pos.x < FLT_EPSILON) ? 0.0f : dx / (v1.pos.x - v0.pos.x);
+		float f2 = (v2.pos.z - v0.pos.z < FLT_EPSILON) ? 0.0f : dz / (v2.pos.z - v0.pos.z);
+
+		Vector3 n1 = Lerp((Vector3&)v0.normal, (Vector3&)v1.normal, f1);
+		Vector3 n2 = Lerp((Vector3&)v0.normal, (Vector3&)v2.normal, f2);
 	
-	float f1 = pos.x - v0.pos.x / v1.pos.x - v0.pos.x;
-	float f2 = pos.z - v0.pos.z / v2.pos.z - v0.pos.z;
+		normal = (n1 + n2).GetNormalized();
 
-
-
-	Lerp((Vector3&)v0.normal, (Vector3&)v1.normal, f1);
-	Lerp((Vector3&)v0.normal, (Vector3&)v2.normal, f2);
-
-
-
-	normal = Cross(v01, v02);
-	normal.Normalize();
-
-	float D = -(normal.x * v0.pos.x + normal.y * v0.pos.y + normal.z * v0.pos.z);
+		D = -(normal.x * v0.pos.x + normal.y * v0.pos.y + normal.z * v0.pos.z);
+	}
 	return (-normal.x * pos.x - normal.z * pos.z - D) / normal.y;
 }
 

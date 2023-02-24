@@ -12,7 +12,7 @@ public:
 
 	void GetHeight(Vector3& pos, Vector3& rot);
 private:
-	float interpolateHeight(Vector3& pos, Vector3& normal, VertexType& v0, VertexType& v1, VertexType& v2);
+	float interpolateHeight(Vector3& pos, Vector3& normal, VertexType& v0, VertexType& v1, VertexType& v2, VertexType& v3);
 
 	void MakeNormal();
 	void MakeMesh();

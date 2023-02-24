@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Homework\230224\Cylinder230224.h" />
     <ClInclude Include="Homework\230224\Car230224.h" />
     <ClInclude Include="Homework\230223\Cube230223.h" />
     <ClInclude Include="Framework\Collision\Collider.h" />
@@ -201,6 +202,7 @@
     <ClInclude Include="Homework\230224\Terrain230224.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Homework\230224\Cylinder230224.cpp" />
     <ClCompile Include="Homework\230224\Car230224.cpp" />
     <ClCompile Include="Homework\230223\Cube230223.cpp" />
     <ClCompile Include="Framework\Collision\Collider.cpp" />

@@ -198,6 +198,9 @@
     <ClInclude Include="Homework\230224\Car230224.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Homework\230224\Cylinder230224.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX3D.cpp">
@@ -360,6 +363,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Homework\230224\Car230224.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Homework\230224\Cylinder230224.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

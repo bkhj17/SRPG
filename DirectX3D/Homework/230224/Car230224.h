@@ -10,11 +10,14 @@ public:
 	void UpdateWorld() override;
 
 	void Render();
+	void RenderUI();
 
 	void SetTerrain(Terrain230224* terrain) { this->terrain = terrain; }
 private:
 	Cube* body;
 	Terrain230224* terrain = nullptr;
+
+	class Cylinder230224* wheel[4];
 
 	float moveSpeed = 30.0f;
 
