@@ -136,6 +136,7 @@ using namespace GameMath;
 
 #include "Objects/Basic/GameObject.h"
 #include "Objects/Basic/Cube.h"
+#include "Objects/Basic/Sphere.h"
 
 #include "Objects/LandScape/Terrain.h"
 

@@ -3,13 +3,13 @@
 class GameObject : public Transform
 {
 public:
-    GameObject(wstring shaderFile = L"Light/SpecularLight.hlsl");
+    GameObject(wstring shaderFile = L"Light/NormalMapping.hlsl");
     virtual ~GameObject();
 
     virtual void Render() {};
     virtual void SetRender();
 
-    virtual void RenderUI();
+    virtual void RenderUI() override;
 
     Material* GetMaterial() { return material; }
 protected:

@@ -4,6 +4,8 @@
 Terrain::Terrain()
 	: width(10), height(10)
 {
+	tag = "Terrain";
+
 	material->SetDiffuseMap(L"Textures/Landscape/Fieldstone_DM.tga");
 	material->SetSpecularMap(L"Textures/Landscape/fieldstone_SM.tga");
 	heightMap = Texture::Add(L"Textures/HeightMaps/HeightMap.png");
@@ -34,13 +36,13 @@ void Terrain::MakeNormal()
 		UINT index1 = indices[i * 3 + 1];
 		UINT index2 = indices[i * 3 + 2];
 
-		Vector3 v0 = vertices[index0].pos;
-		Vector3 v1 = vertices[index1].pos;
-		Vector3 v2 = vertices[index2].pos;
+		Vector3 pos0 = vertices[index0].pos;
+		Vector3 pos1 = vertices[index1].pos;
+		Vector3 pos2 = vertices[index2].pos;
 
 		//순서 주의
-		Vector3 e0 = v1 - v0;
-		Vector3 e1 = v2 - v0;
+		Vector3 e0 = pos1 - pos0;
+		Vector3 e1 = pos2 - pos0;
 
 		Vector3 normal = Cross(e0, e1).GetNormalized();
 

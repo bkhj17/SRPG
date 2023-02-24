@@ -1,0 +1,22 @@
+#pragma once
+class Terrain230224;
+class Car230224 : public GameObject
+{
+public:
+	Car230224();
+	~Car230224();
+
+	void Update();
+	void UpdateWorld() override;
+
+	void Render();
+
+	void SetTerrain(Terrain230224* terrain) { this->terrain = terrain; }
+private:
+	Cube* body;
+	Terrain230224* terrain = nullptr;
+
+	float moveSpeed = 30.0f;
+
+};
+

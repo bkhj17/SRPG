@@ -34,8 +34,9 @@ void Environment::RenderUI()
     if (ImGui::TreeNode("Environment")) {
         mainCamera->RenderUI();
         ImGui::Text("LightOption");
+        ImGui::ColorEdit3("LightColor", (float*)&lightBuffer->Get().color, ImGuiColorEditFlags_PickerHueWheel);
         ImGui::SliderFloat3("LightDir", (float*)&lightBuffer->Get().direction, -1, 1);
-        ImGui::SliderFloat("Shininess", (float*)&lightBuffer->Get().shininess, 1, 50);
+        ImGui::ColorEdit3("Ambient", (float*)&lightBuffer->Get().ambient, ImGuiColorEditFlags_PickerHueWheel);
         ImGui::TreePop();
     }
 }

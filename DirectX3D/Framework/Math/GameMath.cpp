@@ -43,6 +43,13 @@ Vector2 GameMath::Lerp(const Vector2& start, const Vector2& end, float t)
     return start + (end - start) * t;
 }
 
+Vector3 GameMath::Lerp(const Vector3& start, const Vector3& end, float t)
+{
+    t = Clamp(0.0f, 1.0f, t);
+
+    return start + (end - start) * t;
+}
+
 Vector2 GameMath::SLerp(const Vector2& start, const Vector2& end, float t)
 {
     t = Clamp(0.0f, 1.0f, t);

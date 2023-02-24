@@ -6,16 +6,12 @@ struct PixelInput
     float4 pos : SV_POSITION;
     float2 uv : UV;
     float3 normal : NORMAL;
+    float3 tangent : TANGENT;
+    float3 binormal : BINORMAL;
     float3 viewDir : VIEWDIR;
 };
 
-Texture2D ambientMap : register(t2);
-cbuffer IntensityBuffer : register(b2)
-{
-    float shininessIntensity;
-};
-
-PixelInput VS(VertexUVNormal input)
+PixelInput VS(VertexUVNormalTangent input)
 {
     PixelInput output;
     output.pos = mul(input.pos, world);
@@ -25,6 +21,9 @@ PixelInput VS(VertexUVNormal input)
     output.uv = input.uv;
     
     output.normal = mul(input.normal, (float3x3) world); // 
+    output.tangent = mul(input.tangent, (float3x3) world); // 
+    output.binormal = cross(output.normal, output.tangent);
+    
     //output.viewDir = normalize(output.pos.xyz - invView._41_42_43);   //
     output.viewDir = normalize(invView._31_32_33); //forward    
     
@@ -34,8 +33,22 @@ PixelInput VS(VertexUVNormal input)
 float4 PS(PixelInput input) : SV_TARGET
 {
     float4 albedo = diffuseMap.Sample(samp, input.uv);
-    float3 normal = normalize(input.normal);
+    
+    float3 T = normalize(input.tangent);
+    float3 B = normalize(input.binormal);
+    float3 N = normalize(input.normal);
+    
+    float3 normal = N;
     float3 light = normalize(lightDirection);
+    //float3 light = normalize(input.worldPos - lightDirection);
+    if (hasNormalMap)
+    {
+        float3 normalMapColor = normalMap.Sample(samp, input.uv).rgb;
+        normal = normalMapColor * 2.0f - 1.0f;
+        float3x3 TBN = float3x3(T, B, N);
+        normal = normalize(mul(normal, TBN));
+    }
+    
     
     float diffuseIntensity = saturate(dot(normal, -light));
 
@@ -52,12 +65,12 @@ float4 PS(PixelInput input) : SV_TARGET
         
         float4 specularIntensity = specularMap.Sample(samp, input.uv);
                 
-        specular = pow(specular, shininess * shininessIntensity) * specularIntensity;
+        specular = pow(specular, shininess) * specularIntensity * mSpecular * lightColor;
     }
     
-    float4 diffuse = albedo * diffuseIntensity;
+    float4 diffuse = albedo * diffuseIntensity * mDiffuse * lightColor;
     //°£Á¢±¤
-    float4 ambient = albedo * ambientMap.Sample(samp, input.uv);
+    float4 ambient = albedo * ambientColor * mAmbient;
     
-    return max(ambient, diffuse + specular);
+    return ambient + diffuse + specular;
 }

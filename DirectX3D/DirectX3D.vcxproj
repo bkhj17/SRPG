@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Homework\230224\Car230224.h" />
     <ClInclude Include="Homework\230223\Cube230223.h" />
     <ClInclude Include="Framework\Collision\Collider.h" />
     <ClInclude Include="Framework\Collision\LineCollider.h" />
@@ -145,6 +146,7 @@
     <ClInclude Include="Framework\State\SamplerState.h" />
     <ClInclude Include="Homework\230222\GridScene230222.h" />
     <ClInclude Include="Homework\230223\Scene230223.h" />
+    <ClInclude Include="Homework\230224\Scene230224.h" />
     <ClInclude Include="Scenes\GridScene.h" />
     <ClInclude Include="Homework\230221\Grid230221.h" />
     <ClInclude Include="Homework\230221\Cube230221.h" />
@@ -187,6 +189,8 @@
     <ClInclude Include="Manager\SceneManager.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Homework\230223\Sphere230223.h" />
+    <ClInclude Include="Scenes\SphereScene.h" />
+    <ClInclude Include="Objects\Basic\Sphere.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Scenes\TutorialScene.h" />
     <ClInclude Include="Framework\Math\Vector3.h" />
@@ -194,8 +198,10 @@
     <ClInclude Include="Objects\LandScape\Terrain.h" />
     <ClInclude Include="Homework\230222\Terrain230222.h" />
     <ClInclude Include="Homework\230222\TerrainScene230222.h" />
+    <ClInclude Include="Homework\230224\Terrain230224.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Homework\230224\Car230224.cpp" />
     <ClCompile Include="Homework\230223\Cube230223.cpp" />
     <ClCompile Include="Framework\Collision\Collider.cpp" />
     <ClCompile Include="Framework\Collision\LineCollider.cpp" />
@@ -203,6 +209,7 @@
     <ClCompile Include="Framework\State\SamplerState.cpp" />
     <ClCompile Include="Homework\230222\GridScene230222.cpp" />
     <ClCompile Include="Homework\230223\Scene230223.cpp" />
+    <ClCompile Include="Homework\230224\Scene230224.cpp" />
     <ClCompile Include="Scenes\GridScene.cpp" />
     <ClCompile Include="Homework\230221\Grid230221.cpp" />
     <ClCompile Include="Homework\230221\Cube230221.cpp" />
@@ -247,6 +254,9 @@
     <ClCompile Include="Homework\230222\Terrain230222.cpp" />
     <ClCompile Include="Homework\230222\TerrainScene230222.cpp" />
     <ClCompile Include="Homework\230223\Sphere230223.cpp" />
+    <ClCompile Include="Scenes\SphereScene.cpp" />
+    <ClCompile Include="Objects\Basic\Sphere.cpp" />
+    <ClCompile Include="Homework\230224\Terrain230224.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX3D.rc" />
@@ -269,6 +279,12 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shaders\Light\NormalMapping.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Shaders\Light\SpecularLight.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>

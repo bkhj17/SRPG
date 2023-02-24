@@ -79,30 +79,34 @@ void Sphere230223::RenderUI()
 
 void Sphere230223::MakeMesh(float radius, int numSlices, int numStacks)
 {
-    vector<VertexType>& vertices = mesh->GetVertices();
-    vector<UINT>& indices = mesh->GetIndices();
+    float phiStep = XM_PI / numStacks;
+    float thetaStep = XM_2PI / numSlices;
 
+    vector<VertexType>& vertices = mesh->GetVertices();
+    vertices.reserve((numStacks+1) * (numSlices+1));
     for (int y = 0; y <= numStacks; ++y) {
-        float phi = XM_PI * y / numStacks;
+        float phi = phiStep * y;
         float cosPhi = cos(phi);
         float sinPhi = sin(phi);
 
         for (int x = 0; x <= numSlices; ++x) {
-            float theta = 2 * XM_PI * x / numSlices;
+            float theta = thetaStep * x;
             float cosTheta = cos(theta);
             float sinTheta = sin(theta);
 
             VertexType vertex;
-            vertex.pos.x = radius * sinPhi * cosTheta;
-            vertex.pos.y = radius * cosPhi;
-            vertex.pos.z = radius * sinPhi * sinTheta;
-            vertex.normal = Vector3(vertex.pos) / radius;
+            vertex.normal.x = sinPhi * cosTheta;
+            vertex.normal.y = cosPhi;
+            vertex.normal.z = sinPhi * sinTheta;
+            vertex.pos = Vector3(vertex.normal) * radius;
             vertex.uv.x = (float)x / numSlices;
             vertex.uv.y = (float)y / numStacks;
             vertices.push_back(vertex);
         }
     }
 
+    vector<UINT>& indices = mesh->GetIndices();
+    indices.reserve(numStacks * numSlices * 6);
     for (int i = 0; i < numStacks; ++i) {
         for (int j = 0; j < numSlices; ++j) {
             int k1 = i * (numSlices + 1) + j;

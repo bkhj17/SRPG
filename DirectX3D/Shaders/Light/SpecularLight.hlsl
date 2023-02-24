@@ -46,12 +46,12 @@ float4 PS(PixelInput input) : SV_TARGET
         
         float4 specularIntensity = specularMap.Sample(samp, input.uv);
                 
-        specular = pow(specular, shininess) * specularIntensity;
+        specular = pow(specular, shininess) * specularIntensity * mSpecular * lightColor;
     }
     
-    float4 diffuse = albedo * diffuseIntensity;
+    float4 diffuse = albedo * diffuseIntensity * mDiffuse * lightColor;
     //°£Á¢±¤
-    float4 ambient = albedo * 0.1f;
+    float4 ambient = albedo * ambientColor * mAmbient;
     
-    return max(ambient, diffuse + specular);
+    return ambient + diffuse + specular;
 }

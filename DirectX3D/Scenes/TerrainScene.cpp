@@ -34,4 +34,5 @@ void TerrainScene::PostRender()
 
 void TerrainScene::GUIRender()
 {
+	terrain->RenderUI();
 }

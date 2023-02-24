@@ -56,6 +56,23 @@ public:
 	void operator*=(const float& s) { value *= s; }
 	void operator/=(const float& s) { value /= s; }
 
+	friend void operator+=(Float3& v1, const Vector3& v2) {
+		Vector4 temp = XMLoadFloat3(&v1) + v2.value;
+		XMStoreFloat3(&v1, temp);
+	}
+	friend void operator-=(Float3& v1, const Vector3& v2) {
+		Vector4 temp = XMLoadFloat3(&v1) - v2.value;
+		XMStoreFloat3(&v1, temp);
+	}
+	friend void operator*=(Float3& v1, const Vector3& v2) {
+		Vector4 temp = XMLoadFloat3(&v1) * v2.value;
+		XMStoreFloat3(&v1, temp);
+	}
+	friend void operator/=(Float3& v1, const Vector3& v2) {
+		Vector4 temp = XMLoadFloat3(&v1) / v2.value;
+		XMStoreFloat3(&v1, temp);
+	}
+
 	bool operator==(const Vector3& v) {	return XMVector3Equal(value, v.value); }
 	bool operator!=(const Vector3& v) {	return !XMVector3Equal(value, v.value); }
 

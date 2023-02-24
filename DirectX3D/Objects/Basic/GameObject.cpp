@@ -21,7 +21,8 @@ void GameObject::SetRender()
 
 void GameObject::RenderUI()
 {
-    if (ImGui::TreeNode(tag.c_str())) {
+    string label = tag + "_Object";
+    if (ImGui::TreeNode(label.c_str())) {
 
         __super::RenderUI();
         material->RenderUI();

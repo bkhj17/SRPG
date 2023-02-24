@@ -9,10 +9,10 @@ public:
 	~Terrain();
 
 	void Render();
+
 private:
 	void MakeNormal();
 	void MakeMesh();
-
 
 private:
 	UINT width, height;

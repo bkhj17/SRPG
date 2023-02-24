@@ -6,8 +6,8 @@ public:
     Transform();
     virtual ~Transform() = default;
 
-    void UpdateWorld();
-    void RenderUI();
+    virtual void UpdateWorld();
+    virtual void RenderUI();
 
     Vector3 Right() { return right.GetNormalized(); }
     Vector3 Left() { return right.GetNormalized() * -1.0f; }
