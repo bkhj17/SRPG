@@ -125,7 +125,6 @@ void Terrain230224::MakeNormal()
 		vertices[index2].normal = normal + vertices[index2].normal;
 		//정규화는 셰이더에서 하니 생략
 
-
 		//탄젠트
 		Float2 uv0 = vertices[index0].uv;
 		Float2 uv1 = vertices[index1].uv;
