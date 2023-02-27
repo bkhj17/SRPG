@@ -2,27 +2,15 @@
 class Vector3
 {
 public:
-	Vector3(Float3 value)
-		: value(XMLoadFloat3(&value))
-	{
-	}
-	Vector3(float x = 0.0f, float y = 0.0f, float z = 0.0f)
-		: value(XMVectorSet(x, y,z,0))
-	{
-	}
-	Vector3(Vector4 value) : value(value) 
-	{
-	}
+	Vector3(Float3 value) : value(XMLoadFloat3(&value)) {}
+	Vector3(float x = 0.0f, float y = 0.0f, float z = 0.0f)	
+		: value(XMVectorSet(x, y,z,0)) {}
+	Vector3(Vector4 value) : value(value) {}
 
-	void SetX(const float& x) {
-		value = XMVectorSetX(value, x);
-	}
-	void SetY(const float& y) {
-		value = XMVectorSetY(value, y);
-	}
-	void SetZ(const float& z) {
-		value = XMVectorSetZ(value, z);
-	}
+	void SetX(const float& x) {	value = XMVectorSetX(value, x); }
+	void SetY(const float& y) {	value = XMVectorSetY(value, y);	}
+	void SetZ(const float& z) {	value = XMVectorSetZ(value, z); }
+
 	float GetX() const { return XMVectorGetX(value); }
 	float GetY() const { return XMVectorGetY(value); }
 	float GetZ() const { return XMVectorGetZ(value); }
@@ -42,16 +30,12 @@ public:
 
 	Vector3 operator+(const Vector3& v) const { return value + v.value; }
 	Vector3 operator-(const Vector3& v) const { return value - v.value; }
-	Vector3 operator*(const Vector3& v) const { return value * v.value; }
-	Vector3 operator/(const Vector3& v) const { return value / v.value; }
 
 	Vector3 operator*(const float& s) const { return value * s; }
 	Vector3 operator/(const float& s) const { return value / s; }
 
 	void operator+=(const Vector3& v) { value += v.value; }
 	void operator-=(const Vector3& v) { value -= v.value; }
-	void operator*=(const Vector3& v) { value *= v.value; }
-	void operator/=(const Vector3& v) { value /= v.value; }
 
 	void operator*=(const float& s) { value *= s; }
 	void operator/=(const float& s) { value /= s; }
@@ -73,11 +57,15 @@ public:
 		XMStoreFloat3(&v1, temp);
 	}
 
-	bool operator==(const Vector3& v) {	return XMVector3Equal(value, v.value); }
-	bool operator!=(const Vector3& v) {	return !XMVector3Equal(value, v.value); }
+	bool operator==(const Vector3& v) const { return XMVector3Equal(value, v.value); }
+	bool operator!=(const Vector3& v) const { return !XMVector3Equal(value, v.value); }
 
 	Vector3 GetNormalized() const { return XMVector3Normalize(value); }
 	void Normalize() { value = XMVector3Normalize(value); }
+
+	Vector4 GetValue() { return value; }
+	static Vector3 Zero() { return Vector3(); }
+	static Vector3 One() { return Vector3(1,1,1); }
 private:
 	Vector4 value;
 };

@@ -12,7 +12,6 @@ wstring Utility::ToWString(string str)
 {
     wstring temp;
     temp.assign(str.begin(), str.end());
-
     return temp;
 }
 

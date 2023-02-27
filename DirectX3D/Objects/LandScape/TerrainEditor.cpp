@@ -1,15 +1,9 @@
 #include "framework.h"
-#include "Terrain.h"
 
-Terrain::Terrain()
+TerrainEditor::TerrainEditor()
 	: width(10), height(10)
 {
 	tag = "Terrain";
-
-	material->SetDiffuseMap(L"Textures/Landscape/Fieldstone_DM.tga");
-	material->SetSpecularMap(L"Textures/Landscape/fieldstone_SM.tga");
-	material->SetNormalMap(L"Textures/Landscape/fieldstone_NM.tga");
-	heightMap = Texture::Add(L"Textures/HeightMaps/HeightMap.png");
 
 	mesh = new Mesh<VertexType>;
 	MakeMesh();
@@ -18,95 +12,97 @@ Terrain::Terrain()
 	mesh->CreateMesh();
 }
 
-Terrain::~Terrain()
+TerrainEditor::~TerrainEditor()
 {
 	delete mesh;
 }
 
-void Terrain::Render()
+void TerrainEditor::Update()
+{
+	if(KEY_DOWN(VK_LBUTTON))
+		pickingPos = Picking();
+}
+
+void TerrainEditor::Render()
 {
 	SetRender();
 	mesh->Draw();
 }
 
-float Terrain::GetHeight(const Vector3& pos, Vector3* normal) const
+void TerrainEditor::RenderUI()
 {
-	//global은 무시. Terrain이 원점임을 가정한다
-	int x = (int)pos.x;
-	int z = (int)(height - pos.z);
-
-	if (x < 0 || x >= width - 1) return 0.0f;
-	if (z < 0 || z >= width - 1) return 0.0f;
-
-	UINT index[4];
-	index[0] = width * z + x;
-	index[1] = width * (z+1) + x;
-	index[2] = width * z + (x+1);
-	index[3] = width * (z+1) + (x+1);
-
-	vector<VertexType>& vertices = mesh->GetVertices();
-
-	Vector3 p[4];
-	for (UINT i = 0; i < 4; i++)
-		p[i] = vertices[index[i]].pos;
-	
-	float u = pos.x - p[0].x;
-	float v = pos.z - p[0].z;
-
-	Vector3 result;
-	if (u + v <= 1.0f) {
-		result = (p[2] - p[0]) * u + (p[1] - p[0]) * v + p[0];
-
-		if(normal)
-			*normal = GetNormalFromPolygon(p[0], p[1], p[2]);
-		return result.y;
-	}
-	else {
-		u = 1.0f - u;
-		v = 1.0f - v;
-
-
-		result = (p[2] - p[3]) * u + (p[1] - p[3]) * v + p[3];
-
-		if (normal)
-			*normal = GetNormalFromPolygon(p[2], p[1], p[3]);
-		return result.y;
-	}
-
-	return 0.0f;
+	ImGui::Text("TerrainEdit Option");
+	ImGui::Text("x : %.1f, y : %.1f, z : %.1f", pickingPos.x, pickingPos.y, pickingPos.z);
 }
 
-void Terrain::MakeMesh()
+Vector3 TerrainEditor::Picking()
 {
-	width = (UINT)heightMap->GetSize().x;
-	height = (UINT)heightMap->GetSize().y;
+	Ray ray = CAM->ScreenPointToRay(mousePos);
+	for (UINT z = 0; z < height - 1; z++)
+	{
+		for (UINT x = 0; x < width - 1; x++)
+		{
+			UINT index[4];
+			index[0] = width * z + x;
+			index[1] = width * z + x + 1;
+			index[2] = width * (z + 1) + x;
+			index[3] = width * (z + 1) + x + 1;
 
-	vector<Float4> pixels;
-	heightMap->ReadPixels(pixels);
+			vector<VertexType> vertices = mesh->GetVertices();
+
+			Vector3 p[4];
+			for (UINT i = 0; i < 4; i++)
+				p[i] = vertices[index[i]].pos;
+
+			float distance = 0.0f;
+			if (Intersects(ray.pos, ray.dir, p[0], p[1], p[2], distance))
+			{
+				//Vector3 result = ray.pos + ray.dir * distance;
+				//result.z = height - result.z;
+				//return result;
+				return ray.pos + ray.dir * distance;
+			}
+
+			if (Intersects(ray.pos, ray.dir, p[3], p[1], p[2], distance))
+			{
+				//Vector3 result = ray.pos + ray.dir * distance;
+				//result.z = height - result.z;
+				//return result;
+				return ray.pos + ray.dir * distance;
+			}
+
+			float check = distance;
+		}
+	}
+
+	return Vector3();
+}
+
+void TerrainEditor::MakeMesh()
+{
+	vector<Float4> pixels(width * height, Float4(0, 0, 0, 0));
+	if (heightMap) {
+		width = (UINT)heightMap->GetSize().x;
+		height = (UINT)heightMap->GetSize().y;
+
+		heightMap->ReadPixels(pixels);
+	}
 
 	vector<VertexType>& vertices = mesh->GetVertices();
 	vertices.reserve((size_t)width * height);
 	for (int z = 0; z < height; z++) {
 		for (int x = 0; x < width; x++) {
 			VertexType vertex;
+			vertex.pos = { (float)x, 0.0f, (float)(height - z - 1) };
+			vertex.uv.x = x / (float)(width - 1);
+			vertex.uv.y = z / (float)(height - 1);
+
 			UINT index = width * z + x;
-			//vertex.pos = { (float)x,  pixels[index].x * MAX_HEIGHT, (float)z };
-			//vertex.uv = { x/(float)(width-1), 1.0f-z/(float)(height-1) };
-			vertex.pos = { (float)x,  pixels[index].x * MAX_HEIGHT, height - (float)z };
-			vertex.uv = { x / (float)(width - 1), z / (float)(height - 1) };
+			vertex.pos.y = pixels[index].x * MAX_HEIGHT;
+
 			vertices.push_back(vertex);
 		}
 	}
-	/*
-	vector<pair<int, int>> dxz = {
-		{0,0},
-		{0,1},
-		{1,0},
-		{1,0},
-		{0,1},
-		{1,1}
-	};
-	*/
 	vector<pair<int, int>> dxz = {
 		{0,0},
 		{1,0},
@@ -122,19 +118,11 @@ void Terrain::MakeMesh()
 		for (int x = 0; x < width - 1; x++) {
 			for (int i = 0; i < 6; i++)
 				indices.push_back(width * (z + dxz[i].second) + x + dxz[i].first);
-			/*
-			indices.push_back(width * z + x);
-			indices.push_back(width * (z+1) + x);
-			indices.push_back(width * z + (x+1));
-			indices.push_back(width * z + (x+1));
-			indices.push_back(width * (z+1) + x);
-			indices.push_back(width * (z+1) + (x+1));
-			*/
 		}
 	}
 }
 
-void Terrain::MakeNormal()
+void TerrainEditor::MakeNormal()
 {
 	vector<VertexType>& vertices = mesh->GetVertices();
 	const vector<UINT>& indices = mesh->GetIndices();
@@ -160,8 +148,7 @@ void Terrain::MakeNormal()
 	}
 }
 
-
-void Terrain::MakeTangent()
+void TerrainEditor::MakeTangent()
 {
 	vector<VertexType>& vertices = mesh->GetVertices();
 	vector<UINT>& indices = mesh->GetIndices();

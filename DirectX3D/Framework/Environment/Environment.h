@@ -22,6 +22,7 @@ public:
 
     Camera* GetMainCamera() { return mainCamera; }
 
+    Matrix GetProjection() { return projection; }
 private:
     void CreateProjection();
     void CreateState();
@@ -43,4 +44,5 @@ private:
 
     bool isWireMode = false;
 
+    Matrix projection;
 };

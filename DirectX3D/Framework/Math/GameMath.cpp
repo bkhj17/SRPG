@@ -81,3 +81,20 @@ float GameMath::Distance(const Vector2& vec1, const Vector2& vec2)
 {
     return (vec2 - vec1).Length();
 }
+
+Vector3 GameMath::GetNormalFromPolygon(const Vector3& v0, const Vector3& v1, const Vector3& v2)
+{
+    Vector3 e0 = v1 - v0;
+    Vector3 e1 = v2 - v0;
+    return Cross(e0, e1).GetNormalized();
+}
+
+Vector3 GameMath::GetRotFromNormal(Vector3 normal)
+{
+    Vector3 yAxis(0, 1, 0);
+    float angle = Dot(yAxis, normal);
+    Vector3 axis = Cross(yAxis, normal);
+    if (axis == Vector3::Zero())
+        return axis;
+    return XMQuaternionRotationAxis(axis.GetNormalized(), angle);
+}

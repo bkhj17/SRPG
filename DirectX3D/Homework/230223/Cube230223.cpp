@@ -119,7 +119,7 @@ void Cube230223::MakeMesh(Vector3 size)
 	for (auto& square : squares) {
 		for (int i = 0; i < 4; i++) {
 			VertexUVNormal vertex;
-			vertex.pos = size * points[square[i]];
+			vertex.pos = { size.x * points[square[i]].x, size.y * points[square[i]].y, size.z * points[square[i]].z };
 			vertex.uv = uvs[i];
 			vertex.normal = points[square[i]];
 

@@ -27,16 +27,12 @@ void Camera::Update()
     if (Rot().x > 360.0f) {
         Rot().x -= 360.0f;
     }
-    if (Rot().x < -360.0f) {
+    if (Rot().x < -360.0f)
         Rot().x += 360.0f;
-    }
-
-    if (Rot().y > 360.0f) {
+    if (Rot().y > 360.0f)
         Rot().y -= 360.0f;
-    }
-    if (Rot().y < -360.0f) {
+    if (Rot().y < -360.0f)
         Rot().y += 360.0f;
-    }
     SetView();
 }
 
@@ -58,6 +54,30 @@ Vector3 Camera::ScreenToWorld(Vector3 pos)
 Vector3 Camera::WorldToScreen(Vector3 pos)
 {
     return XMVector3TransformCoord(pos, view);
+}
+Ray Camera::ScreenPointToRay(Vector3 screenPoint)
+{
+    Vector3 screenSize(WIN_WIDTH, WIN_HEIGHT, 1.0f);
+
+    Vector2 point;
+    point.x = (screenPoint.x / screenSize.x) * 2.0f - 1.0f;
+    point.y = (screenPoint.y / screenSize.y) * 2.0f - 1.0f;
+
+    Matrix projection = Environment::Get()->GetProjection();
+
+    Float4x4 temp;
+    XMStoreFloat4x4(&temp, projection);
+    screenPoint.x = point.x / temp._11;
+    screenPoint.y = point.y / temp._22;
+    screenPoint.z = 1.0f;
+
+    screenPoint = XMVector3TransformNormal(screenPoint, world);
+
+    Ray ray;
+    ray.pos = Pos();
+    ray.dir = screenPoint.GetNormalized();
+
+    return ray;
 }
 void Camera::RenderUI()
 {

@@ -1,10 +1,9 @@
 #pragma once
-
-class TerrainScene : public Scene
+class Scene230227 : public Scene
 {
 public:
-	TerrainScene();
-	~TerrainScene();
+	Scene230227();
+	~Scene230227();
 	// Scene을(를) 통해 상속됨
 	virtual void Update() override;
 	virtual void PreRender() override;
@@ -13,7 +12,6 @@ public:
 	virtual void GUIRender() override;
 
 private:
-	Terrain* terrain; 
-	Cylinder* cylinder;
+	class TerrainEditor230227* terrain;
 };
 

@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)Libraries\ImGui;$(ProjectDir)Libraries\DirectXTex;$(ProjectDir)Shaders\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Libraries\ImGui;$(ProjectDir)Libraries\DirectXTex;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)Libraries\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -138,6 +138,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Homework\230227\Scene230227.h" />
+    <ClInclude Include="Scenes\TerrainEditorScene.h" />
+    <ClInclude Include="Objects\Basic\Cylinder.h" />
     <ClInclude Include="Homework\230224\Cylinder230224.h" />
     <ClInclude Include="Homework\230224\Car230224.h" />
     <ClInclude Include="Homework\230223\Cube230223.h" />
@@ -200,8 +203,13 @@
     <ClInclude Include="Homework\230222\Terrain230222.h" />
     <ClInclude Include="Homework\230222\TerrainScene230222.h" />
     <ClInclude Include="Homework\230224\Terrain230224.h" />
+    <ClInclude Include="Objects\LandScape\TerrainEditor.h" />
+    <ClInclude Include="Homework\230227\TerrainEditor230227.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Homework\230227\Scene230227.cpp" />
+    <ClCompile Include="Scenes\TerrainEditorScene.cpp" />
+    <ClCompile Include="Objects\Basic\Cylinder.cpp" />
     <ClCompile Include="Homework\230224\Cylinder230224.cpp" />
     <ClCompile Include="Homework\230224\Car230224.cpp" />
     <ClCompile Include="Homework\230223\Cube230223.cpp" />
@@ -259,6 +267,8 @@
     <ClCompile Include="Scenes\SphereScene.cpp" />
     <ClCompile Include="Objects\Basic\Sphere.cpp" />
     <ClCompile Include="Homework\230224\Terrain230224.cpp" />
+    <ClCompile Include="Objects\LandScape\TerrainEditor.cpp" />
+    <ClCompile Include="Homework\230227\TerrainEditor230227.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX3D.rc" />

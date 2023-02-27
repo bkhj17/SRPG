@@ -20,69 +20,45 @@
 
 #define CAM Environment::Get()->GetMainCamera()
 #define DIALOG ImGuiFileDialog::Instance()
-// Windows 헤더 파일
-#include <windows.h>
-// C 런타임 헤더 파일입니다.
 
-#include <iostream>
+#include <windows.h>
 #include <string>
 #include <vector>
-#include <list>
-#include <stack>
-#include <queue>
-#include <deque>
-#include <set>
 #include <map>
 #include <unordered_map>
-#include <algorithm>
-#include <cstdlib>
-#include <cmath>
 #include <functional>
-#include <fstream>
-#include <sstream>
-#include <thread>
-#include <mutex>
+#include <algorithm>
 #include <assert.h>
 
-//DirectX
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include <d3dcompiler.h>
+#include <DirectXTex.h>
+#include <DirectXCollision.h>
+#include <imgui.h>
+#include <imgui_impl_dx11.h>
+#include <imgui_impl_win32.h>
+#include <ImGuiFileDialog.h>
+#include <d2d1_2.h>
+#include <dwrite.h>
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "dxguid.lib")
-
-//DirectXTex
-#include <DirectXTex.h>
 #pragma comment(lib, "DirectXTex.lib")
-
-//ImGui
-#include <ImGui.h>
-#include <imgui_impl_dx11.h>
-#include <imgui_impl_win32.h>
-
-#include <dirent/dirent.h>
-#include <ImGuiFileDialog.h>
-#include <ImGuiFileDialogConfig.h>
-
 #pragma comment(lib, "ImGui.lib")
-
-//DirectWrite
-#include <d2d1_2.h>
-#include <dwrite.h>
-
 #pragma comment(lib, "d2d1.lib")
 #pragma comment(lib, "dwrite.lib")
-
 using namespace std;
 using namespace DirectX;
+using namespace DirectX::TriangleTests;
 
 typedef XMFLOAT2 Float2;
 typedef XMFLOAT3 Float3;
 typedef XMFLOAT4 Float4;
 typedef XMVECTOR Vector4;
 typedef XMMATRIX Matrix;
+typedef XMFLOAT4X4 Float4x4;
 
 typedef function<void()> Event;
 typedef function<void(void*)> ParamEvent;
@@ -137,11 +113,14 @@ using namespace GameMath;
 #include "Objects/Basic/GameObject.h"
 #include "Objects/Basic/Cube.h"
 #include "Objects/Basic/Sphere.h"
+#include "Objects/Basic/Cylinder.h"
 
 #include "Objects/LandScape/Terrain.h"
+#include "Objects/LandScape/TerrainEditor.h"
 
 #include "Scenes/Scene.h"
 #include "Manager/SceneManager.h"
 #include "Manager/GameManager.h"
 
 extern HWND hWnd;
+extern Vector3 mousePos;

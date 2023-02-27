@@ -1,8 +1,8 @@
 #include "framework.h"
 #include "Cylinder230224.h"
 
-Cylinder230224::Cylinder230224(float radius, float height, int sliceCount, int stackCount)
-    : radius(radius), height(height), sliceCount(sliceCount), stackCount(stackCount)
+Cylinder230224::Cylinder230224(float radius, float height, int sliceCount)
+    : radius(radius), height(height), sliceCount(sliceCount)
 {
     mesh = new Mesh<VertexType>;
     MakeMesh();

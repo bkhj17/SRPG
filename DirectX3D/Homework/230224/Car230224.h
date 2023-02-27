@@ -20,6 +20,5 @@ private:
 	class Cylinder230224* wheel[4];
 
 	float moveSpeed = 30.0f;
-
 };
 

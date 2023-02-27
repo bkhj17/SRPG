@@ -50,19 +50,7 @@ void Environment::Set()
 
     lightBuffer->SetPS(0);
 }
-/*
-void Environment::SetAlphaBlend()
-{
-    float blendFactor[4] = {};
-    DC->OMSetBlendState(alphaBlendState, blendFactor, 0xffffffff);
-}
 
-void Environment::SetAdditiveBlend()
-{
-    float blendFactor[4] = {};
-    DC->OMSetBlendState(additiveBlendState, blendFactor, 0xffffffff);
-}
-*/
 void Environment::SetViewport(UINT width, UINT height)
 {
     viewport.Width = width;
@@ -85,11 +73,12 @@ void Environment::CreateProjection()
     /*
     Matrix orthographic = XMMatrixOrthographicOffCenterLH(0.0f, WIN_WIDTH, 0.0f, WIN_HEIGHT, -1.0f, 1.0f);
     */
-    Matrix perspective = XMMatrixPerspectiveFovLH(XM_PIDIV4, (float)WIN_WIDTH / WIN_HEIGHT, 0.1f, 1000.0f);
+   projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, 
+       (float)WIN_WIDTH / WIN_HEIGHT, 0.1f, 1000.0f);
 
     projectionBuffer = new MatrixBuffer();
     //projectionBuffer->Set(orthographic);    
-    projectionBuffer->Set(perspective);    
+    projectionBuffer->Set(projection);
 }
 
 void Environment::CreateState()

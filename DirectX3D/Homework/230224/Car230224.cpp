@@ -43,16 +43,18 @@ void Car230224::Update()
 		Pos() += body->Forward() * DELTA * moveSpeed;
 	}
 	if (KEY_PRESS(VK_DOWN)) {
-		float addictive = (wheel[0]->Rot().y) * DELTA;
+		float addictive = -(wheel[0]->Rot().y) * DELTA;
 		body->Rot().y += addictive * 2.0f;
 		wheel[0]->Rot().y -= addictive;
 
 		Pos() += body->Back() * DELTA * moveSpeed;
 	}
 
-	if(terrain)
-		terrain->GetHeight(Pos(), Rot());
-
+	if (terrain) {
+		Vector3 tRot = {};
+		terrain->GetHeight(Pos(), tRot);
+		Rot() += (tRot - Rot()) * DELTA * moveSpeed;
+	}
 	UpdateWorld();
 }
 
@@ -62,12 +64,10 @@ void Car230224::UpdateWorld()
 
 	body->UpdateWorld();
 	for (int i = 0; i < 4; i++) {
-		if (i < 2) {
-			if (KEY_PRESS(VK_UP))
-				wheel[i]->Rot().x += DELTA;
-			if (KEY_PRESS(VK_DOWN))
-				wheel[i]->Rot().x -= DELTA;
-		}
+		if (KEY_PRESS(VK_UP))
+			wheel[i]->Rot().x += DELTA * moveSpeed;
+		if (KEY_PRESS(VK_DOWN))
+			wheel[i]->Rot().x -= DELTA * moveSpeed;
 		wheel[i]->UpdateWorld();
 	}
 }

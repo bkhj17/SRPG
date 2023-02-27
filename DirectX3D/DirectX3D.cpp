@@ -9,6 +9,7 @@
 // 전역 변수:
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
 HWND hWnd;                                      // 윈도우 핸들
+Vector3 mousePos;
 
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
@@ -162,6 +163,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             // TODO: 여기에 hdc를 사용하는 그리기 코드를 추가합니다...
             EndPaint(hWnd, &ps);
         }
+        break;
+    case WM_MOUSEMOVE:
+        mousePos.x = (float)LOWORD(lParam);
+        mousePos.y = WIN_HEIGHT - (float)HIWORD(lParam);
         break;
     case WM_DESTROY:
         PostQuitMessage(0);

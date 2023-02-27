@@ -25,7 +25,7 @@ PixelInput VS(VertexUVNormalTangent input)
     output.binormal = cross(output.normal, output.tangent);
     
     //output.viewDir = normalize(output.pos.xyz - invView._41_42_43);   //
-    output.viewDir = normalize(invView._31_32_33); //forward    
+    output.viewDir = normalize(invView._31_32_33); //forward
     
     return output;
 }
@@ -48,7 +48,6 @@ float4 PS(PixelInput input) : SV_TARGET
         float3x3 TBN = float3x3(T, B, N);
         normal = normalize(mul(normal, TBN));
     }
-    
     
     float diffuseIntensity = saturate(dot(normal, -light));
 

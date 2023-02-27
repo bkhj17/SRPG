@@ -65,39 +65,32 @@ float Terrain230224::interpolateHeight(Vector3& pos, Vector3& normal, VertexType
 	float dz = pos.z - v0.pos.z;
 
 	float D = 0.0f;
+
+	VertexType vBase;
 	if (dx + dz > 1.0f) {
+		vBase = v3;
 		dx = 1.0f - dx;
 		dz = 1.0f - dz;
-
-		float sum = dx + dz;
-		float rx = dx / sum;
-		float rz = dz / sum;
-
-		float f1 = (v1.pos.x - v3.pos.x < FLT_EPSILON) ? 0.0f : dx / (v1.pos.x - v3.pos.x);
-		float f2 = (v1.pos.z - v3.pos.z < FLT_EPSILON) ? 0.0f : dz / (v2.pos.z - v3.pos.z);
-
-		Vector3 n1 = Lerp((Vector3&)v3.normal, (Vector3&)v1.normal, f1);
-		Vector3 n2 = Lerp((Vector3&)v3.normal, (Vector3&)v2.normal, f2);
-
-		normal = (n1 + n2).GetNormalized();
-
-		D = -(normal.x * v3.pos.x + normal.y * v3.pos.y + normal.z * v3.pos.z);
 	}
-	else {
-		float sum = dx + dz;
-		float rx = dx / sum;
-		float rz = dz / sum;
-	
-		float f1 = (v1.pos.x - v0.pos.x < FLT_EPSILON) ? 0.0f : dx / (v1.pos.x - v0.pos.x);
-		float f2 = (v2.pos.z - v0.pos.z < FLT_EPSILON) ? 0.0f : dz / (v2.pos.z - v0.pos.z);
+	else
+		vBase = v0;
 
-		Vector3 n1 = Lerp((Vector3&)v0.normal, (Vector3&)v1.normal, f1);
-		Vector3 n2 = Lerp((Vector3&)v0.normal, (Vector3&)v2.normal, f2);
-	
-		normal = (n1 + n2).GetNormalized();
+	dx = 1.0f - dx;
+	dz = 1.0f - dz;
 
-		D = -(normal.x * v0.pos.x + normal.y * v0.pos.y + normal.z * v0.pos.z);
-	}
+	float sum = dx + dz;
+	float rx = dx / sum;
+	float rz = dz / sum;
+
+	float f1 = abs(v1.pos.x - vBase.pos.x < FLT_EPSILON) ? 0.0f : dx / (v1.pos.x - vBase.pos.x);
+	float f2 = abs(v2.pos.z - vBase.pos.z < FLT_EPSILON) ? 0.0f : dz / (v2.pos.z - vBase.pos.z);
+
+	Vector3 n1 = Lerp((Vector3&)vBase.normal, (Vector3&)v1.normal, f1);
+	Vector3 n2 = Lerp((Vector3&)vBase.normal, (Vector3&)v2.normal, f2);
+
+	normal = (n1 + n2).GetNormalized();
+
+	D = -Dot(normal, (Vector3&)vBase.pos);
 	return (-normal.x * pos.x - normal.z * pos.z - D) / normal.y;
 }
 

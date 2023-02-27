@@ -24,6 +24,8 @@ void Scene230223::Update()
 		sphere->Rot().y -= 360.0f;
 
 	sphere->Update();
+
+
 	cube->Update();
 }
 

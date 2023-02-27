@@ -27,4 +27,7 @@ namespace GameMath
     float Distance(const Vector2& vec1, const Vector2& vec2);
 
     bool NearlyEqaul(const float& s1, const float& s2) { return abs(s1 - s2) < FLT_EPSILON; }
+
+    Vector3 GetNormalFromPolygon(const Vector3& v0, const Vector3& v1, const Vector3& v2);
+    Vector3 GetRotFromNormal(Vector3 normal);
 }
