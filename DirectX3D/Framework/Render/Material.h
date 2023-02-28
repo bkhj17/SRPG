@@ -18,7 +18,7 @@ public:
 			Float4 ambient = { 1, 1, 1, 1 };
 			float shininess = 24.0f;
 			int hasNormalMap = 0;
-			float padding[2];
+			float padding[2] = {};
 		};
 	public:
 		MaterialBuffer() : ConstBuffer(&data, sizeof(Data)) {}

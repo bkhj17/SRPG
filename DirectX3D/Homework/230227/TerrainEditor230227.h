@@ -7,6 +7,5 @@ public:
 	~TerrainEditor230227() = default;
 
 	void Update() override;
-
 };
 

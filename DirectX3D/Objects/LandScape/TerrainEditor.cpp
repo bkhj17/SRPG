@@ -1,7 +1,7 @@
 #include "framework.h"
 
 TerrainEditor::TerrainEditor()
-	: width(10), height(10)
+	: GameObject(L"LandScape/TerrainEditor.hlsl"), width(MAX_SIZE), height(MAX_SIZE)
 {
 	tag = "Terrain";
 
@@ -9,22 +9,30 @@ TerrainEditor::TerrainEditor()
 	MakeMesh();
 	MakeNormal();
 	MakeTangent();
+	MakeComputeData();
 	mesh->CreateMesh();
+
+	brushBuffer = new BrushBuffer;
+	rayBuffer = new RayBuffer();
 }
 
 TerrainEditor::~TerrainEditor()
 {
 	delete mesh;
+	delete brushBuffer;
+
+	delete rayBuffer;
+	delete structuredBuffer;
 }
 
 void TerrainEditor::Update()
 {
-	if(KEY_DOWN(VK_LBUTTON))
-		pickingPos = Picking();
+	brushBuffer->Get().pickingPos = ComputePicking();
 }
 
 void TerrainEditor::Render()
 {
+	brushBuffer->SetPS(10);
 	SetRender();
 	mesh->Draw();
 }
@@ -32,7 +40,53 @@ void TerrainEditor::Render()
 void TerrainEditor::RenderUI()
 {
 	ImGui::Text("TerrainEdit Option");
-	ImGui::Text("x : %.1f, y : %.1f, z : %.1f", pickingPos.x, pickingPos.y, pickingPos.z);
+	//ImGui::Text("x : %.1f, y : %.1f, z : %.1f", pickingPos.x, pickingPos.y, pickingPos.z);
+	bool resize = false;
+	resize |= ImGui::DragInt("Width", (int*)&width, 1.0f, MIN_SIZE, MAX_SIZE);
+	resize |= ImGui::DragInt("Height", (int*)&height, 1.0f, MIN_SIZE, MAX_SIZE);
+	if (resize)
+		Resize();
+
+	ImGui::DragFloat("Range", &brushBuffer->Get().range, 1.0f, 1.0f, 50.0f);
+	ImGui::ColorEdit3("Color", (float*)&brushBuffer->Get().color);
+}
+
+Vector3 TerrainEditor::ComputePicking()
+{
+	Ray ray = CAM->ScreenPointToRay(mousePos);
+	rayBuffer->Get().pos = ray.pos;
+	rayBuffer->Get().dir = ray.dir;
+	rayBuffer->Get().triangleSize = triangleSize;
+
+	rayBuffer->SetCS(0);
+
+	DC->CSSetShaderResources(0, 1, &structuredBuffer->GetSRV());
+	DC->CSSetUnorderedAccessViews(0, 1, &structuredBuffer->GetUAV(), nullptr);
+
+	computeShader->Set();
+
+	UINT x = (UINT)ceil((float)triangleSize / 64.0f);
+	DC->Dispatch(x, 1, 1);	//연산 실행
+	structuredBuffer->Copy(outputs.data(), sizeof(OutputDesc) * triangleSize);
+	
+	float minDistance = FLT_MAX;
+	int minIndex = -1;
+	UINT index = 0;
+	for (OutputDesc output : outputs) {
+		if (output.picked) {
+			if (minDistance > output.distance) {
+				minDistance = output.distance;
+				minIndex = index;
+			}
+		}
+		index++;
+	}
+
+	if (minIndex >= 0) {
+		return ray.pos + ray.dir * minDistance;
+	}
+
+	return Vector3::Zero();
 }
 
 Vector3 TerrainEditor::Picking()
@@ -55,14 +109,13 @@ Vector3 TerrainEditor::Picking()
 				p[i] = vertices[index[i]].pos;
 
 			float distance = 0.0f;
-			if (Intersects(ray.pos, ray.dir, p[0], p[1], p[2], distance))
+			if (Intersects(ray.pos, ray.dir, p[0], p[1], p[2], distance))	//Intersects : 속도 느림
 			{
 				//Vector3 result = ray.pos + ray.dir * distance;
 				//result.z = height - result.z;
 				//return result;
 				return ray.pos + ray.dir * distance;
 			}
-
 			if (Intersects(ray.pos, ray.dir, p[3], p[1], p[2], distance))
 			{
 				//Vector3 result = ray.pos + ray.dir * distance;
@@ -89,6 +142,7 @@ void TerrainEditor::MakeMesh()
 	}
 
 	vector<VertexType>& vertices = mesh->GetVertices();
+	vertices.clear();
 	vertices.reserve((size_t)width * height);
 	for (int z = 0; z < height; z++) {
 		for (int x = 0; x < width; x++) {
@@ -113,7 +167,8 @@ void TerrainEditor::MakeMesh()
 	};
 
 	vector<UINT>& indices = mesh->GetIndices();
-	indices.reserve((size_t)(width - 1) * (height - 1) * 6);
+	indices.clear();
+	indices.reserve(((size_t)width - 1) * ((size_t)height - 1) * 6);
 	for (int z = 0; z < height - 1; z++) {
 		for (int x = 0; x < width - 1; x++) {
 			for (int i = 0; i < 6; i++)
@@ -127,9 +182,9 @@ void TerrainEditor::MakeNormal()
 	vector<VertexType>& vertices = mesh->GetVertices();
 	const vector<UINT>& indices = mesh->GetIndices();
 	for (UINT i = 0; i < indices.size() / 3; i++) {
-		UINT index0 = indices[i * 3 + 0];
-		UINT index1 = indices[i * 3 + 1];
-		UINT index2 = indices[i * 3 + 2];
+		UINT index0 = indices[(size_t)i * 3 + 0];
+		UINT index1 = indices[(size_t)i * 3 + 1];
+		UINT index2 = indices[(size_t)i * 3 + 2];
 
 		Vector3 pos0 = vertices[index0].pos;
 		Vector3 pos1 = vertices[index1].pos;
@@ -176,4 +231,42 @@ void TerrainEditor::MakeTangent()
 		vertices[index1].tangent += tangent;
 		vertices[index2].tangent += tangent;
 	}
+}
+
+void TerrainEditor::MakeComputeData()
+{
+	vector<VertexType>& vertices = mesh->GetVertices();
+	vector<UINT>& indices = mesh->GetIndices();
+
+	computeShader = Shader::AddCS(L"Compute/ComputePicking.hlsl");
+	triangleSize = indices.size() / 3;
+
+	inputs.resize(triangleSize);
+	outputs.resize(triangleSize);
+
+	for (UINT i = 0; i < triangleSize; i++) {
+		UINT index0 = indices[i * 3 + 0];
+		UINT index1 = indices[i * 3 + 1];
+		UINT index2 = indices[i * 3 + 2];
+
+		inputs[i].v0 = vertices[index0].pos;
+		inputs[i].v1 = vertices[index1].pos;
+		inputs[i].v2 = vertices[index2].pos;
+	}
+
+	structuredBuffer = new StructuredBuffer(
+		inputs.data(), sizeof(InputDesc), triangleSize,
+		sizeof(OutputDesc), triangleSize);
+}
+
+void TerrainEditor::Resize()
+{
+	MakeMesh();
+	MakeNormal();
+	MakeTangent();
+	MakeComputeData();
+
+	mesh->UpdateVertex();
+	mesh->UpdateIndex();
+	structuredBuffer->UpdateInput(inputs.data());
 }

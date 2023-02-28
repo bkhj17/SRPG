@@ -65,7 +65,6 @@ float Terrain::GetHeight(const Vector3& pos, Vector3* normal) const
 		u = 1.0f - u;
 		v = 1.0f - v;
 
-
 		result = (p[2] - p[3]) * u + (p[1] - p[3]) * v + p[3];
 
 		if (normal)

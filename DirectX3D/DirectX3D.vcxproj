@@ -138,7 +138,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Framework\Shader\ComputeShader.h" />
     <ClInclude Include="Homework\230227\Scene230227.h" />
+    <ClInclude Include="Framework\Buffer\RawBuffer.h" />
     <ClInclude Include="Scenes\TerrainEditorScene.h" />
     <ClInclude Include="Objects\Basic\Cylinder.h" />
     <ClInclude Include="Homework\230224\Cylinder230224.h" />
@@ -195,6 +197,7 @@
     <ClInclude Include="Homework\230223\Sphere230223.h" />
     <ClInclude Include="Scenes\SphereScene.h" />
     <ClInclude Include="Objects\Basic\Sphere.h" />
+    <ClInclude Include="Framework\Buffer\StructuredBuffer.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Scenes\TutorialScene.h" />
     <ClInclude Include="Framework\Math\Vector3.h" />
@@ -207,7 +210,9 @@
     <ClInclude Include="Homework\230227\TerrainEditor230227.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Framework\Shader\ComputeShader.cpp" />
     <ClCompile Include="Homework\230227\Scene230227.cpp" />
+    <ClCompile Include="Framework\Buffer\RawBuffer.cpp" />
     <ClCompile Include="Scenes\TerrainEditorScene.cpp" />
     <ClCompile Include="Objects\Basic\Cylinder.cpp" />
     <ClCompile Include="Homework\230224\Cylinder230224.cpp" />
@@ -269,6 +274,7 @@
     <ClCompile Include="Homework\230224\Terrain230224.cpp" />
     <ClCompile Include="Objects\LandScape\TerrainEditor.cpp" />
     <ClCompile Include="Homework\230227\TerrainEditor230227.cpp" />
+    <ClCompile Include="Framework\Buffer\StructuredBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX3D.rc" />
@@ -291,6 +297,34 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shaders\Compute\ByteAddress.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CS</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="Shaders\Compute\ComputePicking.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CS</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="Shaders\LandScape\TerrainEditor.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Shaders\Light\NormalMapping.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>

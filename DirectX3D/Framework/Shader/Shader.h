@@ -9,6 +9,7 @@ protected:
 public:
     static class VertexShader* AddVS(wstring file);
     static class PixelShader* AddPS(wstring file);
+    static class ComputeShader* AddCS(wstring file);
     static void Delete();
 
     virtual void Set() = 0;

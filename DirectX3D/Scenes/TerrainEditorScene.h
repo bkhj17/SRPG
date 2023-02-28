@@ -13,6 +13,8 @@ public:
     virtual void GUIRender() override;
 
 private:
+    void ByteAddress();
+
+private:
     TerrainEditor* terrainEditor;
 };
-

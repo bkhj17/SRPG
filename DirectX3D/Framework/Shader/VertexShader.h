@@ -15,8 +15,8 @@ private:
     void CreateInputLayout();
 
 private:
-    ID3D11VertexShader* shader;
-    ID3D11InputLayout* inputLayout;
+    ID3D11VertexShader* shader = nullptr;
+    ID3D11InputLayout* inputLayout = nullptr;
 
     ID3D11ShaderReflection* reflection;
 };

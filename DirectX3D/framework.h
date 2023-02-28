@@ -83,11 +83,13 @@ using namespace Utility;
 #include "Framework/Buffer/ConstBuffer.h"
 #include "Framework/Buffer/VertexLayouts.h"
 #include "Framework/Buffer/GlobalBuffer.h"
-
+#include "Framework/Buffer/RawBuffer.h"
+#include "Framework/Buffer/StructuredBuffer.h"
 
 #include "Framework/Shader/Shader.h"
 #include "Framework/Shader/VertexShader.h"
 #include "Framework/Shader/PixelShader.h"
+#include "Framework/Shader/ComputeShader.h"
 
 #include "Framework/State/RasterizerState.h"
 #include "Framework/State/SamplerState.h"

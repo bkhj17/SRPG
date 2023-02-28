@@ -216,6 +216,15 @@
     <ClInclude Include="Homework\230227\Scene230227.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Framework\Shader\ComputeShader.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Buffer\RawBuffer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Buffer\StructuredBuffer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX3D.cpp">
@@ -398,6 +407,15 @@
     <ClCompile Include="Homework\230227\Scene230227.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Framework\Shader\ComputeShader.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Buffer\RawBuffer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Buffer\StructuredBuffer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX3D.rc">
@@ -420,6 +438,9 @@
     <FxCompile Include="Shaders\Light\SpecularLight.hlsl" />
     <FxCompile Include="Shaders\Light\SpecularLight230223.hlsl" />
     <FxCompile Include="Shaders\Light\NormalMapping.hlsl" />
+    <FxCompile Include="Shaders\LandScape\TerrainEditor.hlsl" />
+    <FxCompile Include="Shaders\Compute\ByteAddress.hlsl" />
+    <FxCompile Include="Shaders\Compute\ComputePicking.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\VertexHeader.hlsli" />

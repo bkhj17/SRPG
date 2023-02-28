@@ -31,7 +31,7 @@ void Cylinder::MakeMesh()
 	float thetaStep = XM_2PI / sliceCount;
 
 	vector<VertexType>& vertices = mesh->GetVertices();
-	vertices.reserve(4 * (sliceCount + 1));
+	vertices.reserve((size_t)4 * ((size_t)sliceCount + 1));
 	
 	int topIndex = 0;
 	vertex.pos = { 0, height * 0.5f, 0 };
@@ -111,9 +111,9 @@ void Cylinder::MakeNormal()
 	vector<VertexType>& vertices = mesh->GetVertices();
 	const vector<UINT>& indices = mesh->GetIndices();
 	for (UINT i = 0; i < indices.size() / 3; i++) {
-		UINT index0 = indices[i * 3 + 0];
-		UINT index1 = indices[i * 3 + 1];
-		UINT index2 = indices[i * 3 + 2];
+		UINT index0 = indices[(size_t)i * 3 + 0];
+		UINT index1 = indices[(size_t)i * 3 + 1];
+		UINT index2 = indices[(size_t)i * 3 + 2];
 
 		Vector3 pos0 = vertices[index0].pos;
 		Vector3 pos1 = vertices[index1].pos;
@@ -138,9 +138,9 @@ void Cylinder::MakeTangent()
 	vector<UINT>& indices = mesh->GetIndices();
 
 	for (int i = 0; i * 3 < indices.size(); i++) {
-		int index0 = indices[i * 3];
-		int index1 = indices[i * 3 + 1];
-		int index2 = indices[i * 3 + 2];
+		int index0 = indices[(size_t)i * 3];
+		int index1 = indices[(size_t)i * 3 + 1];
+		int index2 = indices[(size_t)i * 3 + 2];
 
 		Float2 uv0 = vertices[index0].uv;
 		Float2 uv1 = vertices[index1].uv;

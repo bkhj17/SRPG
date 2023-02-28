@@ -12,5 +12,5 @@ public:
     virtual void Set() override;
 
 private:
-    ID3D11PixelShader* shader;    
+    ID3D11PixelShader* shader = nullptr;
 };
