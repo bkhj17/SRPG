@@ -5,6 +5,10 @@ TerrainEditor::TerrainEditor()
 {
 	tag = "Terrain";
 
+	material->SetDiffuseMap(L"Textures/Landscape/Dirt.png");
+	secondMap = Texture::Add(L"Textures/LandScape/Dirt2.png");
+	thirdMap = Texture::Add(L"Textures/LandScape/Dirt3.png");
+
 	mesh = new Mesh<VertexType>;
 	MakeMesh();
 	MakeNormal();
@@ -12,27 +16,57 @@ TerrainEditor::TerrainEditor()
 	MakeComputeData();
 	mesh->CreateMesh();
 
+	computeShader = Shader::AddCS(L"Compute/ComputePicking.hlsl");
+
 	brushBuffer = new BrushBuffer;
-	rayBuffer = new RayBuffer();
+	structuredBuffer = new StructuredBuffer(
+		inputs.data(), sizeof(InputDesc), triangleSize, 
+		sizeof(OutputDesc), triangleSize);
+	rayBuffer = new RayBuffer(); 
+
+	char path[128];
+	GetCurrentDirectoryA(sizeof(path), path);
+	projectPath = path;
 }
 
 TerrainEditor::~TerrainEditor()
 {
 	delete mesh;
 	delete brushBuffer;
-
 	delete rayBuffer;
 	delete structuredBuffer;
 }
 
 void TerrainEditor::Update()
 {
-	brushBuffer->Get().pickingPos = ComputePicking();
+	if (ComputePicking(pickingPos))
+		brushBuffer->Get().pickingPos = pickingPos;
+	else
+		return;
+
+	if (KEY_PRESS(VK_LBUTTON) && !ImGui::GetIO().WantCaptureMouse) {
+		switch (editType)
+		{
+		case TerrainEditor::HEIGHT:
+			AdjustHeight();
+			break;
+		case TerrainEditor::ALPHA:
+			AdjustAlpha();
+			break;
+		}
+	}
+
+	if (KEY_UP(VK_LBUTTON)) {
+		UpdateHeight();
+	}
 }
 
 void TerrainEditor::Render()
 {
 	brushBuffer->SetPS(10);
+	secondMap->PSSet(11);
+	thirdMap->PSSet(12);
+
 	SetRender();
 	mesh->Draw();
 }
@@ -47,46 +81,26 @@ void TerrainEditor::RenderUI()
 	if (resize)
 		Resize();
 
-	ImGui::DragFloat("Range", &brushBuffer->Get().range, 1.0f, 1.0f, 50.0f);
+	const char* editList[] = { "Height", "Alpha" };
+	ImGui::Combo("EditType", (int*)&editType, editList, 2);
+
+	const char* brushList[] = { "Circle", "SoftCircle", "Rect" };
+	if (ImGui::Combo("BrushType", (int*)&brushType, brushList, 3))
+		brushBuffer->Get().type = brushType;
+
+	ImGui::DragFloat("Range", &brushBuffer->Get().range, 1.0f, 1.0f, 20.0f);
+	ImGui::DragFloat("AdjustValue", &adjustValue, 1.0f, -50.0f, 50.0f);
 	ImGui::ColorEdit3("Color", (float*)&brushBuffer->Get().color);
-}
 
-Vector3 TerrainEditor::ComputePicking()
-{
-	Ray ray = CAM->ScreenPointToRay(mousePos);
-	rayBuffer->Get().pos = ray.pos;
-	rayBuffer->Get().dir = ray.dir;
-	rayBuffer->Get().triangleSize = triangleSize;
+	ImGui::DragInt("SelectMap", (int*)& selectMap, 1, 0, 2);
 
-	rayBuffer->SetCS(0);
+	SaveHeightMap();
+	ImGui::SameLine();
+	LoadHeightMap();
 
-	DC->CSSetShaderResources(0, 1, &structuredBuffer->GetSRV());
-	DC->CSSetUnorderedAccessViews(0, 1, &structuredBuffer->GetUAV(), nullptr);
-
-	computeShader->Set();
-
-	UINT x = (UINT)ceil((float)triangleSize / 64.0f);
-	DC->Dispatch(x, 1, 1);	//연산 실행
-	structuredBuffer->Copy(outputs.data(), sizeof(OutputDesc) * triangleSize);
-	
-	float minDistance = FLT_MAX;
-	int minIndex = -1;
-	UINT index = 0;
-	for (OutputDesc output : outputs) {
-		if (output.picked) {
-			if (minDistance > output.distance) {
-				minDistance = output.distance;
-				minIndex = index;
-			}
-		}
-		index++;
-	}
-
-	if (minIndex >= 0) {
-		return ray.pos + ray.dir * minDistance;
-	}
-
-	return Vector3::Zero();
+	SaveAlphaMap();
+	ImGui::SameLine();
+	LoadAlphaMap();
 }
 
 Vector3 TerrainEditor::Picking()
@@ -129,6 +143,45 @@ Vector3 TerrainEditor::Picking()
 	}
 
 	return Vector3();
+}
+
+bool TerrainEditor::ComputePicking(Vector3& pos)
+{
+	Ray ray = CAM->ScreenPointToRay(mousePos);
+	rayBuffer->Get().pos = ray.pos;
+	rayBuffer->Get().dir = ray.dir;
+	rayBuffer->Get().triangleSize = triangleSize;
+
+	rayBuffer->SetCS(0);
+
+	DC->CSSetShaderResources(0, 1, &structuredBuffer->GetSRV());
+	DC->CSSetUnorderedAccessViews(0, 1, &structuredBuffer->GetUAV(), nullptr);
+
+	computeShader->Set();
+
+	UINT x = (UINT)ceil((float)triangleSize / 64.0f);
+	DC->Dispatch(x, 1, 1);	//연산 실행
+	structuredBuffer->Copy(outputs.data(), sizeof(OutputDesc) * triangleSize);
+	
+	float minDistance = FLT_MAX;
+	int minIndex = -1;
+	UINT index = 0;
+	for (const OutputDesc& output : outputs) {
+		if (output.picked) {
+			if (minDistance > output.distance) {
+				minDistance = output.distance;
+				minIndex = index;
+			}
+		}
+		index++;
+	}
+
+	if (minIndex >= 0) {
+		pos = ray.pos + ray.dir * minDistance;
+		return true;
+	}
+
+	return false;
 }
 
 void TerrainEditor::MakeMesh()
@@ -186,19 +239,19 @@ void TerrainEditor::MakeNormal()
 		UINT index1 = indices[(size_t)i * 3 + 1];
 		UINT index2 = indices[(size_t)i * 3 + 2];
 
-		Vector3 pos0 = vertices[index0].pos;
-		Vector3 pos1 = vertices[index1].pos;
-		Vector3 pos2 = vertices[index2].pos;
+		Vector3 v0 = vertices[index0].pos;
+		Vector3 v1 = vertices[index1].pos;
+		Vector3 v2 = vertices[index2].pos;
 
 		//순서 주의
-		Vector3 e0 = pos1 - pos0;
-		Vector3 e1 = pos2 - pos0;
+		Vector3 e0 = v1 - v0;
+		Vector3 e1 = v2 - v0;
 
 		Vector3 normal = Cross(e0, e1).GetNormalized();
 
-		vertices[index0].normal += normal;
-		vertices[index1].normal += normal;
-		vertices[index2].normal += normal;
+		vertices[index0].normal = normal + vertices[index0].normal;
+		vertices[index1].normal = normal + vertices[index1].normal;
+		vertices[index2].normal = normal + vertices[index2].normal;
 		//정규화는 셰이더에서 하니 생략
 	}
 }
@@ -209,16 +262,21 @@ void TerrainEditor::MakeTangent()
 	vector<UINT>& indices = mesh->GetIndices();
 
 	for (int i = 0; i * 3 < indices.size(); i++) {
-		int index0 = indices[i * 3];
+		int index0 = indices[i * 3 + 0];
 		int index1 = indices[i * 3 + 1];
 		int index2 = indices[i * 3 + 2];
+
+
+		Vector3 p0 = vertices[index0].pos;
+		Vector3 p1 = vertices[index1].pos;
+		Vector3 p2 = vertices[index2].pos;
 
 		Float2 uv0 = vertices[index0].uv;
 		Float2 uv1 = vertices[index1].uv;
 		Float2 uv2 = vertices[index2].uv;
 
-		Vector3 e0 = (Vector3)vertices[index1].pos - vertices[index0].pos;
-		Vector3 e1 = (Vector3)vertices[index2].pos - vertices[index0].pos;
+		Vector3 e0 = p1 - p0;
+		Vector3 e1 = p2 - p0;
 
 		float u1 = uv1.x - uv0.x;
 		float v1 = uv1.y - uv0.y;
@@ -238,7 +296,6 @@ void TerrainEditor::MakeComputeData()
 	vector<VertexType>& vertices = mesh->GetVertices();
 	vector<UINT>& indices = mesh->GetIndices();
 
-	computeShader = Shader::AddCS(L"Compute/ComputePicking.hlsl");
 	triangleSize = indices.size() / 3;
 
 	inputs.resize(triangleSize);
@@ -253,10 +310,6 @@ void TerrainEditor::MakeComputeData()
 		inputs[i].v1 = vertices[index1].pos;
 		inputs[i].v2 = vertices[index2].pos;
 	}
-
-	structuredBuffer = new StructuredBuffer(
-		inputs.data(), sizeof(InputDesc), triangleSize,
-		sizeof(OutputDesc), triangleSize);
 }
 
 void TerrainEditor::Resize()
@@ -269,4 +322,267 @@ void TerrainEditor::Resize()
 	mesh->UpdateVertex();
 	mesh->UpdateIndex();
 	structuredBuffer->UpdateInput(inputs.data());
+}
+
+void TerrainEditor::UpdateHeight()
+{
+	vector<VertexType>& vertices = mesh->GetVertices();
+	for (auto& vertex : vertices) {
+		vertex.normal = {};
+		vertex.tangent = {};
+	}
+
+	MakeNormal();
+	MakeTangent();
+	MakeComputeData();
+
+	mesh->UpdateVertex();
+	structuredBuffer->UpdateInput(inputs.data());
+}
+
+void TerrainEditor::AdjustHeight()
+{
+	vector<VertexType>& vertices = mesh->GetVertices();
+
+	switch (brushType)
+	{
+	case TerrainEditor::CIRCLE:
+		for (auto& vertex : vertices) {
+			Vector3 pos = { vertex.pos.x, 0, vertex.pos.z };
+			pickingPos.y = 0.0f;
+
+			float distance = Distance(pos, pickingPos);
+
+			if (distance < brushBuffer->Get().range) {
+				vertex.pos.y += adjustValue * DELTA;
+				vertex.pos.y = Clamp(MIN_HEIGHT, MAX_HEIGHT, vertex.pos.y);
+			}
+		}
+		break;
+	case TerrainEditor::SOFT_CIRCLE:
+		for (auto& vertex : vertices) {
+			Vector3 pos = { vertex.pos.x, 0, vertex.pos.z };
+			pickingPos.y = 0.0f;
+
+			float distance = Distance(pos, pickingPos);
+			float temp = adjustValue * max(0, cosf(distance / brushBuffer->Get().range));
+
+			if (distance < brushBuffer->Get().range) {
+				vertex.pos.y += temp * DELTA;
+				vertex.pos.y = Clamp(MIN_HEIGHT, MAX_HEIGHT, vertex.pos.y);
+			}
+		}
+		break;
+	case TerrainEditor::RECT:
+	{
+		float size = brushBuffer->Get().range * 0.5f;
+
+		float left = max(0, pickingPos.x - size);
+		float right = max(0, pickingPos.x + size);
+		float top = max(0, pickingPos.z + size);
+		float bottom = max(0, pickingPos.z - size);
+
+		for (UINT z = (UINT)bottom; z <= (UINT)top; z++) {
+			for (UINT x = (UINT)left; x <= (UINT)right; x++) {
+				UINT index = width * (height - z - 1) + x;
+				if (index >= vertices.size())
+					continue;
+
+				vertices[index].pos.y += adjustValue * DELTA;
+				vertices[index].pos.y = Clamp(MIN_HEIGHT, MAX_HEIGHT, vertices[index].pos.y);
+			}
+		}
+	}
+	break;
+	}
+	mesh->UpdateVertex();
+}
+
+void TerrainEditor::SaveHeightMap()
+{
+	if (ImGui::Button("SaveHeight")) {
+		DIALOG->OpenDialog("SaveHeight", "SaveHeight", ".png", "Textures/");
+	}
+
+	if (DIALOG->Display("SaveHeight")) {
+		if (DIALOG->IsOk()) {
+			string file = DIALOG->GetFilePathName();
+			file = file.substr(projectPath.size() + 1, file.size());
+			UINT size = width * height * 4;	//4 : rgba
+
+			vector<VertexType>& vertices = mesh->GetVertices();
+
+			uint8_t* pixels = new uint8_t[size];
+			for (UINT i = 0; i < size / 4; i++) {
+				float y = vertices[i].pos.y;
+				uint8_t height = (y - MIN_HEIGHT) / (MAX_HEIGHT-MIN_HEIGHT) * 255;
+				pixels[i * 4 + 0] = height;
+				pixels[i * 4 + 1] = height;
+				pixels[i * 4 + 2] = height;
+				pixels[i * 4 + 3] = 255;
+			}
+
+			Image image;
+			image.width = width;
+			image.height = height;
+			image.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+			image.rowPitch = width * 4;
+			image.slicePitch = size;
+			image.pixels = pixels;
+			SaveToWICFile(image, WIC_FLAGS_FORCE_RGB, 
+				GetWICCodec(WIC_CODEC_PNG), ToWString(file).c_str());
+
+			delete[] pixels;
+		}
+		DIALOG->Close();
+	}
+}
+
+void TerrainEditor::LoadHeightMap()
+{
+	
+	if (ImGui::Button("LoadHeight")) {
+		DIALOG->OpenDialog("LoadHeight", "LoadHeight", ".png", "Textures/");
+	}
+
+	if (DIALOG->Display("LoadHeight")) {
+		if (DIALOG->IsOk()) {
+			string file = DIALOG->GetFilePathName();
+			file = file.substr(projectPath.size() + 1, file.size());
+
+			heightMap = Texture::Add(ToWString(file));
+
+			Resize();
+		}
+		DIALOG->Close();
+	}
+}
+
+
+void TerrainEditor::AdjustAlpha()
+{
+	vector<VertexType>& vertices = mesh->GetVertices();
+
+	switch (brushType)
+	{
+	case TerrainEditor::CIRCLE:
+		for (auto& vertex : vertices) {
+			Vector3 pos = { vertex.pos.x, 0, vertex.pos.z };
+			pickingPos.y = 0.0f;
+
+			float distance = Distance(pos, pickingPos);
+
+			if (distance < brushBuffer->Get().range) {
+				vertex.alpha[selectMap] += adjustValue * DELTA;
+				vertex.alpha[selectMap] = Clamp(0.0f, 1.0f, vertex.alpha[selectMap]);
+			}
+		}
+		break;
+	case TerrainEditor::SOFT_CIRCLE:
+		for (auto& vertex : vertices) {
+			Vector3 pos = { vertex.pos.x, 0, vertex.pos.z };
+			pickingPos.y = 0.0f;
+
+			float distance = Distance(pos, pickingPos);
+			float temp = adjustValue * max(0, cosf(distance / brushBuffer->Get().range));
+
+			if (distance < brushBuffer->Get().range) {
+				vertex.alpha[selectMap] += temp * DELTA;
+				vertex.alpha[selectMap] = Clamp(0.0f, 1.0f, vertex.alpha[selectMap]);
+			}
+		}
+		break;
+	case TerrainEditor::RECT:
+	{
+		float size = brushBuffer->Get().range * 0.5f;
+
+		float left = max(0, pickingPos.x - size);
+		float right = max(0, pickingPos.x + size);
+		float top = max(0, pickingPos.z + size);
+		float bottom = max(0, pickingPos.z - size);
+
+		for (UINT z = (UINT)bottom; z <= (UINT)top; z++) {
+			for (UINT x = (UINT)left; x <= (UINT)right; x++) {
+				UINT index = width * (height - z - 1) + x;
+				if (index >= vertices.size())
+					continue;
+
+				auto& vertex = vertices[index];
+
+				vertex.alpha[selectMap] += adjustValue * DELTA;
+				vertex.alpha[selectMap] = Clamp(0.0f, 1.0f, vertex.alpha[selectMap]);
+			}
+		}
+	}
+	break;
+	}
+	mesh->UpdateVertex();
+}
+
+void TerrainEditor::SaveAlphaMap()
+{
+	if (ImGui::Button("SaveAlpha"))
+		DIALOG->OpenDialog("SaveAlpha", "SaveAlpha", ".png", ALPHA_PATH);
+
+	if (DIALOG->Display("SaveAlpha")) {
+		if (DIALOG->IsOk()) {
+			string file = DIALOG->GetFilePathName();
+			file = file.substr(projectPath.size() + 1, file.size());
+
+			UINT size = width * height * 4;	//4 : rgba
+			uint8_t* pixels = new uint8_t[size];
+			
+			vector<VertexType>& vertices = mesh->GetVertices();
+
+			for (UINT i = 0; i < size/4; i++) {
+				pixels[i * 4 + 0] = vertices[i].alpha[0] * 255;
+				pixels[i * 4 + 1] = vertices[i].alpha[1] * 255;
+				pixels[i * 4 + 2] = vertices[i].alpha[2] * 255;
+				pixels[i * 4 + 3] = 255;
+			}
+
+			Image image;
+			image.width = width;
+			image.height = height;
+			image.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+			image.rowPitch = width * 4;
+			image.slicePitch = size;
+			image.pixels = pixels;
+			SaveToWICFile(image, WIC_FLAGS_FORCE_RGB, 
+				GetWICCodec(WIC_CODEC_PNG), ToWString(file).c_str());
+
+			delete[] pixels;
+		}
+		DIALOG->Close();
+	}
+}
+
+void TerrainEditor::LoadAlphaMap()
+{
+	if (ImGui::Button("LoadAlpha")) {
+		DIALOG->OpenDialog("LoadAlpha", "LoadAlpha", ".png", ALPHA_PATH);
+	}
+
+	if (DIALOG->Display("LoadAlpha")) {
+		if (DIALOG->IsOk()) {
+			string file = DIALOG->GetFilePathName();
+			file = file.substr(projectPath.size() + 1, file.size());
+
+			Texture* alphaMap = Texture::Add(ToWString(file));
+
+			vector<VertexType>& vertices = mesh->GetVertices();
+
+			vector<Float4> pixels;
+			alphaMap->ReadPixels(pixels);
+			for (UINT i = 0; i < vertices.size(); i++) {
+				vertices[i].alpha[0] = pixels[i].z;
+				vertices[i].alpha[1] = pixels[i].y;
+				vertices[i].alpha[2] = pixels[i].x;
+				vertices[i].alpha[3] = pixels[i].w;
+			}
+
+			mesh->UpdateVertex();
+		}
+		DIALOG->Close();
+	}
 }

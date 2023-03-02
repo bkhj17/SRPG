@@ -60,6 +60,8 @@ public:
 	bool operator==(const Vector3& v) const { return XMVector3Equal(value, v.value); }
 	bool operator!=(const Vector3& v) const { return !XMVector3Equal(value, v.value); }
 
+	float Length() const { return XMVectorGetX(XMVector3Length(value)); }
+
 	Vector3 GetNormalized() const { return XMVector3Normalize(value); }
 	void Normalize() { value = XMVector3Normalize(value); }
 

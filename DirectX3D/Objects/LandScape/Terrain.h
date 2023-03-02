@@ -6,6 +6,7 @@ private:
 	const float MAX_HEIGHT = 20.0f;
 public:
 	Terrain();
+	Terrain(string mapFile);
 	~Terrain();
 
 	void Render();
@@ -21,4 +22,7 @@ private:
 	Mesh<VertexType>* mesh;
 
 	Texture* heightMap;
+	Texture* alphaMap;
+	Texture* secondMap;
+	Texture* thirdMap;
 };

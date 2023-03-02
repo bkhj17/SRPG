@@ -16,6 +16,7 @@ public:
 			Float4 diffuse = { 1, 1, 1, 1 };
 			Float4 specular = { 1, 1, 1, 1 };
 			Float4 ambient = { 1, 1, 1, 1 };
+			Float4 emissive = { 0, 0, 0, 1 };
 			float shininess = 24.0f;
 			int hasNormalMap = 0;
 			float padding[2] = {};
@@ -39,8 +40,11 @@ public:
 
 	void SetShader(wstring shaderFile);
 	void SetDiffuseMap(wstring textureFile);
+	Texture* GetDiffuseMap() { return diffuseMap; }
 	void SetSpecularMap(wstring textureFile);
+	Texture* GetSpecularMap() { return specularMap; }
 	void SetNormalMap(wstring textureFile);
+	Texture* GetNormalMap() { return normalMap; }
 
 private:
 	void SelectMap(string name, MapType type);
@@ -55,7 +59,5 @@ private:
 	Texture* normalMap = nullptr;
 
 	MaterialBuffer* buffer;
-
-	MapType type = DIFFUSE;
 };
 

@@ -6,6 +6,9 @@
 
 #define WIN_WIDTH 1280
 #define WIN_HEIGHT 720
+
+#define MAX_LIGHT 10
+
 #define CENTER_X (WIN_WIDTH * 0.5f)
 #define CENTER_Y (WIN_HEIGHT * 0.5f)
 
@@ -26,6 +29,9 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
+#include <set>
+#include <stack>
+#include <queue>
 #include <functional>
 #include <algorithm>
 #include <assert.h>

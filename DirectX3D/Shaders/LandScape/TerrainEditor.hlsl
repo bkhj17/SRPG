@@ -4,19 +4,24 @@
 struct PixelInput
 {
     float4 pos : SV_POSITION;
-    float4 worldPos : WORLD_POS;
     float2 uv : UV;
     float3 normal : NORMAL;
     float3 tangent : TANGENT;
     float3 binormal : BINORMAL;
     float3 viewDir : VIEWDIR;
+    float3 worldPos : POSITION;
+    float4 alpha : ALPHA;
 };
 
-PixelInput VS(VertexUVNormalTangent input)
+PixelInput VS(VertexUVNormalTangentAlpha input)
 {
     PixelInput output;
-    output.worldPos = mul(input.pos, world);
-    output.pos = mul(output.worldPos, view);
+    output.pos = mul(input.pos, world);
+	
+    output.viewDir = normalize(invView._31_32_33);
+    output.worldPos = output.pos;
+	
+    output.pos = mul(output.pos, view);
     output.pos = mul(output.pos, projection);
     
     output.uv = input.uv;
@@ -24,9 +29,8 @@ PixelInput VS(VertexUVNormalTangent input)
     output.normal = mul(input.normal, (float3x3) world); // 
     output.tangent = mul(input.tangent, (float3x3) world); // 
     output.binormal = cross(output.normal, output.tangent);
-    
-    //output.viewDir = normalize(output.pos.xyz - invView._41_42_43);   //
-    output.viewDir = normalize(invView._31_32_33); //forward
+        
+    output.alpha = input.alpha;
     
     return output;
 }
@@ -40,64 +44,83 @@ cbuffer BrushBuffer : register(b10)
     float3 color;
 }
 
-float4 BrushColor(float4 pos)
+float4 BrushColor(float3 pos)
 {
-    if (type == 0)
+    if (type == 0 || type == 1)
     {
         //원
         float2 direction = pos.xz - pickingPos.xz;
         float distance = length(direction);
         if (distance <= range)
-        {
             return float4(color, 0.0f); //더할 것이기에 0
-        }
+    }
+    else if (type == 2)
+    {
+        //사각형
+        float size = range * 0.5f;
+        if (abs(pos.x - pickingPos.x) < size && abs(pos.z - pickingPos.z) < size)
+            return float4(color, 0.0f);
     }
     
     return float4(0, 0, 0, 0);
 }
 
-float4 PS(PixelInput input) : SV_TARGET
+Texture2D secondDiffuseMap : register(t11);
+Texture2D thirdDiffuseMap : register(t12);
+
+Texture2D secondNormalMap : register(t21);
+Texture2D thirdNormalMap : register(t22);
+
+Texture2D secondSpecularMap : register(t31);
+Texture2D thirdSpeculerMap : register(t32);
+
+Material GetMaterialToTerrain(PixelInput input)
 {
-    float4 albedo = diffuseMap.Sample(samp, input.uv);
+    Material material;
     
     float3 T = normalize(input.tangent);
     float3 B = normalize(input.binormal);
     float3 N = normalize(input.normal);
     
-    float3 normal = N;
-    float3 light = normalize(lightDirection);
-    //float3 light = normalize(input.worldPos - lightDirection);
     if (hasNormalMap)
-    {
-        float3 normalMapColor = normalMap.Sample(samp, input.uv).rgb;
-        normal = normalMapColor * 2.0f - 1.0f;
+    {    
+        material.normal = normalMap.Sample(samp, input.uv).rgb;
+        material.normal = lerp(material.normal, secondNormalMap.Sample(samp, input.uv).rgb * 2.0f - 1.0f, input.alpha.r);
+        material.normal = lerp(material.normal, thirdNormalMap.Sample(samp, input.uv).rgb * 2.0f - 1.0f, input.alpha.g);
+        
         float3x3 TBN = float3x3(T, B, N);
-        normal = normalize(mul(normal, TBN));
+        material.normal = normalize(mul(material.normal, TBN));
     }
+    else
+        material.normal = NormalMapping(input.tangent, input.binormal, input.normal, input.uv);
     
-    float diffuseIntensity = saturate(dot(normal, -light));
+    float4 albedo = diffuseMap.Sample(samp, input.uv);
+    float4 alpha = input.alpha;
+    float4 second = secondDiffuseMap.Sample(samp, input.uv);
+    float4 third = thirdDiffuseMap.Sample(samp, input.uv);
+    
+    albedo = lerp(albedo, second, alpha.r);
+    albedo = lerp(albedo, third, alpha.g);
 
-    float4 specular = 0;
-    if (diffuseIntensity > 0)
-    {
-        //Phong Shading : 이론 그대로의 정확한 연산
-        //float3 reflection = normalize(reflect(light, normal));  //반사각
-        //specular = saturate(dot(-reflection, input.viewDir));
-        
-        //Blinn Phong Shading(개량형) : 유사한 수치로 효율적으로 연산 가능
-        float3 halfWay = normalize(input.viewDir + light);
-        specular = saturate(dot(normal, -halfWay));
-        
-        float4 specularIntensity = specularMap.Sample(samp, input.uv);
-                
-        specular = pow(specular, shininess) * specularIntensity * mSpecular * lightColor;
-    }
+    material.diffuseColor = albedo;
     
-    float4 diffuse = albedo * diffuseIntensity * mDiffuse * lightColor;
-    //간접광
-    float4 ambient = albedo * ambientColor * mAmbient;
+    material.specularIntensity = specularMap.Sample(samp, input.uv);
+    material.specularIntensity = lerp(material.specularIntensity, secondSpecularMap.Sample(samp, input.uv), input.alpha.r);
+    material.specularIntensity = lerp(material.specularIntensity, thirdSpeculerMap.Sample(samp, input.uv), input.alpha.g);
     
-    float4 brushColor = BrushColor(input.worldPos);
+    material.viewPos = input.worldPos.rgb + input.viewDir * 1.0f;
+    material.worldPos = input.worldPos;
     
-    return (ambient + diffuse + specular) + brushColor;
+    return material;
+}
+
+float4 PS(PixelInput input) : SV_TARGET
+{
+    Material material = GetMaterialToTerrain(input);
+    
+    float4 color = CalcDirectional(material, lights[0]);
+    float4 ambient = CalcAmbient(material);
+    float4 emissive = CalcEmissive(material);
+    
+    return color + ambient + emissive;
 }

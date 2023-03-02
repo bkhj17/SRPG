@@ -41,10 +41,10 @@ inline void Mesh<T>::Draw(D3D11_PRIMITIVE_TOPOLOGY type)
 	
 	if (indexBuffer) {
 		indexBuffer->Set();
-		DC->DrawIndexed(indices.size(), 0, 0);
+		DC->DrawIndexed((UINT)indices.size(), 0, 0);
 	}
 	else {
-		DC->Draw(vertices.size(), 0);
+		DC->Draw((UINT)vertices.size(), 0);
 	}
 }
 
@@ -52,19 +52,19 @@ template<typename T>
 inline void Mesh<T>::CreateMesh()
 {
 	if(vertices.size() > 0)
-		vertexBuffer = new VertexBuffer(vertices.data(), sizeof(T), vertices.size());
+		vertexBuffer = new VertexBuffer(vertices.data(), sizeof(T), (UINT)vertices.size());
 	if(indices.size() > 0)
-		indexBuffer = new IndexBuffer(indices.data(), indices.size());
+		indexBuffer = new IndexBuffer(indices.data(), (UINT)indices.size());
 }
 
 template<typename T>
 inline void Mesh<T>::UpdateVertex()
 {
-	vertexBuffer->Update(vertices.data(), vertices.size());
+	vertexBuffer->Update(vertices.data(), (UINT)vertices.size());
 }
 
 template<typename T>
 inline void Mesh<T>::UpdateIndex()
 {
-	indexBuffer->Update(indices.data(), indices.size());
+	indexBuffer->Update(indices.data(), (UINT)indices.size());
 }

@@ -45,6 +45,7 @@ void Material::RenderUI()
 		ImGui::ColorEdit3("Diffuse", (float*)&buffer->Get().diffuse);
 		ImGui::ColorEdit3("Specular", (float*)&buffer->Get().specular);
 		ImGui::ColorEdit3("Ambient", (float*)&buffer->Get().ambient);
+		ImGui::ColorEdit4("Emissive", (float*)&buffer->Get().emissive);
 
 		ImGui::SliderFloat("Shininess", (float*)&buffer->Get().shininess, 1, 50);
 

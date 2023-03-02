@@ -5,12 +5,14 @@
 #include "Scenes/TerrainScene.h"
 #include "Scenes/SphereScene.h"
 #include "Scenes/TerrainEditorScene.h"
+#include "Scenes/LightScene.h"
 //#include "Homework/230221/Scene230221.h"
 //#include "Homework/230222/GridScene230222.h"
 //#include "Homework/230222/TerrainScene230222.h"
 //#include "Homework/230223/Scene230223.h"
 //#include "Homework/230224/Scene230224.h"
 //#include "Homework/230227/Scene230227.h"
+#include "Homework/230302/Scene230302.h"
 
 GameManager::GameManager()
 {
@@ -20,7 +22,8 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Start", new TutorialScene());
     //SceneManager::Get()->Create("Start", new CubeScene());
     //SceneManager::Get()->Create("Start", new TerrainScene);
-    SceneManager::Get()->Create("Start", new TerrainEditorScene);
+    //SceneManager::Get()->Create("Start", new TerrainEditorScene);
+    //SceneManager::Get()->Create("Start", new LightScene);
     
     //SceneManager::Get()->Create("Grid", new GridScene230222());
     //SceneManager::Get()->Create("Start", new SphereScene);
@@ -28,6 +31,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Start", new Scene230223);
     //SceneManager::Get()->Create("Start", new Scene230224);
     //SceneManager::Get()->Create("Start", new Scene230227);
+    SceneManager::Get()->Create("Start", new Scene230302);
     
     SceneManager::Get()->Add("Grid");
     SceneManager::Get()->Add("Start");

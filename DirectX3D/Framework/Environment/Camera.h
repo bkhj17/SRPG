@@ -34,5 +34,7 @@ private:
     float moveSpeed = 100.0f;
     float rotSpeed = 10.0f;
 
+    Vector3 prevMousePos = {};
+
     Transform* target = nullptr;
 };

@@ -81,8 +81,8 @@ void Cylinder230224::MakeMesh()
 
     for (int i = 1; i <= sliceCount; ++i)
     {
-        indices.push_back(vertices.size()-1);
-        indices.push_back(vertices.size()-1 - i-1);
-        indices.push_back(vertices.size()-1 - i);
+        indices.push_back((UINT)vertices.size()-1);
+        indices.push_back((UINT)vertices.size()-1 - i-1);
+        indices.push_back((UINT)vertices.size()-1 - i);
     }
 }

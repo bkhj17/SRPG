@@ -41,3 +41,12 @@ struct VertexUVNormalTangent
     float3 normal : NORMAL;
     float3 tangent : TANGENT;
 };
+
+struct VertexUVNormalTangentAlpha
+{
+    float4 pos : POSITION;
+    float2 uv : UV;
+    float3 normal : NORMAL;
+    float3 tangent : TANGENT;
+    float4 alpha : ALPHA;
+};

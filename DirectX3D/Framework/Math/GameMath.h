@@ -25,6 +25,7 @@ namespace GameMath
     float Dot(Vector3& vec1, Vector3& vec2);
 
     float Distance(const Vector2& vec1, const Vector2& vec2);
+    float Distance(const Vector3& vec1, const Vector3& vec2);
 
     bool NearlyEqaul(const float& s1, const float& s2) { return abs(s1 - s2) < FLT_EPSILON; }
 

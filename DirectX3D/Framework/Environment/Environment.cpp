@@ -34,9 +34,18 @@ void Environment::RenderUI()
     if (ImGui::TreeNode("Environment")) {
         mainCamera->RenderUI();
         ImGui::Text("LightOption");
-        ImGui::ColorEdit3("LightColor", (float*)&lightBuffer->Get().color, ImGuiColorEditFlags_PickerHueWheel);
-        ImGui::SliderFloat3("LightDir", (float*)&lightBuffer->Get().direction, -1, 1);
-        ImGui::ColorEdit3("Ambient", (float*)&lightBuffer->Get().ambient, ImGuiColorEditFlags_PickerHueWheel);
+        for (UINT i = 0; i < lightBuffer->Get().lightCount; i++) {
+            string name = "Light_"+to_string(i);
+            if (ImGui::TreeNode(name.c_str())) {
+                ImGui::ColorEdit3("LightColor", (float*)&lightBuffer->Get().lights[i].color, ImGuiColorEditFlags_PickerHueWheel);
+                ImGui::SliderFloat3("LightDir", (float*)&lightBuffer->Get().lights[i].direction, -1, 1);
+
+                ImGui::TreePop();
+            }
+        }
+
+        ImGui::ColorEdit3("AmbientLight", (float*)&lightBuffer->Get().ambientLight, ImGuiColorEditFlags_PickerHueWheel);
+        ImGui::ColorEdit3("AmbientCeil", (float*)&lightBuffer->Get().ambientCeil, ImGuiColorEditFlags_PickerHueWheel);
         ImGui::TreePop();
     }
 }

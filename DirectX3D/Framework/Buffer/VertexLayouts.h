@@ -50,24 +50,27 @@ struct VertexColor
 
 struct VertexUVNormal
 {
-    Float3 pos;
-    Float2 uv;
-    Float3 normal;
-
-    VertexUVNormal() : pos(0, 0, 0), uv(0, 0), normal(0, 0, 0)
-    {
-    }
+    Float3 pos = {};
+    Float2 uv = {};
+    Float3 normal = {};
 };
 
 
 struct VertexUVNormalTangent
 {
-    Float3 pos;
-    Float2 uv;
-    Float3 normal;
-    Float3 tangent;
+    Float3 pos = {};
+    Float2 uv = {};
+    Float3 normal = {};
+    Float3 tangent = {};
+};
 
-    VertexUVNormalTangent() : pos(0, 0, 0), uv(0, 0), normal(0, 0, 0), tangent(0,0,0)
-    {
-    }
+
+
+struct VertexUVNormalTangentAlpha
+{
+    Float3 pos = {};
+    Float2 uv = {};
+    Float3 normal = {};
+    Float3 tangent = {};
+    float alpha[4] = {};
 };

@@ -102,7 +102,7 @@ void Font::RenderText(wstring text, Float2 pos, Float2 size)
 	rectF.top = pos.y - halfSize.y;
 	rectF.bottom = pos.y + halfSize.y;
 
-	context->DrawTextW(text.c_str(), text.size(),
+	context->DrawTextW(text.c_str(), (UINT32)text.size(),
 		curFormat, &rectF, curBrush);
 }
 
@@ -126,7 +126,7 @@ void Font::RenderText(string text, Float2 pos, Float2 size)
 
 	wstring temp = ChangeWString(text);
 
-	context->DrawTextW(temp.c_str(), temp.size(),
+	context->DrawTextW(temp.c_str(), (UINT32)temp.size(),
 		curFormat, &rectF, curBrush);
 }
 
@@ -148,7 +148,7 @@ void Font::RenderTextLeft(wstring text, Float2 pos, Float2 size)
 	rectF.top = pos.y - halfSize.y;
 	rectF.bottom = pos.y + halfSize.y;
 
-	context->DrawTextW(text.c_str(), text.size(),
+	context->DrawTextW(text.c_str(), (UINT32)text.size(),
 		curFormat, &rectF, curBrush);
 }
 

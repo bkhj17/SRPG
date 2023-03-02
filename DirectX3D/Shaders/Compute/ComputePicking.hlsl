@@ -1,7 +1,7 @@
 cbuffer RayBuffer : register(b0)
 {
     float3 pos;
-    float triangleSize; //Æú¸®°ï °³¼ö
+    uint triangleSize; //Æú¸®°ï °³¼ö
     
     float3 dir;
 }
@@ -31,7 +31,7 @@ void Intersection(uint index)
     float3 P, T, Q;
     P = cross(dir, e1);
     
-    float d = 1.0f / dot(e1, P);
+    float d = 1.0f / dot(e0, P);
     
     float u, v;
     

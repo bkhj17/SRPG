@@ -2,14 +2,18 @@
 #include "Terrain.h"
 
 Terrain::Terrain()
-	: width(10), height(10)
+	: GameObject(L"LandScape/Terrain.hlsl"), width(10), height(10)
 {
 	tag = "Terrain";
 
 	material->SetDiffuseMap(L"Textures/Landscape/Fieldstone_DM.tga");
-	material->SetSpecularMap(L"Textures/Landscape/fieldstone_SM.tga");
-	material->SetNormalMap(L"Textures/Landscape/fieldstone_NM.tga");
+	//material->SetSpecularMap(L"Textures/Landscape/fieldstone_SM.tga");
+	//material->SetNormalMap(L"Textures/Landscape/fieldstone_NM.tga");
+
 	heightMap = Texture::Add(L"Textures/HeightMaps/HeightMap.png");
+	alphaMap = Texture::Add(L"Textures/HeightMaps/AlphaMap.png");
+	secondMap = Texture::Add(L"Textures/Landscape/Dirt.png");
+	thirdMap = Texture::Add(L"Textures/LandScape/Dirt3.png");
 
 	mesh = new Mesh<VertexType>;
 	MakeMesh();
@@ -25,6 +29,8 @@ Terrain::~Terrain()
 
 void Terrain::Render()
 {
+	alphaMap->PSSet(10);
+	secondMap->PSSet(11);
 	SetRender();
 	mesh->Draw();
 }
@@ -33,10 +39,10 @@ float Terrain::GetHeight(const Vector3& pos, Vector3* normal) const
 {
 	//global은 무시. Terrain이 원점임을 가정한다
 	int x = (int)pos.x;
-	int z = (int)(height - pos.z);
+	int z = (int)(height - pos.z - 1);
 
 	if (x < 0 || x >= width - 1) return 0.0f;
-	if (z < 0 || z >= width - 1) return 0.0f;
+	if (z < 0 || z >= height - 1) return 0.0f;
 
 	UINT index[4];
 	index[0] = width * z + x;
@@ -84,6 +90,7 @@ void Terrain::MakeMesh()
 	heightMap->ReadPixels(pixels);
 
 	vector<VertexType>& vertices = mesh->GetVertices();
+
 	vertices.reserve((size_t)width * height);
 	for (int z = 0; z < height; z++) {
 		for (int x = 0; x < width; x++) {
@@ -96,16 +103,7 @@ void Terrain::MakeMesh()
 			vertices.push_back(vertex);
 		}
 	}
-	/*
-	vector<pair<int, int>> dxz = {
-		{0,0},
-		{0,1},
-		{1,0},
-		{1,0},
-		{0,1},
-		{1,1}
-	};
-	*/
+
 	vector<pair<int, int>> dxz = {
 		{0,0},
 		{1,0},
@@ -121,14 +119,6 @@ void Terrain::MakeMesh()
 		for (int x = 0; x < width - 1; x++) {
 			for (int i = 0; i < 6; i++)
 				indices.push_back(width * (z + dxz[i].second) + x + dxz[i].first);
-			/*
-			indices.push_back(width * z + x);
-			indices.push_back(width * (z+1) + x);
-			indices.push_back(width * z + (x+1));
-			indices.push_back(width * z + (x+1));
-			indices.push_back(width * (z+1) + x);
-			indices.push_back(width * (z+1) + (x+1));
-			*/
 		}
 	}
 }
@@ -142,19 +132,18 @@ void Terrain::MakeNormal()
 		UINT index1 = indices[i * 3 + 1];
 		UINT index2 = indices[i * 3 + 2];
 
-		Vector3 pos0 = vertices[index0].pos;
-		Vector3 pos1 = vertices[index1].pos;
-		Vector3 pos2 = vertices[index2].pos;
+		Vector3 v0 = vertices[index0].pos;
+		Vector3 v1 = vertices[index1].pos;
+		Vector3 v2 = vertices[index2].pos;
 
-		//순서 주의
-		Vector3 e0 = pos1 - pos0;
-		Vector3 e1 = pos2 - pos0;
+		Vector3 e0 = v1 - v0;
+		Vector3 e1 = v2 - v0;
 
 		Vector3 normal = Cross(e0, e1).GetNormalized();
 
-		vertices[index0].normal += normal;
-		vertices[index1].normal += normal;
-		vertices[index2].normal += normal;
+		vertices[index0].normal = normal + vertices[index0].normal;
+		vertices[index1].normal = normal + vertices[index1].normal;
+		vertices[index2].normal = normal + vertices[index2].normal;
 		//정규화는 셰이더에서 하니 생략
 	}
 }
@@ -170,12 +159,16 @@ void Terrain::MakeTangent()
 		int index1 = indices[i * 3 + 1];
 		int index2 = indices[i * 3 + 2];
 
+		Vector3 pos0 = vertices[index0].pos;
+		Vector3 pos1 = vertices[index1].pos;
+		Vector3 pos2 = vertices[index2].pos;
+
 		Float2 uv0 = vertices[index0].uv;
 		Float2 uv1 = vertices[index1].uv;
 		Float2 uv2 = vertices[index2].uv;
 
-		Vector3 e0 = (Vector3)vertices[index1].pos - vertices[index0].pos;
-		Vector3 e1 = (Vector3)vertices[index2].pos - vertices[index0].pos;
+		Vector3 e0 = pos1 - pos0;
+		Vector3 e1 = pos2 - pos0;
 
 		float u1 = uv1.x - uv0.x;
 		float v1 = uv1.y - uv0.y;

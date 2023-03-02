@@ -86,14 +86,21 @@ private:
         Float4 color = { 1, 1, 1, 1 };
         Float3 direction = { 0, -1, 1 };
         float shininess = 24.0f;
-        Float4 ambient = { 0.1f, 0.1f, 0.1f, 1.0f };
+    };
+
+    struct Data {
+        Light lights[MAX_LIGHT];
+        UINT lightCount = 1;
+        Float3 ambientLight = { 0.1f, 0.1f, 0.1f };
+        Float3 ambientCeil = { 0.1f, 0.1f, 0.1f };
+        float padding;
     };
 public:
-    LightBuffer() : ConstBuffer(&light, sizeof(Light))
+    LightBuffer() : ConstBuffer(&data, sizeof(Data))
     {
     }
 
-    Light& Get() { return light; }    
+    Data& Get() { return data; }
 private:
-    Light light;
+    Data data;
 };

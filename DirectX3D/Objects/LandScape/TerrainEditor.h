@@ -1,13 +1,27 @@
 #pragma once
 class TerrainEditor : public GameObject
 {
-private:
-	typedef VertexUVNormalTangent VertexType;
+protected:
+	const string HEIGHT_PATH = "Textures/_Height";
+	const string ALPHA_PATH = "Textures/_Alpha";
+
+	enum BrushType {
+		CIRCLE,
+		SOFT_CIRCLE,
+		RECT
+	};
+
+	enum EditType {
+		HEIGHT,
+		ALPHA,
+	};
+
+	typedef VertexUVNormalTangentAlpha VertexType;
+	const float MIN_HEIGHT = 0.0f;
 	const float MAX_HEIGHT = 20.0f;
 
 	const UINT MIN_SIZE = 2;
-	const UINT MAX_SIZE = 100;
-
+	const UINT MAX_SIZE = 256;
 
 	class BrushBuffer : public ConstBuffer {
 	private:
@@ -30,8 +44,7 @@ private:
 	private:
 		struct Data {
 			Float3 pos;
-			float triangleSize; //Æú¸®°ï °³¼ö
-
+			UINT triangleSize; //Æú¸®°ï °³¼ö
 			Float3 dir;
 
 			float padding;
@@ -53,16 +66,22 @@ private:
 		float distance;
 	};
 
+	struct MapPack {
+		Texture* diffuseMap;
+		Texture* specularMap;
+		Texture* NormalMap;
+	};
+
 public:
 	TerrainEditor();
 	virtual ~TerrainEditor();
 
 	virtual void Update();
-	void Render() override;
-	void RenderUI() override;
+	virtual void Render() override;
+	virtual void RenderUI() override;
 
 	Vector3 Picking();
-	Vector3 ComputePicking();
+	bool ComputePicking(Vector3& pos);
 protected:
 	void MakeMesh();
 	void MakeNormal();
@@ -71,9 +90,29 @@ protected:
 	void MakeComputeData();
 
 	void Resize();
+	void UpdateHeight();
+
+	void AdjustHeight();
+	void AdjustAlpha();
+
+	void SaveHeightMap();
+	void LoadHeightMap();
+
+	void SaveAlphaMap();
+	void LoadAlphaMap();
 protected:
+	string projectPath;
+
 	UINT width, height;
 	UINT triangleSize;
+
+	float adjustValue = 1.0f;
+	BrushType brushType = CIRCLE;
+	EditType editType = ALPHA;
+
+	UINT selectMap = 0;
+
+	Vector3 pickingPos;
 
 	Mesh<VertexType>* mesh;
 	BrushBuffer* brushBuffer;
@@ -83,10 +122,10 @@ protected:
 	vector<InputDesc> inputs;
 	vector<OutputDesc> outputs;
 
-
 	Texture* heightMap;
+	Texture* secondMap;
+	Texture* thirdMap;
 
 	ComputeShader* computeShader;
 
 };
-

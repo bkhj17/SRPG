@@ -8,6 +8,8 @@ Camera::Camera()
     viewBuffer->SetVS(1);
 
     Load();
+
+    prevMousePos = mousePos;
 }
 
 Camera::~Camera()
@@ -92,6 +94,9 @@ void Camera::RenderUI()
 }
 void Camera::FreeMode()
 {
+    Vector3 delta = mousePos - prevMousePos;
+    prevMousePos = mousePos;
+
     if (KEY_PRESS(VK_RBUTTON))
     {
         if (KEY_PRESS('W')) {
@@ -118,10 +123,8 @@ void Camera::FreeMode()
             Pos() += Up() * moveSpeed * DELTA;
             //Pos().y -= moveSpeed * DELTA;
         }
-        ImVec2 delta = ImGui::GetIO().MouseDelta;
-        Rot().x += delta.y * rotSpeed * DELTA;
+        Rot().x -= delta.y * rotSpeed * DELTA;
         Rot().y += delta.x * rotSpeed * DELTA;
-
     }
 }
 
