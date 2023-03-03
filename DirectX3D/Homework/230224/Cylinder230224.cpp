@@ -36,7 +36,7 @@ void Cylinder230224::MakeMesh()
 
 
     // Cylinder top vertices
-    int topStart = vertices.size();
+    int topStart = (int)vertices.size();
     for (int i = 0; i <= sliceCount; ++i)
     {
         vertex.pos = { radius * cosf(i * dTheta), height * 0.5f, radius * sinf(i * dTheta) };
@@ -46,7 +46,7 @@ void Cylinder230224::MakeMesh()
     }
 
     // Cylinder bottom vertices
-    int bottomStart = vertices.size();
+    int bottomStart = (int)vertices.size();
     for (int i = 0; i <= sliceCount; ++i)
     {
         vertex.pos = { radius * cosf(i * dTheta), -height * 0.5f, radius * sinf(i * dTheta) };

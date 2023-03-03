@@ -130,4 +130,11 @@ void Camera::FreeMode()
 
 void Camera::FollowMode()
 {
+    Vector3 delta = mousePos - prevMousePos;
+    prevMousePos = mousePos;
+
+    Pos() = target->GlobalPos() + arm;
+
+    Rot().x -= delta.y * rotSpeed * DELTA;
+    Rot().y += delta.x * rotSpeed * DELTA;
 }

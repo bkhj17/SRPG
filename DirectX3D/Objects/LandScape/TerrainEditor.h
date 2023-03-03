@@ -27,7 +27,7 @@ protected:
 	private:
 		struct Data {
 			int type = 0;
-			Float3 pickingPos;
+			Float3 pickingPos = {};
 
 			float range = 10.0f;
 			Float3 color = { 0, 1, 0 };
@@ -127,5 +127,4 @@ protected:
 	Texture* thirdMap;
 
 	ComputeShader* computeShader;
-
 };

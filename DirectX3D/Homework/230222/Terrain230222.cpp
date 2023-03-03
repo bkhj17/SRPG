@@ -101,8 +101,8 @@ void Terrain230222::SetupVertices(vector<VertexType>& vertices, vector<UINT>& in
 	vertices.resize((size_t)width * height);
 
 	size_t index = 0;
-	for (int z = 0; z < height; z++) {
-		for (int x = 0; x < width; x++) {
+	for (int z = 0; z < (int)height; z++) {
+		for (int x = 0; x < (int)width; x++) {
 			VertexType vertex;
 			vertex.pos = { (float)x, 0.0f, (float)z };
 			vertex.uv = { x / ((float)width - 1), z / ((float)height - 1) };
@@ -121,11 +121,10 @@ void Terrain230222::SetupVertices(vector<VertexType>& vertices, vector<UINT>& in
 
 	indices.resize((size_t)(width - 1) * (height - 1) * 6);
 	index = 0;
-	for (int z = 0; z < height - 1; z++) {
-		for (int x = 0; x < width - 1; x++) {
-			for (int i = 0; i < 6; i++) {
-				indices[index++] = (width * (z + dxz[i].second) + x + dxz[i].first);
-			}
+	for (int z = 0; z < (int)height - 1; z++) {
+		for (int x = 0; x < (int)width - 1; x++) {
+			for (int i = 0; i < 6; i++) 
+				indices[index++] = ((int)width * (z + dxz[i].second) + x + dxz[i].first);
 		}
 	}
 }

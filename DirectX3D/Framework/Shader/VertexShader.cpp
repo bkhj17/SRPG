@@ -2,6 +2,8 @@
 
 VertexShader::VertexShader(wstring file)
 {
+    this->file = file;
+
     DWORD flags = D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG;
 
     D3DCompileFromFile(file.c_str(),

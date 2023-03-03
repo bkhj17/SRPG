@@ -1,10 +1,5 @@
 #pragma once
 
-struct Ray {
-    Vector3 pos;
-    Vector3 dir;
-};
-
 class Camera : public Transform
 {
 public:
@@ -16,12 +11,12 @@ public:
     
     void SetView();
 
-    void SetTarget(Transform* target) { this->target = target; }
+    void SetTarget(Transform* target, Vector3 pivot = {}) { this->target = target; this->arm = pivot; }
 
     Vector3 ScreenToWorld(Vector3 pos);
     Vector3 WorldToScreen(Vector3 pos);
 
-    Ray ScreenPointToRay(Vector3 screenPoint);
+    struct Ray ScreenPointToRay(Vector3 screenPoint);
 
 private:
     void FreeMode();
@@ -37,4 +32,5 @@ private:
     Vector3 prevMousePos = {};
 
     Transform* target = nullptr;
+    Vector3 arm = {};
 };

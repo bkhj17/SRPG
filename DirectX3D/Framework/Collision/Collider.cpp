@@ -1,39 +1,25 @@
 #include "Framework.h"
 
 Collider::Collider()
+    : GameObject(L"Basic/Collider.hlsl")
 {
-    vertexShader = Shader::AddVS(L"Pos.hlsl");
-    pixelShader = Shader::AddPS(L"Pos.hlsl");
 
-    worldBuffer = new MatrixBuffer();
-    colorBuffer = new ColorBuffer();
-    colorBuffer->Get() = { 0, 1, 0, 1 };
+    mesh = new Mesh<Vertex>();
+    SetColor(0, 1, 0);
 }
 
 Collider::~Collider()
 {
-    delete vertexBuffer;
-
-    delete colorBuffer;
-    delete worldBuffer;
+    delete mesh;
 }
 
 void Collider::Render()
 {
-    if (!isActive) return;
-
-    worldBuffer->Set(world);
-    worldBuffer->SetVS(0);
-    colorBuffer->SetPS(0);
-
-    vertexBuffer->Set(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
-
-    vertexShader->Set();
-    pixelShader->Set();
-
-    DC->Draw(vertices.size(), 0);
+    if (!Active()) return;
+    SetRender();
+    mesh->Draw(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 }
-/*
+
 bool Collider::IsCollision(Collider* collider)
 {
     if (!Active()) return false;
@@ -41,12 +27,13 @@ bool Collider::IsCollision(Collider* collider)
 
     switch (collider->type)
     {
-    case Collider::Type::RECT:
-        return IsRectCollision((RectCollider*)collider);        
-    case Collider::Type::CIRCLE:
-        return IsCircleCollision((CircleCollider*)collider);
+    case Collider::Type::BOX:
+        return IsBoxCollision((BoxCollider*)collider);        
+    case Collider::Type::SPHERE:
+        return IsSphereCollision((SphereCollider*)collider);
+    case Collider::Type::CAPSULE:
+        return IsCapsuleCollision((CapsuleCollider*)collider);
     }
 
     return false;
 }
-*/

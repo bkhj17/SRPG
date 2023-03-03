@@ -11,7 +11,7 @@ private:
 	};
 public:
 	class MaterialBuffer : public ConstBuffer {
-	private:
+	public:
 		struct Data {
 			Float4 diffuse = { 1, 1, 1, 1 };
 			Float4 specular = { 1, 1, 1, 1 };
@@ -46,11 +46,23 @@ public:
 	void SetNormalMap(wstring textureFile);
 	Texture* GetNormalMap() { return normalMap; }
 
+	void Save(string file);
+	void Load(string file);
+
+	string& GetName() { return name; }
+	MaterialBuffer::Data& GetData() { return buffer->Get(); }
 private:
 	void SelectMap(string name, MapType type);
 	void UnSelectMap(MapType type);
+
+	void SaveDialog();
+	void LoadDialog();
 private:
 	string name;
+	string file;
+	string projectPath;
+	string editName;
+
 	VertexShader* vertexShader;
 	PixelShader* pixelShader;
 

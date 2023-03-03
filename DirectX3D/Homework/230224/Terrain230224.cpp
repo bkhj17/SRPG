@@ -32,16 +32,16 @@ void Terrain230224::GetHeight(Vector3& pos, Vector3& rot)
 {
 	int x = (int)pos.x;
 	int z = (int)pos.z;
-	if (x < 0 || x > width || z < 0 || z > height)
+	if (x < 0 || x > (int)width || z < 0 || z > (int)height)
 		return;
 	
 	vector<VertexType>& vertices = mesh->GetVertices();
 	const vector<UINT>& indices = mesh->GetIndices();
 
-	VertexType& v0 = vertices[z * width + x];
-	VertexType& v1 = vertices[(z + 1) * width + x];
-	VertexType& v2 = vertices[z * width + x+1];
-	VertexType& v3 = vertices[(z + 1) * width + (x + 1)];
+	VertexType& v0 = vertices[(size_t)z * width + x];
+	VertexType& v1 = vertices[((size_t)z + 1) * width + x];
+	VertexType& v2 = vertices[(size_t)z * width + x+1];
+	VertexType& v3 = vertices[((size_t)z + 1) * width + x + 1];
 
 	Vector3 normal;
 	pos.y = interpolateHeight(pos, normal, v0, v1, v2, v3);
@@ -146,8 +146,8 @@ void Terrain230224::MakeMesh()
 
 	vector<VertexType>& vertices = mesh->GetVertices();
 	vertices.reserve((size_t)width * height);
-	for (int z = 0; z < height; z++) {
-		for (int x = 0; x < width; x++) {
+	for (int z = 0; z < (int)height; z++) {
+		for (int x = 0; x < (int)width; x++) {
 			VertexType vertex;
 			UINT index = width * z + x;
 			vertex.pos = { (float)x,  pixels[index].x * MAX_HEIGHT, (float)z };
@@ -168,8 +168,8 @@ void Terrain230224::MakeMesh()
 
 	vector<UINT>& indices = mesh->GetIndices();
 	indices.reserve((size_t)(width - 1) * (height - 1) * 6);
-	for (int z = 0; z < height - 1; z++) {
-		for (int x = 0; x < width - 1; x++) {
+	for (int z = 0; z < (int)height - 1; z++) {
+		for (int x = 0; x < (int)width - 1; x++) {
 			for (int i = 0; i < 6; i++)
 				indices.push_back(width * (z + dxz[i].second) + x + dxz[i].first);
 		}

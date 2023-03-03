@@ -1,11 +1,25 @@
 #pragma once
 
-class Collider : public Transform
+//반직선
+struct Ray {
+    Vector3 pos;
+    Vector3 dir;
+};
+
+//충돌 접점
+struct Contact {
+    string tag;
+
+    Vector3 hitPoint;
+    float distance;
+};
+
+class Collider : public GameObject
 {
 protected:
-    enum class Type
+    enum Type
     {
-        RECT, CIRCLE
+        BOX, SPHERE, CAPSULE
     };
 
     const float PUSH_SPEED = 500.0f;
@@ -15,27 +29,20 @@ public:
     ~Collider();
 
     void Render();
-    /*
+    
     bool IsCollision(Collider* collider);
     
-    virtual bool IsPointCollision(Vector2 point) = 0;
-    virtual bool IsRectCollision(class RectCollider* rect, Vector2* overlap = nullptr) = 0;
-    virtual bool IsCircleCollision(class CircleCollider* circle) = 0;
+    virtual bool IsRayCollision(IN Ray ray, OUT Contact* contact = nullptr) = 0;
 
-    virtual bool PushCollider(Collider* collider) = 0;
-    */
-    Float4& GetColor() { return colorBuffer->Get(); }
-
+    virtual bool IsBoxCollision(class BoxCollider* collider) = 0;
+    virtual bool IsSphereCollision(class SphereCollider* collider) = 0;
+    virtual bool IsCapsuleCollision(class CapsuleCollider* collider) = 0;
+    
+    void SetColor(Float4 color) { material->GetData().diffuse = color; }
+    void SetColor(float r, float g, float b) { material->GetData().diffuse = {r, g, b, 1}; }
+protected:
+    virtual void MakeMesh() = 0;
 protected:
     Type type;
-
-    VertexBuffer* vertexBuffer;
-    vector<Vertex> vertices;
-
-private:
-    VertexShader* vertexShader;
-    PixelShader* pixelShader;
-
-    MatrixBuffer* worldBuffer;
-    ColorBuffer* colorBuffer;
+    Mesh<Vertex>* mesh;
 };

@@ -91,9 +91,9 @@ private:
     struct Data {
         Light lights[MAX_LIGHT];
         UINT lightCount = 1;
-        Float3 ambientLight = { 0.1f, 0.1f, 0.1f };
-        Float3 ambientCeil = { 0.1f, 0.1f, 0.1f };
-        float padding;
+        Float3 ambientLight = { 0.3f, 0.3f, 0.3f };
+        Float3 ambientCeil = { 0.3f, 0.3f, 0.3f };
+        float padding = 0.0f;
     };
 public:
     LightBuffer() : ConstBuffer(&data, sizeof(Data))

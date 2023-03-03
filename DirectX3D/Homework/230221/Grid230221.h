@@ -8,6 +8,5 @@ public:
 
 	void Render();
 private:
-	vector<LineCollider*> grids;
 };
 

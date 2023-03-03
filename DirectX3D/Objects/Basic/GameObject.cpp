@@ -29,5 +29,4 @@ void GameObject::RenderUI()
 
         ImGui::TreePop();
     }
-
 }

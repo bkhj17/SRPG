@@ -6,14 +6,20 @@ TerrainEditor230302::TerrainEditor230302()
 	material->SetNormalMap(L"Textures/LandScape/Dirt_NM.png");
 	material->SetSpecularMap(L"Textures/Landscape/Dirt_SM.png");
 
+	useMapBuffer = new UseMapBuffer;
+
 	mapPack[0].diffuseMap = Texture::Add(L"Textures/LandScape/Floor.png");
 	mapPack[0].normalMap = Texture::Add(L"Textures/LandScape/Floor_normal.png");
 	mapPack[0].specularMap = Texture::Add(L"Textures/LandScape/Floor_SM.png");
 
-
 	mapPack[1].diffuseMap = Texture::Add(L"Textures/LandScape/Stones.png");
 	mapPack[1].normalMap = Texture::Add(L"Textures/LandScape/Stones_normal.png");
 	mapPack[1].specularMap = Texture::Add(L"Textures/LandScape/Stones_SM.png");
+}
+
+TerrainEditor230302::~TerrainEditor230302()
+{
+	delete useMapBuffer;
 }
 
 void TerrainEditor230302::Render()
@@ -22,6 +28,7 @@ void TerrainEditor230302::Render()
 
 	mapPack[0].Set(1);
 	mapPack[1].Set(2);
+	useMapBuffer->SetPS(11);
 
 	SetRender();
 	mesh->Draw();
@@ -61,7 +68,6 @@ void TerrainEditor230302::RenderUI()
 		}
 		DIALOG->Close();
 	}
-
 }
 
 void TerrainEditor230302::Save(string file)
@@ -80,68 +86,15 @@ void TerrainEditor230302::Save(string file)
 	writer->WString(mapPack[1].specularMap->GetFile());
 	writer->WString(mapPack[1].normalMap->GetFile());
 
-
 	wstring heightMapFile = ToWString(file) + L"_Height.png";
-	writer->WString(heightMapFile);
+	if(SUCCEEDED(SaveHeightMapPng(heightMapFile)))
+		writer->WString(heightMapFile);
 
 	wstring alphaMapFile = ToWString(file) + L"_Alpha.png";
-	writer->WString(alphaMapFile);
+	if (SUCCEEDED(SaveAlphaMapPng(alphaMapFile)))
+		writer->WString(alphaMapFile);
 
 	delete writer;
-
-	{
-		UINT size = width * height * 4;	//4 : rgba
-
-		vector<VertexType>& vertices = mesh->GetVertices();
-
-		uint8_t* pixels = new uint8_t[size];
-		for (UINT i = 0; i < size / 4; i++) {
-			float y = vertices[i].pos.y;
-			uint8_t height = (y - MIN_HEIGHT) / (MAX_HEIGHT - MIN_HEIGHT) * 255;
-			pixels[i * 4 + 0] = height;
-			pixels[i * 4 + 1] = height;
-			pixels[i * 4 + 2] = height;
-			pixels[i * 4 + 3] = 255;
-		}
-
-		Image image;
-		image.width = width;
-		image.height = height;
-		image.format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		image.rowPitch = width * 4;
-		image.slicePitch = size;
-		image.pixels = pixels;
-		SaveToWICFile(image, WIC_FLAGS_FORCE_RGB,
-			GetWICCodec(WIC_CODEC_PNG), heightMapFile.c_str());
-
-		delete[] pixels;
-	}
-
-	{
-		UINT size = width * height * 4;	//4 : rgba
-		uint8_t* pixels = new uint8_t[size];
-
-		vector<VertexType>& vertices = mesh->GetVertices();
-
-		for (UINT i = 0; i < size / 4; i++) {
-			pixels[i * 4 + 0] = vertices[i].alpha[0] * 255;
-			pixels[i * 4 + 1] = vertices[i].alpha[1] * 255;
-			pixels[i * 4 + 2] = vertices[i].alpha[2] * 255;
-			pixels[i * 4 + 3] = 255;
-		}
-
-		Image image;
-		image.width = width;
-		image.height = height;
-		image.format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		image.rowPitch = width * 4;
-		image.slicePitch = size;
-		image.pixels = pixels;
-		SaveToWICFile(image, WIC_FLAGS_FORCE_RGB,
-			GetWICCodec(WIC_CODEC_PNG), alphaMapFile.c_str());
-
-		delete[] pixels;
-	}
 }
 
 void TerrainEditor230302::Load(string file)
@@ -167,8 +120,6 @@ void TerrainEditor230302::Load(string file)
 	heightMap = Texture::Add(heightMapFile);
 	Resize();
 
-
-
 	Texture* alphaMap = Texture::Add(alphaMapFile);
 	vector<VertexType>& vertices = mesh->GetVertices();
 	vector<Float4> pixels;
@@ -181,5 +132,64 @@ void TerrainEditor230302::Load(string file)
 	}
 
 	mesh->UpdateVertex();
+}
 
+HRESULT TerrainEditor230302::SaveHeightMapPng(wstring file)
+{
+	UINT size = width * height * 4;	//4 : rgba
+
+	vector<VertexType>& vertices = mesh->GetVertices();
+
+	uint8_t* pixels = new uint8_t[size];
+	for (UINT i = 0; i < size / 4; i++) {
+		float y = vertices[i].pos.y;
+		uint8_t height = (y - MIN_HEIGHT) / (MAX_HEIGHT - MIN_HEIGHT) * 255;
+		pixels[i * 4 + 0] = height;
+		pixels[i * 4 + 1] = height;
+		pixels[i * 4 + 2] = height;
+		pixels[i * 4 + 3] = 255;
+	}
+
+	Image image;
+	image.width = width;
+	image.height = height;
+	image.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	image.rowPitch = width * 4;
+	image.slicePitch = size;
+	image.pixels = pixels;
+	HRESULT result = SaveToWICFile(image, WIC_FLAGS_FORCE_RGB,
+		GetWICCodec(WIC_CODEC_PNG), file.c_str());
+
+	delete[] pixels;
+
+	return result;
+}
+
+HRESULT TerrainEditor230302::SaveAlphaMapPng(wstring file)
+{
+	UINT size = width * height * 4;	//4 : rgba
+	uint8_t* pixels = new uint8_t[size];
+
+	vector<VertexType>& vertices = mesh->GetVertices();
+
+	for (UINT i = 0; i < size / 4; i++) {
+		pixels[i * 4 + 0] = vertices[i].alpha[0] * 255;
+		pixels[i * 4 + 1] = vertices[i].alpha[1] * 255;
+		pixels[i * 4 + 2] = vertices[i].alpha[2] * 255;
+		pixels[i * 4 + 3] = 255;
+	}
+
+	Image image;
+	image.width = width;
+	image.height = height;
+	image.format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	image.rowPitch = width * 4;
+	image.slicePitch = size;
+	image.pixels = pixels;
+	HRESULT result = SaveToWICFile(image, WIC_FLAGS_FORCE_RGB,
+		GetWICCodec(WIC_CODEC_PNG), file.c_str());
+
+	delete[] pixels;
+
+	return result;
 }

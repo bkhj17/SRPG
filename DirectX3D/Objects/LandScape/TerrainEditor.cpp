@@ -415,7 +415,7 @@ void TerrainEditor::SaveHeightMap()
 			uint8_t* pixels = new uint8_t[size];
 			for (UINT i = 0; i < size / 4; i++) {
 				float y = vertices[i].pos.y;
-				uint8_t height = (y - MIN_HEIGHT) / (MAX_HEIGHT-MIN_HEIGHT) * 255;
+				uint8_t height = (uint8_t)((y - MIN_HEIGHT) / (MAX_HEIGHT-MIN_HEIGHT) * 255);
 				pixels[i * 4 + 0] = height;
 				pixels[i * 4 + 1] = height;
 				pixels[i * 4 + 2] = height;
@@ -535,9 +535,9 @@ void TerrainEditor::SaveAlphaMap()
 			vector<VertexType>& vertices = mesh->GetVertices();
 
 			for (UINT i = 0; i < size/4; i++) {
-				pixels[i * 4 + 0] = vertices[i].alpha[0] * 255;
-				pixels[i * 4 + 1] = vertices[i].alpha[1] * 255;
-				pixels[i * 4 + 2] = vertices[i].alpha[2] * 255;
+				pixels[i * 4 + 0] = (uint8_t)(vertices[i].alpha[0] * 255);
+				pixels[i * 4 + 1] = (uint8_t)(vertices[i].alpha[1] * 255);
+				pixels[i * 4 + 2] = (uint8_t)(vertices[i].alpha[2] * 255);
 				pixels[i * 4 + 3] = 255;
 			}
 

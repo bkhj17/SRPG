@@ -138,6 +138,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Homework\230303\FPS230303.h" />
+    <ClInclude Include="Homework\230303\Cube230303.h" />
+    <ClInclude Include="Framework\Collision\CapsuleCollider.h" />
+    <ClInclude Include="Framework\Collision\BoxCollider.h" />
+    <ClInclude Include="Homework\230303\Scene230303.h" />
+    <ClInclude Include="Scenes\CollisionScene.h" />
     <ClInclude Include="Framework\Shader\ComputeShader.h" />
     <ClInclude Include="Homework\230227\Scene230227.h" />
     <ClInclude Include="Framework\Buffer\RawBuffer.h" />
@@ -149,7 +155,6 @@
     <ClInclude Include="Homework\230224\Car230224.h" />
     <ClInclude Include="Homework\230223\Cube230223.h" />
     <ClInclude Include="Framework\Collision\Collider.h" />
-    <ClInclude Include="Framework\Collision\LineCollider.h" />
     <ClInclude Include="Framework\State\RasterizerState.h" />
     <ClInclude Include="Framework\State\SamplerState.h" />
     <ClInclude Include="Homework\230222\GridScene230222.h" />
@@ -200,6 +205,7 @@
     <ClInclude Include="Scenes\SphereScene.h" />
     <ClInclude Include="Objects\Basic\Sphere.h" />
     <ClInclude Include="Framework\Buffer\StructuredBuffer.h" />
+    <ClInclude Include="Framework\Collision\SphereCollider.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Scenes\TutorialScene.h" />
     <ClInclude Include="Framework\Math\Vector3.h" />
@@ -213,6 +219,12 @@
     <ClInclude Include="Homework\230302\TerrainEditor230302.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Homework\230303\FPS230303.cpp" />
+    <ClCompile Include="Homework\230303\Cube230303.cpp" />
+    <ClCompile Include="Framework\Collision\CapsuleCollider.cpp" />
+    <ClCompile Include="Framework\Collision\BoxCollider.cpp" />
+    <ClCompile Include="Homework\230303\Scene230303.cpp" />
+    <ClCompile Include="Scenes\CollisionScene.cpp" />
     <ClCompile Include="Framework\Shader\ComputeShader.cpp" />
     <ClCompile Include="Homework\230227\Scene230227.cpp" />
     <ClCompile Include="Framework\Buffer\RawBuffer.cpp" />
@@ -224,7 +236,6 @@
     <ClCompile Include="Homework\230224\Car230224.cpp" />
     <ClCompile Include="Homework\230223\Cube230223.cpp" />
     <ClCompile Include="Framework\Collision\Collider.cpp" />
-    <ClCompile Include="Framework\Collision\LineCollider.cpp" />
     <ClCompile Include="Framework\State\RasterizerState.cpp" />
     <ClCompile Include="Framework\State\SamplerState.cpp" />
     <ClCompile Include="Homework\230222\GridScene230222.cpp" />
@@ -281,6 +292,7 @@
     <ClCompile Include="Homework\230227\TerrainEditor230227.cpp" />
     <ClCompile Include="Framework\Buffer\StructuredBuffer.cpp" />
     <ClCompile Include="Homework\230302\TerrainEditor230302.cpp" />
+    <ClCompile Include="Framework\Collision\SphereCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX3D.rc" />
@@ -290,6 +302,12 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Shaders\Basic\Collider.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="Shaders\Basic\Texture.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>

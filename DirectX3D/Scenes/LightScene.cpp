@@ -4,6 +4,8 @@
 LightScene::LightScene()
 {
 	sphere = new Sphere(10);
+	sphere->GetMaterial()->GetName() = "FieldStone";
+
 }
 
 LightScene::~LightScene()
@@ -13,6 +15,12 @@ LightScene::~LightScene()
 
 void LightScene::Update()
 {
+	if (KEY_PRESS(VK_F3))
+		sphere->GetMaterial()->Save("TextData/Materials/FieldStone.material");
+
+	if (KEY_PRESS(VK_F4))
+		sphere->GetMaterial()->Load("TextData/Materials/FieldStone.material");
+
 	sphere->UpdateWorld();
 }
 

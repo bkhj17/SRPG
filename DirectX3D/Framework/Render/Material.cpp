@@ -8,6 +8,10 @@ Material::Material()
 	normalMap = Texture::Add(DEFAULT_NORMAL_MAP, L"NM");
 
 	buffer = new MaterialBuffer;
+
+	char path[128];
+	GetCurrentDirectoryA(sizeof(path), path);
+	projectPath = path;
 }
 
 Material::Material(wstring shaderFile)
@@ -18,6 +22,10 @@ Material::Material(wstring shaderFile)
 	normalMap = Texture::Add(DEFAULT_NORMAL_MAP);
 
 	buffer = new MaterialBuffer;
+
+	char path[128];
+	GetCurrentDirectoryA(sizeof(path), path);
+	projectPath = path;
 }
 
 Material::~Material()
@@ -42,6 +50,15 @@ void Material::RenderUI()
 	string title = name + "_material";
 
 	if (ImGui::TreeNode(title.c_str())) {
+		char str[128];
+		strcpy_s(str, 128, editName.c_str());
+		ImGui::InputText("Name", str, 128);
+		editName = str;
+
+		ImGui::SameLine();
+		if (ImGui::Button("Edit"))
+			name = editName;
+
 		ImGui::ColorEdit3("Diffuse", (float*)&buffer->Get().diffuse);
 		ImGui::ColorEdit3("Specular", (float*)&buffer->Get().specular);
 		ImGui::ColorEdit3("Ambient", (float*)&buffer->Get().ambient);
@@ -61,6 +78,8 @@ void Material::RenderUI()
 		ImGui::SameLine();
 		UnSelectMap(DIFFUSE);
 
+		SaveDialog();
+		LoadDialog();
 		ImGui::TreePop();
 	}
 }
@@ -91,6 +110,118 @@ void Material::SetNormalMap(wstring textureFile)
 		buffer->Get().hasNormalMap = 0;
 		Texture::Add(DEFAULT_NORMAL_MAP);
 	}
+}
+
+void Material::Save(string file)
+{
+	tinyxml2::XMLDocument* document = new tinyxml2::XMLDocument();
+	auto material = document->NewElement("Material");
+	material->SetAttribute("Name", name.c_str());
+	document->InsertFirstChild(material);
+	
+	tinyxml2::XMLElement* shader = document->NewElement("Shader"); 
+
+	wstring shaderFile = vertexShader->GetFile();
+	shaderFile = shaderFile.substr(shaderFile.find_first_of(L'/')+1);
+	shader->SetAttribute("Vertex", ToString(shaderFile).c_str());
+
+	shaderFile = pixelShader->GetFile();
+	shaderFile = shaderFile.substr(shaderFile.find_first_of(L'/') + 1);
+	shader->SetAttribute("Pixel", ToString(shaderFile).c_str());
+	material->InsertFirstChild(shader);
+
+	tinyxml2::XMLElement* texture = document->NewElement("Texture");
+	texture->SetAttribute("Diffuse", ToString(diffuseMap->GetFile()).c_str());
+	texture->SetAttribute("Specular", ToString(specularMap->GetFile()).c_str());
+	texture->SetAttribute("Normal", ToString(normalMap->GetFile()).c_str());
+	material->InsertEndChild(texture);
+
+	tinyxml2::XMLElement* property = document->NewElement("Property");
+	tinyxml2::XMLElement* diffuse = document->NewElement("Diffuse");
+	diffuse->SetAttribute("R", buffer->Get().diffuse.x);
+	diffuse->SetAttribute("G", buffer->Get().diffuse.y);
+	diffuse->SetAttribute("B", buffer->Get().diffuse.z);
+	diffuse->SetAttribute("A", buffer->Get().diffuse.w);
+	property->InsertEndChild(diffuse);
+
+	tinyxml2::XMLElement* specular = document->NewElement("Diffuse");
+	specular->SetAttribute("R", buffer->Get().specular.x);
+	specular->SetAttribute("G", buffer->Get().specular.y);
+	specular->SetAttribute("B", buffer->Get().specular.z);
+	specular->SetAttribute("A", buffer->Get().specular.w);
+	property->InsertEndChild(specular);
+
+	tinyxml2::XMLElement* ambient = document->NewElement("Amibient");
+	ambient->SetAttribute("R", buffer->Get().ambient.x);
+	ambient->SetAttribute("G", buffer->Get().ambient.y);
+	ambient->SetAttribute("B", buffer->Get().ambient.z);
+	ambient->SetAttribute("A", buffer->Get().ambient.w);
+	property->InsertEndChild(ambient);
+
+	tinyxml2::XMLElement* emissive = document->NewElement("Emissive");
+	emissive->SetAttribute("R", buffer->Get().emissive.x);
+	emissive->SetAttribute("G", buffer->Get().emissive.y);
+	emissive->SetAttribute("B", buffer->Get().emissive.z);
+	emissive->SetAttribute("A", buffer->Get().emissive.w);
+	property->InsertEndChild(emissive);
+
+	property->SetAttribute("Shininess", buffer->Get().shininess);
+	property->SetAttribute("HasNormalMap", buffer->Get().hasNormalMap);
+
+	material->InsertEndChild(property);
+
+	document->SaveFile(file.c_str());
+
+	delete document;
+}
+
+void Material::Load(string file)
+{
+	tinyxml2::XMLDocument* document = new tinyxml2::XMLDocument();
+	document->LoadFile(file.c_str());
+	auto material = document->FirstChildElement();
+	name = material->Attribute("Name");
+
+	auto shader = material->FirstChildElement();
+	wstring shaderFile = ToWString(shader->Attribute("Vertex"));
+	vertexShader = Shader::AddVS(shaderFile);
+	shaderFile = ToWString(shader->Attribute("Pixel"));
+	pixelShader = Shader::AddPS(shaderFile);
+
+	auto texture = shader->NextSiblingElement();
+	diffuseMap = Texture::Add(ToWString(texture->Attribute("Diffuse")));
+	specularMap = Texture::Add(ToWString(texture->Attribute("Specular")));
+	normalMap = Texture::Add(ToWString(texture->Attribute("Normal")));
+
+	tinyxml2::XMLElement* property = texture->NextSiblingElement();
+	tinyxml2::XMLElement* diffuse = property->FirstChildElement();
+	buffer->Get().diffuse.x = diffuse->FloatAttribute("R");
+	buffer->Get().diffuse.y = diffuse->FloatAttribute("G");
+	buffer->Get().diffuse.z = diffuse->FloatAttribute("B");
+	buffer->Get().diffuse.w = diffuse->FloatAttribute("A");
+
+	tinyxml2::XMLElement* specular = diffuse->NextSiblingElement();
+	buffer->Get().specular.x = specular->FloatAttribute("R");
+	buffer->Get().specular.y = specular->FloatAttribute("G");
+	buffer->Get().specular.z = specular->FloatAttribute("B");
+	buffer->Get().specular.w = specular->FloatAttribute("A");
+
+	tinyxml2::XMLElement* ambient = specular->NextSiblingElement();
+	buffer->Get().ambient.x = ambient->FloatAttribute("R");
+	buffer->Get().ambient.y = ambient->FloatAttribute("G");
+	buffer->Get().ambient.z = ambient->FloatAttribute("B");
+	buffer->Get().ambient.w = ambient->FloatAttribute("A");
+
+	tinyxml2::XMLElement* emissive = ambient->NextSiblingElement();
+	buffer->Get().emissive.x = emissive->FloatAttribute("R");
+	buffer->Get().emissive.y = emissive->FloatAttribute("G");
+	buffer->Get().emissive.z = emissive->FloatAttribute("B");
+	buffer->Get().emissive.w = emissive->FloatAttribute("A");
+
+	buffer->Get().shininess = property->FloatAttribute("Shininess");
+	buffer->Get().hasNormalMap = property->IntAttribute("HasNormalMap");
+
+	delete document;
 }
 
 void Material::SelectMap(string name, MapType type)
@@ -180,5 +311,44 @@ void Material::UnSelectMap(MapType type)
 		default:
 			break;
 		}
+	}
+}
+
+void Material::SaveDialog()
+{
+	string key = "Save";
+	if (ImGui::Button(key.c_str()))
+		Save("TextData/Materials/" + name + ".mat");
+
+	ImGui::SameLine();
+	
+	if (ImGui::Button("SaveAs"))
+		DIALOG->OpenDialog(key.c_str(), key.c_str(), ".mat", "TextData/Materials/");
+
+	if (DIALOG->Display(key.c_str())) {
+
+		if (DIALOG->IsOk()) {
+			string file = DIALOG->GetFilePathName();
+			file = file.substr(projectPath.size() + 1, file.size());
+			Save(file);
+		}
+		DIALOG->Close();
+	}
+}
+
+void Material::LoadDialog()
+{
+	string key = "Load";
+
+	if (ImGui::Button(key.c_str()))
+		DIALOG->OpenDialog(key.c_str(), key.c_str(), ".mat", "TextData/Materials/");
+
+	if (DIALOG->Display(key.c_str())) {
+		if (DIALOG->IsOk()) {
+			string file = DIALOG->GetFilePathName();
+			file = file.substr(projectPath.size() + 1, file.size());
+			Load(file);
+		}
+		DIALOG->Close();
 	}
 }

@@ -65,6 +65,16 @@ float4 BrushColor(float3 pos)
     return float4(0, 0, 0, 0);
 }
 
+cbuffer UseMapBuffer : register(b11)
+{
+    int useSecondDiffuse;
+    int useSecondNormal;
+    int useSecondSpecular;
+    int useThirdDiffuse;
+    int useThirdNormal;
+    int useThirdSpecular;
+}
+
 Texture2D secondDiffuseMap : register(t11);
 Texture2D thirdDiffuseMap : register(t12);
 
@@ -85,8 +95,10 @@ Material GetMaterialToTerrain(PixelInput input)
     if (hasNormalMap)
     {    
         material.normal = normalMap.Sample(samp, input.uv).rgb;
-        material.normal = lerp(material.normal, secondNormalMap.Sample(samp, input.uv).rgb * 2.0f - 1.0f, input.alpha.r);
-        material.normal = lerp(material.normal, thirdNormalMap.Sample(samp, input.uv).rgb * 2.0f - 1.0f, input.alpha.g);
+        if(useSecondNormal)
+            material.normal = lerp(material.normal, secondNormalMap.Sample(samp, input.uv).rgb * 2.0f - 1.0f, input.alpha.r);
+        if(useThirdNormal)        
+            material.normal = lerp(material.normal, thirdNormalMap.Sample(samp, input.uv).rgb * 2.0f - 1.0f, input.alpha.g);
         
         float3x3 TBN = float3x3(T, B, N);
         material.normal = normalize(mul(material.normal, TBN));
@@ -105,8 +117,10 @@ Material GetMaterialToTerrain(PixelInput input)
     material.diffuseColor = albedo;
     
     material.specularIntensity = specularMap.Sample(samp, input.uv);
-    material.specularIntensity = lerp(material.specularIntensity, secondSpecularMap.Sample(samp, input.uv), input.alpha.r);
-    material.specularIntensity = lerp(material.specularIntensity, thirdSpeculerMap.Sample(samp, input.uv), input.alpha.g);
+    if(useSecondSpecular)
+        material.specularIntensity = lerp(material.specularIntensity, secondSpecularMap.Sample(samp, input.uv), input.alpha.r);
+    if(useThirdSpecular)
+        material.specularIntensity = lerp(material.specularIntensity, thirdSpeculerMap.Sample(samp, input.uv), input.alpha.g);
     
     material.viewPos = input.worldPos.rgb + input.viewDir * 1.0f;
     material.worldPos = input.worldPos;

@@ -100,7 +100,6 @@ using namespace Utility;
 #include "Framework/State/RasterizerState.h"
 #include "Framework/State/SamplerState.h"
 
-
 #include "Framework/Math/Vector2.h"
 #include "Framework/Math/Vector3.h"
 #include "Framework/Math/Transform.h"
@@ -112,9 +111,6 @@ using namespace GameMath;
 #include "Framework/Render/Material.h"
 #include "Framework/Render/Mesh.h"
 
-#include "Framework/Collision/Collider.h"
-#include "Framework/Collision/LineCollider.h"
-
 #include "Framework/Environment/Camera.h"
 #include "Framework/Environment/Environment.h"
 
@@ -122,6 +118,12 @@ using namespace GameMath;
 #include "Objects/Basic/Cube.h"
 #include "Objects/Basic/Sphere.h"
 #include "Objects/Basic/Cylinder.h"
+
+#include "Framework/Collision/Collider.h"
+#include "Framework/Collision/BoxCollider.h"
+#include "Framework/Collision/SphereCollider.h"
+#include "Framework/Collision/CapsuleCollider.h"
+#include "Framework/Collision/LineCollider.h"
 
 #include "Objects/LandScape/Terrain.h"
 #include "Objects/LandScape/TerrainEditor.h"
