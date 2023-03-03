@@ -252,6 +252,9 @@
     <ClInclude Include="Homework\230303\FPS230303.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\Basic\Quad.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX3D.cpp">
@@ -468,6 +471,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Homework\230303\FPS230303.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Basic\Quad.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

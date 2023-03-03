@@ -12,9 +12,22 @@ public:
 	virtual void PostRender() override;
 	virtual void GUIRender() override;
 private:
+	void CheckInRange();
+
+	void CheckCollide();
+	void CheckStand();
+
+	void SetupCube();
+private:
 	vector<Cube230303*> cubes;
+	
+	//
 	Cube230303* check = nullptr;
+	Ray rayCheck;
+	Contact contectCheck;
 
 	class FPS230303* fps;
+
+	Quad* quad;
 };
 

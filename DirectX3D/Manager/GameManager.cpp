@@ -20,6 +20,8 @@ GameManager::GameManager()
 {
     Create();
 
+    uiViewBuffer = new MatrixBuffer;
+
     SceneManager::Get()->Create("Grid", new GridScene());
     //SceneManager::Get()->Create("Start", new TutorialScene());
     //SceneManager::Get()->Create("Start", new CubeScene());
@@ -44,13 +46,13 @@ GameManager::GameManager()
 GameManager::~GameManager()
 {
     Delete();
+    delete uiViewBuffer;
 }
 
 void GameManager::Update()
 {
     Keyboard::Get()->Update();
     Timer::Get()->Update();
-
 
     SceneManager::Get()->Update();
 
@@ -68,11 +70,13 @@ void GameManager::Render()
     CAM->SetView();
     SceneManager::Get()->Render();
 
-
-    //uiViewBuffer->SetVS(1);
-    Font::Get()->GetDC()->BeginDraw();
     
+    uiViewBuffer->SetVS(1);
+    Environment::Get()->SetOrthoProjection();
+
     SceneManager::Get()->PostRender();
+
+    Font::Get()->GetDC()->BeginDraw();
 
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();

@@ -19,7 +19,8 @@ public:
     */
     void SetViewport(UINT width = WIN_WIDTH, UINT height = WIN_HEIGHT);
     void SetProjection();
-
+    void SetOrthoProjection();
+    
     Camera* GetMainCamera() { return mainCamera; }
 
     Matrix GetProjection() { return projection; }
@@ -27,16 +28,18 @@ private:
     void CreateProjection();
     void CreateState();
 
+    void CreateBlendState();
 private:
+    MatrixBuffer* orthoBuffer;
     MatrixBuffer* projectionBuffer;
     Camera* mainCamera;
     LightBuffer* lightBuffer;
 
     SamplerState* samplerState;
-    /*
+    
     ID3D11BlendState* alphaBlendState;
     ID3D11BlendState* additiveBlendState;
-    */
+    
     RasterizerState* raterizerState[2];
 
 

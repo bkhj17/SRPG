@@ -143,6 +143,7 @@
     <ClInclude Include="Framework\Collision\CapsuleCollider.h" />
     <ClInclude Include="Framework\Collision\BoxCollider.h" />
     <ClInclude Include="Homework\230303\Scene230303.h" />
+    <ClInclude Include="Objects\Basic\Quad.h" />
     <ClInclude Include="Scenes\CollisionScene.h" />
     <ClInclude Include="Framework\Shader\ComputeShader.h" />
     <ClInclude Include="Homework\230227\Scene230227.h" />
@@ -224,6 +225,7 @@
     <ClCompile Include="Framework\Collision\CapsuleCollider.cpp" />
     <ClCompile Include="Framework\Collision\BoxCollider.cpp" />
     <ClCompile Include="Homework\230303\Scene230303.cpp" />
+    <ClCompile Include="Objects\Basic\Quad.cpp" />
     <ClCompile Include="Scenes\CollisionScene.cpp" />
     <ClCompile Include="Framework\Shader\ComputeShader.cpp" />
     <ClCompile Include="Homework\230227\Scene230227.cpp" />

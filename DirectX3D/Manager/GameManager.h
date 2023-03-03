@@ -14,4 +14,5 @@ private:
     void Delete();
 
 private:
+    MatrixBuffer* uiViewBuffer;
 };

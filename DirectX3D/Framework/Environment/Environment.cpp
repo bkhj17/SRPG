@@ -4,6 +4,7 @@ Environment::Environment()
 {
     CreateProjection();
     CreateState();
+    CreateBlendState();
 
     mainCamera = new Camera();
     lightBuffer = new LightBuffer;
@@ -77,17 +78,22 @@ void Environment::SetProjection()
     projectionBuffer->SetVS(2);
 }
 
+void Environment::SetOrthoProjection()
+{
+    orthoBuffer->SetVS(2);
+}
+
 void Environment::CreateProjection()
 {
-    /*
-    Matrix orthographic = XMMatrixOrthographicOffCenterLH(0.0f, WIN_WIDTH, 0.0f, WIN_HEIGHT, -1.0f, 1.0f);
-    */
-   projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, 
-       (float)WIN_WIDTH / WIN_HEIGHT, 0.1f, 1000.0f);
+    projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, 
+        (float)WIN_WIDTH / WIN_HEIGHT, 0.1f, 1000.0f);
 
     projectionBuffer = new MatrixBuffer();
-    //projectionBuffer->Set(orthographic);    
     projectionBuffer->Set(projection);
+
+    Matrix orthographic = XMMatrixOrthographicOffCenterLH(0.0f, WIN_WIDTH, 0.0f, WIN_HEIGHT, -1.0f, 1.0f);
+    orthoBuffer = new MatrixBuffer();
+    orthoBuffer->Set(orthographic);    
 }
 
 void Environment::CreateState()
@@ -100,7 +106,6 @@ void Environment::CreateState()
     raterizerState[1]->FillMode(D3D11_FILL_WIREFRAME);
 }
 
-/*
 void Environment::CreateBlendState()
 {
     D3D11_BLEND_DESC blendDesc = {};    
@@ -124,4 +129,3 @@ void Environment::CreateBlendState()
 
     DEVICE->CreateBlendState(&blendDesc, &additiveBlendState);
 }
-*/

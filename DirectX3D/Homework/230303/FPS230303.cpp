@@ -28,8 +28,14 @@ void FPS230303::Update()
     Pos() += mv * moveSpeed * DELTA;
 
     jumpValue -= DELTA * 9.8f;
-    if (KEY_PRESS(VK_SPACE)) {
-        jumpValue = 10.0f;
+
+    standing = false;
+    Observer::Get()->ExcuteEvent("CheckCollide");
+    Observer::Get()->ExcuteEvent("CheckStand");
+
+    if (KEY_PRESS(VK_SPACE) && standing) {
+        jumpValue = 5.0f;
+        standing = false;
     }
 
     Pos().y += jumpValue * DELTA;
@@ -57,6 +63,7 @@ void FPS230303::StandOn(BoxCollider* collider)
         if (cFps.distance > 0.0f && cFps.distance < GlobalScale().y) {
             Pos().y += GlobalScale().y - cFps.distance;
             jumpValue = 0.0f;
+            standing = true;
             UpdateWorld();
         }
     }
