@@ -15,7 +15,8 @@
 //#include "Homework/230224/Scene230224.h"
 //#include "Homework/230227/Scene230227.h"
 //#include "Homework/230302/Scene230302.h"
-#include "Homework/230303/Scene230303.h"
+//#include "Homework/230303/Scene230303.h"
+#include "Homework/230306/Scene230306.h"
 
 GameManager::GameManager()
 {
@@ -28,7 +29,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Start", new TerrainEditorScene);
     //SceneManager::Get()->Create("Start", new LightScene);
     //SceneManager::Get()->Create("Start", new CollisionScene);
-    SceneManager::Get()->Create("Start", new MineCraftScene);
+    //SceneManager::Get()->Create("Start", new MineCraftScene);
     
     //SceneManager::Get()->Create("Grid", new GridScene230222());
     //SceneManager::Get()->Create("Start", new SphereScene);
@@ -38,7 +39,8 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Start", new Scene230227);
     //SceneManager::Get()->Create("Start", new Scene230302);
     //SceneManager::Get()->Create("Start", new Scene230303);
-    
+    SceneManager::Get()->Create("Start", new Scene230306);
+
     SceneManager::Get()->Add("Grid");
     SceneManager::Get()->Add("Start");
 }

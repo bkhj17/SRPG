@@ -63,6 +63,25 @@ wstring BinaryReader::WString()
     return temp;
 }
 
+Vector3 BinaryReader::Vector()
+{
+    Vector3 result;
+    result.x = Float();
+    result.y = Float();
+    result.z = Float();
+
+
+    return result;
+}
+
+bool BinaryReader::Bool()
+{
+
+    bool temp = false;
+    ReadFile(file, &temp, sizeof(bool), &size, nullptr);
+    return temp;
+}
+
 void BinaryReader::Byte(void** data, UINT dataSize)
 {
     ReadFile(file, *data, dataSize, &size, nullptr);

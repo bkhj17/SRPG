@@ -99,6 +99,7 @@ using namespace Utility;
 
 #include "Framework/State/RasterizerState.h"
 #include "Framework/State/SamplerState.h"
+#include "Framework/State/BlendState.h"
 
 #include "Framework/Math/Vector2.h"
 #include "Framework/Math/Vector3.h"

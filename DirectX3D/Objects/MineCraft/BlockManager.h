@@ -15,8 +15,6 @@ public:
 
 	float GetHeight(const Vector3& pos) const;
 private:
-
-
 	list<Cube*> blocks;
 };
 

@@ -4,7 +4,6 @@ Environment::Environment()
 {
     CreateProjection();
     CreateState();
-    CreateBlendState();
 
     mainCamera = new Camera();
     lightBuffer = new LightBuffer;
@@ -22,6 +21,8 @@ Environment::~Environment()
     delete samplerState;
     delete raterizerState[0];
     delete raterizerState[1];
+    delete blendState[0];
+    delete blendState[1];
 
     delete uiViewBuffer;
 }
@@ -97,11 +98,6 @@ void Environment::SetOrthographic()
     projectionBuffer->SetVS(2);
 }
 
-void Environment::SetOrthoProjection()
-{
-    orthoBuffer->SetVS(2);
-}
-
 void Environment::CreateProjection()
 {
     orthographic = XMMatrixOrthographicOffCenterLH(0.0f, (float)WIN_WIDTH, 0.0f, (float)WIN_HEIGHT, -1.0f, 1.0f);
@@ -120,28 +116,8 @@ void Environment::CreateState()
     raterizerState[0] = new RasterizerState();
     raterizerState[1] = new RasterizerState();
     raterizerState[1]->FillMode(D3D11_FILL_WIREFRAME);
-}
 
-void Environment::CreateBlendState()
-{
-    D3D11_BLEND_DESC blendDesc = {};    
-    blendDesc.RenderTarget[0].BlendEnable = true;
-    blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-    blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-    blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-
-    blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
-    blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
-    blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-
-    blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-    DEVICE->CreateBlendState(&blendDesc, &alphaBlendState);
-
-    float blendFactor[4] = {};
-    DC->OMSetBlendState(alphaBlendState, blendFactor, 0xffffffff);
-
-    blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
-
-    DEVICE->CreateBlendState(&blendDesc, &additiveBlendState);
+    blendState[0] = new BlendState();
+    blendState[1] = new BlendState();
+    blendState[1]->SetState();
 }

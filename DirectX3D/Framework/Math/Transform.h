@@ -9,12 +9,12 @@ public:
     virtual void UpdateWorld();
     virtual void RenderUI();
 
-    Vector3 Right() { return right.GetNormalized(); }
-    Vector3 Left() { return right.GetNormalized() * -1.0f; }
-    Vector3 Up() { return up.GetNormalized(); }
-    Vector3 Down() { return up.GetNormalized() * -1.0f; }
-    Vector3 Forward() { return forward.GetNormalized(); }
-    Vector3 Back() { return forward.GetNormalized() * -1.0f; }
+    Vector3 Right() const { return right.GetNormalized(); }
+    Vector3 Left() const { return right.GetNormalized() * -1.0f; }
+    Vector3 Up() const { return up.GetNormalized(); }
+    Vector3 Down() const { return up.GetNormalized() * -1.0f; }
+    Vector3 Forward() const { return forward.GetNormalized(); }
+    Vector3 Back() const { return forward.GetNormalized() * -1.0f; }
 
     Vector3 GlobalPos() { return globalPosition; }
     Vector3 GlobalScale() { return globalScale; }

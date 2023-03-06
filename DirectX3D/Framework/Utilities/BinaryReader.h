@@ -1,5 +1,6 @@
 #pragma once
 
+class Vector3;
 class BinaryReader
 {
 public:
@@ -12,6 +13,8 @@ public:
     float Float();
     string String();
     wstring WString();
+    Vector3 Vector();
+    bool Bool();
 
     void Byte(void** data, UINT dataSize);
 

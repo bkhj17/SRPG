@@ -2,7 +2,7 @@
 class Steve : public SphereCollider
 {
 private:
-	const float GRAVITY = 9.8f;
+	const float GRAVITY = 98.0f;
 
 public:
 	Steve();
@@ -20,14 +20,14 @@ private:
 
 private:
 	float moveSpeed = 10.0f;
-	float rotSpeed = 5.0f;
-	float jumpPower = 10.0f;
+	float rotSpeed = 15.0f;
+	float jumpPower = 20.0f;
 
 	float velocity = 0.0f;
 
-
 	bool isJump = false;
 
+	Vector3 prevMousePos;
 	Quad* crossHair;
 };
 

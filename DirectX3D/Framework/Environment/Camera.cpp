@@ -25,7 +25,7 @@ void Camera::Update()
         FollowMode();
     else
         FreeMode();
-
+    /*
     if (Rot().x > 360.0f) {
         Rot().x -= 360.0f;
     }
@@ -35,7 +35,42 @@ void Camera::Update()
         Rot().y -= 360.0f;
     if (Rot().y < -360.0f)
         Rot().y += 360.0f;
+    */
     SetView();
+}
+
+void Camera::RenderUI()
+{
+    if (ImGui::TreeNode("CameraOption")) {
+        ImGui::DragFloat("MoveSpeed", &moveSpeed);
+        ImGui::DragFloat("RotSpeed", &rotSpeed);
+
+        if (target && ImGui::TreeNode("TargetOption")) {
+            ImGui::DragFloat("Distance", &distance, 0.1f);
+            ImGui::DragFloat("Height", &height, 0.1f);
+            ImGui::DragFloat3("FocusOffset", (float*)&focusOffset, 0.1f);
+
+            float degree = XMConvertToDegrees(rotY);
+            ImGui::DragFloat("RotY", &degree, 0.1f);
+            rotY = XMConvertToRadians(degree);
+
+            ImGui::DragFloat("MoveDamping", &moveDamping, 0.1f);
+            ImGui::DragFloat("RotDamping", &rotDamping, 0.1f);
+
+            ImGui::InputText("File", file, 128);
+
+            if (ImGui::Button("save")) {
+                TargetOptionSave(file);
+            }
+            if (ImGui::Button("load")) {
+                TargetOptionLoad(file);
+            }
+
+            ImGui::TreePop();
+        }
+        __super::RenderUI();
+        ImGui::TreePop();
+    }
 }
 
 void Camera::SetView()
@@ -81,17 +116,7 @@ Ray Camera::ScreenPointToRay(Vector3 screenPoint)
 
     return ray;
 }
-void Camera::RenderUI()
-{
-    __super::RenderUI();
-    if (ImGui::TreeNode("CameraOption")) {
-        ImGui::DragFloat("MoveSpeed", &moveSpeed);
-        ImGui::DragFloat("RotSpeed", &rotSpeed);
 
-        __super::RenderUI();
-        ImGui::TreePop();
-    }
-}
 void Camera::FreeMode()
 {
     Vector3 delta = mousePos - prevMousePos;
@@ -99,30 +124,18 @@ void Camera::FreeMode()
 
     if (KEY_PRESS(VK_RBUTTON))
     {
-        if (KEY_PRESS('W')) {
+        if (KEY_PRESS('W'))
             Pos() += Forward() * moveSpeed * DELTA;
-            //Pos().z += moveSpeed * DELTA;
-        }
-        if (KEY_PRESS('S')) {
+        if (KEY_PRESS('S'))
             Pos() += Back() * moveSpeed * DELTA;
-            //Pos().z -= moveSpeed * DELTA;
-        }
-        if (KEY_PRESS('A')) {
+        if (KEY_PRESS('A'))
             Pos() += Left() * moveSpeed *DELTA;
-            //Pos().x -= moveSpeed * DELTA;
-        }
-        if (KEY_PRESS('D')) {
+        if (KEY_PRESS('D'))
             Pos() += Right() * moveSpeed * DELTA;
-            //Pos().x += moveSpeed * DELTA;
-        }
-        if (KEY_PRESS('Q')) {
+        if (KEY_PRESS('Q'))
             Pos() += Down() * moveSpeed * DELTA;
-            //Pos().y += moveSpeed * DELTA;
-        }
-        if (KEY_PRESS('E')) {
+        if (KEY_PRESS('E'))
             Pos() += Up() * moveSpeed * DELTA;
-            //Pos().y -= moveSpeed * DELTA;
-        }
         Rot().x -= delta.y * rotSpeed * DELTA;
         Rot().y += delta.x * rotSpeed * DELTA;
     }
@@ -130,11 +143,53 @@ void Camera::FreeMode()
 
 void Camera::FollowMode()
 {
-    Vector3 delta = mousePos - prevMousePos;
-    prevMousePos = mousePos;
+    destRot = Lerp(destRot, target->Rot().y, rotDamping * DELTA);
+    rotMatrix = XMMatrixRotationY(destRot + rotY);
 
-    Pos() = target->GlobalPos() + arm;
+    Vector3 forward = XMVector3TransformNormal(Vector3::Forward(), rotMatrix);
 
-    Rot().x -= delta.y * rotSpeed * DELTA;
-    Rot().y += delta.x * rotSpeed * DELTA;
+    destPos = target->GlobalPos() + forward * -distance;
+    destPos.y += height;
+
+    Pos() = Lerp(Pos(), destPos, moveDamping * DELTA);
+
+    if (isLookAtTarget)
+    {
+        Vector3 offset = XMVector3TransformCoord(focusOffset, rotMatrix);
+        Vector3 targetPos = target->GlobalPos() + offset;
+
+        Vector3 dir = (targetPos - Pos()).GetNormalized();
+        forward = Vector3(dir.x, 0.0f, dir.z).GetNormalized();
+
+        Rot().x = acos(Dot(forward, dir));
+        Rot().y = atan2(dir.x, dir.z);
+    }
+}
+
+void Camera::TargetOptionSave(string file)
+{
+    string path = "TextData/Camera/" + file + ".cam";
+    BinaryWriter* writer = new BinaryWriter(path);
+    writer->Float(distance);
+    writer->Float(height);
+    writer->Float(moveDamping);
+    writer->Float(rotDamping);
+    writer->Float(rotY);
+    writer->Vector(focusOffset);
+    writer->Bool(isLookAtTarget);
+    delete writer;
+}
+
+void Camera::TargetOptionLoad(string file)
+{
+    string path = "TextData/Camera/" + file + ".cam";
+    BinaryReader* reader = new BinaryReader(path);
+    distance = reader->Float();
+    height = reader->Float();
+    moveDamping = reader->Float();
+    rotDamping = reader->Float();
+    rotY = reader->Float();
+    focusOffset = reader->Vector();
+    isLookAtTarget = reader->Bool();
+    delete reader;
 }

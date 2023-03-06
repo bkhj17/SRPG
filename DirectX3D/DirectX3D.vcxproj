@@ -138,6 +138,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Homework\230306\BlockManager230306.h" />
+    <ClInclude Include="Framework\State\BlendState.h" />
+    <ClInclude Include="Homework\230306\Inventory230306.h" />
     <ClInclude Include="Objects\Basic\Quad.h" />
     <ClInclude Include="Objects\MineCraft\BlockManager.h" />
     <ClInclude Include="Homework\230303\FPS230303.h" />
@@ -145,6 +148,7 @@
     <ClInclude Include="Framework\Collision\CapsuleCollider.h" />
     <ClInclude Include="Framework\Collision\BoxCollider.h" />
     <ClInclude Include="Homework\230303\Scene230303.h" />
+    <ClInclude Include="Homework\230306\Scene230306.h" />
     <ClInclude Include="Scenes\MineCraftScene.h" />
     <ClInclude Include="Scenes\CollisionScene.h" />
     <ClInclude Include="Framework\Shader\ComputeShader.h" />
@@ -223,6 +227,9 @@
     <ClInclude Include="Homework\230302\TerrainEditor230302.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Homework\230306\BlockManager230306.cpp" />
+    <ClCompile Include="Framework\State\BlendState.cpp" />
+    <ClCompile Include="Homework\230306\Inventory230306.cpp" />
     <ClCompile Include="Objects\Basic\Quad.cpp" />
     <ClCompile Include="Objects\MineCraft\BlockManager.cpp" />
     <ClCompile Include="Homework\230303\FPS230303.cpp" />
@@ -230,6 +237,7 @@
     <ClCompile Include="Framework\Collision\CapsuleCollider.cpp" />
     <ClCompile Include="Framework\Collision\BoxCollider.cpp" />
     <ClCompile Include="Homework\230303\Scene230303.cpp" />
+    <ClCompile Include="Homework\230306\Scene230306.cpp" />
     <ClCompile Include="Scenes\MineCraftScene.cpp" />
     <ClCompile Include="Scenes\CollisionScene.cpp" />
     <ClCompile Include="Framework\Shader\ComputeShader.cpp" />
@@ -365,6 +373,12 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Shaders\Light\Light.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\SelectTexture230306.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>

@@ -48,6 +48,16 @@ void BinaryWriter::WString(wstring data)
     WriteFile(file, str, sizeof(WCHAR) * data.size(), &size, nullptr);
 }
 
+void BinaryWriter::Vector(Vector3 data)
+{
+    WriteFile(file, &data, sizeof(Vector3), &size, nullptr);
+}
+
+void BinaryWriter::Bool(bool data)
+{
+    WriteFile(file, &data, sizeof(bool), &size, nullptr);
+}
+
 void BinaryWriter::Byte(void* data, UINT dataSize)
 {
     WriteFile(file, data, dataSize, &size, nullptr);

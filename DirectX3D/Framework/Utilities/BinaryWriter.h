@@ -1,5 +1,6 @@
 #pragma once
 
+class Vector3;
 class BinaryWriter
 {
 public:
@@ -12,6 +13,8 @@ public:
     void Float(float data);
     void String(string data);
     void WString(wstring data);
+    void Vector(Vector3 data);
+    void Bool(bool data);
 
     void Byte(void* data, UINT dataSize);
 

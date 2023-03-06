@@ -7,6 +7,9 @@ MineCraftScene::MineCraftScene()
 	steve = new Steve;
 	steve->Pos() = { 5,5,5 };
 	steve->UpdateWorld();
+
+	CAM->SetTarget(steve);
+	CAM->TargetOptionLoad("Mine");
 }
 
 MineCraftScene::~MineCraftScene()
@@ -38,4 +41,5 @@ void MineCraftScene::PostRender()
 
 void MineCraftScene::GUIRender()
 {
+	steve->GUIRender();
 }

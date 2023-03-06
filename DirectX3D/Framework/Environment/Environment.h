@@ -29,7 +29,6 @@ private:
     void CreateProjection();
     void CreateState();
 
-    void CreateBlendState();
 private:
     MatrixBuffer* orthoBuffer;
     MatrixBuffer* projectionBuffer;
@@ -39,8 +38,7 @@ private:
 
     SamplerState* samplerState;
     
-    ID3D11BlendState* alphaBlendState;
-    ID3D11BlendState* additiveBlendState;
+    BlendState* blendState[2];
     
     RasterizerState* raterizerState[2];
 

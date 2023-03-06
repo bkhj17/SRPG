@@ -25,7 +25,7 @@ Scene230303::Scene230303()
 	}
 
 	fps = new FPS230303;
-	CAM->SetTarget(fps, Vector3(0, 1, 0));
+	CAM->SetTarget(fps);
 
 	Observer::Get()->AddEvent("CheckCollide", bind(&Scene230303::CheckCollide, this));
 	Observer::Get()->AddEvent("CheckStand", bind(&Scene230303::CheckStand, this));
