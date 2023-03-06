@@ -17,5 +17,8 @@ private:
 	float moveSpeed = 10.0f;
 
 	float jumpValue = 0.0f;
+
+	bool standing = false;
+	Vector3 moved = {};
 };
 

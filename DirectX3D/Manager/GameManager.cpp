@@ -53,7 +53,6 @@ void GameManager::Update()
     Keyboard::Get()->Update();
     Timer::Get()->Update();
 
-
     SceneManager::Get()->Update();
 
     Environment::Get()->Update();

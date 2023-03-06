@@ -29,17 +29,19 @@ private:
     void CreateProjection();
     void CreateState();
 
+    void CreateBlendState();
 private:
+    MatrixBuffer* orthoBuffer;
     MatrixBuffer* projectionBuffer;
     Camera* mainCamera;
     LightBuffer* lightBuffer;
     ViewBuffer* uiViewBuffer;
 
     SamplerState* samplerState;
-    /*
+    
     ID3D11BlendState* alphaBlendState;
     ID3D11BlendState* additiveBlendState;
-    */
+    
     RasterizerState* raterizerState[2];
 
 

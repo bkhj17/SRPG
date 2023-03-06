@@ -31,7 +31,6 @@ Quad::~Quad()
 void Quad::Render()
 {
     SetRender();
-
     mesh->Draw();
 }
 
@@ -45,10 +44,10 @@ void Quad::MakeMesh()
     float top = +size.y * 0.5f;
     float bottom = -size.y * 0.5f;
 
-    vertices.emplace_back(left, top, 0, startUV.x, startUV.y);
-    vertices.emplace_back(right, top, 0, endUV.x, startUV.y);
-    vertices.emplace_back(left, bottom, 0, startUV.x, endUV.y);
-    vertices.emplace_back(right, bottom, 0, endUV.x, endUV.y);
+    vertices.emplace_back(left, top, 0.0f, startUV.x, startUV.y);
+    vertices.emplace_back(right, top, 0.0f, endUV.x, startUV.y);
+    vertices.emplace_back(left, bottom, 0.0f, startUV.x, endUV.y);
+    vertices.emplace_back(right, bottom, 0.0f, endUV.x, endUV.y);
 
     indices = { 0, 1, 2, 2, 1, 3 };
 }
