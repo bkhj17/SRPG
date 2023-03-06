@@ -9,8 +9,17 @@ public:
 	virtual ~Cube();
 
 	virtual void Update();
+	virtual void UpdateWorld();
+
 	virtual void Render();
+
+	class BoxCollider* GetCollider() { return collider; }
+private:
+	void MakeMesh();
 private:
 	Mesh<VertexUV>* mesh;
+
+	Vector3 size;
+	BoxCollider* collider;
 };
 

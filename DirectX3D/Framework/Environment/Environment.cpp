@@ -7,6 +7,8 @@ Environment::Environment()
 
     mainCamera = new Camera();
     lightBuffer = new LightBuffer;
+
+    uiViewBuffer = new ViewBuffer;
 }
 
 Environment::~Environment()
@@ -19,12 +21,16 @@ Environment::~Environment()
     delete samplerState;
     delete raterizerState[0];
     delete raterizerState[1];
+
+    delete uiViewBuffer;
 }
 
 void Environment::Update()
 {
     if (KEY_DOWN(VK_F1))
         isWireMode = !isWireMode;
+    if (KEY_DOWN(VK_F2))
+        Collider::RenderOnOff();
 
     mainCamera->Update();
 }
@@ -53,11 +59,17 @@ void Environment::RenderUI()
 void Environment::Set()
 {
     SetViewport();
-    SetProjection();
+    SetPerspective();
 
     raterizerState[(int)isWireMode]->SetState();        
 
     lightBuffer->SetPS(0);
+}
+
+void Environment::PostSet()
+{
+    uiViewBuffer->SetVS(1);
+    SetOrthographic();
 }
 
 void Environment::SetViewport(UINT width, UINT height)
@@ -72,22 +84,26 @@ void Environment::SetViewport(UINT width, UINT height)
     DC->RSSetViewports(1, &viewport);
 }
 
-void Environment::SetProjection()
+void Environment::SetPerspective()
 {
+    projectionBuffer->Set(perspective);
+    projectionBuffer->SetVS(2);
+}
+
+void Environment::SetOrthographic()
+{
+    projectionBuffer->Set(orthographic);
     projectionBuffer->SetVS(2);
 }
 
 void Environment::CreateProjection()
 {
-    /*
-    Matrix orthographic = XMMatrixOrthographicOffCenterLH(0.0f, WIN_WIDTH, 0.0f, WIN_HEIGHT, -1.0f, 1.0f);
-    */
-   projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, 
+    orthographic = XMMatrixOrthographicOffCenterLH(0.0f, (float)WIN_WIDTH, 0.0f, (float)WIN_HEIGHT, -1.0f, 1.0f);
+    
+    perspective = XMMatrixPerspectiveFovLH(XM_PIDIV4, 
        (float)WIN_WIDTH / WIN_HEIGHT, 0.1f, 1000.0f);
 
     projectionBuffer = new MatrixBuffer();
-    //projectionBuffer->Set(orthographic);    
-    projectionBuffer->Set(projection);
 }
 
 void Environment::CreateState()

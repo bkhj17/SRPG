@@ -138,11 +138,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Objects\Basic\Quad.h" />
+    <ClInclude Include="Objects\MineCraft\BlockManager.h" />
     <ClInclude Include="Homework\230303\FPS230303.h" />
     <ClInclude Include="Homework\230303\Cube230303.h" />
     <ClInclude Include="Framework\Collision\CapsuleCollider.h" />
     <ClInclude Include="Framework\Collision\BoxCollider.h" />
     <ClInclude Include="Homework\230303\Scene230303.h" />
+    <ClInclude Include="Scenes\MineCraftScene.h" />
     <ClInclude Include="Scenes\CollisionScene.h" />
     <ClInclude Include="Framework\Shader\ComputeShader.h" />
     <ClInclude Include="Homework\230227\Scene230227.h" />
@@ -206,6 +209,7 @@
     <ClInclude Include="Objects\Basic\Sphere.h" />
     <ClInclude Include="Framework\Buffer\StructuredBuffer.h" />
     <ClInclude Include="Framework\Collision\SphereCollider.h" />
+    <ClInclude Include="Objects\MineCraft\Steve.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Scenes\TutorialScene.h" />
     <ClInclude Include="Framework\Math\Vector3.h" />
@@ -219,11 +223,14 @@
     <ClInclude Include="Homework\230302\TerrainEditor230302.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Objects\Basic\Quad.cpp" />
+    <ClCompile Include="Objects\MineCraft\BlockManager.cpp" />
     <ClCompile Include="Homework\230303\FPS230303.cpp" />
     <ClCompile Include="Homework\230303\Cube230303.cpp" />
     <ClCompile Include="Framework\Collision\CapsuleCollider.cpp" />
     <ClCompile Include="Framework\Collision\BoxCollider.cpp" />
     <ClCompile Include="Homework\230303\Scene230303.cpp" />
+    <ClCompile Include="Scenes\MineCraftScene.cpp" />
     <ClCompile Include="Scenes\CollisionScene.cpp" />
     <ClCompile Include="Framework\Shader\ComputeShader.cpp" />
     <ClCompile Include="Homework\230227\Scene230227.cpp" />
@@ -293,6 +300,7 @@
     <ClCompile Include="Framework\Buffer\StructuredBuffer.cpp" />
     <ClCompile Include="Homework\230302\TerrainEditor230302.cpp" />
     <ClCompile Include="Framework\Collision\SphereCollider.cpp" />
+    <ClCompile Include="Objects\MineCraft\Steve.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX3D.rc" />

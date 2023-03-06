@@ -118,6 +118,7 @@ using namespace GameMath;
 #include "Objects/Basic/Cube.h"
 #include "Objects/Basic/Sphere.h"
 #include "Objects/Basic/Cylinder.h"
+#include "Objects/Basic/Quad.h"
 
 #include "Framework/Collision/Collider.h"
 #include "Framework/Collision/BoxCollider.h"
@@ -127,6 +128,9 @@ using namespace GameMath;
 
 #include "Objects/LandScape/Terrain.h"
 #include "Objects/LandScape/TerrainEditor.h"
+
+#include "Objects/MineCraft/BlockManager.h"
+#include "Objects/MineCraft/Steve.h"
 
 #include "Scenes/Scene.h"
 #include "Manager/SceneManager.h"

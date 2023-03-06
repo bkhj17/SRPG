@@ -1,5 +1,7 @@
 #include "Framework.h"
 
+bool Collider::isRender = true;
+
 Collider::Collider()
     : GameObject(L"Basic/Collider.hlsl")
 {
@@ -16,6 +18,8 @@ Collider::~Collider()
 void Collider::Render()
 {
     if (!Active()) return;
+    if (!isRender) return;
+
     SetRender();
     mesh->Draw(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 }

@@ -13,16 +13,18 @@ public:
     void RenderUI();
 
     void Set();
+    void PostSet();
     /*
     void SetAlphaBlend();
     void SetAdditiveBlend();
     */
     void SetViewport(UINT width = WIN_WIDTH, UINT height = WIN_HEIGHT);
-    void SetProjection();
+    void SetPerspective();
+    void SetOrthographic();
 
     Camera* GetMainCamera() { return mainCamera; }
 
-    Matrix GetProjection() { return projection; }
+    Matrix GetProjection() { return perspective; }
 private:
     void CreateProjection();
     void CreateState();
@@ -31,6 +33,7 @@ private:
     MatrixBuffer* projectionBuffer;
     Camera* mainCamera;
     LightBuffer* lightBuffer;
+    ViewBuffer* uiViewBuffer;
 
     SamplerState* samplerState;
     /*
@@ -44,5 +47,6 @@ private:
 
     bool isWireMode = false;
 
-    Matrix projection;
+    Matrix perspective;
+    Matrix orthographic;
 };

@@ -4,6 +4,9 @@
 struct Ray {
     Vector3 pos;
     Vector3 dir;
+
+    Ray() {}
+    Ray(Vector3 pos, Vector3 dir) : pos(pos), dir(dir) {}
 };
 
 //충돌 접점
@@ -40,9 +43,14 @@ public:
     
     void SetColor(Float4 color) { material->GetData().diffuse = color; }
     void SetColor(float r, float g, float b) { material->GetData().diffuse = {r, g, b, 1}; }
+
+    static void RenderOnOff() { isRender = !isRender; }
 protected:
     virtual void MakeMesh() = 0;
 protected:
     Type type;
     Mesh<Vertex>* mesh;
+
+private: 
+    static bool isRender;
 };

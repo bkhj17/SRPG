@@ -2,9 +2,50 @@
 #include "Cube.h"
 
 Cube::Cube(Vector3 size)
+	: size(size)
 {
 	tag = "Cube";
+
 	mesh = new Mesh<VertexType>;
+	MakeMesh();
+	mesh->CreateMesh();
+
+	collider = new BoxCollider(size);
+	collider->SetParent(this);
+}
+
+Cube::~Cube()
+{
+	delete mesh;
+	delete collider;
+}
+
+void Cube::Update()
+{
+	if (!isActive)
+		return;
+
+	UpdateWorld();
+}
+
+void Cube::UpdateWorld()
+{
+	__super::UpdateWorld();
+	collider->UpdateWorld();
+}
+
+void Cube::Render()
+{
+	if (!isActive)
+		return;
+
+	SetRender();
+	mesh->Draw();
+}
+
+void Cube::MakeMesh()
+{
+	Vector3 halfSize = size * 0.5f;
 
 	vector<Vector3> points = {
 		{-1, -1, -1},	//0
@@ -39,9 +80,9 @@ Cube::Cube(Vector3 size)
 	for (auto& square : squares) {
 		for (int i = 0; i < 4; i++) {
 			vertices.emplace_back(
-				size.x * points[square[i]].x, 
-				size.y * points[square[i]].y, 
-				size.z * points[square[i]].z, 
+				halfSize.x * points[square[i]].x,
+				halfSize.y * points[square[i]].y,
+				halfSize.z * points[square[i]].z,
 				uvs[i].x, uvs[i].y);
 		}
 	}
@@ -56,27 +97,4 @@ Cube::Cube(Vector3 size)
 		indices.push_back(i * 4 + 1);
 		indices.push_back(i * 4 + 3);
 	}
-	mesh->CreateMesh();
-}
-
-Cube::~Cube()
-{
-	delete mesh;
-}
-
-void Cube::Update()
-{
-	if (!isActive)
-		return;
-
-	UpdateWorld();
-}
-
-void Cube::Render()
-{
-	if (!isActive)
-		return;
-
-	SetRender();
-	mesh->Draw();
 }

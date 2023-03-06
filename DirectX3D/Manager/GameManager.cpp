@@ -7,6 +7,7 @@
 #include "Scenes/TerrainEditorScene.h"
 #include "Scenes/LightScene.h"
 #include "Scenes/CollisionScene.h"
+#include "Scenes/MineCraftScene.h"
 //#include "Homework/230221/Scene230221.h"
 //#include "Homework/230222/GridScene230222.h"
 //#include "Homework/230222/TerrainScene230222.h"
@@ -27,6 +28,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Start", new TerrainEditorScene);
     //SceneManager::Get()->Create("Start", new LightScene);
     //SceneManager::Get()->Create("Start", new CollisionScene);
+    SceneManager::Get()->Create("Start", new MineCraftScene);
     
     //SceneManager::Get()->Create("Grid", new GridScene230222());
     //SceneManager::Get()->Create("Start", new SphereScene);
@@ -35,7 +37,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Start", new Scene230224);
     //SceneManager::Get()->Create("Start", new Scene230227);
     //SceneManager::Get()->Create("Start", new Scene230302);
-    SceneManager::Get()->Create("Start", new Scene230303);
+    //SceneManager::Get()->Create("Start", new Scene230303);
     
     SceneManager::Get()->Add("Grid");
     SceneManager::Get()->Add("Start");
@@ -68,10 +70,8 @@ void GameManager::Render()
     CAM->SetView();
     SceneManager::Get()->Render();
 
-
-    //uiViewBuffer->SetVS(1);
+    Environment::Get()->PostSet();
     Font::Get()->GetDC()->BeginDraw();
-    
     SceneManager::Get()->PostRender();
 
     ImGui_ImplDX11_NewFrame();
