@@ -70,7 +70,6 @@ Vector3 BinaryReader::Vector()
     result.y = Float();
     result.z = Float();
 
-
     return result;
 }
 

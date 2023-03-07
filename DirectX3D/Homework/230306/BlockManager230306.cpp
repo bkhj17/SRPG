@@ -83,12 +83,18 @@ Cube* BlockManager230306::BlockMining(const Ray& ray, OUT Contact* hit)
 	return check;
 }
 
+bool BlockManager230306::IsValidToBuild(Cube* check, Contact& contact)
+{
+	return false;
+}
+
 bool BlockManager230306::SetupCube(Cube* check, Texture* texture, Contact& contact)
 {
 	if (!check || !texture) //탐지된 게 없다
 		return false;
 			
 	Vector3 dir = contact.hitPoint - check->GlobalPos();
+	//회전은 고려하지 않음 -> 고려할 경우 check->Rot
 	//셋 중 가장 큰 것만을 남긴다
 	if (abs(dir.y) > abs(dir.x)) {
 		if (abs(dir.y) > abs(dir.z))
@@ -107,32 +113,28 @@ bool BlockManager230306::SetupCube(Cube* check, Texture* texture, Contact& conta
 	cRay.pos = check->GlobalPos();
 	cRay.dir = dir;
 
-	bool isOn = false;
 	for (auto cube : blocks) {
 		if (!cube->Active() || cube == check)
 			continue;
 
 		//뭐가 있는지 없는지 체크
+		Vector3 newPos = check->GlobalScale() * dir;
 		Contact cContact;
 		if (cube->GetCollider()->IsRayCollision(cRay, &cContact)) {
-			if (cContact.distance < (check->GlobalScale().y * 0.5f + 1.0f)) {
-				isOn = true;
-				break;
-			}
+			if (cContact.distance < (newPos.Length() * 0.5f + 1.0f))
+				return false;	//해당 위치에 블록이 있었다 => 놓을 수 없음
 		}
 	}
 
-	if (!isOn) { //아무것도 없다면 cube 출현
-		for (auto cube : blocks) {
-			if (cube->Active())
-				continue;
-
-			cube->SetActive(true);
-			cube->GetMaterial()->SetDiffuseMap(texture->GetFile());
-			cube->Pos() = check->GlobalPos() + dir;
-			cube->Rot() = check->Rot();
-			return true;
-		}
+	//아무것도 없다면 cube 출현
+	for (auto cube : blocks) {
+		if (cube->Active())
+			continue;
+		cube->SetActive(true);
+		cube->GetMaterial()->SetDiffuseMap(texture->GetFile());
+		cube->Pos() = check->GlobalPos() + dir;
+		cube->Rot() = check->Rot();
+		return true;
 	}
 	return false;
 }

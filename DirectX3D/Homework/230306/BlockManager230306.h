@@ -16,6 +16,8 @@ public:
 	float GetHeight(const Vector3& pos) const;
 
 	Cube* BlockMining(const Ray& ray, OUT Contact* hit = nullptr);
+
+	bool IsValidToBuild(Cube* check, Contact& contact);
 	bool SetupCube(Cube* check, Texture* texture, Contact& contact);
 private:
 	list<Cube*> blocks;

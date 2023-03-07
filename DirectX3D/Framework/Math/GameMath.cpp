@@ -93,6 +93,11 @@ float GameMath::Distance(const Vector3& vec1, const Vector3& vec2)
     return (vec2 - vec1).Length();
 }
 
+bool GameMath::NearlyEqual(const float& s1, const float& s2) 
+{
+    return abs(s1 - s2) < FLT_EPSILON; 
+}
+
 Vector3 GameMath::GetNormalFromPolygon(const Vector3& v0, const Vector3& v1, const Vector3& v2)
 {
     Vector3 e0 = v1 - v0;

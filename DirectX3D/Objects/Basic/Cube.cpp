@@ -22,7 +22,7 @@ Cube::~Cube()
 
 void Cube::Update()
 {
-	if (!isActive)
+	if (!Active())
 		return;
 
 	UpdateWorld();
@@ -36,7 +36,7 @@ void Cube::UpdateWorld()
 
 void Cube::Render()
 {
-	if (!isActive)
+	if (!Active())
 		return;
 
 	SetRender();

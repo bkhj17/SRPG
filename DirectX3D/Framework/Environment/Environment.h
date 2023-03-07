@@ -37,10 +37,9 @@ private:
     ViewBuffer* uiViewBuffer;
 
     SamplerState* samplerState;
-    
-    BlendState* blendState[2];
-    
     RasterizerState* raterizerState[2];
+    BlendState* blendState[2];
+    DepthStencilState* depthStencilState[2];
 
 
     D3D11_VIEWPORT viewport;

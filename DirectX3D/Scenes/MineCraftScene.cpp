@@ -20,6 +20,8 @@ MineCraftScene::~MineCraftScene()
 
 void MineCraftScene::Update()
 {
+	BlockManager::Get()->Push(steve);
+
 	BlockManager::Get()->Update();
 	steve->Update();
 }

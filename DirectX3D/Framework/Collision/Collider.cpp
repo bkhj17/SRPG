@@ -41,3 +41,15 @@ bool Collider::IsCollision(Collider* collider)
 
     return false;
 }
+
+bool Collider::PushCollision(Collider* collider)
+{
+    if (!IsCollision(collider))
+        return false;
+    
+    Vector3 dir = (collider->GlobalPos() - GlobalPos()).GetNormalized();
+    collider->GetParent()->Pos() += dir * PUSH_SPEED * DELTA;
+    collider->GetParent()->UpdateWorld();
+
+    return false;
+}

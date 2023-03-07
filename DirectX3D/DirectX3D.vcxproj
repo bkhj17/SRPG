@@ -138,9 +138,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Framework\State\DepthStencilState.h" />
     <ClInclude Include="Homework\230306\BlockManager230306.h" />
     <ClInclude Include="Framework\State\BlendState.h" />
     <ClInclude Include="Homework\230306\Inventory230306.h" />
+    <ClInclude Include="Objects\MineCraft\MineUI.h" />
     <ClInclude Include="Objects\Basic\Quad.h" />
     <ClInclude Include="Objects\MineCraft\BlockManager.h" />
     <ClInclude Include="Homework\230303\FPS230303.h" />
@@ -227,9 +229,11 @@
     <ClInclude Include="Homework\230302\TerrainEditor230302.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Framework\State\DepthStencilState.cpp" />
     <ClCompile Include="Homework\230306\BlockManager230306.cpp" />
     <ClCompile Include="Framework\State\BlendState.cpp" />
     <ClCompile Include="Homework\230306\Inventory230306.cpp" />
+    <ClCompile Include="Objects\MineCraft\MineUI.cpp" />
     <ClCompile Include="Objects\Basic\Quad.cpp" />
     <ClCompile Include="Objects\MineCraft\BlockManager.cpp" />
     <ClCompile Include="Homework\230303\FPS230303.cpp" />

@@ -14,20 +14,21 @@ public:
 
 	void GUIRender();
 
+	void BlocksSaveLoad();
 private:
 	void Control();
 	void Jump();
-
 private:
 	float moveSpeed = 10.0f;
-	float rotSpeed = 15.0f;
+	float rotSpeed = 5.0f;
 	float jumpPower = 20.0f;
 
 	float velocity = 0.0f;
 
 	bool isJump = false;
 
-	Vector3 prevMousePos;
-	Quad* crossHair;
+	POINT clientCenterPos = { WIN_WIDTH >> 1, WIN_HEIGHT >> 1 };
+	
+	MineUI* mineUI;
 };
 

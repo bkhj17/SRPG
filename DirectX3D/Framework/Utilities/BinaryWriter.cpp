@@ -50,7 +50,9 @@ void BinaryWriter::WString(wstring data)
 
 void BinaryWriter::Vector(Vector3 data)
 {
-    WriteFile(file, &data, sizeof(Vector3), &size, nullptr);
+    Float(data.x);
+    Float(data.y);
+    Float(data.z);
 }
 
 void BinaryWriter::Bool(bool data)

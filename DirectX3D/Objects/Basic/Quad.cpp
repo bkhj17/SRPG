@@ -30,6 +30,9 @@ Quad::~Quad()
 
 void Quad::Render()
 {
+    if (!Active())
+        return;
+
     SetRender();
     mesh->Draw();
 }

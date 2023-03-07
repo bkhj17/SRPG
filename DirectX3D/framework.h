@@ -100,6 +100,7 @@ using namespace Utility;
 #include "Framework/State/RasterizerState.h"
 #include "Framework/State/SamplerState.h"
 #include "Framework/State/BlendState.h"
+#include "Framework/State/DepthStencilState.h"
 
 #include "Framework/Math/Vector2.h"
 #include "Framework/Math/Vector3.h"
@@ -131,6 +132,7 @@ using namespace GameMath;
 #include "Objects/LandScape/TerrainEditor.h"
 
 #include "Objects/MineCraft/BlockManager.h"
+#include "Objects/MineCraft/MineUI.h"
 #include "Objects/MineCraft/Steve.h"
 
 #include "Scenes/Scene.h"

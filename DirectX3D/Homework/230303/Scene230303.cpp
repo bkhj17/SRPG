@@ -169,7 +169,7 @@ void Scene230303::SetupCube()
 			if (!cube->Active() || cube == check)
 				continue;
 
-			//위에 뭐가 있는지 없는지 체크
+			//뭐가 있는지 없는지 체크
 			Contact cContact;
 			if (cube->GetCollider()->IsRayCollision(cRay, &cContact)) {
 				if (cContact.distance < (check->GlobalScale().y * 0.5f + 1.0f)) {
@@ -179,7 +179,7 @@ void Scene230303::SetupCube()
 			}
 		}
 
-		if (!isOn) { //위에 아무것도 없다면 cube 출현
+		if (!isOn) { //아무것도 없다면 cube 출현
 			for (auto cube : cubes) {
 				if (cube->Active())
 					continue;

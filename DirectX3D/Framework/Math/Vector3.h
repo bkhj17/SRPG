@@ -65,9 +65,9 @@ public:
 
 		switch (index)
 		{
-		case 0:	return GetX();
-		case 1:	return GetY();
-		case 2:	return GetZ();
+		case 0:	return x;
+		case 1:	return y;
+		case 2:	return z;
 		}	
 	}
 

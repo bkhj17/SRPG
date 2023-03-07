@@ -63,6 +63,7 @@ void Environment::Set()
     SetViewport();
     SetPerspective();
 
+    depthStencilState[0]->SetState();
     raterizerState[(int)isWireMode]->SetState();        
 
     lightBuffer->SetPS(0);
@@ -70,6 +71,7 @@ void Environment::Set()
 
 void Environment::PostSet()
 {
+    depthStencilState[1]->SetState();
     uiViewBuffer->SetVS(1);
     SetOrthographic();
 }
@@ -120,4 +122,8 @@ void Environment::CreateState()
     blendState[0] = new BlendState();
     blendState[1] = new BlendState();
     blendState[1]->SetState();
+
+    depthStencilState[0] = new DepthStencilState();
+    depthStencilState[1] = new DepthStencilState();
+    depthStencilState[1]->DepthEnable(false);
 }

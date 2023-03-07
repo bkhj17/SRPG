@@ -25,7 +25,7 @@ protected:
         BOX, SPHERE, CAPSULE
     };
 
-    const float PUSH_SPEED = 500.0f;
+    const float PUSH_SPEED = 50.0f;
 
 public:
     Collider();
@@ -41,6 +41,8 @@ public:
     virtual bool IsSphereCollision(class SphereCollider* collider) = 0;
     virtual bool IsCapsuleCollision(class CapsuleCollider* collider) = 0;
     
+    virtual bool PushCollision(Collider* collider);
+
     void SetColor(Float4 color) { material->GetData().diffuse = color; }
     void SetColor(float r, float g, float b) { material->GetData().diffuse = {r, g, b, 1}; }
 
