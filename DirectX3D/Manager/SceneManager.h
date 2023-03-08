@@ -23,4 +23,3 @@ private:
 	unordered_map<string, Scene*> scenes;
 	list<Scene*> curScenes;
 };
-

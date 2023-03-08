@@ -39,14 +39,22 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include <d3dcompiler.h>
+//DirectXTex
 #include <DirectXTex.h>
 #include <DirectXCollision.h>
+//ImGui
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
 #include <imgui_impl_win32.h>
 #include <ImGuiFileDialog.h>
+//Font
 #include <d2d1_2.h>
 #include <dwrite.h>
+//assimp
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -55,6 +63,7 @@
 #pragma comment(lib, "ImGui.lib")
 #pragma comment(lib, "d2d1.lib")
 #pragma comment(lib, "dwrite.lib")
+#pragma comment(lib, "assimp-vc143-mtd.lib")
 using namespace std;
 using namespace DirectX;
 using namespace DirectX::TriangleTests;
@@ -126,7 +135,11 @@ using namespace GameMath;
 #include "Framework/Collision/BoxCollider.h"
 #include "Framework/Collision/SphereCollider.h"
 #include "Framework/Collision/CapsuleCollider.h"
-#include "Framework/Collision/LineCollider.h"
+
+#include "Framework/Model/ModelData.h"
+#include "Framework/Model/ModelExporter.h"
+#include "Framework/Model/ModelMesh.h"
+#include "Framework/Model/Model.h"
 
 #include "Objects/LandScape/Terrain.h"
 #include "Objects/LandScape/TerrainEditor.h"

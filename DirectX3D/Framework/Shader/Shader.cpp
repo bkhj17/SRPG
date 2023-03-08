@@ -8,7 +8,10 @@ Shader::~Shader()
 }
 
 VertexShader* Shader::AddVS(wstring file)
-{    
+{   
+    if (file.size() == 0)
+        file = L"Light/Light.hlsl";
+
     wstring key = file + L"VS";
     if (shaders.count(key) > 0)
         return (VertexShader*)shaders[key];
@@ -21,6 +24,9 @@ VertexShader* Shader::AddVS(wstring file)
 
 PixelShader* Shader::AddPS(wstring file)
 {
+    if (file.size() == 0)
+        file = L"Light/Light.hlsl";
+
     wstring key = file + L"PS";
     if (shaders.count(key) > 0)
         return (PixelShader*)shaders[key];

@@ -15,7 +15,7 @@ wstring Utility::ToWString(string str)
     return temp;
 }
 
-vector<string> Utility::SplitString(string origin, const string& tok)
+vector<string> Utility::SplitString(string origin, const string& tok, bool includeLast)
 {
     vector<string> result;
 
@@ -29,14 +29,55 @@ vector<string> Utility::SplitString(string origin, const string& tok)
         origin = origin.substr(cutAt + 1);
     }
 
-    if (origin.size() > 0)
+    if (includeLast && origin.size() > 0)
         result.push_back(origin);
 
     return result;
 }
 
+bool Utility::ExistDirectory(string file)
+{
+    DWORD fileValue = GetFileAttributesA(file.c_str());
+    bool temp = (fileValue != INVALID_FILE_ATTRIBUTES 
+        && (fileValue & FILE_ATTRIBUTE_DIRECTORY));
+    return temp;
+}
+
 wstring Utility::GetExtension(wstring file)
 {
     size_t index = file.find_last_of('.');
-    return file.substr(index + 1, file.length());
+    if (index == string::npos)
+        return file;
+
+    return file.substr(index + 1);
+}
+
+string Utility::GetFileName(string file)
+{
+    size_t index = file.find_last_of('/');
+    if (index == string::npos)
+        return file;
+
+    return file.substr(index+1);
+}
+
+string Utility::GetFileNameWithoutExtension(string file)
+{
+    string fileName = GetFileName(file);
+    size_t index = fileName.find_last_of('.');
+
+    return fileName.substr(0, index);
+}
+
+void Utility::CreateFolders(string file)
+{
+    //폴더 생성기
+    vector<string> folders = SplitString(file, "/", false);
+
+    string temp = "";
+    for (string folder : folders) {
+        temp += folder + "/";
+        if (!ExistDirectory(temp))
+            CreateDirectoryA(temp.c_str(), 0);
+    }
 }

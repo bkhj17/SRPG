@@ -173,9 +173,9 @@ HRESULT TerrainEditor230302::SaveAlphaMapPng(wstring file)
 	vector<VertexType>& vertices = mesh->GetVertices();
 
 	for (UINT i = 0; i < size / 4; i++) {
-		pixels[i * 4 + 0] = vertices[i].alpha[0] * 255;
-		pixels[i * 4 + 1] = vertices[i].alpha[1] * 255;
-		pixels[i * 4 + 2] = vertices[i].alpha[2] * 255;
+		pixels[i * 4 + 0] = (UINT)(vertices[i].alpha[0] * 255);
+		pixels[i * 4 + 1] = (UINT)(vertices[i].alpha[1] * 255);
+		pixels[i * 4 + 2] = (UINT)(vertices[i].alpha[2] * 255);
 		pixels[i * 4 + 3] = 255;
 	}
 

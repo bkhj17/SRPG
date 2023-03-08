@@ -64,8 +64,8 @@ private:
 	string projectPath;
 	string editName;
 
-	VertexShader* vertexShader;
-	PixelShader* pixelShader;
+	VertexShader* vertexShader = nullptr;
+	PixelShader* pixelShader = nullptr;
 
 	Texture* diffuseMap = nullptr;
 	Texture* specularMap = nullptr;

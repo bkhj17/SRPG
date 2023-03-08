@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)Libraries\ImGui;$(ProjectDir)Libraries\DirectXTex;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Libraries\ImGui;$(ProjectDir)Libraries\;$(ProjectDir)Libraries\DirectXTex;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)Libraries\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -138,10 +138,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Framework\Model\ModelExporter.h" />
     <ClInclude Include="Framework\State\DepthStencilState.h" />
     <ClInclude Include="Homework\230306\BlockManager230306.h" />
     <ClInclude Include="Framework\State\BlendState.h" />
     <ClInclude Include="Homework\230306\Inventory230306.h" />
+    <ClInclude Include="Framework\Model\ModelData.h" />
+    <ClInclude Include="Framework\Model\Model.h" />
+    <ClInclude Include="Framework\Model\ModelMesh.h" />
+    <ClInclude Include="Homework\230308\Scene230308.h" />
+    <ClInclude Include="Scenes\ModelRenderScene.h" />
+    <ClInclude Include="Scenes\ModelExportScene.h" />
     <ClInclude Include="Objects\MineCraft\MineUI.h" />
     <ClInclude Include="Objects\Basic\Quad.h" />
     <ClInclude Include="Objects\MineCraft\BlockManager.h" />
@@ -229,10 +236,16 @@
     <ClInclude Include="Homework\230302\TerrainEditor230302.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Framework\Model\ModelExporter.cpp" />
     <ClCompile Include="Framework\State\DepthStencilState.cpp" />
     <ClCompile Include="Homework\230306\BlockManager230306.cpp" />
     <ClCompile Include="Framework\State\BlendState.cpp" />
     <ClCompile Include="Homework\230306\Inventory230306.cpp" />
+    <ClCompile Include="Framework\Model\Model.cpp" />
+    <ClCompile Include="Framework\Model\ModelMesh.cpp" />
+    <ClCompile Include="Homework\230308\Scene230308.cpp" />
+    <ClCompile Include="Scenes\ModelRenderScene.cpp" />
+    <ClCompile Include="Scenes\ModelExportScene.cpp" />
     <ClCompile Include="Objects\MineCraft\MineUI.cpp" />
     <ClCompile Include="Objects\Basic\Quad.cpp" />
     <ClCompile Include="Objects\MineCraft\BlockManager.cpp" />

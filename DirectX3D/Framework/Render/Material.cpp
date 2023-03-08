@@ -120,14 +120,14 @@ void Material::Save(string file)
 	document->InsertFirstChild(material);
 	
 	tinyxml2::XMLElement* shader = document->NewElement("Shader"); 
+	string shaderFile;
+	if (vertexShader)
+		shaderFile = ToString(vertexShader->GetFile());
+	shader->SetAttribute("Vertex", shaderFile.c_str());
 
-	wstring shaderFile = vertexShader->GetFile();
-	shaderFile = shaderFile.substr(shaderFile.find_first_of(L'/')+1);
-	shader->SetAttribute("Vertex", ToString(shaderFile).c_str());
-
-	shaderFile = pixelShader->GetFile();
-	shaderFile = shaderFile.substr(shaderFile.find_first_of(L'/') + 1);
-	shader->SetAttribute("Pixel", ToString(shaderFile).c_str());
+	if (pixelShader)
+		shaderFile = ToString(pixelShader->GetFile());
+	shader->SetAttribute("Pixel", shaderFile.c_str());
 	material->InsertFirstChild(shader);
 
 	tinyxml2::XMLElement* texture = document->NewElement("Texture");

@@ -8,6 +8,8 @@
 #include "Scenes/LightScene.h"
 #include "Scenes/CollisionScene.h"
 #include "Scenes/MineCraftScene.h"
+#include "Scenes/ModelExportScene.h"
+#include "Scenes/ModelRenderScene.h"
 //#include "Homework/230221/Scene230221.h"
 //#include "Homework/230222/GridScene230222.h"
 //#include "Homework/230222/TerrainScene230222.h"
@@ -16,20 +18,23 @@
 //#include "Homework/230227/Scene230227.h"
 //#include "Homework/230302/Scene230302.h"
 //#include "Homework/230303/Scene230303.h"
-#include "Homework/230306/Scene230306.h"
+//#include "Homework/230306/Scene230306.h"
+#include "Homework/230308/Scene230308.h"
 
 GameManager::GameManager()
 {
     Create();
 
     SceneManager::Get()->Create("Grid", new GridScene());
+    //SceneManager::Get()->Create("ModelExport", new ModelExportScene);
     //SceneManager::Get()->Create("Start", new TutorialScene());
     //SceneManager::Get()->Create("Start", new CubeScene());
     //SceneManager::Get()->Create("Start", new TerrainScene);
     //SceneManager::Get()->Create("Start", new TerrainEditorScene);
     //SceneManager::Get()->Create("Start", new LightScene);
     //SceneManager::Get()->Create("Start", new CollisionScene);
-    SceneManager::Get()->Create("Start", new MineCraftScene);
+    //SceneManager::Get()->Create("Start", new MineCraftScene);
+    //SceneManager::Get()->Create("Start", new ModelRenderScene);
     
     //SceneManager::Get()->Create("Grid", new GridScene230222());
     //SceneManager::Get()->Create("Start", new SphereScene);
@@ -40,6 +45,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Start", new Scene230302);
     //SceneManager::Get()->Create("Start", new Scene230303);
     //SceneManager::Get()->Create("Start", new Scene230306);
+    SceneManager::Get()->Create("Start", new Scene230308);
 
     SceneManager::Get()->Add("Grid");
     SceneManager::Get()->Add("Start");

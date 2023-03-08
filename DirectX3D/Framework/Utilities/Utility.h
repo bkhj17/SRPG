@@ -5,8 +5,14 @@ namespace Utility
     string ToString(wstring str);
     wstring ToWString(string str);
 
-    vector<string> SplitString(string origin, const string& tok);
+    vector<string> SplitString(string origin, const string& tok, bool includeLast = true);
+
+    bool ExistDirectory(string file);
 
     //확장자 반환 함수
     wstring GetExtension(wstring file);
+    string GetFileName(string file);
+    string GetFileNameWithoutExtension(string file);
+
+    void CreateFolders(string file);
 }
