@@ -65,22 +65,6 @@ void Scene230308::Update()
 
 		Vector3 vec = player->GlobalPos() - target->GlobalPos();
 		Vector3 curForward(0,0,1);
-		vec.y = 0;
-		vec.Normalize();
-
-
-		Vector3 rotAxis = Cross(vec, curForward);
-		float rotAngle = Dot(curForward, vec);
-
-		float radian = acosf(rotAngle);
-		float degree = XMConvertToDegrees(radian);
-		
-		if (rotAxis == Vector3::Zero())
-			target->Rot() = rotAxis;
-		else
-			target->Rot() = XMQuaternionRotationAxis(rotAxis.GetNormalized(), radian);
-		
-		target->Pos() += target->Forward() * 30.0f * DELTA;
 
 		target->UpdateWorld();
 	}
