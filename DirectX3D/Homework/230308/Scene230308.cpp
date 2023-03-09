@@ -1,25 +1,39 @@
 #include "framework.h"
 #include "Scene230308.h"
+#include "Player230308.h"
+#include "Enemy230308.h"
+#include "Bullet230308.h"
 
 Scene230308::Scene230308()
 {
-	player = new SphereCollider;
-	//CAM->SetTarget(player);
+	player = new Player230308;
+	player->Pos().x = 125.0f;
+	player->Pos().z = 45.0f;
+	player->Scale() *= 5.0f;
 
 	spots.resize(4);
 	int index = 0;
 	for (auto& spot : spots) {
 		spot = new SphereCollider;
-		spot->Pos() = { 25.0f * index, 0.0f, 100.0f };
-		spot->UpdateWorld();
+		spot->Pos() = { 50.0f * (index+1), 0.0f, 200.0f };
 		spot->SetTag("spot" + to_string(index++));
 	}
 	targets.resize(10);
 	for (auto& target : targets) {
-		target = new Sphere;
-		target->GetMaterial()->SetDiffuseMap(L"Textures/Block/Gold.png");
+		target = new Enemy230308;
 		target->SetActive(false);
 	}
+
+	bullets.resize(100);
+	for (auto& bullet : bullets) {
+		bullet = new Bullet230308;
+		bullet->SetActive(false);
+	}
+
+	gameOver = new Quad(L"Textures/UI/GameOver.png");
+	gameOver->Pos() = { CENTER_X, CENTER_Y, 0.0f };
+	gameOver->UpdateWorld();
+	gameOver->SetActive(false);
 }
 
 Scene230308::~Scene230308()
@@ -31,18 +45,50 @@ Scene230308::~Scene230308()
 
 	for (auto target : targets)
 		delete target;
+
+
+	for (auto bullet : bullets)
+		delete bullet;
+
+	delete gameOver;
 }
 
 void Scene230308::Update()
 {
-	if (KEY_DOWN('K'))
+	player->Update();
+
+	for (auto spot : spots) {
+		Observer::Get()->ExcuteParamEvent("GetHeight", spot);
+		spot->Pos().y += 1.0f;
+		spot->UpdateWorld();
+	}
+
+
+	if (KEY_DOWN('K')) {
 		play = !play;
+		if (play) {
+			CAM->SetTarget(player);
+			CAM->TargetOptionLoad("Mine");
+		}
+	}
+
+	if (KEY_DOWN(VK_LBUTTON)) {
+		for (auto bullet : bullets) {
+			if (bullet->Active())
+				continue;
+
+			bullet->Spawn(CAM->GlobalPos() + CAM->Forward() * 5.0f, CAM->Rot());
+			break;
+		}
+	}
+
+	for (auto bullet : bullets) {
+		bullet->Update();
+	}
+
+
 	if (!play)
 		return;
-
-	player->UpdateWorld();
-	for (auto spot : spots)
-		spot->UpdateWorld();
 
 	spawnTime -= DELTA;
 	if (curTargetNum < targets.size() && spawnTime <= 0.0f) {
@@ -50,12 +96,10 @@ void Scene230308::Update()
 		for (auto target : targets) {
 			if (target->Active())
 				continue;
-
-			target->Pos() = spawnPos;
-			target->UpdateWorld();
-			target->SetActive(true);
+			target->Spawn(spawnPos);
 			curTargetNum++;
 			spawnTime = spawnRate;
+			break;
 		}
 	}
 
@@ -63,15 +107,29 @@ void Scene230308::Update()
 		if (!target->Active())
 			continue;
 
-		Vector3 vec = player->GlobalPos() - target->GlobalPos();
-		Vector3 curForward(0,0,1);
+		target->SetTargetPos(player->GlobalPos());
+		target->Update();
 
-		target->UpdateWorld();
+		for (auto bullet : bullets) {
+			if (!bullet->Active())
+				continue;
+			if (bullet->IsCollision(target->GetCollider())) {
+				target->SetActive(false);
+				bullet->SetActive(false);
+			}
+		}
+
+		if (target->GetCollider()->IsCollision(player)) {
+			play = false;
+			gameOver->SetActive(true);
+		}
 	}
 }
 
 void Scene230308::PreRender()
 {
+	player->PostRender();
+	gameOver->Render();
 }
 
 void Scene230308::Render()
@@ -85,10 +143,16 @@ void Scene230308::Render()
 		if(target->Active())
 			target->Render();
 	}
+
+	for (auto bullet : bullets) {
+		bullet->Render();
+	}
 }
 
 void Scene230308::PostRender()
 {
+	player->PostRender();
+	gameOver->Render();
 }
 
 void Scene230308::GUIRender()
@@ -96,6 +160,4 @@ void Scene230308::GUIRender()
 	player->RenderUI();
 	for (auto spot : spots)
 		spot->RenderUI();
-
-	
 }

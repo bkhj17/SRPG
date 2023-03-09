@@ -15,6 +15,7 @@ public:
     void WString(wstring data);
     void Vector(Vector3 data);
     void Bool(bool data);
+    void Matrix(XMMATRIX data);
 
     void Byte(void* data, UINT dataSize);
 

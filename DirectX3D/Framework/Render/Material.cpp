@@ -17,9 +17,9 @@ Material::Material()
 Material::Material(wstring shaderFile)
 {
 	SetShader(shaderFile);
-	diffuseMap = Texture::Add(DEFAULT_DIFFUSE_MAP);
-	specularMap = Texture::Add(DEFAULT_SPECULAR_MAP);
-	normalMap = Texture::Add(DEFAULT_NORMAL_MAP);
+	diffuseMap = Texture::Add(DEFAULT_DIFFUSE_MAP, L"DM");
+	specularMap = Texture::Add(DEFAULT_SPECULAR_MAP, L"SM");
+	normalMap = Texture::Add(DEFAULT_NORMAL_MAP, L"NM");
 
 	buffer = new MaterialBuffer;
 
@@ -72,11 +72,11 @@ void Material::RenderUI()
 
 		SelectMap("SM", SPECULAR);
 		ImGui::SameLine();
-		UnSelectMap(DIFFUSE);
+		UnSelectMap(SPECULAR);
 
 		SelectMap("NM", NORMAL);
 		ImGui::SameLine();
-		UnSelectMap(DIFFUSE);
+		UnSelectMap(NORMAL);
 
 		SaveDialog();
 		LoadDialog();
@@ -92,12 +92,12 @@ void Material::SetShader(wstring shaderFile)
 
 void Material::SetDiffuseMap(wstring textureFile)
 {
-	diffuseMap = textureFile.length() > 0 ? Texture::Add(textureFile) : Texture::Add(DEFAULT_DIFFUSE_MAP);
+	diffuseMap = textureFile.length() > 0 ? Texture::Add(textureFile) : Texture::Add(DEFAULT_DIFFUSE_MAP, L"DM");
 }
 
 void Material::SetSpecularMap(wstring textureFile)
 {
-	specularMap = textureFile.length() > 0 ? Texture::Add(textureFile) : Texture::Add(DEFAULT_SPECULAR_MAP);
+	specularMap = textureFile.length() > 0 ? Texture::Add(textureFile) : Texture::Add(DEFAULT_SPECULAR_MAP, L"SM");
 }
 
 void Material::SetNormalMap(wstring textureFile)
@@ -108,7 +108,7 @@ void Material::SetNormalMap(wstring textureFile)
 	}
 	else {
 		buffer->Get().hasNormalMap = 0;
-		Texture::Add(DEFAULT_NORMAL_MAP);
+		normalMap = Texture::Add(DEFAULT_NORMAL_MAP, L"NM");
 	}
 }
 

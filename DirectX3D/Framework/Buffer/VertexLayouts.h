@@ -74,3 +74,15 @@ struct VertexUVNormalTangentAlpha
     Float3 tangent = {};
     float alpha[4] = {};
 };
+
+
+struct VertexUVNormalTangentBlend
+{
+    Float3 pos = {};
+    Float2 uv = {};
+    Float3 normal = {};
+    Float3 tangent = {};
+    
+    Float4 indices;
+    Float4 weights;
+};

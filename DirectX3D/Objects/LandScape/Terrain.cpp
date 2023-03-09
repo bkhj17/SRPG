@@ -7,11 +7,11 @@ Terrain::Terrain()
 	tag = "Terrain";
 
 	material->SetDiffuseMap(L"Textures/Landscape/Fieldstone_DM.tga");
-	//material->SetSpecularMap(L"Textures/Landscape/fieldstone_SM.tga");
-	//material->SetNormalMap(L"Textures/Landscape/fieldstone_NM.tga");
+	material->SetSpecularMap(L"Textures/Landscape/fieldstone_SM.tga");
+	material->SetNormalMap(L"Textures/Landscape/fieldstone_NM.tga");
 
-	heightMap = Texture::Add(L"Textures/HeightMaps/HeightMap.png");
-	alphaMap = Texture::Add(L"Textures/HeightMaps/AlphaMap.png");
+	heightMap = Texture::Add(L"Textures/HeightMaps/HeightMap230308.png");
+	alphaMap = Texture::Add(L"Textures/HeightMaps/AlphaMap230308.png");
 	secondMap = Texture::Add(L"Textures/Landscape/Dirt.png");
 	thirdMap = Texture::Add(L"Textures/LandScape/Dirt3.png");
 
@@ -31,6 +31,7 @@ void Terrain::Render()
 {
 	alphaMap->PSSet(10);
 	secondMap->PSSet(11);
+	thirdMap->PSSet(12);
 	SetRender();
 	mesh->Draw();
 }
@@ -147,7 +148,6 @@ void Terrain::MakeNormal()
 		//정규화는 셰이더에서 하니 생략
 	}
 }
-
 
 void Terrain::MakeTangent()
 {

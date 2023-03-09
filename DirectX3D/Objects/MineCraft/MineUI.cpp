@@ -63,6 +63,7 @@ void MineUI::Update()
 void MineUI::PostRender()
 {
 	crossHair->Render();
+	/*
 	quickSlot->Render();
 	for (int i = 0; i < 5; i++) {
 		Vector3 pos = { 20.0f * (-4 + i), 0, 0 };
@@ -79,6 +80,7 @@ void MineUI::PostRender()
 		}
 	}
 	iconFrame->Render();
+	*/
 }
 
 void MineUI::GUIRender()

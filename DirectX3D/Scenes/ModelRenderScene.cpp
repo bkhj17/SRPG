@@ -3,7 +3,7 @@
 
 ModelRenderScene::ModelRenderScene()
 {
-	model = new Model("Jin");
+	model = new Model("Robot");
 }
 
 ModelRenderScene::~ModelRenderScene()

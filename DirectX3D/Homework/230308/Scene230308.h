@@ -16,14 +16,16 @@ public:
 private:
 	bool play = false;
 
-	class GameObject* player;
+	class Player230308* player;
 	vector<SphereCollider*> spots;
 
 	int curTargetNum = 0;
 	float spawnTime = 0.0f;
 	float spawnRate = 5.0f;
 
-	vector<Sphere*> targets;
-	vector<SphereCollider*> bullets;
+	vector<class Enemy230308*> targets;
+	vector<class Bullet230308*> bullets;
+
+	Quad* gameOver;
 };
 

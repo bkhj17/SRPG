@@ -75,9 +75,15 @@ Vector3 BinaryReader::Vector()
 
 bool BinaryReader::Bool()
 {
-
     bool temp = false;
     ReadFile(file, &temp, sizeof(bool), &size, nullptr);
+    return temp;
+}
+
+XMMATRIX BinaryReader::Matrix()
+{
+    XMMATRIX temp = {};
+    ReadFile(file, &temp, sizeof(XMMATRIX), &size, nullptr);
     return temp;
 }
 

@@ -90,5 +90,22 @@ void Model::ReadMesh()
 		meshes.push_back(mesh);
 	}
 
+	size = reader->UInt();
+	nodes.resize(size);
+	for (auto& node : nodes) {
+		node.index = reader->Int();
+		node.name = reader->String();
+		node.parent = reader->Int();
+		node.transform = reader->Matrix();
+	}
+
+	size = reader->UInt();
+	bones.resize(size);
+	for (auto& bone : bones) {
+		bone.index = reader->Int();
+		bone.name = reader->String();
+		bone.offset = reader->Matrix();
+		boneMap[bone.name] = bone.index;
+	}
 	delete reader;
 }

@@ -76,7 +76,7 @@ public:
 	Vector3 GetNormalized() const { return XMVector3Normalize(value); }
 	void Normalize() { value = XMVector3Normalize(value); }
 
-	Vector4 GetValue() { return value; }
+	Vector4* GetValue() { return &value; }
 	static Vector3 Zero() { return Vector3(); }
 	static Vector3 One() { return Vector3(1,1,1); }
 

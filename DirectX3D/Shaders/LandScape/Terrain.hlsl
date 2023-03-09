@@ -32,7 +32,6 @@ PixelInput VS(VertexUVNormalTangent input)
     return output;
 }
 
-
 Texture2D alphaMap : register(t10); //¾ËÆÄ¸Ê : Æ¯Á¤ ¸Ê°ú ¼¯À» º¸°£¿ë ¸Ê
 Texture2D secondMap : register(t11);
 Texture2D thirdMap : register(t12);

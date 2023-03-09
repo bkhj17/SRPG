@@ -32,4 +32,5 @@ namespace GameMath
 
     Vector3 GetNormalFromPolygon(const Vector3& v0, const Vector3& v1, const Vector3& v2);
     Vector3 GetRotFromNormal(Vector3 normal);
+    
 }

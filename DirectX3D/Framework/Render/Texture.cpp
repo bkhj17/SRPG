@@ -38,18 +38,16 @@ Texture* Texture::Add(wstring file)
     if (textures.count(file) > 0)
         return textures[file];
 
-    wstring path = file;
-
     ScratchImage image;
     HRESULT result;
 
     wstring extension = GetExtension(file);
     if (extension.compare(L"tga") == 0) {
-        result = LoadFromTGAFile(path.c_str(), nullptr, image);
+        result = LoadFromTGAFile(file.c_str(), nullptr, image);
     } else if(extension.compare(L"dds") == 0)
-        result = LoadFromDDSFile(path.c_str(), DDS_FLAGS_NONE, nullptr, image);
+        result = LoadFromDDSFile(file.c_str(), DDS_FLAGS_NONE, nullptr, image);
     else //기타 등등
-        result = LoadFromWICFile(path.c_str(), WIC_FLAGS_NONE, nullptr, image);
+        result = LoadFromWICFile(file.c_str(), WIC_FLAGS_NONE, nullptr, image);
 
     assert(SUCCEEDED(result));
 
@@ -58,7 +56,7 @@ Texture* Texture::Add(wstring file)
     CreateShaderResourceView(DEVICE, image.GetImages(), image.GetImageCount(),
         image.GetMetadata(), &srv);
 
-    textures[file] = new Texture(srv, image, path);
+    textures[file] = new Texture(srv, image, file);
 
     return textures[file];
 }

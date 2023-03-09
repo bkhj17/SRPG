@@ -60,6 +60,11 @@ void BinaryWriter::Bool(bool data)
     WriteFile(file, &data, sizeof(bool), &size, nullptr);
 }
 
+void BinaryWriter::Matrix(XMMATRIX data)
+{
+    WriteFile(file, &data, sizeof(XMMATRIX), &size, nullptr);
+}
+
 void BinaryWriter::Byte(void* data, UINT dataSize)
 {
     WriteFile(file, data, dataSize, &size, nullptr);

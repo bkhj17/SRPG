@@ -15,6 +15,7 @@ public:
     wstring WString();
     Vector3 Vector();
     bool Bool();
+    XMMATRIX Matrix();
 
     void Byte(void** data, UINT dataSize);
 

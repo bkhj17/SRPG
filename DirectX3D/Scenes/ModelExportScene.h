@@ -4,7 +4,7 @@ class ModelExportScene : public Scene
 {
 public:
 	ModelExportScene();
-	~ModelExportScene();
+	~ModelExportScene() = default;
 
 	// Scene을(를) 통해 상속됨
 	virtual void Update() override;
@@ -16,6 +16,5 @@ public:
 	virtual void PostRender() override;
 
 	virtual void GUIRender() override;
-
 };
 

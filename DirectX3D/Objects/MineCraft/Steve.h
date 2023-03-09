@@ -8,18 +8,20 @@ public:
 	Steve();
 	~Steve();
 
-	void Update();
+	virtual void Update();
 	void Render();
-	void PostRender();
+	virtual void PostRender();
 
 	void GUIRender();
 
 	void BlocksSaveLoad();
-private:
+protected:
 	void Control();
 	void Jump();
+protected:
+	MineUI* mineUI;
 private:
-	float moveSpeed = 10.0f;
+	float moveSpeed = 20.0f;
 	float rotSpeed = 5.0f;
 	float jumpPower = 20.0f;
 
@@ -29,6 +31,5 @@ private:
 
 	POINT clientCenterPos = { WIN_WIDTH >> 1, WIN_HEIGHT >> 1 };
 	
-	MineUI* mineUI;
 };
 

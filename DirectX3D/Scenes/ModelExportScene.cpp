@@ -3,17 +3,19 @@
 
 ModelExportScene::ModelExportScene()
 {
-	string name = "Jin";
+	string name = "Robot";
 	string file = "Models/FBX/" + name + ".fbx";
+	
+	//ModelExporter* exporter = new ModelExporter(name, file);
+	//exporter->ExportMaterial();
+	//exporter->ExportMesh();
+	//delete exporter;
 
+	string clipName = "Dance";
+	file = "Models/Animations/" + name + "/" + clipName + ".fbx";
 	ModelExporter* exporter = new ModelExporter(name, file);
-	exporter->ExportMaterial();
-	exporter->ExportMesh();
+	exporter->ExportClip(clipName);
 	delete exporter;
-}
-
-ModelExportScene::~ModelExportScene()
-{
 }
 
 void ModelExportScene::Update()

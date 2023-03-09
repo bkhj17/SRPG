@@ -9,7 +9,7 @@ ModelExporter::ModelExporter(string name, string file)
 	//필요한 정보 빼고 제외 
 	importer->SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
 
-	scene = importer->ReadFile(file, 
+	scene = importer->ReadFile(file,
 		aiProcess_ConvertToLeftHanded 
 		| aiProcessPreset_TargetRealtime_MaxQuality);
 	assert(scene != nullptr);
@@ -28,8 +28,17 @@ void ModelExporter::ExportMaterial()
 
 void ModelExporter::ExportMesh()
 {
+	ReadNode(scene->mRootNode, -1, -1);
 	ReadMesh(scene->mRootNode);
 	WriteMesh();
+}
+
+void ModelExporter::ExportClip(string clipName)
+{
+	for (UINT i = 0; i < scene->mNumAnimations; i++) {
+		Clip* clip = ReadClip(scene->mAnimations[i]);
+		WriteClip(clip, clipName, i);
+	}
 }
 
 void ModelExporter::ReadMaterial()
@@ -140,6 +149,10 @@ void ModelExporter::ReadMesh(aiNode* node)
 		aiMesh* srcMesh = scene->mMeshes[index];
 
 		mesh->materialIndex = srcMesh->mMaterialIndex;
+		
+		vector<VertexWeights> vertexWeights(srcMesh->mNumVertices);
+		ReadBone(srcMesh, vertexWeights);
+
 		mesh->vertices.resize(srcMesh->mNumVertices);
 		for (UINT v = 0; v < srcMesh->mNumVertices; v++) {
 			ModelVertex vertex;
@@ -153,6 +166,19 @@ void ModelExporter::ReadMesh(aiNode* node)
 
 			if (srcMesh->HasTangentsAndBitangents())
 				memcpy(&vertex.tangent, &srcMesh->mTangents[v], sizeof(Float3));
+
+			if (!vertexWeights.empty()) {
+				vertexWeights[i].Normalize();
+				vertex.indices.x = (float)vertexWeights[v].indices[0];
+				vertex.indices.y = (float)vertexWeights[v].indices[1];
+				vertex.indices.z = (float)vertexWeights[v].indices[2];
+				vertex.indices.w = (float)vertexWeights[v].indices[3];
+
+				vertex.weights.x = vertexWeights[v].weights[0];
+				vertex.weights.y = vertexWeights[v].weights[1];
+				vertex.weights.z = vertexWeights[v].weights[2];
+				vertex.weights.w = vertexWeights[v].weights[3];
+			}
 
 			mesh->vertices[v] = vertex;
 		}
@@ -169,6 +195,51 @@ void ModelExporter::ReadMesh(aiNode* node)
 
 	for (UINT i = 0; i < node->mNumChildren; i++)
 		ReadMesh(node->mChildren[i]);
+}
+
+void ModelExporter::ReadNode(aiNode* node, int index, int parent)
+{
+	NodeData* nodeData = new NodeData();
+	nodeData->index = index;
+	nodeData->parent = parent;
+	nodeData->name = node->mName.C_Str();
+
+	Matrix matrix(node->mTransformation[0]);
+	nodeData->transform = XMMatrixTranspose(matrix);	//전치행렬
+	nodes.push_back(nodeData);
+
+	for (int i = 0; i < node->mNumChildren; i++)
+		ReadNode(node->mChildren[i], nodes.size(), index);
+}
+
+void ModelExporter::ReadBone(aiMesh* mesh, vector<VertexWeights>& vertexWeights)
+{
+	//mNumBones : 메시에 있는 본 정보
+	for (int i = 0; i < mesh->mNumBones; i++) {
+		UINT boneIndex = 0;
+		string name = mesh->mBones[i]->mName.C_Str();
+
+		if (boneMap.count(name) == 0) {
+			boneIndex = boneCount++;
+			boneMap[name] = boneIndex;
+
+			BoneData* boneData = new BoneData;
+			boneData->name = name;
+			boneData->index = boneIndex;
+
+			Matrix matrix(mesh->mBones[i]->mOffsetMatrix[0]);
+			boneData->offset = XMMatrixTranspose(matrix);
+			bones.push_back(boneData);
+		}
+		else {
+			boneIndex = boneMap[name];
+		}
+
+		for (UINT j = 0; j < mesh->mBones[i]->mNumWeights; j++) {
+			UINT index = mesh->mBones[i]->mWeights[j].mVertexId;
+			vertexWeights[index].Add(boneIndex, mesh->mBones[i]->mWeights[j].mWeight);
+		}
+	}
 }
 
 void ModelExporter::WriteMesh()
@@ -191,5 +262,155 @@ void ModelExporter::WriteMesh()
 		delete mesh;
 	}
 	meshes.clear();
+
+	//Node
+	writer->UInt(nodes.size());
+	for (auto node : nodes) {
+		writer->Int(node->index);
+		writer->String(node->name);
+		writer->Int(node->parent);
+		writer->Matrix(node->transform);
+
+		delete node;
+	}
+	nodes.clear();
+
+	writer->UInt(bones.size());
+	for (auto bone : bones) {
+		writer->Int(bone->index);
+		writer->String(bone->name);
+		writer->Matrix(bone->offset);
+
+		delete bone;
+	}
+	bones.clear();
+
+	delete writer;
+}
+
+Clip* ModelExporter::ReadClip(aiAnimation* animation)
+{
+	Clip* clip = new Clip;
+	clip->name = animation->mName.C_Str();
+	clip->tickPerSecond = (float)animation->mTicksPerSecond;
+	clip->frameCount = (UINT)animation->mDuration + 1;	//+1 : 정수형 변환에 의한 프레임 누락 방지
+
+	vector<ClipNode> clipNodes;
+	clipNodes.reserve(animation->mNumChannels);
+	for (int i = 0; i < animation->mNumChannels; i++) {
+		aiNodeAnim* srcNode = animation->mChannels[i];
+
+		ClipNode node;
+		node.name = srcNode->mNodeName;
+
+		UINT keyCount = max(srcNode->mNumPositionKeys, srcNode->mNumRotationKeys);
+		keyCount = max(keyCount, srcNode->mNumScalingKeys);
+
+		node.transforms.reserve(keyCount);
+
+		KeyTransform transform = {};
+		for (UINT k = 0; k < keyCount; k++) {
+			bool isFound = false;
+			float t = node.transforms.size();
+
+			if (k < srcNode->mNumPositionKeys && NearlyEqual((float)srcNode->mPositionKeys[k].mTime, t)) {
+				aiVectorKey key = srcNode->mPositionKeys[k];
+				memcpy_s(&transform.pos, sizeof(Float3), &key.mValue, sizeof(aiVector3D));
+
+				isFound = true;
+			}
+
+			if (k < srcNode->mNumRotationKeys && NearlyEqual((float)srcNode->mRotationKeys[k].mTime, t)) {
+				aiQuatKey key = srcNode->mRotationKeys[k];
+				transform.rot.x = (float)key.mValue.x;
+				transform.rot.y = (float)key.mValue.y;
+				transform.rot.z = (float)key.mValue.z;
+				transform.rot.w = (float)key.mValue.w;
+
+				isFound = true;
+			}
+
+			if (k < srcNode->mNumScalingKeys && NearlyEqual((float)srcNode->mScalingKeys[k].mTime, t)) {
+				aiVectorKey key = srcNode->mScalingKeys[k];
+				memcpy_s(&transform.scale, sizeof(Float3), &key.mValue, sizeof(aiVector3D));
+
+				isFound = true;
+			}
+
+			if (isFound)
+				node.transforms.push_back(transform);
+		}
+
+		if (node.transforms.size() < clip->frameCount) {
+			//남은 분량은 마지막 프레임으로 채운다
+			UINT count = clip->frameCount - node.transforms.size();
+			KeyTransform keyTransfrom = node.transforms.back();
+
+			for (int i = 0; i < count; i++)
+				node.transforms.push_back(keyTransfrom);
+		}
+		clipNodes.push_back(node);
+	}
+
+	ReadKeyFrame(clip, scene->mRootNode, clipNodes);
+
+	return clip;
+}
+
+void ModelExporter::ReadKeyFrame(Clip* clip, aiNode* node, vector<ClipNode>& clipNodes)
+{
+	KeyFrame* keyFrame = new KeyFrame;
+	keyFrame->boneName = node->mName.C_Str();
+	keyFrame->transforms.reserve(clip->frameCount);
+	for (UINT i = 0; i < clip->frameCount; i++) {
+		ClipNode* clipNode = nullptr;
+		for (auto& temp : clipNodes) {
+			if (temp.name == node->mName) {
+				clipNode = &temp;
+				break;
+			}
+		}
+
+		KeyTransform keyTransform;
+		if (clipNode == nullptr) {
+			Matrix transform(node->mTransformation[0]);
+			transform = XMMatrixTranspose(transform);
+
+			Vector3 S, R, T;
+			XMMatrixDecompose(S.GetValue(), R.GetValue(), T.GetValue(), transform);
+			keyTransform.scale = S;
+			XMStoreFloat4(&keyTransform.rot, R);
+			keyTransform.pos = T;
+		}
+		else {
+			keyTransform = clipNode->transforms[i];
+		}
+
+		keyFrame->transforms.push_back(keyTransform);
+	}
+
+	clip->keyFrame.push_back(keyFrame);
+	for (int i = 0; i < node->mNumChildren; i++)
+		ReadKeyFrame(clip, node->mChildren[i], clipNodes);
+}
+
+void ModelExporter::WriteClip(Clip* clip, string clipName, UINT index)
+{
+	string file = "Models/Clips/" + name + "/" + clipName + to_string(index) + ".clip";
+	CreateFolders(file);
+
+	BinaryWriter* writer = new BinaryWriter(file);
+	writer->String(clip->name);
+	writer->UInt(clip->frameCount);
+	writer->Float(clip->tickPerSecond);
+
+	writer->UInt(clip->keyFrame.size());
+	for (KeyFrame* keyFrame : clip->keyFrame) {
+		writer->String(keyFrame->boneName);
+		writer->UInt(keyFrame->transforms.size());
+		writer->Byte(keyFrame->transforms.data(), sizeof(KeyTransform) * keyFrame->transforms.size());
+		delete keyFrame;
+	}
+	delete clip;
 	delete writer;
 }

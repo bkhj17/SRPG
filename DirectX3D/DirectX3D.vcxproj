@@ -138,6 +138,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Homework\230308\Bullet230308.h" />
+    <ClInclude Include="Homework\230308\Enemy230308.h" />
+    <ClInclude Include="Framework\Model\ModelAnimator.h" />
     <ClInclude Include="Framework\Model\ModelExporter.h" />
     <ClInclude Include="Framework\State\DepthStencilState.h" />
     <ClInclude Include="Homework\230306\BlockManager230306.h" />
@@ -147,6 +150,9 @@
     <ClInclude Include="Framework\Model\Model.h" />
     <ClInclude Include="Framework\Model\ModelMesh.h" />
     <ClInclude Include="Homework\230308\Scene230308.h" />
+    <ClInclude Include="Framework\Model\ModelClip.h" />
+    <ClInclude Include="Homework\230308\Player230308.h" />
+    <ClInclude Include="Scenes\ModelAnimationScene.h" />
     <ClInclude Include="Scenes\ModelRenderScene.h" />
     <ClInclude Include="Scenes\ModelExportScene.h" />
     <ClInclude Include="Objects\MineCraft\MineUI.h" />
@@ -234,8 +240,13 @@
     <ClInclude Include="Objects\LandScape\TerrainEditor.h" />
     <ClInclude Include="Homework\230227\TerrainEditor230227.h" />
     <ClInclude Include="Homework\230302\TerrainEditor230302.h" />
+    <ClInclude Include="Homework\230308\TerrainScene230308.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Homework\230308\Bullet230308.cpp" />
+    <ClCompile Include="Homework\230308\Enemy230308.cpp" />
+    <ClCompile Include="Framework\Model\ModelAnimator.cpp" />
+    <ClCompile Include="Framework\Model\ModelClip.cpp" />
     <ClCompile Include="Framework\Model\ModelExporter.cpp" />
     <ClCompile Include="Framework\State\DepthStencilState.cpp" />
     <ClCompile Include="Homework\230306\BlockManager230306.cpp" />
@@ -244,6 +255,8 @@
     <ClCompile Include="Framework\Model\Model.cpp" />
     <ClCompile Include="Framework\Model\ModelMesh.cpp" />
     <ClCompile Include="Homework\230308\Scene230308.cpp" />
+    <ClCompile Include="Homework\230308\Player230308.cpp" />
+    <ClCompile Include="Scenes\ModelAnimationScene.cpp" />
     <ClCompile Include="Scenes\ModelRenderScene.cpp" />
     <ClCompile Include="Scenes\ModelExportScene.cpp" />
     <ClCompile Include="Objects\MineCraft\MineUI.cpp" />
@@ -326,6 +339,7 @@
     <ClCompile Include="Homework\230302\TerrainEditor230302.cpp" />
     <ClCompile Include="Framework\Collision\SphereCollider.cpp" />
     <ClCompile Include="Objects\MineCraft\Steve.cpp" />
+    <ClCompile Include="Homework\230308\TerrainScene230308.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX3D.rc" />
@@ -390,6 +404,12 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Shaders\Light\Light.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\Model\ModelAnimation.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
