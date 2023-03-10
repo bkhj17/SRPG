@@ -16,9 +16,9 @@ LightPixelInput VS(VertexUVNormalTangentBlend input)
     
     output.uv = input.uv;
     
-    output.normal = mul(input.normal, (float3x3) transform); // 
-    output.tangent = mul(input.tangent, (float3x3) transform); // 
-    output.binormal = cross(output.normal, output.tangent);
+    output.normal = mul(input.normal, (float3x3) transform);    // 
+    output.tangent = mul(input.tangent, (float3x3) transform);  // 
+    output.binormal = cross(output.normal, output.tangent);     
        
     return output;
 }

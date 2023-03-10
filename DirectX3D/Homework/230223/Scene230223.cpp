@@ -46,7 +46,7 @@ void Scene230223::PostRender()
 
 void Scene230223::GUIRender()
 {
-	sphere->RenderUI();
+	sphere->GUIRender();
 
-	cube->RenderUI();
+	cube->GUIRender();
 }

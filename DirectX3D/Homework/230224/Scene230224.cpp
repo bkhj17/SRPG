@@ -36,6 +36,6 @@ void Scene230224::PostRender()
 
 void Scene230224::GUIRender()
 {
-	terrain->RenderUI();
-	car->RenderUI();
+	terrain->GUIRender();
+	car->GUIRender();
 }

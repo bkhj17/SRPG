@@ -17,7 +17,7 @@ private:
 	void MakeMesh();
 	void MakeTangent();
 
-private:
+protected:
 	UINT width, height;
 	Mesh<VertexType>* mesh;
 

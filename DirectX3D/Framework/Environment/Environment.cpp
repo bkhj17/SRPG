@@ -37,10 +37,10 @@ void Environment::Update()
     mainCamera->Update();
 }
 
-void Environment::RenderUI()
+void Environment::GUIRender()
 {
     if (ImGui::TreeNode("Environment")) {
-        mainCamera->RenderUI();
+        mainCamera->GUIRender();
         ImGui::Text("LightOption");
         for (UINT i = 0; i < lightBuffer->Get().lightCount; i++) {
             string name = "Light_"+to_string(i);

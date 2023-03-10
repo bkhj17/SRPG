@@ -93,7 +93,7 @@ void Scene230303::GUIRender()
 {
 	if (ImGui::TreeNode("Cubes")) {
 		for (auto cube : cubes)
-			cube->RenderUI();
+			cube->GUIRender();
 
 		ImGui::TreePop();
 	}

@@ -61,5 +61,5 @@ void CollisionScene::PostRender()
 void CollisionScene::GUIRender()
 {
 	for (auto collider : colliders)
-		collider->RenderUI();
+		collider->GUIRender();
 }

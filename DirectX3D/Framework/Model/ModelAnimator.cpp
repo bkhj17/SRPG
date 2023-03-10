@@ -11,6 +11,7 @@ ModelAnimator::~ModelAnimator()
 {
 	for (auto clip : clips)
 		delete clip;
+	clips.clear();
 
 	delete frameBuffer;
 	delete[] clipTransforms;
@@ -40,10 +41,13 @@ void ModelAnimator::Render()
 
 void ModelAnimator::GUIRender()
 {
-	int clip = frameBuffer->Get().clip;
-	ImGui::SliderInt("Clip", &frameBuffer->Get().clip, 0, clips.size() - 1);
-	ImGui::SliderInt("Frame", (int*)&frameBuffer->Get().curFrame, 0, clips[clip]->frameCount-1);
-	__super::RenderUI();
+	/*
+	int clip = frameBuffer->Get().cur.clip;
+	ImGui::SliderInt("Clip", &frameBuffer->Get().cur.clip, 0, clips.size() - 1);
+	ImGui::SliderInt("Frame", (int*)&frameBuffer->Get().cur.curFrame, 0, clips[clip]->frameCount-1);
+	ImGui::SliderFloat("Speed", &frameBuffer->Get().cur.scale, 0, 10.0f);
+	*/
+	__super::GUIRender();
 }
 
 void ModelAnimator::ReadClip(string clipName, UINT clipNum)
@@ -71,7 +75,13 @@ void ModelAnimator::ReadClip(string clipName, UINT clipNum)
 		clip->keyFrames[keyFrame->boneName] = keyFrame;
 	}
 	clips.push_back(clip);
+
+	delete reader;
+
+
 }
+
+
 
 void ModelAnimator::CreateTexture()
 {
@@ -119,7 +129,6 @@ void ModelAnimator::CreateTexture()
 
 	delete subResource;
 	VirtualFree(p, 0, MEM_RELEASE);
-
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
@@ -174,6 +183,75 @@ void ModelAnimator::CreateClipTransform(UINT index)
 	}
 }
 
+void ModelAnimator::PlayClip(int clip, float scale, float takeTime)
+{
+	isPlay = true;
+	frameBuffer->Get().next.clip = clip;
+	frameBuffer->Get().next.scale = scale;
+	frameBuffer->Get().takeTime = takeTime;
+	frameBuffer->Get().runningTime = 0.0f;
+}
+
 void ModelAnimator::UpdateFrame()
 {
+	if (!isPlay)
+		return;
+
+	FrameBuffer::Data& frameData = frameBuffer->Get();
+	{
+		ModelClip* clip = clips[frameData.cur.clip];
+		clip->playTime += DELTA * frameData.cur.scale;
+
+		frameData.cur.time += clip->tickPerSecond * DELTA * frameData.cur.scale;
+		if (frameData.cur.time >= 1.0f) {
+			frameData.cur.curFrame = (frameData.cur.curFrame + 1) % (clip->frameCount - 1);
+			frameData.cur.time -= 1.0f;
+		}
+	}
+	{
+		if (frameData.next.clip < 0)
+			return;
+
+		ModelClip* clip = clips[frameData.next.clip];
+
+		frameData.tweenTime += DELTA / frameData.takeTime;
+		if (frameData.tweenTime >= 1.0f) {
+			frameData.cur = frameData.next;
+			frameData.tweenTime = 0.0f;
+
+			frameData.next.clip = -1;
+			frameData.next.curFrame = 0;
+			frameData.next.time = 0.0f;
+			return;
+		}
+
+		frameData.next.time += clip->tickPerSecond * DELTA * frameData.next.scale;
+		if (frameData.next.time >= 1.0f) {
+			frameData.next.curFrame = (frameData.next.curFrame + 1) % (clip->frameCount - 1);
+			frameData.next.time -= 1.0f;
+		}
+	}
+}
+
+Matrix ModelAnimator::GetTransformByNode(int nodeIndex)
+{
+	if (texture == nullptr) return XMMatrixIdentity();
+	Matrix curAnim;
+	{
+		Frame& curFrame = frameBuffer->Get().cur;
+		Matrix cur = nodeTransforms[curFrame.clip].transform[curFrame.curFrame][nodeIndex];
+		Matrix next = nodeTransforms[curFrame.clip].transform[curFrame.curFrame+1][nodeIndex];
+		curAnim = Lerp(cur, next, curFrame.time);
+	}
+	{
+		Frame& nextFrame = frameBuffer->Get().next;
+		if (nextFrame.clip == -1)
+			return curAnim;
+		Matrix cur = nodeTransforms[nextFrame.clip].transform[nextFrame.curFrame][nodeIndex];
+		Matrix next = nodeTransforms[nextFrame.clip].transform[nextFrame.curFrame + 1][nodeIndex];
+
+		Matrix nextAnim = Lerp(cur, next, nextFrame.time);
+
+		return Lerp(curAnim, nextAnim, frameBuffer->Get().tweenTime);
+	}
 }

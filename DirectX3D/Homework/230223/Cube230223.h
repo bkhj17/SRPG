@@ -12,7 +12,7 @@ public:
 	virtual void Update();
 	virtual void Render();
 
-	virtual void RenderUI();
+	virtual void GUIRender();
 private:
 	void MakeMesh(Vector3 size);
 

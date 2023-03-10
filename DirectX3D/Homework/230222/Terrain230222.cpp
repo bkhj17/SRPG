@@ -20,7 +20,7 @@ void Terrain230222::Render()
 	mesh->Draw();
 }
 
-void Terrain230222::RenderUI()
+void Terrain230222::GUIRender()
 {
 	if (ImGui::TreeNode("TerrainOption")) {
 		int pastWidth = width;
@@ -28,7 +28,7 @@ void Terrain230222::RenderUI()
 		ImGui::DragInt("Width", (int*)&width, 1.0f, 1);
 		ImGui::DragInt("Height", (int*)&height, 1.0f, 1);
 
-		material->RenderUI();
+		material->GUIRender();
 
 		if (width != pastWidth || height != pastHeight) {
 			//메시 업데이트

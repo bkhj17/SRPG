@@ -61,7 +61,7 @@ void Cube230220::Render()
 	DC->DrawIndexed(indices.size(), 0, 0);
 }
 
-void Cube230220::RenderUI()
+void Cube230220::GUIRender()
 {
 	string tag = "Cube";
 	if (ImGui::TreeNode(tag.c_str()))

@@ -31,10 +31,10 @@ void Model::Render()
 
 void Model::GUIRender()
 {
-	RenderUI();
+	__super::GUIRender();
 
 	for (auto material : materials)
-		material->RenderUI();
+		material->GUIRender();
 }
 
 

@@ -53,6 +53,6 @@ void TerrainScene::PostRender()
 
 void TerrainScene::GUIRender()
 {
-	terrain->RenderUI();
-	cylinder->RenderUI();
+	terrain->GUIRender();
+	cylinder->GUIRender();
 }

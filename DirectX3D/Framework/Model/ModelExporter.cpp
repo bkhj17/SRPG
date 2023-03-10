@@ -8,11 +8,31 @@ ModelExporter::ModelExporter(string name, string file)
 	
 	//필요한 정보 빼고 제외 
 	importer->SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
-
+	/*
 	scene = importer->ReadFile(file,
 		aiProcess_ConvertToLeftHanded 
 		| aiProcessPreset_TargetRealtime_MaxQuality);
 	assert(scene != nullptr);
+	*/
+	importer->SetPropertyInteger(AI_CONFIG_PP_RVC_FLAGS, aiComponent_TANGENTS_AND_BITANGENTS);
+
+	scene = importer->ReadFile(file,
+		aiProcessPreset_TargetRealtime_MaxQuality |
+		aiProcess_Triangulate |
+		aiProcess_GenSmoothNormals |
+		aiProcess_FixInfacingNormals |
+		aiProcess_RemoveRedundantMaterials |
+		aiProcess_OptimizeMeshes |
+		aiProcess_ValidateDataStructure |
+		aiProcess_ImproveCacheLocality |
+		aiProcess_JoinIdenticalVertices |
+		aiProcess_FindInvalidData |
+		aiProcess_TransformUVCoords |
+		aiProcess_FlipUVs |
+		aiProcess_ConvertToLeftHanded);
+
+	if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+		return;
 }
 
 ModelExporter::~ModelExporter()

@@ -146,12 +146,16 @@ using namespace GameMath;
 #include "Framework/Model/ModelClip.h"
 #include "Framework/Model/ModelAnimator.h"
 
+
 #include "Objects/LandScape/Terrain.h"
 #include "Objects/LandScape/TerrainEditor.h"
 
 #include "Objects/MineCraft/BlockManager.h"
 #include "Objects/MineCraft/MineUI.h"
 #include "Objects/MineCraft/Steve.h"
+
+#include "Objects/Weapon/Crowbar.h"
+#include "Objects/Character/Human.h"
 
 #include "Scenes/Scene.h"
 #include "Manager/SceneManager.h"

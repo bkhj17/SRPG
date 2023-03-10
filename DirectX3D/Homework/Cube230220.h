@@ -7,7 +7,7 @@ public:
 
 	void Update();
 	void Render();
-	void RenderUI();
+	void GUIRender();
 private:
 	VertexBuffer* vertexBuffer;
 	IndexBuffer* indexBuffer;

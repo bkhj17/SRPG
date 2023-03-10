@@ -45,7 +45,7 @@ void Material::Set()
 	pixelShader->Set();
 }
 
-void Material::RenderUI()
+void Material::GUIRender()
 {
 	string title = name + "_material";
 

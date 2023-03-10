@@ -36,6 +36,6 @@ void CubeScene::PostRender()
 
 void CubeScene::GUIRender()
 {
-	cube->RenderUI();
-	cube->GetMaterial()->RenderUI();
+	cube->GUIRender();
+	cube->GetMaterial()->GUIRender();
 }

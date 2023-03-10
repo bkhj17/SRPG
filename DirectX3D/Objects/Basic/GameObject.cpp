@@ -19,13 +19,13 @@ void GameObject::SetRender()
     material->Set();
 }
 
-void GameObject::RenderUI()
+void GameObject::GUIRender()
 {
     string label = tag + "_Object";
     if (ImGui::TreeNode(label.c_str())) {
 
-        __super::RenderUI();
-        material->RenderUI();
+        __super::GUIRender();
+        material->GUIRender();
 
         ImGui::TreePop();
     }

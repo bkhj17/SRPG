@@ -39,5 +39,5 @@ void LightScene::PostRender()
 
 void LightScene::GUIRender()
 {
-	sphere->RenderUI();
+	sphere->GUIRender();
 }

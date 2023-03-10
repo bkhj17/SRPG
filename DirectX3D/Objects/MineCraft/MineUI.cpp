@@ -86,13 +86,13 @@ void MineUI::PostRender()
 void MineUI::GUIRender()
 {
 	if (ImGui::TreeNode("MineUI")) {
-		quickSlot->RenderUI();
+		quickSlot->GUIRender();
 
 		for (auto& icon : blockIcons)
-			icon.second->RenderUI();
+			icon.second->GUIRender();
 		ImGui::TreePop();
 	}
-	iconFrame->RenderUI();
+	iconFrame->GUIRender();
 }
 
 void MineUI::Mining()

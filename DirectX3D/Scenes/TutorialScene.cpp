@@ -71,5 +71,5 @@ void TutorialScene::PostRender()
 
 void TutorialScene::GUIRender()
 {
-	cube->RenderUI();
+	cube->GUIRender();
 }

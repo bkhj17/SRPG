@@ -157,7 +157,7 @@ void Scene230308::PostRender()
 
 void Scene230308::GUIRender()
 {
-	player->RenderUI();
+	player->GUIRender();
 	for (auto spot : spots)
-		spot->RenderUI();
+		spot->GUIRender();
 }

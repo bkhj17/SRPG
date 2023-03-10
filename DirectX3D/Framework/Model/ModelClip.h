@@ -15,5 +15,7 @@ private:
 	float tickPerSecond;
 	float duration;
 
+	float playTime = 0.0f;
+
 	unordered_map<string, KeyFrame*> keyFrames;
 };

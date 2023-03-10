@@ -34,9 +34,9 @@ void TerrainEditor230302::Render()
 	mesh->Draw();
 }
 
-void TerrainEditor230302::RenderUI()
+void TerrainEditor230302::GUIRender()
 {
-	__super::RenderUI();
+	__super::GUIRender();
 
 	if (ImGui::Button("Save_Terrain")) {
 		DIALOG->OpenDialog("Save_Terrain", "Save_Terrain", "", ".");

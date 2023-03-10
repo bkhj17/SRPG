@@ -3,19 +3,28 @@
 
 ModelExportScene::ModelExportScene()
 {
-	string name = "Robot";
-	string file = "Models/FBX/" + name + ".fbx";
-	
-	//ModelExporter* exporter = new ModelExporter(name, file);
-	//exporter->ExportMaterial();
-	//exporter->ExportMesh();
-	//delete exporter;
+	string name = "crowbar";
+	string file = "Models/FBX/" + name + ".obj";
+	ModelExporter* exporter = nullptr;
 
-	string clipName = "Dance";
-	file = "Models/Animations/" + name + "/" + clipName + ".fbx";
-	ModelExporter* exporter = new ModelExporter(name, file);
-	exporter->ExportClip(clipName);
+	exporter = new ModelExporter(name, file);
+	exporter->ExportMaterial();
+	exporter->ExportMesh();
 	delete exporter;
+	
+	/*
+	vector<string> clipNames = {
+		//"Dance"
+		"idle", "jump", "run"
+	};
+
+	for (const auto& clipName : clipNames) {
+		file = "Models/Animations/" + name + "/" + clipName + ".fbx";
+		exporter = new ModelExporter(name, file);
+		exporter->ExportClip(clipName);
+		delete exporter;
+	}
+	*/
 }
 
 void ModelExportScene::Update()

@@ -16,6 +16,8 @@ namespace GameMath
     float Lerp(const float& start, const float& end, float t);
     Vector2 Lerp(const Vector2& start, const Vector2& end, float t);    
     Vector3 Lerp(const Vector3& start, const Vector3& end, float t);    
+    Matrix Lerp(const Matrix& start, const Matrix& end, float t);
+
     Vector2 SLerp(const Vector2& start, const Vector2& end, float t); 
     Vector3 SLerp(const Vector3& start, const Vector3& end, float t); 
     /*
@@ -32,5 +34,4 @@ namespace GameMath
 
     Vector3 GetNormalFromPolygon(const Vector3& v0, const Vector3& v1, const Vector3& v2);
     Vector3 GetRotFromNormal(Vector3 normal);
-    
 }

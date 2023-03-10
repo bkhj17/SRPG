@@ -7,7 +7,7 @@ public:
     virtual ~Transform() = default;
 
     virtual void UpdateWorld();
-    virtual void RenderUI();
+    virtual void GUIRender();
 
     Vector3 Right() const { return right.GetNormalized(); }
     Vector3 Left() const { return right.GetNormalized() * -1.0f; }
@@ -24,6 +24,8 @@ public:
 
     void SetParent(Transform* transform) { parent = transform; }
     void SetPivot(Vector3 pivot) { this->pivot = pivot; }
+
+    void SetWorld(Matrix& matrix) { world = matrix; }
 
     bool Active();
     bool ActiveSelf() { return isActive; }

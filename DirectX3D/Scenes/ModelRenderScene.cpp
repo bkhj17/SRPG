@@ -3,7 +3,7 @@
 
 ModelRenderScene::ModelRenderScene()
 {
-	model = new Model("Robot");
+	model = new Model("crowbar");
 }
 
 ModelRenderScene::~ModelRenderScene()

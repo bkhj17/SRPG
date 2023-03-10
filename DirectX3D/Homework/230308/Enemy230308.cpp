@@ -67,17 +67,20 @@ void Enemy230308::Move()
 		Vector3 b = direction;
 		b.y = 0.0f;
 
-		XMVECTOR aNorm = XMVector3Normalize(a);
-		XMVECTOR bNorm = XMVector3Normalize(b);
+		Vector3 aNorm = a.GetNormalized();
+		Vector3 bNorm = b.GetNormalized();
 
-		float yaw = atan2f(XMVectorGetX(bNorm), XMVectorGetZ(bNorm)) -
-			atan2f(XMVectorGetX(aNorm), XMVectorGetZ(aNorm));
-		float pitch = asinf(XMVectorGetY(bNorm)) - asinf(XMVectorGetY(aNorm));
+		float yaw = atan2f(bNorm.x, bNorm.z) - atan2f(aNorm.x, aNorm.z);
+		
+		/*
+		float pitch = asinf(bNorm.y) - asinf(aNorm.y);
+		
+		Vector3 aCrossB = XMVector3Cross(a, b);
+		float roll = atan2f(aCrossB.x, aCrossB.y);
+		*/
+		Vector3 rot = { 0.0f, yaw, 0.0f };
 
-		XMVECTOR aCrossB = XMVector3Cross(a, b);
-		float roll = atan2f(XMVectorGetX(aCrossB), XMVectorGetY(aCrossB));
-
-		model->Rot() = { 0.0f, yaw, 0.0f };
+		model->Rot() = Lerp(model->Rot(), rot, DELTA * 10.0f);
 	}
 
 	Pos() += direction * moveSpeed * DELTA;

@@ -36,14 +36,14 @@ private:
 				specularMap->PSSet(30 + slot);
 		}
 
-		void RenderUI();
+		void GUIRender();
 	};
 public:
 	TerrainEditor230302();
 	~TerrainEditor230302();
 
 	void Render();
-	void RenderUI();
+	void GUIRender();
 private:
 	void Save(string file);
 	void Load(string file);

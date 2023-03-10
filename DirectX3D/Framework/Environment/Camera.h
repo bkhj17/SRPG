@@ -7,7 +7,7 @@ public:
     ~Camera();
 
     void Update();
-    void RenderUI();
+    void GUIRender();
     
     void SetView();
 

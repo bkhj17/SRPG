@@ -10,7 +10,7 @@ private:
 
 public:
     void Update();
-    void RenderUI();
+    void GUIRender();
 
     void Set();
     void PostSet();

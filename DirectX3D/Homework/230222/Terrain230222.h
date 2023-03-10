@@ -11,7 +11,7 @@ public:
 	~Terrain230222();
 
 	void Render();
-	void RenderUI();
+	void GUIRender();
 private:
 	void CreateMesh();
 	void UpdateMesh();

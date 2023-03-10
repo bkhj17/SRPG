@@ -1,0 +1,26 @@
+# Blender MTL File: 'None'
+# Material Count: 2
+
+newmtl crowbar_cyl
+Ns 81.000021
+Ka 1.000000 1.000000 1.000000
+Kd 0.463411 0.829384 0.474197
+Ks 0.100000 0.100000 0.100000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump C:\\Users\\SBAUser\\source\\repos\\bkhj17\\DX\\DirectX3D\\DirectX3D\\Textures\\Model\\crowbar\\crowbar_normal.png
+map_Kd C:\\Users\\SBAUser\\source\\repos\\bkhj17\\DX\\DirectX3D\\DirectX3D\\Textures\\Model\\crowbar\\crowbar_cyl.png
+
+newmtl head_uvw
+Ns 224.999983
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.200000 0.200000 0.200000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump C:\\Users\\SBAUser\\source\\repos\\bkhj17\\DX\\DirectX3D\\DirectX3D\\Textures\\Model\\crowbar\\head_normal.png
+map_Kd C:\\Users\\SBAUser\\source\\repos\\bkhj17\\DX\\DirectX3D\\DirectX3D\\Textures\\Model\\crowbar\\head.png

@@ -34,7 +34,7 @@ void TerrainScene230308::PostRender()
 
 void TerrainScene230308::GUIRender()
 {
-	terrain->RenderUI();
+	terrain->GUIRender();
 }
 
 void TerrainScene230308::GetHeightFromTerrain(void* transformPtr, bool updateNormal)
@@ -44,7 +44,9 @@ void TerrainScene230308::GetHeightFromTerrain(void* transformPtr, bool updateNor
 	if (updateNormal) {
 		Vector3 normal;
 		transform->Pos().y = terrain->GetHeight(transform->GlobalPos(), &normal);
-		transform->Rot() = GetRotFromNormal(normal);
+		Vector3 rot = GetRotFromNormal(normal);
+
+		transform->Rot() = Lerp(transform->Rot(), rot, DELTA * 10.0f);
 	}
 	else {
 		transform->Pos().y = terrain->GetHeight(transform->GlobalPos());

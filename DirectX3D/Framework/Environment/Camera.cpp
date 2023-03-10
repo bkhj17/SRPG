@@ -39,7 +39,7 @@ void Camera::Update()
     SetView();
 }
 
-void Camera::RenderUI()
+void Camera::GUIRender()
 {
     if (ImGui::TreeNode("CameraOption")) {
         ImGui::DragFloat("MoveSpeed", &moveSpeed);
@@ -68,7 +68,7 @@ void Camera::RenderUI()
 
             ImGui::TreePop();
         }
-        __super::RenderUI();
+        __super::GUIRender();
         ImGui::TreePop();
     }
 }

@@ -40,11 +40,11 @@ void Cube230223::Render()
 	mesh->Draw();
 }
 
-void Cube230223::RenderUI()
+void Cube230223::GUIRender()
 {
 	if (ImGui::TreeNode(tag.c_str())) {
-		Transform::RenderUI();
-		material->RenderUI();
+		Transform::GUIRender();
+		material->GUIRender();
 
 		string temp = tag + "_Shininess";
 		ImGui::DragFloat(temp.c_str(), (float*)&intensityBuffer->Get()[0], 0.1f, 0.0f);

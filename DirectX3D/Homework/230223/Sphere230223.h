@@ -10,7 +10,7 @@ public:
 
 	virtual void Update();
 	virtual void Render();
-	virtual void RenderUI();
+	virtual void GUIRender();
 private:
 	void MakeMesh(float radius, int numSlices, int numStacks);
 

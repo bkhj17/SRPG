@@ -32,5 +32,5 @@ void Scene230302::PostRender()
 
 void Scene230302::GUIRender()
 {
-	terrainEditor->RenderUI();
+	terrainEditor->GUIRender();
 }

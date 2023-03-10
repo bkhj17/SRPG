@@ -44,6 +44,6 @@ void SphereScene::PostRender()
 
 void SphereScene::GUIRender()
 {
-	sun->RenderUI();
-	earth->RenderUI();
+	sun->GUIRender();
+	earth->GUIRender();
 }

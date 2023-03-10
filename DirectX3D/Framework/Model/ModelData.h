@@ -27,7 +27,7 @@ struct BoneData {
 struct VertexWeights
 {
 	UINT indices[4] = {};	//Bone Index
-	float weights[4] = {};	//Bone 가중치 : 
+	float weights[4] = {};	//Bone 가중치 : 보간할 때 필요
 
 	void Add(const UINT& index, const float& weight) {
 		for (int i = 0; i < 4; i++) {

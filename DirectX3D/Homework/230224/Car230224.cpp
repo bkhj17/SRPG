@@ -79,9 +79,9 @@ void Car230224::Render()
 		wheel[i]->Render();
 }
 
-void Car230224::RenderUI()
+void Car230224::GUIRender()
 {
-	body->RenderUI();
+	body->GUIRender();
 	for (int i = 0; i < 4; i++)
-		wheel[i]->RenderUI();
+		wheel[i]->GUIRender();
 }

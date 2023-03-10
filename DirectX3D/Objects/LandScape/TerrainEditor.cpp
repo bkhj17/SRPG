@@ -71,7 +71,7 @@ void TerrainEditor::Render()
 	mesh->Draw();
 }
 
-void TerrainEditor::RenderUI()
+void TerrainEditor::GUIRender()
 {
 	ImGui::Text("TerrainEdit Option");
 	//ImGui::Text("x : %.1f, y : %.1f, z : %.1f", pickingPos.x, pickingPos.y, pickingPos.z);

@@ -10,7 +10,7 @@ public:
 	void UpdateWorld() override;
 
 	void Render();
-	void RenderUI();
+	void GUIRender();
 
 	void SetTerrain(Terrain230224* terrain) { this->terrain = terrain; }
 private:

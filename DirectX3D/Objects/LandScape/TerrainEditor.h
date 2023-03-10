@@ -78,7 +78,7 @@ public:
 
 	virtual void Update();
 	virtual void Render() override;
-	virtual void RenderUI() override;
+	virtual void GUIRender() override;
 
 	Vector3 Picking();
 	bool ComputePicking(Vector3& pos);

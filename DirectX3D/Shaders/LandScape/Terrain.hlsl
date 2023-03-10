@@ -42,7 +42,6 @@ Material GetMaterialToTerrain(PixelInput input)
     material.normal = NormalMapping(input.tangent,
         input.binormal, input.normal, input.uv);
     
-    
     float4 albedo = diffuseMap.Sample(samp, input.uv);
     float4 alpha = alphaMap.Sample(samp, input.uv);
     float4 second = secondMap.Sample(samp, input.uv);
@@ -63,21 +62,6 @@ Material GetMaterialToTerrain(PixelInput input)
 float4 PS(PixelInput input) : SV_TARGET
 {
     Material material = GetMaterialToTerrain(input);
-    
-    float3 T = normalize(input.tangent);
-    float3 B = normalize(input.binormal);
-    float3 N = normalize(input.normal);
-    
-    float3 normal = N;
-    float3 light = normalize(lights[0].direction);
-    
-    if (hasNormalMap)
-    {
-        float3 normalMapColor = normalMap.Sample(samp, input.uv).rgb;
-        normal = normalMapColor * 2.0f - 1.0f;
-        float3x3 TBN = float3x3(T, B, N);
-        normal = normalize(mul(normal, TBN));
-    }
     
     float4 directional = CalcDirectional(material, lights[0]);
     float4 ambient = CalcAmbient(material);

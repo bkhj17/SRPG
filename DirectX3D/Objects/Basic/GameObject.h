@@ -8,7 +8,7 @@ public:
 
     virtual void Render() {};
     virtual void SetRender();
-    virtual void RenderUI() override;
+    virtual void GUIRender() override;
 
     Material* GetMaterial() { return material; }
 protected:

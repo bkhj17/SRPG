@@ -11,6 +11,7 @@
 #include "Scenes/ModelExportScene.h"
 #include "Scenes/ModelRenderScene.h"
 #include "Scenes/ModelAnimationScene.h"
+#include "Scenes/ActionScene.h"
 //#include "Homework/230221/Scene230221.h"
 //#include "Homework/230222/GridScene230222.h"
 //#include "Homework/230222/TerrainScene230222.h"
@@ -20,8 +21,9 @@
 //#include "Homework/230302/Scene230302.h"
 //#include "Homework/230303/Scene230303.h"
 //#include "Homework/230306/Scene230306.h"
-#include "Homework/230308/Scene230308.h"
-#include "Homework/230308/TerrainScene230308.h"
+//#include "Homework/230308/Scene230308.h"
+//#include "Homework/230308/TerrainScene230308.h"
+#include "Homework/230310/TestScene230310.h"
 
 GameManager::GameManager()
 {
@@ -38,6 +40,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Start", new MineCraftScene);
     //SceneManager::Get()->Create("Start", new ModelRenderScene);
     //SceneManager::Get()->Create("Start", new ModelAnimationScene);
+    //SceneManager::Get()->Create("Start", new ActionScene);
     
     //SceneManager::Get()->Create("Grid", new GridScene230222());
     //SceneManager::Get()->Create("Start", new SphereScene);
@@ -48,11 +51,12 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Start", new Scene230302);
     //SceneManager::Get()->Create("Start", new Scene230303);
     //SceneManager::Get()->Create("Start", new Scene230306);
-    SceneManager::Get()->Create("Terrain", new TerrainScene230308);
-    SceneManager::Get()->Create("Start", new Scene230308);
+    //SceneManager::Get()->Create("Terrain", new TerrainScene230308);
+    //SceneManager::Get()->Create("Start", new Scene230308);
+    SceneManager::Get()->Create("Start", new TestScene230310);
 
     SceneManager::Get()->Add("Grid");
-    SceneManager::Get()->Add("Terrain");
+    //SceneManager::Get()->Add("Terrain");
     SceneManager::Get()->Add("Start");
 }
 
@@ -90,12 +94,12 @@ void GameManager::Render()
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
     
-    //CAM->RenderUI();
+    //CAM->GUIRender();
     
     static bool isActive = true;
     if (isActive) {
         ImGui::Begin("Inspector", &isActive);
-        Environment::Get()->RenderUI();
+        Environment::Get()->GUIRender();
         SceneManager::Get()->GUIRender();
         ImGui::End();
     }

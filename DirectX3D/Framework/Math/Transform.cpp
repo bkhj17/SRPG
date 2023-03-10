@@ -32,7 +32,7 @@ void Transform::UpdateWorld()
     globalScale = tempScale;
 }
 
-void Transform::RenderUI()
+void Transform::GUIRender()
 {
     if (ImGui::TreeNode((tag + "_Transform").c_str()))
     {

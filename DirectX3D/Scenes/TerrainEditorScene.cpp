@@ -32,7 +32,7 @@ void TerrainEditorScene::PostRender()
 
 void TerrainEditorScene::GUIRender()
 {
-	terrainEditor->RenderUI();
+	terrainEditor->GUIRender();
 }
 
 void TerrainEditorScene::ByteAddress()
