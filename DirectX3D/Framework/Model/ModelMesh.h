@@ -6,7 +6,8 @@ public:
 	~ModelMesh();
 
 	void Render();
-
+	void RenderInstanced(UINT instanceCount);
+	
 	void CreateMesh(void* vertexData, UINT vertexCount, void* indexData, UINT indexCount);
 
 	void SetMaterial(Material* material) { this->material = material; }

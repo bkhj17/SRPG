@@ -3,14 +3,12 @@
 
 ModelAnimationScene::ModelAnimationScene()
 {
-	modelAnimator = new ModelAnimator("Human");
-	//modelAnimator->ReadClip("Dance");
-	//modelAnimator->ReadClip("idle");
-	modelAnimator->ReadClip("idle", 1);
-	//modelAnimator->ReadClip("jump");
-	modelAnimator->ReadClip("jump", 1);
-	//modelAnimator->ReadClip("run");
-	modelAnimator->ReadClip("run", 1);
+	modelAnimator = new ModelAnimator("Naruto");
+	modelAnimator->ReadClip("Idle", 0);
+	modelAnimator->ReadClip("Run", 0);
+	modelAnimator->ReadClip("Punching", 0);
+
+	modelAnimator->GetClip(2)->SetEvent(bind(&ModelAnimationScene::SetIdle, this), 0.55f);
 }
 
 ModelAnimationScene::~ModelAnimationScene()
@@ -45,4 +43,9 @@ void ModelAnimationScene::PostRender()
 void ModelAnimationScene::GUIRender()
 {
 	modelAnimator->GUIRender();
+}
+
+void ModelAnimationScene::SetIdle()
+{
+	modelAnimator->PlayClip(0, 1.0f, 0.1f);
 }

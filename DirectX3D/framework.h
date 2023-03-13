@@ -10,7 +10,7 @@
 #define MAX_LIGHT 10
 #define MAX_BONE 512	//적으면 추후 수정
 #define MAX_FRAME 512	//적으면 추후 수정
-
+#define MAX_INSTANCE 128
 
 #define CENTER_X (WIN_WIDTH * 0.5f)
 #define CENTER_Y (WIN_HEIGHT * 0.5f)
@@ -145,7 +145,8 @@ using namespace GameMath;
 #include "Framework/Model/Model.h"
 #include "Framework/Model/ModelClip.h"
 #include "Framework/Model/ModelAnimator.h"
-
+#include "Framework/Model/ModelInstancing.h"
+#include "Framework/Model/ModelAnimatorInstancing.h"
 
 #include "Objects/LandScape/Terrain.h"
 #include "Objects/LandScape/TerrainEditor.h"

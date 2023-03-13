@@ -1,7 +1,7 @@
 #pragma once
 class Terrain : public GameObject
 {
-private:
+protected:
 	typedef VertexUVNormalTangent VertexType;
 	const float MAX_HEIGHT = 20.0f;
 public:
@@ -12,6 +12,7 @@ public:
 	void Render();
 
 	float GetHeight(const Vector3& pos, Vector3* normal = nullptr) const;
+
 private:
 	void MakeNormal();
 	void MakeMesh();

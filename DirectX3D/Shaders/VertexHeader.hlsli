@@ -1,3 +1,4 @@
+#define MAX_INSTANCE 128
 
 cbuffer WorldBuffer : register(b0)
 {
@@ -39,6 +40,12 @@ cbuffer FrameBuffer : register(b3)
     Motion motion;
 }
 
+cbuffer FrameInstancingBuffer : register(b4)
+{
+    Motion motions[MAX_INSTANCE];
+    
+}
+
 //모션 여러개 하려면 3차원배열 필요
 Texture2DArray transformMap : register(t0);
 
@@ -78,7 +85,6 @@ struct VertexUVNormalTangentAlpha
     float4 alpha : ALPHA;
 };
 
-
 struct VertexUVNormalTangentBlend
 {
     float4 pos : POSITION;
@@ -87,6 +93,19 @@ struct VertexUVNormalTangentBlend
     float3 tangent : TANGENT;
     float4 indices : BLENDINDICES;
     float4 weights : BLENDWEIGHTS;
+};
+
+struct VertexInstancing
+{
+    float4 pos : POSITION;
+    float2 uv : UV;
+    float3 normal : NORMAL;
+    float3 tangent : TANGENT;
+    float4 indices : BLENDINDICES;
+    float4 weights : BLENDWEIGHTS;
+    
+    matrix transform : INSTANCE_TRANSFORM;
+    int index : INSTANCE_INDEX;
 };
 
 //Vertex Function
@@ -146,6 +165,70 @@ matrix SkinWorld(float4 indices, float4 weights)
             nextAnim = lerp(cur, next, motion.next.time);
             
             curAnim = lerp(curAnim, nextAnim, motion.tweenTime);
+        }
+        transform += mul(weights[i], curAnim);
+
+    }
+    return transform;
+}
+
+//Vertex Function
+matrix SkinWorld(int instanceID, float4 indices, float4 weights)
+{
+    matrix transform = 0;
+    matrix cur, next;
+    matrix curAnim, nextAnim;
+    
+    float4 c0, c1, c2, c3;
+    float4 n0, n1, n2, n3;
+    
+    for (int i = 0; i < 4; i++)
+    {
+        int clip = motions[instanceID].cur.clip;
+        int curFrame = motions[instanceID].cur.curFrame;
+        
+        //PS 이외에서는 Sample 대신 Load를 쓴다
+        c0 = transformMap.Load(int4(indices[i] * 4 + 0, curFrame, clip, 0));
+        c1 = transformMap.Load(int4(indices[i] * 4 + 1, curFrame, clip, 0));
+        c2 = transformMap.Load(int4(indices[i] * 4 + 2, curFrame, clip, 0));
+        c3 = transformMap.Load(int4(indices[i] * 4 + 3, curFrame, clip, 0));
+        
+        cur = matrix(c0, c1, c2, c3);
+        transform += mul(weights[i], cur);
+        
+        //프레임 보간
+        n0 = transformMap.Load(int4(indices[i] * 4 + 0, curFrame + 1, clip, 0));
+        n1 = transformMap.Load(int4(indices[i] * 4 + 1, curFrame + 1, clip, 0));
+        n2 = transformMap.Load(int4(indices[i] * 4 + 2, curFrame + 1, clip, 0));
+        n3 = transformMap.Load(int4(indices[i] * 4 + 3, curFrame + 1, clip, 0));
+        
+        next = matrix(n0, n1, n2, n3);
+        
+        curAnim = lerp(cur, next, motions[instanceID].cur.time);
+        
+        clip = motions[instanceID].next.clip;
+        curFrame = motions[instanceID].next.curFrame;
+        
+        if (clip > -1)
+        {
+            c0 = transformMap.Load(int4(indices[i] * 4 + 0, curFrame, clip, 0));
+            c1 = transformMap.Load(int4(indices[i] * 4 + 1, curFrame, clip, 0));
+            c2 = transformMap.Load(int4(indices[i] * 4 + 2, curFrame, clip, 0));
+            c3 = transformMap.Load(int4(indices[i] * 4 + 3, curFrame, clip, 0));
+        
+            cur = matrix(c0, c1, c2, c3);
+            transform += mul(weights[i], cur);
+        
+            n0 = transformMap.Load(int4(indices[i] * 4 + 0, curFrame + 1, clip, 0));
+            n1 = transformMap.Load(int4(indices[i] * 4 + 1, curFrame + 1, clip, 0));
+            n2 = transformMap.Load(int4(indices[i] * 4 + 2, curFrame + 1, clip, 0));
+            n3 = transformMap.Load(int4(indices[i] * 4 + 3, curFrame + 1, clip, 0));
+        
+            next = matrix(n0, n1, n2, n3);
+            
+            nextAnim = lerp(cur, next, motions[instanceID].next.time);
+            
+            curAnim = lerp(curAnim, nextAnim, motions[instanceID].tweenTime);
         }
         transform += mul(weights[i], curAnim);
 

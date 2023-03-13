@@ -14,6 +14,9 @@ public:
 	virtual void GUIRender() override;
 
 private:
+	void SetIdle();
+
+private:
 	ModelAnimator* modelAnimator;
 };
 

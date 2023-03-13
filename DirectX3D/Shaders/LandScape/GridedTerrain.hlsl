@@ -25,8 +25,8 @@ PixelInput VS(VertexUVNormalTangent input)
     
     output.uv = input.uv;
     
-    output.normal = mul(input.normal, (float3x3) world); // 
-    output.tangent = mul(input.tangent, (float3x3) world); // 
+    output.normal = mul(input.normal, (float3x3) world);    // 
+    output.tangent = mul(input.tangent, (float3x3) world);  // 
     output.binormal = cross(output.normal, output.tangent);
         
     return output;

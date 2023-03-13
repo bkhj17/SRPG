@@ -17,8 +17,10 @@ ModelAnimator::~ModelAnimator()
 	delete[] clipTransforms;
 	delete[] nodeTransforms;
 
-	texture->Release();
-	srv->Release();
+	if(texture)
+		texture->Release();
+	if(srv)
+		srv->Release();
 }
 
 void ModelAnimator::Update()
@@ -29,9 +31,8 @@ void ModelAnimator::Update()
 
 void ModelAnimator::Render()
 {
-	if (texture == nullptr) {
+	if (texture == nullptr)
 		CreateTexture();
-	}
 
 	frameBuffer->SetVS(3);
 	DC->VSSetShaderResources(0, 1, &srv);
@@ -56,7 +57,9 @@ void ModelAnimator::ReadClip(string clipName, UINT clipNum)
 		+ clipName + to_string(clipNum) + ".clip";
 
 	BinaryReader* reader = new BinaryReader(path);
-	
+	if (reader->IsFailed())
+		return;
+
 	ModelClip* clip = new ModelClip();
 	clip->name = reader->String();
 	clip->frameCount = reader->UInt();
@@ -77,11 +80,7 @@ void ModelAnimator::ReadClip(string clipName, UINT clipNum)
 	clips.push_back(clip);
 
 	delete reader;
-
-
 }
-
-
 
 void ModelAnimator::CreateTexture()
 {
@@ -190,6 +189,8 @@ void ModelAnimator::PlayClip(int clip, float scale, float takeTime)
 	frameBuffer->Get().next.scale = scale;
 	frameBuffer->Get().takeTime = takeTime;
 	frameBuffer->Get().runningTime = 0.0f;
+
+	clips[clip]->Init();
 }
 
 void ModelAnimator::UpdateFrame()
@@ -207,6 +208,8 @@ void ModelAnimator::UpdateFrame()
 			frameData.cur.curFrame = (frameData.cur.curFrame + 1) % (clip->frameCount - 1);
 			frameData.cur.time -= 1.0f;
 		}
+
+		clip->Execute();
 	}
 	{
 		if (frameData.next.clip < 0)

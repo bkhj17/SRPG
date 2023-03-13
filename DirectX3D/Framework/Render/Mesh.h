@@ -2,13 +2,12 @@
 template<typename T>
 class Mesh
 {
-private:
-	typedef VertexUV VertexType;
 public:
 	Mesh() = default;
 	~Mesh();
 
 	void Draw(D3D11_PRIMITIVE_TOPOLOGY type = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	void DrawInstanced(UINT instanceCount, D3D11_PRIMITIVE_TOPOLOGY type = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	void CreateMesh();
 	void UpdateVertex();
@@ -45,6 +44,23 @@ inline void Mesh<T>::Draw(D3D11_PRIMITIVE_TOPOLOGY type)
 	}
 	else {
 		DC->Draw((UINT)vertices.size(), 0);
+	}
+}
+
+template<typename T>
+inline void Mesh<T>::DrawInstanced(UINT instanceCount, D3D11_PRIMITIVE_TOPOLOGY type)
+{
+	if (!vertexBuffer)
+		return;
+
+	vertexBuffer->Set(type);
+
+	if (indexBuffer) {
+		indexBuffer->Set();
+		DC->DrawIndexedInstanced((UINT)indices.size(), instanceCount, 0, 0, 0);
+	}
+	else {
+		DC->DrawInstanced((UINT)vertices.size(), instanceCount, 0, 0);
 	}
 }
 

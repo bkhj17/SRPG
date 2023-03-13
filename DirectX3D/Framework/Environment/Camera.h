@@ -20,13 +20,20 @@ public:
 
     void TargetOptionSave(string file);
     void TargetOptionLoad(string file);
+
+    bool ContainPoint(Vector3 point);
 private:
     void FreeMode();
     void FollowMode();
 
+    void Frustum();
 private:
     ViewBuffer* viewBuffer;
     Matrix view;
+    Matrix projection;
+
+    Vector3 planes[6];
+    float a, b, c, d;
 
     float moveSpeed = 50.0f;
     float rotSpeed = 10.0f;

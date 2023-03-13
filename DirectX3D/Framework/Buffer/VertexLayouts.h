@@ -64,8 +64,6 @@ struct VertexUVNormalTangent
     Float3 tangent = {};
 };
 
-
-
 struct VertexUVNormalTangentAlpha
 {
     Float3 pos = {};
@@ -74,7 +72,6 @@ struct VertexUVNormalTangentAlpha
     Float3 tangent = {};
     float alpha[4] = {};
 };
-
 
 struct VertexUVNormalTangentBlend
 {
@@ -85,4 +82,9 @@ struct VertexUVNormalTangentBlend
     
     Float4 indices;
     Float4 weights;
+};
+
+struct InstanceData {
+    Matrix world = XMMatrixIdentity();
+    int index = 0;
 };

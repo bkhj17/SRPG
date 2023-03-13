@@ -139,6 +139,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Homework\230310\GridedTerrain.h" />
+    <ClInclude Include="Framework\Model\ModelInstancing.h" />
+    <ClInclude Include="Framework\Model\ModelAnimatorInstancing.h" />
+    <ClInclude Include="Homework\230313\Bullet230313.h" />
+    <ClInclude Include="Homework\230313\Enemy230313.h" />
+    <ClInclude Include="Homework\230313\Player230313.h" />
+    <ClInclude Include="Homework\230313\Scene230313.h" />
+    <ClInclude Include="Homework\230313\Instancing230313.h" />
+    <ClInclude Include="Scenes\InstancingScene.h" />
     <ClInclude Include="Objects\Weapon\Crowbar.h" />
     <ClInclude Include="Objects\Character\Human.h" />
     <ClInclude Include="Scenes\ActionScene.h" />
@@ -246,9 +254,19 @@
     <ClInclude Include="Homework\230302\TerrainEditor230302.h" />
     <ClInclude Include="Homework\230308\TerrainScene230308.h" />
     <ClInclude Include="Homework\230310\TestScene230310.h" />
+    <ClInclude Include="Homework\230313\TerrainScene230313.h" />
+    <ClInclude Include="Homework\230313\Terrain230313.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Homework\230310\GridedTerrain.cpp" />
+    <ClCompile Include="Framework\Model\ModelInstancing.cpp" />
+    <ClCompile Include="Framework\Model\ModelAnimatorInstancing.cpp" />
+    <ClCompile Include="Homework\230313\Bullet230313.cpp" />
+    <ClCompile Include="Homework\230313\Enemy230313.cpp" />
+    <ClCompile Include="Homework\230313\Player230313.cpp" />
+    <ClCompile Include="Homework\230313\Scene230313.cpp" />
+    <ClCompile Include="Homework\230313\Instancing230313.cpp" />
+    <ClCompile Include="Scenes\InstancingScene.cpp" />
     <ClCompile Include="Objects\Weapon\Crowbar.cpp" />
     <ClCompile Include="Objects\Character\Human.cpp" />
     <ClCompile Include="Scenes\ActionScene.cpp" />
@@ -350,6 +368,8 @@
     <ClCompile Include="Objects\MineCraft\Steve.cpp" />
     <ClCompile Include="Homework\230308\TerrainScene230308.cpp" />
     <ClCompile Include="Homework\230310\TestScene230310.cpp" />
+    <ClCompile Include="Homework\230313\TerrainScene230313.cpp" />
+    <ClCompile Include="Homework\230313\Terrain230313.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX3D.rc" />
@@ -426,6 +446,24 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Shaders\Model\ModelAnimation.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\Model\ModelAnimationInstance.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\Model\ModelInstancing.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\ProgressBar230313.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>

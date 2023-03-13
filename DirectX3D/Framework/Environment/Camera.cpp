@@ -21,21 +21,22 @@ Camera::~Camera()
 
 void Camera::Update()
 {
+    projection = Environment::Get()->GetProjection();
+    Frustum();
+
     if (target)
         FollowMode();
     else
         FreeMode();
-    /*
-    if (Rot().x > 360.0f) {
-        Rot().x -= 360.0f;
-    }
+    if (Rot().x > 360.0f)
+        Rot().x -= 360.0f;    
     if (Rot().x < -360.0f)
         Rot().x += 360.0f;
     if (Rot().y > 360.0f)
         Rot().y -= 360.0f;
     if (Rot().y < -360.0f)
         Rot().y += 360.0f;
-    */
+    
     SetView();
 }
 
@@ -59,12 +60,10 @@ void Camera::GUIRender()
 
             ImGui::InputText("File", file, 128);
 
-            if (ImGui::Button("save")) {
+            if (ImGui::Button("save")) 
                 TargetOptionSave(file);
-            }
-            if (ImGui::Button("load")) {
+            if (ImGui::Button("load")) 
                 TargetOptionLoad(file);
-            }
 
             ImGui::TreePop();
         }
@@ -90,8 +89,15 @@ Vector3 Camera::ScreenToWorld(Vector3 pos)
 
 Vector3 Camera::WorldToScreen(Vector3 pos)
 {
-    return XMVector3TransformCoord(pos, view);
+    Vector3 result = XMVector3TransformCoord(pos, view);
+    result = XMVector3TransformCoord(result, projection);
+    Vector3 screen;
+    screen.x = (result.x + 1) * 0.5f * WIN_WIDTH;
+    screen.y = (result.y + 1) * 0.5f * WIN_HEIGHT;
+    
+    return screen;
 }
+
 Ray Camera::ScreenPointToRay(Vector3 screenPoint)
 {
     Vector3 screenSize(WIN_WIDTH, WIN_HEIGHT, 1.0f);
@@ -99,8 +105,6 @@ Ray Camera::ScreenPointToRay(Vector3 screenPoint)
     Vector2 point;
     point.x = (screenPoint.x / screenSize.x) * 2.0f - 1.0f;
     point.y = (screenPoint.y / screenSize.y) * 2.0f - 1.0f;
-
-    Matrix projection = Environment::Get()->GetProjection();
 
     Float4x4 temp;
     XMStoreFloat4x4(&temp, projection);
@@ -166,6 +170,60 @@ void Camera::FollowMode()
     }
 }
 
+void Camera::Frustum()
+{
+    Float4x4 VP;
+    XMStoreFloat4x4(&VP, view * projection);
+
+    //Left
+    a = VP._14 + VP._11;
+    b = VP._24 + VP._21;
+    c = VP._34 + VP._31;
+    d = VP._44 + VP._41;
+    planes[0] = XMVectorSet(a, b, c, d);
+
+    //Right
+    a = VP._14 - VP._11;
+    b = VP._24 - VP._21;
+    c = VP._34 - VP._31;
+    d = VP._44 - VP._41;
+    planes[1] = XMVectorSet(a, b, c, d);
+
+
+    //Bottom
+    a = VP._14 + VP._12;
+    b = VP._24 + VP._22;
+    c = VP._34 + VP._32;
+    d = VP._44 + VP._42;
+    planes[2] = XMVectorSet(a, b, c, d);
+
+    //Top
+    a = VP._14 - VP._12;
+    b = VP._24 - VP._22;
+    c = VP._34 - VP._32;
+    d = VP._44 - VP._42;
+    planes[3] = XMVectorSet(a, b, c, d);
+
+    //Near
+    a = VP._14 + VP._13;
+    b = VP._24 + VP._23;
+    c = VP._34 + VP._33;
+    d = VP._44 + VP._43;
+    planes[4] = XMVectorSet(a, b, c, d);
+
+    //Far
+    a = VP._14 - VP._13;
+    b = VP._24 - VP._23;
+    c = VP._34 - VP._33;
+    d = VP._44 - VP._43;
+    planes[5] = XMVectorSet(a, b, c, d);
+
+
+    for (int i = 0; i < 6; i++) {
+        planes[i] = XMPlaneNormalize(planes[i]);
+    }
+}
+
 void Camera::TargetOptionSave(string file)
 {
     string path = "TextData/Camera/" + file + ".cam";
@@ -192,4 +250,14 @@ void Camera::TargetOptionLoad(string file)
     focusOffset = reader->Vector();
     isLookAtTarget = reader->Bool();
     delete reader;
+}
+
+bool Camera::ContainPoint(Vector3 point)
+{
+    for (int i = 0; i < 6; i++) {
+        Vector3 dot = XMPlaneDotCoord(planes[i], point);
+        if (dot.x < 0.0f)
+            return false;
+    }
+    return true;
 }

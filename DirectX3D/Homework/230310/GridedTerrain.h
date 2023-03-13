@@ -10,5 +10,11 @@ public:
 
 private:
 	FloatValueBuffer* widthHeightBuffer;
+
+	vector<Cube*> cubes;
+
+
+	UINT tileWidth = 10, tileHeight = 10;
+	UINT row, col;
 };
 

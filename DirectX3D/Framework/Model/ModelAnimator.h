@@ -42,6 +42,8 @@ public:
     void PlayClip(int clip, float scale = 1.0f, float takeTime = 0.2f);
 
     Matrix GetTransformByNode(int node);
+
+    ModelClip* GetClip(UINT index) { return clips[index]; }
 protected:
 	void CreateTexture();
 	void CreateClipTransform(UINT index);
