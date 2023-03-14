@@ -184,8 +184,10 @@ void Material::Load(string file)
 
 	auto shader = material->FirstChildElement();
 	wstring shaderFile = ToWString(shader->Attribute("Vertex"));
+	shaderFile = shaderFile.substr(shaderFile.find_first_of('/') + 1, shaderFile.length());
 	vertexShader = Shader::AddVS(shaderFile);
 	shaderFile = ToWString(shader->Attribute("Pixel"));
+	shaderFile = shaderFile.substr(shaderFile.find_first_of('/') + 1, shaderFile.length());
 	pixelShader = Shader::AddPS(shaderFile);
 
 	auto texture = shader->NextSiblingElement();

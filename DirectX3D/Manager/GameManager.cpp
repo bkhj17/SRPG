@@ -13,6 +13,7 @@
 #include "Scenes/ModelAnimationScene.h"
 #include "Scenes/ActionScene.h"
 #include "Scenes/InstancingScene.h"
+#include "Scenes/GameScene.h"
 //#include "Homework/230221/Scene230221.h"
 //#include "Homework/230222/GridScene230222.h"
 //#include "Homework/230222/TerrainScene230222.h"
@@ -33,18 +34,21 @@ GameManager::GameManager()
     Create();
 
     SceneManager::Get()->Create("Grid", new GridScene());
-    SceneManager::Get()->Create("ModelExport", new ModelExportScene);
+
+    //SceneManager::Get()->Create("ModelExport", new ModelExportScene);
+    //SceneManager::Get()->Create("Start", new ModelRenderScene);
+    //SceneManager::Get()->Create("Start", new ModelAnimationScene);
+
     //SceneManager::Get()->Create("Start", new TutorialScene());
     //SceneManager::Get()->Create("Start", new CubeScene());
     //SceneManager::Get()->Create("Start", new TerrainScene);
     //SceneManager::Get()->Create("Start", new TerrainEditorScene);
     //SceneManager::Get()->Create("Start", new LightScene);
-    //SceneManager::Get()->Create("Start", new CollisionScene);
+    SceneManager::Get()->Create("Start", new CollisionScene);
     //SceneManager::Get()->Create("Start", new MineCraftScene);
-    //SceneManager::Get()->Create("Start", new ModelRenderScene);
-    //SceneManager::Get()->Create("Start", new ModelAnimationScene);
     //SceneManager::Get()->Create("Start", new InstancingScene);
     //SceneManager::Get()->Create("Start", new ActionScene);
+    //SceneManager::Get()->Create("Start", new GameScene);
     
     //SceneManager::Get()->Create("Grid", new GridScene230222());
     //SceneManager::Get()->Create("Start", new SphereScene);
@@ -58,11 +62,11 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Terrain", new TerrainScene230308);
     //SceneManager::Get()->Create("Start", new Scene230308);
     //SceneManager::Get()->Create("Start", new TestScene230310);
-    SceneManager::Get()->Create("Terrain", new TerrainScene230313);
-    SceneManager::Get()->Create("Start", new Scene230313);
+    //SceneManager::Get()->Create("Terrain", new TerrainScene230313);
+    //SceneManager::Get()->Create("Start", new Scene230313);
     
     SceneManager::Get()->Add("Grid");
-    SceneManager::Get()->Add("Terrain");
+    //SceneManager::Get()->Add("Terrain");
     SceneManager::Get()->Add("Start");
 }
 

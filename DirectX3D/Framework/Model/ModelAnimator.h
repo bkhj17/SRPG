@@ -3,10 +3,10 @@ class ModelAnimator : public Model
 {
 protected:
     struct Frame {
-        int clip;
-        UINT curFrame;
-        float time;
-        float scale;
+        int clip = 0;
+        UINT curFrame = 0;
+        float time = 0.0f;
+        float scale = 1.0f;
     };
 
     class FrameBuffer : public ConstBuffer

@@ -4,7 +4,7 @@
 ModelExportScene::ModelExportScene()
 {
 	string name = "Robot";
-	string file = "Models/FBX/" + name + ".obj";
+	string file = "Models/FBX/" + name + ".fbx";
 	ModelExporter* exporter = nullptr;
 	/*
 	exporter = new ModelExporter(name, file);
@@ -17,7 +17,8 @@ ModelExportScene::ModelExportScene()
 		//"Dance"
 		//"Idle", "Run", "Punching",
 		//"Firing"		
-		"Walking"		
+		"ZombieWalk",
+		//"ZombieDeath", "ZombieHit", "ZombieStandUp",
 	};
 	
 	for (const auto& clipName : clipNames) {

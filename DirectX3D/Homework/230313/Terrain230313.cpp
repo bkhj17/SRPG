@@ -63,7 +63,7 @@ void Terrain230313::MakeComputeData()
 	vector<VertexType>& vertices = mesh->GetVertices();
 	vector<UINT>& indices = mesh->GetIndices();
 
-	triangleSize = indices.size() / 3;
+	triangleSize = (UINT)indices.size() / 3;
 
 	inputs.resize(triangleSize);
 	outputs.resize(triangleSize);

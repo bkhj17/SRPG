@@ -107,7 +107,7 @@ bool BoxCollider::IsSphereCollision(SphereCollider* collider)
 
 bool BoxCollider::IsCapsuleCollision(CapsuleCollider* collider)
 {
-	return false;
+	return collider->IsBoxCollision(this);
 }
 
 void BoxCollider::GetObb(OUT ObbDesc& obbDesc)
@@ -134,15 +134,12 @@ bool BoxCollider::IsSeperateAxis(Vector3 D, Vector3 axis, ObbDesc box1, ObbDesc 
 		b += abs(Dot(temp, axis));
 	}
 
-
-
 	return distance > a+b;
 }
 
 void BoxCollider::MakeMesh()
 {
 	Vector3 halfSize = size * 0.5f;
-
 
 	vector<Vector3> points = {
 		{-1, -1, -1},	//0

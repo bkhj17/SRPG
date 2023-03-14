@@ -1,23 +1,12 @@
 #include "../VertexHeader.hlsli"
 #include "../PixelHeader.hlsli"
 
-struct PixelInput
+LightPixelInput VS(VertexUVNormalTangent input)
 {
-    float4 pos : SV_POSITION;
-    float2 uv : UV;
-    float3 normal : NORMAL;
-    float3 tangent : TANGENT;
-    float3 binormal : BINORMAL;
-    float3 viewDir : VIEWDIR;
-    float3 worldPos : POSITION;
-};
-
-PixelInput VS(VertexUVNormalTangent input)
-{
-    PixelInput output;
+    LightPixelInput output;
     output.pos = mul(input.pos, world);
     
-    output.viewDir = normalize(invView._31_32_33);
+    output.viewPos = normalize(invView._31_32_33);
     output.worldPos = output.pos;
     
     output.pos = mul(output.pos, view);
@@ -36,7 +25,7 @@ Texture2D alphaMap : register(t10); //¾ËÆÄ¸Ê : Æ¯Á¤ ¸Ê°ú ¼¯À» º¸°£¿ë ¸Ê
 Texture2D secondMap : register(t11);
 Texture2D thirdMap : register(t12);
 
-Material GetMaterialToTerrain(PixelInput input)
+Material GetMaterialToTerrain(LightPixelInput input)
 {
     Material material;
     material.normal = NormalMapping(input.tangent,
@@ -53,15 +42,16 @@ Material GetMaterialToTerrain(PixelInput input)
     material.diffuseColor = albedo;
     
     material.specularIntensity = diffuseMap.Sample(samp, input.uv);
-    material.viewPos = input.worldPos.rgb + input.viewDir * 1.0f;
+    material.viewPos = input.worldPos.rgb + input.viewPos * 1.0f;
     material.worldPos = input.worldPos;
     
     return material;
 }
 
-float4 PS(PixelInput input) : SV_TARGET
-{
+float4 PS(LightPixelInput input) : SV_TARGET
+{    
     Material material = GetMaterialToTerrain(input);
+    GetMaterial(input);
     
     float4 directional = CalcDirectional(material, lights[0]);
     float4 ambient = CalcAmbient(material);

@@ -24,8 +24,7 @@ public:
 
     void SetParent(Transform* transform) { parent = transform; }
     void SetPivot(Vector3 pivot) { this->pivot = pivot; }
-
-    void SetWorld(Matrix& matrix) { world = matrix; }
+    void SetWorld(const Matrix& matrix) { world = matrix; }
 
     bool Active();
     bool ActiveSelf() { return isActive; }
@@ -50,14 +49,11 @@ protected:
 
     bool isActive = true;    
 
-    Matrix world;
+    Matrix world = XMMatrixIdentity();
 
 private:
     Transform* parent = nullptr;
-    /*
-    Matrix S, R, T;
-    Matrix P, IP;
-    */
+
     Vector3 pivot;
     
     Vector3 right, up, forward;

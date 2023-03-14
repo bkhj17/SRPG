@@ -22,7 +22,7 @@ void ModelClip::Execute()
 
     float ratio = playTime / duration;
 
-    if (eventIter->first > ratio) return;  //
+    if (eventIter->first > ratio) return;
 
     eventIter->second();
     eventIter++;

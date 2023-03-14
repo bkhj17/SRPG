@@ -228,7 +228,7 @@ void ModelAnimator::UpdateFrame()
 			return;
 		}
 
-		frameData.next.time += clip->tickPerSecond * DELTA * frameData.next.scale;
+		frameData.next.time += clip->tickPerSecond * frameData.next.scale * DELTA;
 		if (frameData.next.time >= 1.0f) {
 			frameData.next.curFrame = (frameData.next.curFrame + 1) % (clip->frameCount - 1);
 			frameData.next.time -= 1.0f;
@@ -244,7 +244,7 @@ Matrix ModelAnimator::GetTransformByNode(int nodeIndex)
 		Frame& curFrame = frameBuffer->Get().cur;
 		Matrix cur = nodeTransforms[curFrame.clip].transform[curFrame.curFrame][nodeIndex];
 		Matrix next = nodeTransforms[curFrame.clip].transform[curFrame.curFrame+1][nodeIndex];
-		curAnim = Lerp(cur, next, curFrame.time);
+		curAnim = Lerp(cur, next, curFrame.time) * world;
 	}
 	{
 		Frame& nextFrame = frameBuffer->Get().next;
@@ -253,7 +253,7 @@ Matrix ModelAnimator::GetTransformByNode(int nodeIndex)
 		Matrix cur = nodeTransforms[nextFrame.clip].transform[nextFrame.curFrame][nodeIndex];
 		Matrix next = nodeTransforms[nextFrame.clip].transform[nextFrame.curFrame + 1][nodeIndex];
 
-		Matrix nextAnim = Lerp(cur, next, nextFrame.time);
+		Matrix nextAnim = Lerp(cur, next, nextFrame.time) * world;
 
 		return Lerp(curAnim, nextAnim, frameBuffer->Get().tweenTime);
 	}

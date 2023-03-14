@@ -138,6 +138,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Objects\Weapon\Kunai.h" />
+    <ClInclude Include="Objects\Character\Naruto.h" />
+    <ClInclude Include="Objects\Manager\KunaiManager.h" />
+    <ClInclude Include="Objects\Character\Robot.h" />
+    <ClInclude Include="Objects\Manager\RobotManager.h" />
+    <ClInclude Include="Scenes\GameScene.h" />
     <ClInclude Include="Homework\230310\GridedTerrain.h" />
     <ClInclude Include="Framework\Model\ModelInstancing.h" />
     <ClInclude Include="Framework\Model\ModelAnimatorInstancing.h" />
@@ -258,6 +264,12 @@
     <ClInclude Include="Homework\230313\Terrain230313.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Objects\Weapon\Kunai.cpp" />
+    <ClCompile Include="Objects\Character\Naruto.cpp" />
+    <ClCompile Include="Objects\Manager\KunaiManager.cpp" />
+    <ClCompile Include="Objects\Character\Robot.cpp" />
+    <ClCompile Include="Objects\Manager\RobotManager.cpp" />
+    <ClCompile Include="Scenes\GameScene.cpp" />
     <ClCompile Include="Homework\230310\GridedTerrain.cpp" />
     <ClCompile Include="Framework\Model\ModelInstancing.cpp" />
     <ClCompile Include="Framework\Model\ModelAnimatorInstancing.cpp" />

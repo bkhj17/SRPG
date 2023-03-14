@@ -156,7 +156,12 @@ using namespace GameMath;
 #include "Objects/MineCraft/Steve.h"
 
 #include "Objects/Weapon/Crowbar.h"
+#include "Objects/Weapon/Kunai.h"
+
+#include "Objects/Manager/KunaiManager.h"
+
 #include "Objects/Character/Human.h"
+#include "Objects/Character/Naruto.h"
 
 #include "Scenes/Scene.h"
 #include "Manager/SceneManager.h"

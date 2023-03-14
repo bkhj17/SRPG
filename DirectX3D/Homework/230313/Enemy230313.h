@@ -22,6 +22,9 @@ public:
 	Matrix GetModelWorld() { return modelTransform->GetWorld(); }
 
 	void Hit();
+	void SetAction(int index);
+	int GetCurAction() { return curClip; }
+	int& GetIndex() { return index; }
 private:
 	void Move();
 	void UpdateHeight();
@@ -37,5 +40,8 @@ private:
 	int hp = 2;
 	Quad* HPBar;
 	IntValueBuffer* hpBuffer;
+
+	int index = -1;
+	int curClip = 0;
 };
 

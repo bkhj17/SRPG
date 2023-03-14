@@ -78,26 +78,36 @@ void Enemy230313::Spawn(Vector3 spawnPos)
 	Pos() = spawnPos;
 	moveSpeed = Random(MIN_MOVE_SPEED, MAX_MOVE_SPEED);
 	hp = 2;
+
+	SetAction(0);
 	UpdateWorld();
 	SetActive(true);
 }
 
 void Enemy230313::Hit()
 {
-	if (!Active())
+	if (!Active() || curClip < 2)
 		return;
 
-	if (--hp <= 0)
-		SetActive(false);
-	
+	 
+	SetAction((--hp <= 0) ? 2 : 1);	
+}
+
+void Enemy230313::SetAction(int index)
+{
+	if (curClip == index)
+		return;
+
+	curClip = index;
+	//instancing에 접근해야 한다
+
 }
 
 void Enemy230313::Move()
 {
-	//타겟을 바라보는건 model rot을 
-	//지형 normal 받는건 본체 rot을
+	if (curClip != 0)
+		return;
 
-	// 시작 위치에서 목표 위치를 바라보는 방향을 계산합니다.
 	Vector3 direction = (targetPos - GlobalPos());
 	direction.Normalize();
 

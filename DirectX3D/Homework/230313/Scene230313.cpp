@@ -21,12 +21,6 @@ Scene230313::Scene230313()
 	}
 
 	inst = new Instancing230313("Robot");
-	inst->ReadClip("Walking", 0);
-	for (int i = 0; i < 10; i++) {
-		auto target = inst->Add(new Enemy230313);
-		target->SetActive(false);
-		
-	}
 
 	bullets.resize(100);
 	for (auto& bullet : bullets) {
@@ -83,7 +77,6 @@ void Scene230313::Update()
 	if (!play)
 		return;
 
-	auto& targets = inst->GetTransforms();
 
 	spawnTime -= DELTA;
 	if (spawnTime <= 0.0f) {
@@ -91,6 +84,8 @@ void Scene230313::Update()
 		if(inst->Spawn(spawnPos))
 			spawnTime = spawnRate;
 	}
+
+	auto& targets = inst->GetTransforms();
 	for (auto target : targets) {
 		if (!target->Active())
 			continue;
@@ -99,19 +94,17 @@ void Scene230313::Update()
 		enemy->SetTargetPos(player->GetShotPos());
 		enemy->Update();
 
-		for (auto bullet : bullets) {
-			if (!bullet->Active())
-				continue;
-			if (bullet->IsCollision(enemy->GetCollider())) {
-				bullet->SetActive(false);
-				enemy->Hit();
-			}
-		}
-
 		if (enemy->GetCollider()->IsCollision(player->GetCollider())) {
 			play = false;
 			gameOver->SetActive(true);
 		}
+	}
+
+	for (auto bullet : bullets) {
+		if (!bullet->Active())
+			continue;
+
+		inst->Hit(bullet);
 	}
 	inst->Update();
 }
@@ -129,9 +122,8 @@ void Scene230313::Render()
 
 	inst->Render();
 
-	for (auto bullet : bullets) {
+	for (auto bullet : bullets)
 		bullet->Render();
-	}
 }
 
 void Scene230313::PostRender()

@@ -121,3 +121,15 @@ Vector3 GameMath::GetRotFromNormal(Vector3 normal)
         return axis;
     return XMQuaternionRotationAxis(axis.GetNormalized(), angle);
 }
+
+Vector3 GameMath::ClosestPointOnLine(const Vector3& start, const Vector3& end, const Vector3& point)
+{
+    Vector3 line = end - start;
+    Vector3 ps = point - start;
+
+    float x = Dot(line, ps);
+    float y = Dot(line, line);
+
+    float t = Clamp(0, 1, x / y);
+    return start + line * t;
+}

@@ -3,7 +3,7 @@
 
 ModelRenderScene::ModelRenderScene()
 {
-	model = new Model("crowbar");
+	model = new Model("Kunai");
 }
 
 ModelRenderScene::~ModelRenderScene()

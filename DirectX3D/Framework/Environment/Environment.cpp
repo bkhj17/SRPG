@@ -105,7 +105,7 @@ void Environment::CreateProjection()
     orthographic = XMMatrixOrthographicOffCenterLH(0.0f, (float)WIN_WIDTH, 0.0f, (float)WIN_HEIGHT, -1.0f, 1.0f);
     
     perspective = XMMatrixPerspectiveFovLH(XM_PIDIV4, 
-       (float)WIN_WIDTH / WIN_HEIGHT, 0.1f, 1000.0f);
+       (float)WIN_WIDTH / WIN_HEIGHT, 0.1f, 5000.0f);
 
     projectionBuffer = new MatrixBuffer();
 }

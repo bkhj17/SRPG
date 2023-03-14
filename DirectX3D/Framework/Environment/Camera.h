@@ -18,6 +18,8 @@ public:
 
     struct Ray ScreenPointToRay(Vector3 screenPoint);
 
+    void LookAtTarget();
+
     void TargetOptionSave(string file);
     void TargetOptionLoad(string file);
 
@@ -53,7 +55,8 @@ private:
     Vector3 destPos;
     Vector3 focusOffset;
 
-    bool isLookAtTarget = true;
+    bool isLookAtTargetX = true;
+    bool isLookAtTargetY = true;
 
     Matrix rotMatrix;
 

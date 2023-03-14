@@ -28,6 +28,7 @@ void Camera::Update()
         FollowMode();
     else
         FreeMode();
+
     if (Rot().x > 360.0f)
         Rot().x -= 360.0f;    
     if (Rot().x < -360.0f)
@@ -47,6 +48,7 @@ void Camera::GUIRender()
         ImGui::DragFloat("RotSpeed", &rotSpeed);
 
         if (target && ImGui::TreeNode("TargetOption")) {
+            
             ImGui::DragFloat("Distance", &distance, 0.1f);
             ImGui::DragFloat("Height", &height, 0.1f);
             ImGui::DragFloat3("FocusOffset", (float*)&focusOffset, 0.1f);
@@ -57,6 +59,9 @@ void Camera::GUIRender()
 
             ImGui::DragFloat("MoveDamping", &moveDamping, 0.1f);
             ImGui::DragFloat("RotDamping", &rotDamping, 0.1f);
+
+            ImGui::Checkbox("LookAtTargetX", &isLookAtTargetX);
+            ImGui::Checkbox("LookAtTargetY", &isLookAtTargetY);
 
             ImGui::InputText("File", file, 128);
 
@@ -121,6 +126,25 @@ Ray Camera::ScreenPointToRay(Vector3 screenPoint)
     return ray;
 }
 
+void Camera::LookAtTarget()
+{
+    rotMatrix = XMMatrixRotationY(destRot + rotY);
+
+    Vector3 forward = XMVector3TransformNormal(Vector3::Forward(), rotMatrix);
+
+    Pos() = target->GlobalPos() + forward * -distance;
+    Pos().y += height;
+
+    Vector3 offset = XMVector3TransformCoord(focusOffset, rotMatrix);
+    Vector3 targetPos = target->GlobalPos() + offset;
+
+    Vector3 dir = (targetPos - Pos()).GetNormalized();
+    forward = Vector3(dir.x, 0.0f, dir.z).GetNormalized();
+
+    Rot().x = acos(Dot(forward, dir));
+    Rot().y = atan2(dir.x, dir.z);
+}
+
 void Camera::FreeMode()
 {
     Vector3 delta = mousePos - prevMousePos;
@@ -140,6 +164,7 @@ void Camera::FreeMode()
             Pos() += Down() * moveSpeed * DELTA;
         if (KEY_PRESS('E'))
             Pos() += Up() * moveSpeed * DELTA;
+
         Rot().x -= delta.y * rotSpeed * DELTA;
         Rot().y += delta.x * rotSpeed * DELTA;
     }
@@ -157,18 +182,18 @@ void Camera::FollowMode()
 
     Pos() = Lerp(Pos(), destPos, moveDamping * DELTA);
 
-    if (isLookAtTarget)
-    {
-        Vector3 offset = XMVector3TransformCoord(focusOffset, rotMatrix);
-        Vector3 targetPos = target->GlobalPos() + offset;
+    Vector3 offset = XMVector3TransformCoord(focusOffset, rotMatrix);
+    Vector3 targetPos = target->GlobalPos() + offset;
 
-        Vector3 dir = (targetPos - Pos()).GetNormalized();
-        forward = Vector3(dir.x, 0.0f, dir.z).GetNormalized();
+    Vector3 dir = (targetPos - Pos()).GetNormalized();
+    forward = Vector3(dir.x, 0.0f, dir.z).GetNormalized();
 
+    if (isLookAtTargetX)
         Rot().x = acos(Dot(forward, dir));
+    if (isLookAtTargetY)
         Rot().y = atan2(dir.x, dir.z);
-    }
 }
+
 
 void Camera::Frustum()
 {
@@ -234,7 +259,8 @@ void Camera::TargetOptionSave(string file)
     writer->Float(rotDamping);
     writer->Float(rotY);
     writer->Vector(focusOffset);
-    writer->Bool(isLookAtTarget);
+    writer->Bool(isLookAtTargetX);
+    writer->Bool(isLookAtTargetY);
     delete writer;
 }
 
@@ -248,7 +274,8 @@ void Camera::TargetOptionLoad(string file)
     rotDamping = reader->Float();
     rotY = reader->Float();
     focusOffset = reader->Vector();
-    isLookAtTarget = reader->Bool();
+    isLookAtTargetX = reader->Bool();
+    isLookAtTargetY = reader->Bool();
     delete reader;
 }
 
