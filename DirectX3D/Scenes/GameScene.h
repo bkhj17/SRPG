@@ -26,7 +26,8 @@ private:
 	Model* forest;
 	Naruto* naruto;
 
-
 	BlendState* blendState[2];
+
+	SkyBox* skyBox;
 };
 

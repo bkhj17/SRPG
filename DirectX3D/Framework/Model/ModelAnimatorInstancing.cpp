@@ -60,10 +60,38 @@ void ModelAnimatorInstancing::PlayClip(UINT instanceID, int clip, float scale, f
     frameInstancingBuffer->Get().motions[instanceID].runningTime = 0.0f;
 }
 
+Matrix ModelAnimatorInstancing::GetTransformByNode(UINT instanceID, int nodeIndex)
+{
+	if (texture == nullptr) return XMMatrixIdentity();
+	Matrix curAnim;
+	{
+		Frame& curFrame = frameInstancingBuffer->Get().motions[instanceID].cur;
+
+		Matrix cur = nodeTransforms[curFrame.clip].transform[curFrame.curFrame][nodeIndex];
+		Matrix next = nodeTransforms[curFrame.clip].transform[curFrame.curFrame + 1][nodeIndex];
+		curAnim = Lerp(cur, next, curFrame.time) * transforms[instanceID]->GetWorld();
+	}
+	{
+		Frame& nextFrame = frameInstancingBuffer->Get().motions[instanceID].next;
+		if (nextFrame.clip == -1)
+			return curAnim;
+		Matrix cur = nodeTransforms[nextFrame.clip].transform[nextFrame.curFrame][nodeIndex];
+		Matrix next = nodeTransforms[nextFrame.clip].transform[nextFrame.curFrame + 1][nodeIndex];
+
+		Matrix nextAnim = Lerp(cur, next, nextFrame.time) * transforms[instanceID]->GetWorld();
+
+		float tweenTime = frameInstancingBuffer->Get().motions[instanceID].tweenTime;
+
+		return Lerp(curAnim, nextAnim, tweenTime);
+	}
+}
+
 void ModelAnimatorInstancing::UpdateFrame(UINT instanceID, Motion& motion)
 {
 	{
 		ModelClip* clip = clips[motion.cur.clip];
+
+		motion.duration = clip->frameCount / clip->tickPerSecond;
 
 		motion.runningTime += motion.cur.scale * DELTA;
 		motion.cur.time += clip->tickPerSecond * DELTA * motion.cur.scale;
@@ -104,9 +132,6 @@ void ModelAnimatorInstancing::UpdateTransforms()
     drawCount = 0;
     for (UINT i = 0; i < transforms.size(); i++) {
         if (transforms[i]->Active()) {
-            if (!CAM->ContainPoint(transforms[i]->GlobalPos()))
-                continue;
-
             UpdateFrame(i, frameInstancingBuffer->Get().motions[i]);
 
             transforms[i]->UpdateWorld();

@@ -17,7 +17,7 @@ ModelExportScene::ModelExportScene()
 		//"Dance"
 		//"Idle", "Run", "Punching",
 		//"Firing"		
-		"ZombieWalk",
+		"ZombieRun",
 		//"ZombieDeath", "ZombieHit", "ZombieStandUp",
 	};
 	

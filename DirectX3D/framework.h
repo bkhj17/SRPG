@@ -134,6 +134,8 @@ using namespace GameMath;
 #include "Objects/Basic/Cylinder.h"
 #include "Objects/Basic/Quad.h"
 
+#include "Objects/UI/ProgressBar.h"
+
 #include "Framework/Collision/Collider.h"
 #include "Framework/Collision/BoxCollider.h"
 #include "Framework/Collision/SphereCollider.h"
@@ -150,6 +152,7 @@ using namespace GameMath;
 
 #include "Objects/LandScape/Terrain.h"
 #include "Objects/LandScape/TerrainEditor.h"
+#include "Objects/LandScape/SkyBox.h"
 
 #include "Objects/MineCraft/BlockManager.h"
 #include "Objects/MineCraft/MineUI.h"
@@ -158,10 +161,13 @@ using namespace GameMath;
 #include "Objects/Weapon/Crowbar.h"
 #include "Objects/Weapon/Kunai.h"
 
-#include "Objects/Manager/KunaiManager.h"
-
 #include "Objects/Character/Human.h"
 #include "Objects/Character/Naruto.h"
+#include "Objects/Character/Robot.h"
+
+#include "Objects/Manager/KunaiManager.h"
+#include "Objects/Manager/RobotManager.h"
+
 
 #include "Scenes/Scene.h"
 #include "Manager/SceneManager.h"

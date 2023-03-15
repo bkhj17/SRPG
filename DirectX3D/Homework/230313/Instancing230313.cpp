@@ -86,6 +86,7 @@ bool Instancing230313::Spawn(Vector3 pos)
 
 void Instancing230313::SetEvent(UINT instanceID, int clip, Event event)
 {
+    
 }
 
 void Instancing230313::Hit(Collider* collider)

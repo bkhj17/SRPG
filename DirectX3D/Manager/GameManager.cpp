@@ -44,11 +44,11 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Start", new TerrainScene);
     //SceneManager::Get()->Create("Start", new TerrainEditorScene);
     //SceneManager::Get()->Create("Start", new LightScene);
-    SceneManager::Get()->Create("Start", new CollisionScene);
+    //SceneManager::Get()->Create("Start", new CollisionScene);
     //SceneManager::Get()->Create("Start", new MineCraftScene);
     //SceneManager::Get()->Create("Start", new InstancingScene);
     //SceneManager::Get()->Create("Start", new ActionScene);
-    //SceneManager::Get()->Create("Start", new GameScene);
+    SceneManager::Get()->Create("Start", new GameScene);
     
     //SceneManager::Get()->Create("Grid", new GridScene230222());
     //SceneManager::Get()->Create("Start", new SphereScene);

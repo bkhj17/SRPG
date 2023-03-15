@@ -13,6 +13,7 @@ public:
 
 	void Update();
 	void Render();
+	void PostRender();
 	void GUIRender();
 
 
@@ -38,7 +39,11 @@ private:
 	float deceleration = 5.0f;
 
 	Vector3 velocity;
+	Vector3 targetPos;
+	bool isTarget = false;
 
 	POINT clientCenterPos = { WIN_WIDTH >> 1, WIN_HEIGHT >> 1 };
+
+	Quad* crossHair;
 };
 

@@ -16,7 +16,6 @@ void ModelClip::Init()
 
 void ModelClip::Execute()
 {
-    
     if (events.empty()) return;             //실행할 게 없다
     if (eventIter == events.end()) return;  //남은 이벤트가 없다
 

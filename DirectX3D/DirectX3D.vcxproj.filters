@@ -387,6 +387,12 @@
     <ClInclude Include="Objects\Manager\RobotManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\UI\ProgressBar.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\LandScape\SkyBox.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX3D.cpp">
@@ -737,6 +743,12 @@
     <ClCompile Include="Objects\Manager\RobotManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Objects\UI\ProgressBar.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\LandScape\SkyBox.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX3D.rc">
@@ -768,6 +780,8 @@
     <FxCompile Include="Shaders\Model\ModelInstancing.hlsl" />
     <FxCompile Include="Shaders\Model\ModelAnimationInstance.hlsl" />
     <FxCompile Include="Shaders\ProgressBar230313.hlsl" />
+    <FxCompile Include="Shaders\UI\ProgressBar.hlsl" />
+    <FxCompile Include="Shaders\LandScape\SkyBox.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\VertexHeader.hlsli" />

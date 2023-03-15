@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Objects\UI\ProgressBar.h" />
     <ClInclude Include="Objects\Weapon\Kunai.h" />
     <ClInclude Include="Objects\Character\Naruto.h" />
     <ClInclude Include="Objects\Manager\KunaiManager.h" />
@@ -247,6 +248,7 @@
     <ClInclude Include="Framework\Buffer\StructuredBuffer.h" />
     <ClInclude Include="Framework\Collision\SphereCollider.h" />
     <ClInclude Include="Objects\MineCraft\Steve.h" />
+    <ClInclude Include="Objects\LandScape\SkyBox.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Scenes\TutorialScene.h" />
     <ClInclude Include="Framework\Math\Vector3.h" />
@@ -264,6 +266,7 @@
     <ClInclude Include="Homework\230313\Terrain230313.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Objects\UI\ProgressBar.cpp" />
     <ClCompile Include="Objects\Weapon\Kunai.cpp" />
     <ClCompile Include="Objects\Character\Naruto.cpp" />
     <ClCompile Include="Objects\Manager\KunaiManager.cpp" />
@@ -382,6 +385,7 @@
     <ClCompile Include="Homework\230310\TestScene230310.cpp" />
     <ClCompile Include="Homework\230313\TerrainScene230313.cpp" />
     <ClCompile Include="Homework\230313\Terrain230313.cpp" />
+    <ClCompile Include="Objects\LandScape\SkyBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX3D.rc" />
@@ -433,6 +437,12 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CS</EntryPointName>
     </FxCompile>
+    <FxCompile Include="Shaders\LandScape\SkyBox.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="Shaders\LandScape\Terrain.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
@@ -482,6 +492,12 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Shaders\SelectTexture230306.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\UI\ProgressBar.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>

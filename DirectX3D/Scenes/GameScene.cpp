@@ -10,7 +10,6 @@ GameScene::GameScene()
 
 	naruto = new Naruto;
 
-
 	blendState[0] = new BlendState;
 	blendState[1] = new BlendState;
 	blendState[1]->AlphaToCoverage(true);
@@ -20,6 +19,9 @@ GameScene::GameScene()
 	CAM->LookAtTarget();
 
 	KunaiManager::Get();
+	RobotManager::Get()->SetTarget(naruto);
+
+	skyBox = new SkyBox(L"Textures/LandScape/Snow_ENV.dds");
 }
 
 GameScene::~GameScene()
@@ -31,6 +33,9 @@ GameScene::~GameScene()
 	delete blendState[1];
 
 	KunaiManager::Delete();
+	RobotManager::Delete();
+
+	delete skyBox;
 }
 
 void GameScene::Update()
@@ -38,6 +43,7 @@ void GameScene::Update()
 	naruto->Update();
 
 	KunaiManager::Get()->Update();
+	RobotManager::Get()->Update();
 }
 
 void GameScene::PreRender()
@@ -46,15 +52,22 @@ void GameScene::PreRender()
 
 void GameScene::Render()
 {
+	skyBox->Render();
+
 	naruto->Render();
 
+	blendState[1]->SetState();
 	forest->Render();
+	blendState[0]->SetState();
 
 	KunaiManager::Get()->Render();
+	RobotManager::Get()->Render();
 }
 
 void GameScene::PostRender()
 {
+	RobotManager::Get()->PostRender();
+	naruto->PostRender();
 }
 
 void GameScene::GUIRender()

@@ -2,13 +2,12 @@
 #include "ModelAnimator.h"
 class ModelAnimatorInstancing : public ModelAnimator
 {
-private:
+public:
     struct Motion {
-
         float takeTime = 0.2f;      //클립 전환 시간
         float tweenTime = 0.0f;
         float runningTime = 0.0f;
-        float padding = 0.0f;
+        float duration = 1.0f;
 
         Frame cur, next;
 
@@ -16,7 +15,7 @@ private:
             next.clip = -1;
         }
     };
-
+private:
     class FrameInstancingBuffer : public ConstBuffer
     {
     public:
@@ -41,6 +40,13 @@ public:
     Transform* Add();
 
     void PlayClip(UINT instanceID, int clip, float scale = 1.0f, float takeTime = 0.1f);
+
+    Matrix GetTransformByNode(UINT instanceID, int nodeIndex);
+    Motion* GetMotion(UINT instanceID) { 
+        return &frameInstancingBuffer->Get().motions[instanceID]; 
+    }
+
+    UINT GetClipSize() { return clips.size(); }
 protected:
     void UpdateFrame(UINT instanceID, Motion& motion);
     virtual void UpdateTransforms();

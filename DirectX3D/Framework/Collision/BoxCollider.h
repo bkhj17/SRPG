@@ -27,4 +27,3 @@ private:
 private:
 	Vector3 size;
 };
-

@@ -87,20 +87,23 @@ void Camera::SetView()
     viewBuffer->SetVS(1);
 }
 
-Vector3 Camera::ScreenToWorld(Vector3 pos)
+Vector3 Camera::ScreenToWorld(Vector3 screenPos)
 {
-    return XMVector3TransformCoord(pos, world);
+    //2D용. ScreenPointToRay 써야함
+    return XMVector3TransformCoord(screenPos, world);
 }
 
-Vector3 Camera::WorldToScreen(Vector3 pos)
+Vector3 Camera::WorldToScreen(Vector3 worldPos)
 {
-    Vector3 result = XMVector3TransformCoord(pos, view);
-    result = XMVector3TransformCoord(result, projection);
-    Vector3 screen;
-    screen.x = (result.x + 1) * 0.5f * WIN_WIDTH;
-    screen.y = (result.y + 1) * 0.5f * WIN_HEIGHT;
+    Vector3 screenPos = XMVector3TransformCoord(worldPos, view);
+    screenPos = XMVector3TransformCoord(screenPos, projection);
+
+    screenPos = (screenPos + Vector3::One()) * 0.5f;
+
+    screenPos.x *= WIN_WIDTH;
+    screenPos.y *= WIN_HEIGHT;
     
-    return screen;
+    return screenPos;
 }
 
 Ray Camera::ScreenPointToRay(Vector3 screenPoint)

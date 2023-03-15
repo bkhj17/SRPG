@@ -13,8 +13,8 @@ public:
 
     void SetTarget(Transform* target) { this->target = target; }
 
-    Vector3 ScreenToWorld(Vector3 pos);
-    Vector3 WorldToScreen(Vector3 pos);
+    Vector3 ScreenToWorld(Vector3 screenPos);
+    Vector3 WorldToScreen(Vector3 worldPos);
 
     struct Ray ScreenPointToRay(Vector3 screenPoint);
 

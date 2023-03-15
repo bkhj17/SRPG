@@ -20,10 +20,16 @@ Naruto::Naruto()
 	ReadClip("Throw");
 	GetClip(THROW)->SetEvent(bind(&Naruto::Throw, this), 0.7f);
 	GetClip(THROW)->SetEvent(bind(&Naruto::EndThrow, this), 0.9f);
+
+	crossHair = new Quad(L"Textures/UI/cursor.png");
+	crossHair->Pos() = Vector3(CENTER_X, CENTER_Y, 0);
+	crossHair->UpdateWorld();
+
 }
 
 Naruto::~Naruto()
 {
+	delete crossHair;
 	delete rightHand;
 	delete kunai;
 }
@@ -41,6 +47,11 @@ void Naruto::Render()
 {
 	__super::Render();
 	kunai->Render();
+}
+
+void Naruto::PostRender()
+{
+	crossHair->Render();
 }
 
 void Naruto::GUIRender()
@@ -112,8 +123,14 @@ void Naruto::Rotate()
 
 void Naruto::Attack()
 {
+	if (curState == THROW)
+		return;
+
 	if (KEY_DOWN(VK_LBUTTON)) {
 		SetState(THROW);
+
+		Ray ray = CAM->ScreenPointToRay(mousePos);
+		isTarget = RobotManager::Get()->IsCollision(ray, targetPos);
 	}
 }
 
@@ -146,7 +163,12 @@ void Naruto::SetState(State state)
 
 void Naruto::Throw()
 {
-	KunaiManager::Get()->Throw(kunai->GlobalPos(), Back());
+	Vector3 dir = Back();
+	if (isTarget) {
+		dir = targetPos - kunai->GlobalPos();
+	}
+
+	KunaiManager::Get()->Throw(kunai->GlobalPos(), dir.GetNormalized());
 }
 
 void Naruto::EndThrow()

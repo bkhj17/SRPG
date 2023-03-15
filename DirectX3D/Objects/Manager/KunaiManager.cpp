@@ -16,9 +16,8 @@ KunaiManager::KunaiManager()
 KunaiManager::~KunaiManager()
 {
 	delete kunaiInstancing;
-	for (auto kunai : kunaies) {
+	for (auto kunai : kunaies)
 		delete kunai;
-	}
 }
 
 void KunaiManager::Update()
@@ -43,5 +42,16 @@ void KunaiManager::Throw(Vector3 pos, Vector3 dir)
 			return;
 		}
 	}
+}
 
+bool KunaiManager::IsCollision(Collider* collider)
+{
+	for (auto kunai : kunaies) {
+		if (kunai->GetCollider()->IsCollision(collider)) {
+			kunai->GetTransform()->SetActive(false);
+			return true;
+		}			
+	}
+
+	return false;
 }
