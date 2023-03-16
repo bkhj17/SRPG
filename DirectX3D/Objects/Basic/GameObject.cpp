@@ -23,7 +23,6 @@ void GameObject::GUIRender()
 {
     string label = tag + "_Object";
     if (ImGui::TreeNode(label.c_str())) {
-
         __super::GUIRender();
         material->GUIRender();
 

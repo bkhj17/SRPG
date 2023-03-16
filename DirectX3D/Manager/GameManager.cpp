@@ -1,19 +1,21 @@
 #include "Framework.h"
-#include "Scenes/TutorialScene.h"
-#include "Scenes/CubeScene.h"
+//#include "Scenes/TutorialScene.h"
+//#include "Scenes/CubeScene.h"
 #include "Scenes/GridScene.h"
-#include "Scenes/TerrainScene.h"
-#include "Scenes/SphereScene.h"
-#include "Scenes/TerrainEditorScene.h"
-#include "Scenes/LightScene.h"
-#include "Scenes/CollisionScene.h"
-#include "Scenes/MineCraftScene.h"
-#include "Scenes/ModelExportScene.h"
-#include "Scenes/ModelRenderScene.h"
-#include "Scenes/ModelAnimationScene.h"
-#include "Scenes/ActionScene.h"
-#include "Scenes/InstancingScene.h"
-#include "Scenes/GameScene.h"
+//#include "Scenes/TerrainScene.h"
+//#include "Scenes/SphereScene.h"
+//#include "Scenes/TerrainEditorScene.h"
+//#include "Scenes/LightScene.h"
+//#include "Scenes/CollisionScene.h"
+//#include "Scenes/MineCraftScene.h"
+//#include "Scenes/ModelExportScene.h"
+//#include "Scenes/ModelRenderScene.h"
+//#include "Scenes/ModelAnimationScene.h"
+//#include "Scenes/ActionScene.h"
+//#include "Scenes/InstancingScene.h"
+//#include "Scenes/GameScene.h"
+#include "Scenes/RenderTargetScene.h"
+#include "Scenes/DeferredScene.h"
 //#include "Homework/230221/Scene230221.h"
 //#include "Homework/230222/GridScene230222.h"
 //#include "Homework/230222/TerrainScene230222.h"
@@ -48,7 +50,9 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Start", new MineCraftScene);
     //SceneManager::Get()->Create("Start", new InstancingScene);
     //SceneManager::Get()->Create("Start", new ActionScene);
-    SceneManager::Get()->Create("Start", new GameScene);
+    //SceneManager::Get()->Create("Start", new GameScene);
+    //SceneManager::Get()->Create("Start", new RenderTargetScene);
+    SceneManager::Get()->Create("Start", new DeferredScene);
     
     //SceneManager::Get()->Create("Grid", new GridScene230222());
     //SceneManager::Get()->Create("Start", new SphereScene);

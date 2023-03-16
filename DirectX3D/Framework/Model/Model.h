@@ -9,7 +9,6 @@ public:
 	void GUIRender();
 
 	void SetShader(wstring file);
-
 private:
 	void ReadMaterial();
 	void ReadMesh();

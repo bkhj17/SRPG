@@ -8,6 +8,8 @@ public:
 	void Update();
 	void Render();
 	void GUIRender();
+
+	Crowbar* GetCrowbar() { return crowbar; }
 private:
 	Crowbar* crowbar;
 	Transform* rightHand;

@@ -1,12 +1,11 @@
 #include "Framework.h"
 
-RenderTarget::RenderTarget(UINT width, UINT height)
-    : width(width), height(height)
+RenderTarget::RenderTarget(UINT width, UINT height, DXGI_FORMAT format)
+    : width(width), height(height), format(format)
 {
     CreateRTVTexture();
     CreateRTV();
     CreateSRV();
-    CreateProjection();
 }
 
 RenderTarget::~RenderTarget()
@@ -15,14 +14,30 @@ RenderTarget::~RenderTarget()
     rtv->Release();
 }
 
-void RenderTarget::Set(Float4 clearColor)
+void RenderTarget::Set(DepthStencil* depthStencil, Float4 clearColor)
 {
-    DC->OMSetRenderTargets(1, &rtv, nullptr);
+    DC->OMSetRenderTargets(1, &rtv, depthStencil->GetDSV());
 
     DC->ClearRenderTargetView(rtv, (float*)&clearColor);
+    depthStencil->Clear();
 
+    Environment::Get()->Set();
     Environment::Get()->SetViewport(width, height);
-    projectionBuffer->SetVS(2);
+}
+
+void RenderTarget::SetMulti(RenderTarget** targets, UINT count, DepthStencil* depthStencil, Float4 clearColor)
+{
+    vector<ID3D11RenderTargetView*> rtvs;
+    for (int i = 0; i < count; i++) {
+        rtvs.push_back(targets[i]->GetRTV());
+        DC->ClearRenderTargetView(rtvs.back(), (float*)&clearColor);
+    }
+
+    depthStencil->Clear();
+
+    DC->OMSetRenderTargets(count, rtvs.data(), depthStencil->GetDSV());
+
+    Environment::Get()->Set();
 }
 
 void RenderTarget::CreateRTVTexture()
@@ -57,13 +72,4 @@ void RenderTarget::CreateSRV()
     desc.Texture2D.MipLevels = 1;
 
     DEVICE->CreateShaderResourceView(rtvTexture, &desc, &srv);
-}
-
-void RenderTarget::CreateProjection()
-{
-    Matrix orthographic = XMMatrixOrthographicOffCenterLH(
-        0.0f, width, 0.0f, height, -1.0f, 1.0f);
-
-    projectionBuffer = new MatrixBuffer();
-    projectionBuffer->Set(orthographic);    
 }

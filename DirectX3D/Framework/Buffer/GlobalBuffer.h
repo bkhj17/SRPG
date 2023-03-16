@@ -81,11 +81,19 @@ private:
 
 class LightBuffer : public ConstBuffer
 {
-private:
+public:
     struct Light {
         Float4 color = { 1, 1, 1, 1 };
         Float3 direction = { 0, -1, 1 };
-        float shininess = 24.0f;
+        int type = 0;
+
+        Float3 pos = { 0,0,0 };
+        float range = 100.0f;
+
+        float inner = 55.0f;    //최소각도
+        float outer = 70.0f;    //최대각도
+        float length = 50.0f;   //
+        int active = 1;         //가동여부
     };
 
     struct Data {

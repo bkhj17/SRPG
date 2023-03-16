@@ -42,11 +42,29 @@ void Environment::GUIRender()
     if (ImGui::TreeNode("Environment")) {
         mainCamera->GUIRender();
         ImGui::Text("LightOption");
+
+        if (ImGui::Button("Add"))
+            lightBuffer->Get().lightCount++;
+
         for (UINT i = 0; i < lightBuffer->Get().lightCount; i++) {
             string name = "Light_"+to_string(i);
             if (ImGui::TreeNode(name.c_str())) {
-                ImGui::ColorEdit3("LightColor", (float*)&lightBuffer->Get().lights[i].color, ImGuiColorEditFlags_PickerHueWheel);
-                ImGui::SliderFloat3("LightDir", (float*)&lightBuffer->Get().lights[i].direction, -1, 1);
+                LightBuffer::Light& light = lightBuffer->Get().lights[i];
+
+                ImGui::Checkbox("Active", (bool*)&light.active);
+
+                const char* list[] = { "Directional", "Point", "Spot", "Capsule"};
+                ImGui::Combo("Type", &light.type, list, 4);
+
+                ImGui::ColorEdit3("Color", (float*)&light.color, ImGuiColorEditFlags_PickerHueWheel);
+                ImGui::SliderFloat3("Dir", (float*)&light.direction, -1, 1);
+                ImGui::DragFloat3("Pos", (float*)&light.pos);
+                ImGui::SliderFloat("Range", &light.range, 1, 1000);
+                
+                //각도 : 디그리로 받아 셰이더에서 변환
+                ImGui::SliderFloat("Inner", &light.inner, 0, light.outer);
+                ImGui::SliderFloat("Outer", &light.outer, light.inner, 180.0f);
+                ImGui::SliderFloat("Length", &light.length, 1, 1000);
 
                 ImGui::TreePop();
             }
@@ -98,6 +116,13 @@ void Environment::SetOrthographic()
 {
     projectionBuffer->Set(orthographic);
     projectionBuffer->SetVS(2);
+}
+
+LightBuffer::Light* Environment::AddLight()
+{
+    int index = lightBuffer->Get().lightCount++;
+
+    return GetLight(index);
 }
 
 void Environment::CreateProjection()

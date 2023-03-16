@@ -138,12 +138,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Scenes\DeferredScene.h" />
+    <ClInclude Include="Framework\Render\DepthStencil.h" />
+    <ClInclude Include="Framework\Render\RenderTarget.h" />
+    <ClInclude Include="Framework\Render\GBuffer.h" />
     <ClInclude Include="Objects\UI\ProgressBar.h" />
     <ClInclude Include="Objects\Weapon\Kunai.h" />
     <ClInclude Include="Objects\Character\Naruto.h" />
     <ClInclude Include="Objects\Manager\KunaiManager.h" />
     <ClInclude Include="Objects\Character\Robot.h" />
     <ClInclude Include="Objects\Manager\RobotManager.h" />
+    <ClInclude Include="Scenes\RenderTargetScene.h" />
     <ClInclude Include="Scenes\GameScene.h" />
     <ClInclude Include="Homework\230310\GridedTerrain.h" />
     <ClInclude Include="Framework\Model\ModelInstancing.h" />
@@ -266,12 +271,17 @@
     <ClInclude Include="Homework\230313\Terrain230313.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scenes\DeferredScene.cpp" />
+    <ClCompile Include="Framework\Render\DepthStencil.cpp" />
+    <ClCompile Include="Framework\Render\RenderTarget.cpp" />
+    <ClCompile Include="Framework\Render\GBuffer.cpp" />
     <ClCompile Include="Objects\UI\ProgressBar.cpp" />
     <ClCompile Include="Objects\Weapon\Kunai.cpp" />
     <ClCompile Include="Objects\Character\Naruto.cpp" />
     <ClCompile Include="Objects\Manager\KunaiManager.cpp" />
     <ClCompile Include="Objects\Character\Robot.cpp" />
     <ClCompile Include="Objects\Manager\RobotManager.cpp" />
+    <ClCompile Include="Scenes\RenderTargetScene.cpp" />
     <ClCompile Include="Scenes\GameScene.cpp" />
     <ClCompile Include="Homework\230310\GridedTerrain.cpp" />
     <ClCompile Include="Framework\Model\ModelInstancing.cpp" />
@@ -461,6 +471,18 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
+    <FxCompile Include="Shaders\Light\AnimGBuffer.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\Light\GBuffer.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="Shaders\Light\Light.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
@@ -480,6 +502,12 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Shaders\Model\ModelInstancing.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\PostEffect\Bloom.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>

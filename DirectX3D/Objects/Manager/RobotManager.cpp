@@ -91,7 +91,7 @@ void RobotManager::Spawn()
 {
 	Vector3 dir;
 	dir.x = Random(-1.0f, 1.0f);
-	dir.x = Random(-1.0f, 1.0f);
+	dir.z = Random(-1.0f, 1.0f);
 
 	Vector3 randomPos = target->Pos() + dir.GetNormalized() * 1500.0f;
 	for (auto robot : robots) {

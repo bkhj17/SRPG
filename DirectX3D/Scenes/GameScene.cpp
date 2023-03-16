@@ -4,7 +4,7 @@
 GameScene::GameScene()
 {
 	forest = new Model("Forest");
-	forest->SetShader(L"Basic/Texture.hlsl");
+	forest->SetShader(L"");//L"Basic/Texture.hlsl");
 	forest->Scale() *= 10.0f;
 	forest->UpdateWorld();
 
@@ -14,9 +14,9 @@ GameScene::GameScene()
 	blendState[1] = new BlendState;
 	blendState[1]->AlphaToCoverage(true);
 
-	CAM->SetTarget(naruto);
-	CAM->TargetOptionLoad("Naruto");
-	CAM->LookAtTarget();
+	//CAM->SetTarget(naruto);
+	//CAM->TargetOptionLoad("Naruto");
+	//CAM->LookAtTarget();
 
 	KunaiManager::Get();
 	RobotManager::Get()->SetTarget(naruto);
@@ -40,7 +40,7 @@ GameScene::~GameScene()
 
 void GameScene::Update()
 {
-	naruto->Update();
+	//naruto->Update();
 
 	KunaiManager::Get()->Update();
 	RobotManager::Get()->Update();

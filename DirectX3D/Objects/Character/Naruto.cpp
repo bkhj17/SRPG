@@ -1,5 +1,4 @@
 #include "framework.h"
-#include "Naruto.h"
 
 Naruto::Naruto()
 	: ModelAnimator("Naruto")
@@ -12,6 +11,10 @@ Naruto::Naruto()
 	kunai->SetParent(rightHand);
 	kunai->Load();
 
+	crossHair = new Quad(L"Textures/UI/cursor.png");
+	crossHair->Pos() = Vector3(CENTER_X, CENTER_Y, 0);
+	crossHair->UpdateWorld();
+
 	ReadClip("Idle");
 	ReadClip("Run");
 	ReadClip("RunBack");
@@ -21,10 +24,8 @@ Naruto::Naruto()
 	GetClip(THROW)->SetEvent(bind(&Naruto::Throw, this), 0.7f);
 	GetClip(THROW)->SetEvent(bind(&Naruto::EndThrow, this), 0.9f);
 
-	crossHair = new Quad(L"Textures/UI/cursor.png");
-	crossHair->Pos() = Vector3(CENTER_X, CENTER_Y, 0);
-	crossHair->UpdateWorld();
-
+	light = Environment::Get()->GetLight(0);
+	light->range = 1000.0f;
 }
 
 Naruto::~Naruto()
@@ -36,10 +37,16 @@ Naruto::~Naruto()
 
 void Naruto::Update()
 {
+	light->pos = GlobalPos() + Vector3(0, 100, 0);
+	light->direction = Back();
+
 	Control();
 	SetAnimation();
-	ModelAnimator::Update();
 	rightHand->SetWorld(GetTransformByNode(38));
+	ModelAnimator::Update();
+
+
+
 	kunai->UpdateWorld();
 }
 
@@ -62,8 +69,8 @@ void Naruto::GUIRender()
 
 void Naruto::Control()
 {
-	Move();
 	Rotate();
+	Move();
 	Attack();
 }
 

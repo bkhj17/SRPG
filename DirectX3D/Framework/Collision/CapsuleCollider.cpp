@@ -3,6 +3,7 @@
 CapsuleCollider::CapsuleCollider(float radius, float height, UINT stackCount, UINT sliceCount)
     : radius(radius), height(height), stackCount(stackCount), sliceCount(sliceCount)
 {
+	type = CAPSULE;
     MakeMesh();
     mesh->CreateMesh();
 }
@@ -30,7 +31,7 @@ bool CapsuleCollider::IsRayCollision(IN Ray ray, OUT Contact* contact)
 	float oaoa = Dot(oa, oa);
 
 	float a = baba - bard * bard;
-	float b = baba * rdoa - baoa - r * r * baba;
+	float b = baba * rdoa - baoa * bard;
 	float c = baba * oaoa - baoa * baoa - r * r * baba;
 
 	float h = b * b - a * c;
@@ -96,7 +97,7 @@ bool CapsuleCollider::IsSphereCollision(SphereCollider* collider)
 	Vector3 pointOnLine = ClosestPointOnLine(pa, pb, P);
 	float distance = Distance(P, pointOnLine);
 
-    return radius <= (Radius() + collider->Radius());
+    return distance <= (Radius() + collider->Radius());
 }
 
 bool CapsuleCollider::IsCapsuleCollision(CapsuleCollider* collider)

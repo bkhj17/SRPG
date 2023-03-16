@@ -124,6 +124,9 @@ using namespace GameMath;
 #include "Framework/Render/Texture.h"
 #include "Framework/Render/Material.h"
 #include "Framework/Render/Mesh.h"
+#include "Framework/Render/DepthStencil.h"
+#include "Framework/Render/RenderTarget.h"
+#include "Framework/Render/GBuffer.h"
 
 #include "Framework/Environment/Camera.h"
 #include "Framework/Environment/Environment.h"

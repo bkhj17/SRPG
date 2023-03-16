@@ -40,6 +40,7 @@ public:
 
 	void SetShader(wstring shaderFile);
 	void SetDiffuseMap(wstring textureFile);
+	void SetDiffuseMap(Texture* texture) { diffuseMap = texture; }
 	void SetSpecularMap(wstring textureFile);
 	void SetNormalMap(wstring textureFile);
 

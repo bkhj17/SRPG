@@ -47,6 +47,8 @@ void KunaiManager::Throw(Vector3 pos, Vector3 dir)
 bool KunaiManager::IsCollision(Collider* collider)
 {
 	for (auto kunai : kunaies) {
+
+
 		if (kunai->GetCollider()->IsCollision(collider)) {
 			kunai->GetTransform()->SetActive(false);
 			return true;

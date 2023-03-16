@@ -1,10 +1,10 @@
 #include "../VertexHeader.hlsli"
 #include "../PixelHeader.hlsli"
 
-LightPixelInput VS(VertexInstancing input)
+LightPixelInput VS(VertexUVNormalTangentBlend input)
 {
     LightPixelInput output;
-    matrix transform = mul(SkinWorld(input.index, input.indices, input.weights), input.transform);
+    matrix transform = mul(SkinWorld(input.indices, input.weights), world);
     
     output.pos = mul(input.pos, transform);
     
@@ -23,7 +23,12 @@ LightPixelInput VS(VertexInstancing input)
     return output;
 }
 
+
 float4 PS(LightPixelInput input) : SV_TARGET
 {
-    return CalcLights(input);
+    float3 albedo = diffuseMap.Sample(samp, input.uv).rgb;
+    float specularIntencity = specularMap.Sample(samp, input.uv).r;
+    float3 normal = NormalMapping(input.tangent, input.binormal, input.normal, input.uv);
+    
+    return PackGBuffer(albedo, normal, specularIntencity).diffuse;
 }

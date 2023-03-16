@@ -128,6 +128,7 @@ void Robot::Spawn(Vector3 pos)
 	SetState(WALK);
 
 	curHp = maxHp;
+	hpBar->SetAmount(curHp / maxHp);
 	transform->Pos() = pos;		
 }
 
