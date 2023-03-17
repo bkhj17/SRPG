@@ -105,12 +105,12 @@ void ModelExporter::ReadMaterial()
 
 void ModelExporter::WriteMaterial()
 {
+	string savePath = "Models/Materials/" + name + "/";
 	string file = name + ".mats";
-	string savePath = "Models/Materials/" + name + "/" + file;
 
 	CreateFolders(savePath);
 
-	BinaryWriter* writer = new BinaryWriter(savePath);
+	BinaryWriter* writer = new BinaryWriter(savePath + file);
 
 	writer->UInt(materials.size());
 	for (Material* material : materials) {

@@ -5,6 +5,8 @@ ModelAnimator::ModelAnimator(string name)
 {
 	SetShader(L"Model/ModelAnimation.hlsl");
 	frameBuffer = new FrameBuffer;
+
+	worldBuffer->SetType(1);
 }
 
 ModelAnimator::~ModelAnimator()

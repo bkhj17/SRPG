@@ -37,8 +37,11 @@ void Camera::Update()
         Rot().y -= 360.0f;
     if (Rot().y < -360.0f)
         Rot().y += 360.0f;
-    
-    SetView();
+
+    UpdateWorld();
+
+    view = XMMatrixInverse(nullptr, world);
+    viewBuffer->Set(view, world);
 }
 
 void Camera::GUIRender()
@@ -79,12 +82,8 @@ void Camera::GUIRender()
 
 void Camera::SetView()
 {
-    UpdateWorld();
-
-    view = XMMatrixInverse(nullptr, world);
-
-    viewBuffer->Set(view, world);
     viewBuffer->SetVS(1);
+    viewBuffer->SetPS(1);
 }
 
 Vector3 Camera::ScreenToWorld(Vector3 screenPos)

@@ -22,6 +22,5 @@ private:
 
     ID3D11Texture2D* rtvTexture;
     ID3D11RenderTargetView* rtv;
-    ID3D11ShaderResourceView* srv;
-
+    ID3D11ShaderResourceView* srv = nullptr;
 };

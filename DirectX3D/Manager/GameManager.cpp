@@ -16,6 +16,7 @@
 //#include "Scenes/GameScene.h"
 #include "Scenes/RenderTargetScene.h"
 #include "Scenes/DeferredScene.h"
+#include "Scenes/ShadowScene.h"
 //#include "Homework/230221/Scene230221.h"
 //#include "Homework/230222/GridScene230222.h"
 //#include "Homework/230222/TerrainScene230222.h"
@@ -52,7 +53,8 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Start", new ActionScene);
     //SceneManager::Get()->Create("Start", new GameScene);
     //SceneManager::Get()->Create("Start", new RenderTargetScene);
-    SceneManager::Get()->Create("Start", new DeferredScene);
+    //SceneManager::Get()->Create("Start", new DeferredScene);
+    //SceneManager::Get()->Create("Start", new ShadowScene);
     
     //SceneManager::Get()->Create("Grid", new GridScene230222());
     //SceneManager::Get()->Create("Start", new SphereScene);
@@ -65,9 +67,10 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Start", new Scene230306);
     //SceneManager::Get()->Create("Terrain", new TerrainScene230308);
     //SceneManager::Get()->Create("Start", new Scene230308);
-    //SceneManager::Get()->Create("Start", new TestScene230310);
     //SceneManager::Get()->Create("Terrain", new TerrainScene230313);
     //SceneManager::Get()->Create("Start", new Scene230313);
+    
+    SceneManager::Get()->Create("Start", new TestScene230310);
     
     SceneManager::Get()->Add("Grid");
     //SceneManager::Get()->Add("Terrain");
@@ -133,7 +136,6 @@ void GameManager::Create()
     Keyboard::Get();
     Timer::Get();
     Device::Get();
-    
     Environment::Get();
     Observer::Get();
     
@@ -143,6 +145,8 @@ void GameManager::Create()
     Font::Get()->SetColor("White");
     Font::Get()->SetStyle("Default");
     
+    Texture::Add(L"Textures/Color/White.png");
+
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
 
@@ -157,14 +161,12 @@ void GameManager::Delete()
     Keyboard::Delete();
     Timer::Delete();
     Device::Delete();
-    
     Shader::Delete();
-    Environment::Delete();    
-    
+    Environment::Delete();
     Texture::Delete();
     Observer::Delete();
     Font::Delete();
-    
+
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
 

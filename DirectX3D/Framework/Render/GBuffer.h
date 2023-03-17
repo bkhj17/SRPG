@@ -5,10 +5,10 @@ public:
 	GBuffer();
 	~GBuffer();
 
-	void PreRender();
-	void PostRender();
-
 	void SetMultiRenderTarget();
+	void PostRender();
+	void SetSRVs();
+
 private:
 	RenderTarget* diffuseRender;
 	RenderTarget* specularRender;

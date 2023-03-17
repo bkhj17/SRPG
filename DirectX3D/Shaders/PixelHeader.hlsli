@@ -28,7 +28,6 @@ struct Light
     int active;
 };
 
-
 struct LightPixelInput
 {
     float4 pos : SV_POSITION;
@@ -55,7 +54,7 @@ cbuffer LightBuffer : register(b0)
     float3 ambientCeil;
 }
 
-cbuffer MaterialBuffer : register(b1)
+cbuffer MaterialBuffer : register(b3)
 {
     float4 mDiffuse;
     float4 mSpecular;
@@ -96,7 +95,7 @@ Material GetMaterial(LightPixelInput input)
     material.normal = NormalMapping(input.tangent,
         input.binormal, input.normal, input.uv);
     material.diffuseColor = diffuseMap.Sample(samp, input.uv);
-    material.specularIntensity = diffuseMap.Sample(samp, input.uv);
+    material.specularIntensity = specularMap.Sample(samp, input.uv);
     material.viewPos = input.viewPos;
     material.worldPos = input.worldPos;
     
@@ -239,7 +238,6 @@ float4 CalcCapsule(Material material, Light light)
     {
         float3 viewDir = normalize(material.worldPos - material.viewPos);
         float3 halfWay = normalize(viewDir + toLight);
-        
         float specular = saturate(dot(material.normal, -halfWay));
         
         finalColor += light.color * pow(specular, shininess)
@@ -278,9 +276,9 @@ float4 CalcLights(LightPixelInput input)
             color += CalcCapsule(material, lights[i]);        
     }
     
-    
     float4 ambient = CalcAmbient(material);
-    float4 emissive = CalcEmissive(material);
+    //float4 emissive = CalcEmissive(material);
+    float4 emissive = mEmissive;    //ÀÚÃ¼¹ß±¤
     
     return color + ambient + emissive;
 }

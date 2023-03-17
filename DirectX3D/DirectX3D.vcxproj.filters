@@ -408,6 +408,12 @@
     <ClInclude Include="Scenes\DeferredScene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Scenes\ShadowScene.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Environment\Shadow.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX3D.cpp">
@@ -779,6 +785,12 @@
     <ClCompile Include="Scenes\DeferredScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Scenes\ShadowScene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Environment\Shadow.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX3D.rc">
@@ -815,6 +827,10 @@
     <FxCompile Include="Shaders\PostEffect\Bloom.hlsl" />
     <FxCompile Include="Shaders\Light\GBuffer.hlsl" />
     <FxCompile Include="Shaders\Light\AnimGBuffer.hlsl" />
+    <FxCompile Include="Shaders\Light\Deferred.hlsl" />
+    <FxCompile Include="Shaders\Light\DepthMap.hlsl" />
+    <FxCompile Include="Shaders\Light\AnimDepthMap.hlsl" />
+    <FxCompile Include="Shaders\Light\Shadow.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\VertexHeader.hlsli" />

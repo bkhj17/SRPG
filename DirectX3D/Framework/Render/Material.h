@@ -2,9 +2,9 @@
 class Material
 {
 private:
-	const wstring DEFAULT_DIFFUSE_MAP = L"Textures/Color/White.png";
-	const wstring DEFAULT_SPECULAR_MAP = L"Textures/Color/White.png";
-	const wstring DEFAULT_NORMAL_MAP = L"Textures/Color/White.png";
+	const wstring DEFAULT_DIFFUSE_MAP	= L"Textures/Color/White.png";
+	const wstring DEFAULT_SPECULAR_MAP	= L"Textures/Color/White.png";
+	const wstring DEFAULT_NORMAL_MAP	= L"Textures/Color/White.png";
 
 	enum MapType {
 		DIFFUSE, SPECULAR, NORMAL
@@ -17,6 +17,7 @@ public:
 			Float4 specular = { 1, 1, 1, 1 };
 			Float4 ambient = { 1, 1, 1, 1 };
 			Float4 emissive = { 0, 0, 0, 1 };
+
 			float shininess = 24.0f;
 			int hasNormalMap = 0;
 			float padding[2] = {};
@@ -40,9 +41,10 @@ public:
 
 	void SetShader(wstring shaderFile);
 	void SetDiffuseMap(wstring textureFile);
-	void SetDiffuseMap(Texture* texture) { diffuseMap = texture; }
 	void SetSpecularMap(wstring textureFile);
 	void SetNormalMap(wstring textureFile);
+
+	void SetDiffuseMap(Texture* texture) { diffuseMap = texture; }
 
 	Texture* GetDiffuseMap() { return diffuseMap; }
 	Texture* GetSpecularMap() { return specularMap; }

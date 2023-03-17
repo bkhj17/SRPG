@@ -24,11 +24,11 @@ LightPixelInput VS(VertexUVNormalTangentBlend input)
 }
 
 
-float4 PS(LightPixelInput input) : SV_TARGET
+GBufferOutput PS(LightPixelInput input) : SV_TARGET
 {
     float3 albedo = diffuseMap.Sample(samp, input.uv).rgb;
     float specularIntencity = specularMap.Sample(samp, input.uv).r;
     float3 normal = NormalMapping(input.tangent, input.binormal, input.normal, input.uv);
     
-    return PackGBuffer(albedo, normal, specularIntencity).diffuse;
+    return PackGBuffer(albedo, normal, specularIntencity);
 }

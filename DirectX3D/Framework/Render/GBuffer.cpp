@@ -2,9 +2,12 @@
 
 GBuffer::GBuffer()
 {
-	diffuseRender = new RenderTarget(WIN_WIDTH, WIN_HEIGHT, DXGI_FORMAT_R8G8B8A8_UNORM);
-	specularRender = new RenderTarget(WIN_WIDTH, WIN_HEIGHT, DXGI_FORMAT_R8G8B8A8_UNORM);
-	normalRender = new RenderTarget(WIN_WIDTH, WIN_HEIGHT, DXGI_FORMAT_R8G8B8A8_UNORM);
+	//diffuseRender = new RenderTarget(WIN_WIDTH, WIN_HEIGHT, DXGI_FORMAT_R8G8B8A8_UNORM);
+	//specularRender = new RenderTarget(WIN_WIDTH, WIN_HEIGHT, DXGI_FORMAT_R8G8B8A8_UNORM);
+	//normalRender = new RenderTarget(WIN_WIDTH, WIN_HEIGHT, DXGI_FORMAT_R8G8B8A8_UNORM);
+	diffuseRender = new RenderTarget;
+	specularRender = new RenderTarget;
+	normalRender = new RenderTarget;
 
 	depthStencil = new DepthStencil(WIN_WIDTH, WIN_HEIGHT, true);
 
@@ -37,15 +40,20 @@ GBuffer::~GBuffer()
 		delete quad;
 }
 
-void GBuffer::PreRender()
-{
-	RenderTarget::SetMulti(rtvs, 3, depthStencil);
-}
-
 void GBuffer::PostRender()
 {
+	for (Quad* quad : quads)
+		quad->Render();
+}
+
+void GBuffer::SetSRVs()
+{
+	for (int i = 0; i < 4; i++) {
+		DC->PSSetShaderResources(10 + i, 1, &srvs[i]);
+	}
 }
 
 void GBuffer::SetMultiRenderTarget()
 {
+	RenderTarget::SetMulti(rtvs, 3, depthStencil);
 }

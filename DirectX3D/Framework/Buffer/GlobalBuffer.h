@@ -17,6 +17,33 @@ private:
     Matrix matrix;
 };
 
+class WorldBuffer : public ConstBuffer
+{
+private:
+    struct Data {
+        Matrix world = XMMatrixIdentity();
+
+        int type = 0;
+
+        float padding[3];
+    };
+public:
+    WorldBuffer() : ConstBuffer(&data, sizeof(Data))
+    {
+    }
+
+    void Set(Matrix value)
+    {
+        data.world = XMMatrixTranspose(value);
+    }
+
+    void SetType(int type) {
+        data.type = type;
+    }
+private:
+    Data data;
+};
+
 class ViewBuffer : public ConstBuffer
 {
 private:

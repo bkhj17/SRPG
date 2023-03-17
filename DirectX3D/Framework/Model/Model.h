@@ -21,7 +21,6 @@ protected:
 	vector<BoneData> bones;
 
 	map<string, UINT> boneMap;
-private:
-	MatrixBuffer* worldBuffer;
+	WorldBuffer* worldBuffer;
 };
 

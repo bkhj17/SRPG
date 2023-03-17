@@ -12,6 +12,8 @@ RenderTarget::~RenderTarget()
 {
     rtvTexture->Release();
     rtv->Release();
+
+    srv->Release();
 }
 
 void RenderTarget::Set(DepthStencil* depthStencil, Float4 clearColor)
@@ -34,6 +36,13 @@ void RenderTarget::SetMulti(RenderTarget** targets, UINT count, DepthStencil* de
     }
 
     depthStencil->Clear();
+
+    //연결해제
+    {
+        ID3D11ShaderResourceView* nullptrArray[10]{ nullptr };
+        for (int i = 0; i < 10; ++i) nullptrArray[i] = nullptr;
+        DC->PSSetShaderResources(0, 10, nullptrArray);
+    }
 
     DC->OMSetRenderTargets(count, rtvs.data(), depthStencil->GetDSV());
 

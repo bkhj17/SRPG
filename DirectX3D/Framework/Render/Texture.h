@@ -31,5 +31,7 @@ private:
     ScratchImage image;
     ID3D11ShaderResourceView* srv;
 
+    bool isReferanced = false;
+
     static unordered_map<wstring, Texture*> textures;
 };

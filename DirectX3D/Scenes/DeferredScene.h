@@ -13,7 +13,11 @@ public:
 	virtual void GUIRender() override;
 private:
 	GBuffer* gBuffer;
+
 	Model* forest;
 	Human* human;
+
+	Material* material;
+	VertexBuffer* vertexBuffer;
 };
 

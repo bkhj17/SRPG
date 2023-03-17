@@ -9,7 +9,8 @@ Texture::Texture(ID3D11ShaderResourceView* srv, ScratchImage& image, wstring fil
 
 Texture::~Texture()
 {
-    srv->Release();
+    if (!isReferanced) 
+        srv->Release();
 }
 
 void Texture::PSSet(UINT slot)
@@ -57,6 +58,7 @@ Texture* Texture::Add(wstring file)
         image.GetMetadata(), &srv);
 
     textures[file] = new Texture(srv, image, file);
+    textures[file]->isReferanced = false;
 
     return textures[file];
 }
@@ -85,6 +87,7 @@ Texture* Texture::Add(wstring file, wstring key)
         image.GetMetadata(), &srv);
 
     textures[key] = new Texture(srv, image, file);
+    textures[key]->isReferanced = false;
 
     return textures[key];
 }
@@ -96,7 +99,7 @@ Texture* Texture::Add(wstring key, ID3D11ShaderResourceView* srv)
 
     ScratchImage image;
     textures[key] = new Texture(srv, image, key);
-
+    textures[key]->isReferanced = true;
     return textures[key];
 }
 

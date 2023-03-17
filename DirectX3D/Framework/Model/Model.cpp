@@ -7,7 +7,7 @@ Model::Model(string name)
 	ReadMaterial();
 	ReadMesh();
 
-	worldBuffer = new MatrixBuffer();
+	worldBuffer = new WorldBuffer();
 }
 
 Model::~Model()
@@ -56,7 +56,7 @@ void Model::ReadMaterial()
 	materials.reserve(size);
 
 	for (int i = 0; i < size; i++) {
-		Material* material = new Material(L"");
+		Material* material = new Material();
 		material->Load(reader->String());
 		materials.push_back(material);
 	}

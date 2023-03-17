@@ -2,6 +2,9 @@
 
 class Quad : public GameObject
 {
+private:
+    typedef VertexUV VertexType;
+
 public:
     Quad(Vector2 size);
     Quad(wstring file, Vector2 startUV = Vector2(), Vector2 endUV = Vector2(1, 1));

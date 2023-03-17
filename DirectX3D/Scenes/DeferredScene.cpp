@@ -7,6 +7,10 @@ DeferredScene::DeferredScene()
 
 	forest = new Model("Forest");
 	human = new Human;
+
+	material = new Material(L"Light/Deferred.hlsl");
+	UINT vertices[4] = { 0, 1, 2, 3 };
+	vertexBuffer = new VertexBuffer(vertices, sizeof(UINT), 4);
 }
 
 DeferredScene::~DeferredScene()
@@ -15,6 +19,9 @@ DeferredScene::~DeferredScene()
 
 	delete forest;
 	delete human;
+
+	delete material;
+	delete vertexBuffer;
 }
 
 void DeferredScene::Update()
@@ -25,7 +32,7 @@ void DeferredScene::Update()
 
 void DeferredScene::PreRender()
 {
-	gBuffer->PreRender();
+	gBuffer->SetMultiRenderTarget();
 
 	forest->SetShader(L"Light/GBuffer.hlsl");
 	human->SetShader(L"Light/AnimGBuffer.hlsl");
@@ -37,6 +44,12 @@ void DeferredScene::PreRender()
 
 void DeferredScene::Render()
 {
+	vertexBuffer->Set(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+	gBuffer->SetSRVs();
+	material->Set();
+
+	DC->Draw(4, 0);
 }
 
 void DeferredScene::PostRender()

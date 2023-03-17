@@ -10,7 +10,7 @@ Material::Material()
 	buffer = new MaterialBuffer;
 
 	char path[128];
-	GetCurrentDirectoryA(sizeof(path), path);
+	GetCurrentDirectoryA(128, path);
 	projectPath = path;
 }
 
@@ -24,7 +24,7 @@ Material::Material(wstring shaderFile)
 	buffer = new MaterialBuffer;
 
 	char path[128];
-	GetCurrentDirectoryA(sizeof(path), path);
+	GetCurrentDirectoryA(128, path);
 	projectPath = path;
 }
 
@@ -39,7 +39,7 @@ void Material::Set()
 	specularMap->PSSet(1);
 	normalMap->PSSet(2);
 
-	buffer->SetPS(1);
+	buffer->SetPS(3);
 
 	vertexShader->Set();
 	pixelShader->Set();
@@ -52,7 +52,9 @@ void Material::GUIRender()
 	if (ImGui::TreeNode(title.c_str())) {
 		char str[128];
 		strcpy_s(str, 128, editName.c_str());
+		ImGui::PushItemWidth(100);
 		ImGui::InputText("Name", str, 128);
+		ImGui::PopItemWidth();
 		editName = str;
 
 		ImGui::SameLine();

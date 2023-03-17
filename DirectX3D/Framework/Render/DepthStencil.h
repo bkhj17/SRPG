@@ -18,5 +18,5 @@ private:
 
 	ID3D11Texture2D* dsvTexture;
 	ID3D11DepthStencilView* dsv;
-	ID3D11ShaderResourceView* srv;	//
+	ID3D11ShaderResourceView* srv = nullptr;	//
 };

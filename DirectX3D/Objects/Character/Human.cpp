@@ -23,15 +23,15 @@ void Human::Update()
 {
 	rightHand->SetWorld((Matrix&)GetTransformByNode(51));
 
+	crowbar->Update();
 
 	__super::Update();
-	crowbar->Update();
 }
 
 void Human::Render()
 {
-	__super::Render();
 	crowbar->Render();
+	__super::Render();
 }
 
 void Human::GUIRender()

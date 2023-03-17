@@ -130,6 +130,7 @@ using namespace GameMath;
 
 #include "Framework/Environment/Camera.h"
 #include "Framework/Environment/Environment.h"
+#include "Framework/Environment/Shadow.h"
 
 #include "Objects/Basic/GameObject.h"
 #include "Objects/Basic/Cube.h"

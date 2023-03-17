@@ -5,6 +5,7 @@ Crowbar::Crowbar()
 	: Model("crowbar")
 {
 	SetTag("Crowbar");
+	Load();
 
 	collider = new BoxCollider();
 	collider->SetTag("CrowbarCollider");

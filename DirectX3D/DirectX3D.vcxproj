@@ -254,6 +254,8 @@
     <ClInclude Include="Framework\Collision\SphereCollider.h" />
     <ClInclude Include="Objects\MineCraft\Steve.h" />
     <ClInclude Include="Objects\LandScape\SkyBox.h" />
+    <ClInclude Include="Scenes\ShadowScene.h" />
+    <ClInclude Include="Framework\Environment\Shadow.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Scenes\TutorialScene.h" />
     <ClInclude Include="Framework\Math\Vector3.h" />
@@ -396,6 +398,8 @@
     <ClCompile Include="Homework\230313\TerrainScene230313.cpp" />
     <ClCompile Include="Homework\230313\Terrain230313.cpp" />
     <ClCompile Include="Objects\LandScape\SkyBox.cpp" />
+    <ClCompile Include="Scenes\ShadowScene.cpp" />
+    <ClCompile Include="Framework\Environment\Shadow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX3D.rc" />
@@ -447,6 +451,18 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CS</EntryPointName>
     </FxCompile>
+    <FxCompile Include="Shaders\Light\AnimDepthMap.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\Light\Deferred.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="Shaders\LandScape\SkyBox.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
@@ -477,6 +493,12 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
+    <FxCompile Include="Shaders\Light\DepthMap.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="Shaders\Light\GBuffer.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
@@ -484,6 +506,12 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Shaders\Light\Light.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\Light\Shadow.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>

@@ -110,12 +110,14 @@ void Environment::SetPerspective()
 {
     projectionBuffer->Set(perspective);
     projectionBuffer->SetVS(2);
+    projectionBuffer->SetPS(2);
 }
 
 void Environment::SetOrthographic()
 {
     projectionBuffer->Set(orthographic);
     projectionBuffer->SetVS(2);
+    projectionBuffer->SetPS(2);
 }
 
 LightBuffer::Light* Environment::AddLight()

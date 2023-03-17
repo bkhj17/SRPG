@@ -1,11 +1,20 @@
 #include "../VertexHeader.hlsli"
 #include "../PixelHeader.hlsli"
 
-LightPixelInput VS(VertexUVNormalTangent input)
+LightPixelInput VS(VertexUVNormalTangentBlend input)
 {
     LightPixelInput output;
-    output.pos = mul(input.pos, world);
-
+    
+    
+    matrix transform;
+    [branch]
+    if (animType)
+        transform = mul(SkinWorld(input.indices, input.weights), world);
+    else
+        transform = world;
+        
+    output.pos = mul(input.pos, transform);
+    
     output.viewPos = invView._41_42_43; //forward
     output.worldPos = output.pos;
     
@@ -14,10 +23,10 @@ LightPixelInput VS(VertexUVNormalTangent input)
     
     output.uv = input.uv;
     
-    output.normal = mul(input.normal, (float3x3) world); // 
-    output.tangent = mul(input.tangent, (float3x3) world); // 
+    output.normal = mul(input.normal, (float3x3) transform); // 
+    output.tangent = mul(input.tangent, (float3x3) transform); // 
     output.binormal = cross(output.normal, output.tangent);
-        
+       
     return output;
 }
 

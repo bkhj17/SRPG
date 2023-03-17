@@ -1,7 +1,7 @@
 #include "framework.h"
 
 DepthStencil::DepthStencil(UINT width, UINT height, bool isStencil)
-    : width(width), height(height), isStencil()
+    : width(width), height(height), isStencil(isStencil)
 {
 	CreateDSVTexture();
 	CreateDSV();
@@ -12,7 +12,7 @@ DepthStencil::~DepthStencil()
 {
 	dsvTexture->Release();
 	dsv->Release();
-	srv->Release();
+    srv->Release();
 }
 
 void DepthStencil::Clear()
