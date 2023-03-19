@@ -14,7 +14,7 @@ TestScene230310::~TestScene230310()
 
 void TestScene230310::Update()
 {
-	terrain->UpdateWorld();
+	terrain->Update();
 }
 
 void TestScene230310::PreRender()

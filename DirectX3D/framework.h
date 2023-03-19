@@ -58,7 +58,6 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "dxguid.lib")
@@ -67,6 +66,7 @@
 #pragma comment(lib, "d2d1.lib")
 #pragma comment(lib, "dwrite.lib")
 #pragma comment(lib, "assimp-vc143-mtd.lib")
+
 using namespace std;
 using namespace DirectX;
 using namespace DirectX::TriangleTests;
@@ -171,7 +171,6 @@ using namespace GameMath;
 
 #include "Objects/Manager/KunaiManager.h"
 #include "Objects/Manager/RobotManager.h"
-
 
 #include "Scenes/Scene.h"
 #include "Manager/SceneManager.h"
