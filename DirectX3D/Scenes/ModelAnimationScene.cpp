@@ -3,12 +3,9 @@
 
 ModelAnimationScene::ModelAnimationScene()
 {
-	modelAnimator = new ModelAnimator("Robot");
-	modelAnimator->ReadClip("ZombieWalk", 0);
-	modelAnimator->ReadClip("ZombieHit", 0);
-	modelAnimator->ReadClip("ZombieStandUp", 0);
-	modelAnimator->ReadClip("ZombieDeath", 0);
-	modelAnimator->PlayClip(0);
+	modelAnimator = new ModelAnimator("Fox");
+	modelAnimator->ReadClip("Idle", 0);
+	modelAnimator->ReadClip("Run", 0, "FoxTransform");
 
 	//modelAnimator->GetClip(2)->SetEvent(bind(&ModelAnimationScene::SetIdle, this), 0.55f);
 }

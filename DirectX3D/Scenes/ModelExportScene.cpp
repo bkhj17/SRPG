@@ -3,22 +3,18 @@
 
 ModelExportScene::ModelExportScene()
 {
-	string name = "Robot";
+	string name = "Fox";
 	string file = "Models/FBX/" + name + ".fbx";
 	ModelExporter* exporter = nullptr;
-	/*
+	
 	exporter = new ModelExporter(name, file);
 	exporter->ExportMaterial();
 	exporter->ExportMesh();
 	delete exporter;
-	*/
+	
 	
 	vector<string> clipNames = {
-		//"Dance"
-		//"Idle", "Run", "Punching",
-		//"Firing"		
-		"ZombieRun",
-		//"ZombieDeath", "ZombieHit", "ZombieStandUp",
+		"Idle", "Run"
 	};
 	
 	for (const auto& clipName : clipNames) {

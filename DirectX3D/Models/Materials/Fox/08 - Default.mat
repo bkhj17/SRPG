@@ -1,10 +1,10 @@
-<Material Name="">
+<Material Name="08 - Default">
     <Shader Vertex="Shaders/Model/ModelAnimation.hlsl" Pixel="Shaders/Model/ModelAnimation.hlsl"/>
     <Texture Diffuse="Models\Materials\Fox\T_Fox_BC.png" Specular="Textures/Color/White.png" Normal="Models\Materials\Fox\T_Fox_Normal.png"/>
     <Property Shininess="1" HasNormalMap="1">
         <Diffuse R="0.44313729" G="0.44313729" B="0.44313729" A="1"/>
-        <Diffuse R="1" G="1" B="1" A="1"/>
-        <Amibient R="0" G="0" B="0" A="1"/>
+        <Diffuse R="0.89999998" G="0.89999998" B="0.89999998" A="1"/>
+        <Amibient R="0.44313729" G="0.44313729" B="0.44313729" A="1"/>
         <Emissive R="0" G="0" B="0" A="1"/>
     </Property>
 </Material>

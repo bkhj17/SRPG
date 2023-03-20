@@ -4,19 +4,20 @@
 #include "Scenes/GridScene.h"
 //#include "Scenes/TerrainScene.h"
 //#include "Scenes/SphereScene.h"
-//#include "Scenes/TerrainEditorScene.h"
+#include "Scenes/TerrainEditorScene.h"
 //#include "Scenes/LightScene.h"
 //#include "Scenes/CollisionScene.h"
 //#include "Scenes/MineCraftScene.h"
-//#include "Scenes/ModelExportScene.h"
-//#include "Scenes/ModelRenderScene.h"
-//#include "Scenes/ModelAnimationScene.h"
+#include "Scenes/ModelExportScene.h"
+#include "Scenes/ModelRenderScene.h"
+#include "Scenes/ModelAnimationScene.h"
 //#include "Scenes/ActionScene.h"
 //#include "Scenes/InstancingScene.h"
 //#include "Scenes/GameScene.h"
 #include "Scenes/RenderTargetScene.h"
 #include "Scenes/DeferredScene.h"
 #include "Scenes/ShadowScene.h"
+#include "Scenes/AStarScene.h"
 //#include "Homework/230221/Scene230221.h"
 //#include "Homework/230222/GridScene230222.h"
 //#include "Homework/230222/TerrainScene230222.h"
@@ -55,6 +56,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Start", new RenderTargetScene);
     //SceneManager::Get()->Create("Start", new DeferredScene);
     //SceneManager::Get()->Create("Start", new ShadowScene);
+    SceneManager::Get()->Create("Start", new AStarScene);
     
     //SceneManager::Get()->Create("Grid", new GridScene230222());
     //SceneManager::Get()->Create("Start", new SphereScene);
@@ -70,7 +72,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Terrain", new TerrainScene230313);
     //SceneManager::Get()->Create("Start", new Scene230313);
     
-    SceneManager::Get()->Create("Start", new TestScene230310);
+    //SceneManager::Get()->Create("Start", new TestScene230310);
     
     SceneManager::Get()->Add("Grid");
     //SceneManager::Get()->Add("Terrain");

@@ -53,7 +53,7 @@ void ModelAnimator::GUIRender()
 	__super::GUIRender();
 }
 
-void ModelAnimator::ReadClip(string clipName, UINT clipNum)
+void ModelAnimator::ReadClip(string clipName, UINT clipNum, string lockBone)
 {
 	string path = "Models/Clips/" + name + "/" 
 		+ clipName + to_string(clipNum) + ".clip";
@@ -64,6 +64,7 @@ void ModelAnimator::ReadClip(string clipName, UINT clipNum)
 
 	ModelClip* clip = new ModelClip();
 	clip->name = reader->String();
+	clip->lockBone = lockBone;
 	clip->frameCount = reader->UInt();
 	clip->tickPerSecond = reader->Float();
 
@@ -152,6 +153,9 @@ void ModelAnimator::CreateClipTransform(UINT index)
 			if (frame != nullptr)
 			{
 				KeyTransform& transform = frame->transforms[i];
+				if (node.name == clip->lockBone)
+					transform.pos = {};				
+				
 				animation = XMMatrixTransformation(XMVectorZero(), XMQuaternionIdentity(), 
 					Vector3(transform.scale),
 					XMVectorZero(), 

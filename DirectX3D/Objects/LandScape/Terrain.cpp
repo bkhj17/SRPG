@@ -6,11 +6,7 @@ Terrain::Terrain()
 {
 	tag = "Terrain";
 
-	material->SetDiffuseMap(L"Textures/Landscape/Fieldstone_DM.tga");
-	material->SetSpecularMap(L"Textures/Landscape/fieldstone_SM.tga");
-	material->SetNormalMap(L"Textures/Landscape/fieldstone_NM.tga");
-
-	heightMap = Texture::Add(L"Textures/HeightMaps/HeightMap230308.png");
+	heightMap = Texture::Add(L"Textures/HeightMaps/HeightMapAStar.png");
 	alphaMap = Texture::Add(L"Textures/HeightMaps/AlphaMap230308.png");
 	secondMap = Texture::Add(L"Textures/Landscape/Dirt.png");
 	thirdMap = Texture::Add(L"Textures/LandScape/Dirt3.png");
@@ -62,10 +58,17 @@ float Terrain::GetHeight(const Vector3& pos, Vector3* normal) const
 
 	Vector3 result;
 	if (u + v <= 1.0f) {
+		float y0 = p[0].y, y1 = p[1].y, y2 = p[2].y;
+
+		
 		result = (p[2] - p[0]) * u + (p[1] - p[0]) * v + p[0];
+		if (result.y > 20.0f) {
+			result.y = 20.0f;
+		}
 
 		if(normal)
 			*normal = GetNormalFromPolygon(p[0], p[1], p[2]);
+
 		return result.y;
 	}
 	else {
@@ -80,6 +83,42 @@ float Terrain::GetHeight(const Vector3& pos, Vector3* normal) const
 	}
 
 	return 0.0f;
+}
+
+Vector3 Terrain::Picking()
+{
+	Ray ray = CAM->ScreenPointToRay(mousePos);
+	vector<VertexType> vertices = mesh->GetVertices();
+	
+	for (UINT z = 0; z < height - 1; z++)
+	{
+		for (UINT x = 0; x < width - 1; x++)
+		{
+			UINT index[4];
+			index[0] = width * z + x;
+			index[1] = width * z + x + 1;
+			index[2] = width * (z + 1) + x;
+			index[3] = width * (z + 1) + x + 1;
+
+
+			Vector3 p[4];
+			for (UINT i = 0; i < 4; i++)
+				p[i] = vertices[index[i]].pos;
+
+			float distance = 0.0f;
+			if (Intersects(ray.pos, ray.dir, p[0], p[1], p[2], distance))
+			{
+				return ray.pos + ray.dir * distance;
+			}
+
+			if (Intersects(ray.pos, ray.dir, p[3], p[1], p[2], distance))
+			{
+				return ray.pos + ray.dir * distance;
+			}
+		}
+	}
+
+	return Vector3();
 }
 
 void Terrain::MakeMesh()

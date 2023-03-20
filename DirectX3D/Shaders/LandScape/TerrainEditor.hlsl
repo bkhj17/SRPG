@@ -8,8 +8,8 @@ struct PixelInput
     float3 normal : NORMAL;
     float3 tangent : TANGENT;
     float3 binormal : BINORMAL;
-    float3 viewDir : VIEWDIR;
-    float3 worldPos : POSITION;
+    float3 viewPos : POSITION0;
+    float3 worldPos : POSITION1;
     float4 alpha : ALPHA;
 };
 
@@ -18,7 +18,7 @@ PixelInput VS(VertexUVNormalTangentAlpha input)
     PixelInput output;
     output.pos = mul(input.pos, world);
 	
-    output.viewDir = normalize(invView._31_32_33);
+    output.viewPos = invView._41_42_43;
     output.worldPos = output.pos;
 	
     output.pos = mul(output.pos, view);
@@ -86,6 +86,15 @@ Texture2D thirdSpeculerMap : register(t32);
 
 Material GetMaterialToTerrain(PixelInput input)
 {
+    
+    float4 albedo = diffuseMap.Sample(samp, input.uv);
+    float4 alpha = input.alpha;
+    float4 second = secondDiffuseMap.Sample(samp, input.uv);
+    float4 third = thirdDiffuseMap.Sample(samp, input.uv);
+    
+    albedo = lerp(albedo, second, alpha.r);
+    albedo = lerp(albedo, third, alpha.g);
+    
     Material material;
     
     float3 T = normalize(input.tangent);
@@ -106,14 +115,6 @@ Material GetMaterialToTerrain(PixelInput input)
     else
         material.normal = NormalMapping(input.tangent, input.binormal, input.normal, input.uv);
     
-    float4 albedo = diffuseMap.Sample(samp, input.uv);
-    float4 alpha = input.alpha;
-    float4 second = secondDiffuseMap.Sample(samp, input.uv);
-    float4 third = thirdDiffuseMap.Sample(samp, input.uv);
-    
-    albedo = lerp(albedo, second, alpha.r);
-    albedo = lerp(albedo, third, alpha.g);
-
     material.diffuseColor = albedo;
     
     material.specularIntensity = specularMap.Sample(samp, input.uv);
@@ -122,7 +123,7 @@ Material GetMaterialToTerrain(PixelInput input)
     if(useThirdSpecular)
         material.specularIntensity = lerp(material.specularIntensity, thirdSpeculerMap.Sample(samp, input.uv), input.alpha.g);
     
-    material.viewPos = input.worldPos.rgb + input.viewDir * 1.0f;
+    material.viewPos = input.viewPos;
     material.worldPos = input.worldPos;
     
     return material;
@@ -136,5 +137,5 @@ float4 PS(PixelInput input) : SV_TARGET
     float4 ambient = CalcAmbient(material);
     float4 emissive = CalcEmissive(material);
     
-    return color + ambient + emissive;
+    return color + ambient + emissive + BrushColor(material.worldPos.xyz);
 }

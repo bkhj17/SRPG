@@ -38,7 +38,7 @@ public:
 	void Render();
 	void GUIRender();
 
-	void ReadClip(string clipName, UINT clipNum = 0);
+	void ReadClip(string clipName, UINT clipNum = 0, string lockBone = "");
     void PlayClip(int clip, float scale = 1.0f, float takeTime = 0.2f);
 
     Matrix GetTransformByNode(int node);

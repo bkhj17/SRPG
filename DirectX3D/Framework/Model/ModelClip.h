@@ -16,6 +16,7 @@ public:
 	void SetEvent(Event event, float timeRatio);
 private:
 	string name;
+	string lockBone;
 
 	UINT frameCount;
 	float tickPerSecond;

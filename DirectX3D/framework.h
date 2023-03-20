@@ -145,6 +145,10 @@ using namespace GameMath;
 #include "Framework/Collision/SphereCollider.h"
 #include "Framework/Collision/CapsuleCollider.h"
 
+#include "Objects/Algorithm/Node.h"
+#include "Objects/Algorithm/Heap.h"
+#include "Objects/Algorithm/AStar.h"
+
 #include "Framework/Model/ModelData.h"
 #include "Framework/Model/ModelExporter.h"
 #include "Framework/Model/ModelMesh.h"
@@ -168,6 +172,7 @@ using namespace GameMath;
 #include "Objects/Character/Human.h"
 #include "Objects/Character/Naruto.h"
 #include "Objects/Character/Robot.h"
+#include "Objects/Character/Fox.h"
 
 #include "Objects/Manager/KunaiManager.h"
 #include "Objects/Manager/RobotManager.h"
