@@ -6,8 +6,9 @@ Terrain::Terrain()
 {
 	tag = "Terrain";
 
-	heightMap = Texture::Add(L"Textures/HeightMaps/HeightMapAStar.png");
-	alphaMap = Texture::Add(L"Textures/HeightMaps/AlphaMap230308.png");
+	material->SetDiffuseMap(L"Textures/LandScape/Dirt2.png");
+	heightMap = Texture::Add(L"Textures/HeightMaps/HeightMapField.png");
+	alphaMap = Texture::Add(L"Textures/HeightMaps/AlphaField.png");
 	secondMap = Texture::Add(L"Textures/Landscape/Dirt.png");
 	thirdMap = Texture::Add(L"Textures/LandScape/Dirt3.png");
 

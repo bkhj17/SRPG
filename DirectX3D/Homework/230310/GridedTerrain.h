@@ -21,7 +21,12 @@ private:
 	UINT tileWidth = 10, tileHeight = 10;
 	UINT row, col;
 
-	int selected = -1;
+	int selected;
 	ColorBuffer* tileColorBuffer;
+
+
+	int w, h;
+	bool isMoving = false;
+	SphereCollider* testCursor;
 };
 

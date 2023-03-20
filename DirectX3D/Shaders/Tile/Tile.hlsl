@@ -24,5 +24,12 @@ cbuffer SelectedBuffer : register(b9)
 
 float4 PS(PixelInput input) : SV_TARGET
 {
-    return color;
+    float u = input.uv.x;
+    float v = input.uv.y;
+    
+    [branch]
+    if(u < 0.01 || u > 0.99 || v < 0.01 || v > 0.99)
+        return float4(color.xyz, 1.0f);
+    else 
+        return color;
 }

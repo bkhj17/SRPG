@@ -14,6 +14,17 @@ GridedTerrain::GridedTerrain()
 	row = width / tileWidth;
 	col = height / tileHeight;
 
+	Vector3 up = Vector3(0, 1, 0);
+
+	float halfX = tileWidth * 0.5f;
+	float halfZ = tileHeight * 0.5f;
+	vector<Vector3> v = {
+		Vector3(-halfX, 0, -halfZ),
+		Vector3(halfX, 0, -halfZ),
+		Vector3(-halfX, 0, halfZ),
+		Vector3(halfX, 0, halfZ)
+	};
+
 	vector<VertexType>& vertices = mesh->GetVertices();
 	cubes.resize((size_t)row*col);
 	for (int i = 0; i < row; i++) {
@@ -21,20 +32,32 @@ GridedTerrain::GridedTerrain()
 			size_t index = (size_t)i * col + j;
 			cubes[index] = new Cube(Vector3(tileWidth, 3.0f, tileHeight));
 			cubes[index]->GetMaterial()->SetShader(L"Tile/Tile.hlsl");
-			cubes[index]->SetParent(this);
 
-			Vector3 up = Vector3(0, 1, 0);
-
-			Vector3 normal;
-			cubes[index]->Pos() = Vector3(tileWidth * j + (tileWidth >> 1), 0, tileHeight * (row - i));
-			cubes[index]->Pos().y = GetHeight(cubes[index]->Pos(), &normal);
-
+			Vector3 pos(tileWidth * j + (tileWidth >> 1), 0, tileHeight * (row-i) + (tileHeight >> 1));
+			cubes[index]->Pos() = pos;
+			cubes[index]->Pos().y = GetHeight(pos);
 			cubes[index]->UpdateWorld();
+
+			bool check = cubes[index]->Pos().y < MAX_HEIGHT * 0.1f;
+			if (check) {
+				for (const auto& dv : v) {
+					if (GetHeight(dv + pos) > MAX_HEIGHT * 0.1f) {
+						check = false;
+						break;
+					}
+				}
+			}
+			cubes[index]->SetActive(check);
 		}
 	}
 
 	tileColorBuffer = new ColorBuffer;
-	tileColorBuffer->Get() = { 1.0f, 1.0f, 1.0f, 0.5f };
+
+	w = 5;
+	h = 5;
+	testCursor = new SphereCollider;
+	testCursor->Pos() = CoordToPos(w, h);
+	testCursor->UpdateWorld();
 }
 
 GridedTerrain::~GridedTerrain()
@@ -45,13 +68,22 @@ GridedTerrain::~GridedTerrain()
 		delete cube;
 	cubes.clear();
 	cubes.shrink_to_fit();
+
+	delete tileColorBuffer;
+
+	delete testCursor;
 }
 
 void GridedTerrain::Update()
 {
+	/*
 	Ray ray = CAM->ScreenPointToRay(mousePos);
 	float dist = FLT_MAX;
+
 	for (int i = 0; i < cubes.size(); i++) {
+		if (!cubes[i]->Active())
+			continue;
+
 		Contact contact;
 		if (cubes[i]->GetCollider()->IsRayCollision(ray, &contact)) {
 			if (contact.distance < dist) {
@@ -60,8 +92,40 @@ void GridedTerrain::Update()
 			}
 		}
 	}
-
+	*/
 	UpdateWorld();
+
+	if (!isMoving) {
+
+		if (KEY_PRESS(VK_UP)) {
+			if (h < row - 1)
+				h--;
+		}
+		if (KEY_PRESS(VK_DOWN)) {
+			if (h > 0)
+				h++;
+		}
+		if (KEY_PRESS(VK_LEFT)) {
+			if (w > 0)
+				w--;
+
+		}
+		if (KEY_PRESS(VK_RIGHT)) {
+			if (w < col - 1)
+				w++;
+		}
+	}
+	selected = h * col + w;
+	Vector3 targetPos = CoordToPos(w, h);
+	targetPos.y = 3.0f;
+
+	isMoving = ((targetPos - testCursor->Pos()).Length() > 1.0f);
+	if (isMoving)
+		testCursor->Pos() = Lerp(testCursor->Pos(), targetPos, 20.0f * DELTA);
+	else
+		testCursor->Pos() = targetPos;
+	
+	testCursor->UpdateWorld();
 }
 
 void GridedTerrain::Render()
@@ -71,16 +135,20 @@ void GridedTerrain::Render()
 	__super::Render();
 
 	int index = 0;
-	for (auto& cube : cubes) {
-		if (index == selected)
+	for (int i = 0; i < cubes.size(); i++) {
+		if(!cubes[i]->Active())
+			continue;
+
+		if (i == selected)
 			tileColorBuffer->Get() = Float4(0.0f, 0.0f, 1.0f, 0.7f);
 		else
 			tileColorBuffer->Get() = Float4(1.0f, 1.0f, 1.0f, 0.2f);
 		tileColorBuffer->SetPS(9);
 
-		cube->Render();
-		index++;
+		cubes[i]->Render();
 	}
+
+	testCursor->Render();
 }
 
 Vector3 GridedTerrain::CoordToPos(int x, int y)
