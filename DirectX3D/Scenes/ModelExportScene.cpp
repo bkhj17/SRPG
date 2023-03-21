@@ -3,7 +3,7 @@
 
 ModelExportScene::ModelExportScene()
 {
-	string name = "Fox";
+	string name = "Master";
 	string file = "Models/FBX/" + name + ".fbx";
 	ModelExporter* exporter = nullptr;
 	
@@ -14,7 +14,7 @@ ModelExportScene::ModelExportScene()
 	
 	
 	vector<string> clipNames = {
-		"Idle", "Run"
+		"Idle"
 	};
 	
 	for (const auto& clipName : clipNames) {

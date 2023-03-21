@@ -38,8 +38,8 @@ void AStar::SetNode(Terrain* terrain)
 	Vector2 size = terrain->GetSize();
 
 	intervel = { size.x / width, size.y / height };
-	for (UINT z = 0; z < height; z++) {
-		for (UINT x = 0; x < width; x++) {
+	for (UINT z = 0; z <= height; z++) {
+		for (UINT x = 0; x <= width; x++) {
 			Vector3 pos = Vector3(x * intervel.x, 0, z * intervel.y);
 			pos.y = terrain->GetHeight(pos);
 
@@ -125,8 +125,6 @@ void AStar::GetPath(IN int start, IN int end, OUT vector<Vector3>& path)
 		path.push_back(nodes[curIndex]->GlobalPos());
 		curIndex = nodes[curIndex]->via;
 	}
-
-	//path.push_back(nodes[start]->pos);
 }
 
 void AStar::MakeDirectPath(IN Vector3 start, IN Vector3 end, OUT vector<Vector3>& path)
@@ -282,8 +280,9 @@ void AStar::SetEdge()
 
 void AStar::SetEdgeDiagonal()
 {
+	size_t width = (size_t)this->width + 1;
 	for (size_t i = 0; i < nodes.size(); i++) {
-		if (i % width != (size_t)width - 1)
+		if (i % width != width - 1)
 		{
 			nodes[i]->AddEdge(nodes[i + 1]);
 			nodes[i + 1]->AddEdge(nodes[i]);
@@ -295,7 +294,7 @@ void AStar::SetEdgeDiagonal()
 			nodes[i + width]->AddEdge(nodes[i]);
 		}
 
-		if (i < nodes.size() - width && i % width != (size_t)width - 1)
+		if (i < nodes.size() - width && i % width != width - 1)
 		{
 			nodes[i]->AddEdge(nodes[i + width + 1]);
 			nodes[i + width + 1]->AddEdge(nodes[i]);

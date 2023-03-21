@@ -56,8 +56,8 @@ protected:
 
     FrameBuffer* frameBuffer;
     //¹è¿­
-    ClipTransform* clipTransforms;
-    ClipTransform* nodeTransforms;
+    ClipTransform* clipTransforms = nullptr;
+    ClipTransform* nodeTransforms = nullptr;
 
     ID3D11Texture2D* texture = nullptr;
     ID3D11ShaderResourceView* srv;

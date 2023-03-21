@@ -3,9 +3,9 @@
 
 ModelAnimationScene::ModelAnimationScene()
 {
-	modelAnimator = new ModelAnimator("Fox");
+	modelAnimator = new ModelAnimator("Master");
 	modelAnimator->ReadClip("Idle", 0);
-	modelAnimator->ReadClip("Run", 0, "FoxTransform");
+	//modelAnimator->ReadClip("Run", 0);
 
 	//modelAnimator->GetClip(2)->SetEvent(bind(&ModelAnimationScene::SetIdle, this), 0.55f);
 }

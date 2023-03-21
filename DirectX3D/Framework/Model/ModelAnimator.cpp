@@ -190,6 +190,9 @@ void ModelAnimator::CreateClipTransform(UINT index)
 
 void ModelAnimator::PlayClip(int clip, float scale, float takeTime)
 {
+	if (clips.size() <= clip)
+		return;
+
 	isPlay = true;
 	frameBuffer->Get().next.clip = clip;
 	frameBuffer->Get().next.scale = scale;

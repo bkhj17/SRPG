@@ -49,6 +49,23 @@ struct VertexWeights
 	}
 };
 
+struct KeyPos {
+	float time;
+	Float3 pos;
+
+};
+
+struct KeyRot {
+	float time;
+	Float4 rot;
+
+};
+
+struct KeyScale {
+	float time;
+	Float3 scale;
+
+};
 struct KeyTransform
 {
 	Float3 scale;

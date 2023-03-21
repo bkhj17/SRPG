@@ -90,7 +90,6 @@ void Fox::SetPath()
 	astar->GetPath(start, end, path);
 	astar->MakeDirectPath(GlobalPos(), destPos, path);
 
-	path.insert(path.begin(), destPos);
 
 	UINT pathSize = path.size();
 
@@ -113,4 +112,5 @@ void Fox::SetPath()
 		else
 			pathSize = path.size();
 	}
+	path.insert(path.begin(), destPos);
 }
