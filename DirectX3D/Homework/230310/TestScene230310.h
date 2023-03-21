@@ -15,5 +15,6 @@ public:
 	virtual void GUIRender() override;
 private:
 	class GridedTerrain* terrain;
+	class Character* testCharacter;
 };
 

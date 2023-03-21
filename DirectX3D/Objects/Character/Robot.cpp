@@ -107,7 +107,6 @@ void Robot::EndDying()
 
 void Robot::Hit()
 {
-
 	curHp -= 10.0f;
 	hpBar->SetAmount(curHp / maxHp);
 
@@ -115,7 +114,10 @@ void Robot::Hit()
 		SetState(DIE);
 		return;
 	}
-	
+
+	Vector3 velocity = (target->Pos() - transform->Pos()).GetNormalized();
+	Audio::Get()->Play("hit", transform->Pos(), velocity);
+
 	curState = HIT;
 	instancing->PlayClip(index, curState);
 	eventIters[curState] = totalEvents[curState].begin();
@@ -129,7 +131,10 @@ void Robot::Spawn(Vector3 pos)
 
 	curHp = maxHp;
 	hpBar->SetAmount(curHp / maxHp);
-	transform->Pos() = pos;		
+	transform->Pos() = pos;
+
+	//Vector3 velocity = (target->Pos() - transform->Pos()).GetNormalized();
+	//Audio::Get()->Play("move", transform->Pos(), velocity);
 }
 
 void Robot::SetState(State state)

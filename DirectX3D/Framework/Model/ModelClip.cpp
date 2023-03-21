@@ -2,7 +2,7 @@
 
 ModelClip::~ModelClip()
 {
-    for (auto keyFrame : keyFrames)
+    for (auto& keyFrame : keyFrames)
         delete keyFrame.second;
     keyFrames.clear();
 }

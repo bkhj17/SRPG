@@ -1,5 +1,6 @@
 #include "framework.h"
 #include "GridedTerrain.h"
+#include "MapCursor.h"
 
 GridedTerrain::GridedTerrain()
 {
@@ -50,14 +51,13 @@ GridedTerrain::GridedTerrain()
 			cubes[index]->SetActive(check);
 		}
 	}
-
 	tileColorBuffer = new ColorBuffer;
 
-	w = 5;
-	h = 5;
-	testCursor = new SphereCollider;
-	testCursor->Pos() = CoordToPos(w, h);
-	testCursor->UpdateWorld();
+	cursor = new MapCursor;
+	cursor->SetGridTerrain(this);
+	cursor->SetMapGrid(row, col);
+	cursor->GetW() = 5;
+	cursor->GetH() = 5;
 }
 
 GridedTerrain::~GridedTerrain()
@@ -71,12 +71,16 @@ GridedTerrain::~GridedTerrain()
 
 	delete tileColorBuffer;
 
-	delete testCursor;
+	delete cursor;
+
+	objects.clear();
+	selectables.clear();
 }
 
 void GridedTerrain::Update()
 {
 	/*
+	//마우스 기반 코드. 혹시 모르니 남겨둠
 	Ray ray = CAM->ScreenPointToRay(mousePos);
 	float dist = FLT_MAX;
 
@@ -95,37 +99,12 @@ void GridedTerrain::Update()
 	*/
 	UpdateWorld();
 
-	if (!isMoving) {
-
-		if (KEY_PRESS(VK_UP)) {
-			if (h < row - 1)
-				h--;
-		}
-		if (KEY_PRESS(VK_DOWN)) {
-			if (h > 0)
-				h++;
-		}
-		if (KEY_PRESS(VK_LEFT)) {
-			if (w > 0)
-				w--;
-
-		}
-		if (KEY_PRESS(VK_RIGHT)) {
-			if (w < col - 1)
-				w++;
-		}
+	cursor->Update();
+	int s = CoordToIndex(cursor->GetW(), cursor->GetH());
+	if (s != selected) {
+		selected = s;
+		Test();
 	}
-	selected = h * col + w;
-	Vector3 targetPos = CoordToPos(w, h);
-	targetPos.y = 3.0f;
-
-	isMoving = ((targetPos - testCursor->Pos()).Length() > 1.0f);
-	if (isMoving)
-		testCursor->Pos() = Lerp(testCursor->Pos(), targetPos, 20.0f * DELTA);
-	else
-		testCursor->Pos() = targetPos;
-	
-	testCursor->UpdateWorld();
 }
 
 void GridedTerrain::Render()
@@ -139,7 +118,7 @@ void GridedTerrain::Render()
 		if(!cubes[i]->Active())
 			continue;
 
-		if (i == selected)
+		if (selectables.find(i) != selectables.end())
 			tileColorBuffer->Get() = Float4(0.0f, 0.0f, 1.0f, 0.7f);
 		else
 			tileColorBuffer->Get() = Float4(1.0f, 1.0f, 1.0f, 0.2f);
@@ -148,10 +127,85 @@ void GridedTerrain::Render()
 		cubes[i]->Render();
 	}
 
-	testCursor->Render();
+	cursor->Render();
+}
+
+int GridedTerrain::CoordToIndex(int x, int y)
+{
+	return y * col + x;
 }
 
 Vector3 GridedTerrain::CoordToPos(int x, int y)
 {
-	return cubes[(size_t)y * col + x]->Pos();
+	Vector3 pos = cubes[(size_t)y * col + x]->GlobalPos();
+	pos.y += cubes[(size_t)y * col + x]->GlobalScale().y;
+	return pos;
+}
+
+pair<int, int> GridedTerrain::IndexToCoord(int index)
+{
+	return {index % col, index / col};
+}
+
+pair<int, int> GridedTerrain::PosToCoord(Vector3 pos)
+{
+	int x = (int)pos.x / tileWidth;
+	int y = row - (int)pos.z / tileHeight;
+
+	return { x, y };
+}
+
+void GridedTerrain::AddObject(Transform* object)
+{
+	objects.push_back(object);
+}
+
+void GridedTerrain::Test()
+{
+	int range = 0;
+
+	for (auto object : objects) {
+		auto coord = PosToCoord(object->GlobalPos());
+		int index = CoordToIndex(coord.first, coord.second);
+
+		if (index == selected) {
+			range = 2;
+			break;
+		}
+	}
+
+	selectables.clear();
+
+	const int dx[] = { 0,0,1,-1 };
+	const int dy[] = { 1,-1,0,0 };
+
+	pair<int, int> coord = IndexToCoord(selected);
+	priority_queue<pair<int, int>> pq;
+	pq.push({ 0, selected });
+	while (!pq.empty()) {
+		int dist = pq.top().first;
+		int cur = pq.top().second;
+		pq.pop();
+
+		if (dist > range)
+			continue;
+
+		if (selectables.find(cur) != selectables.end() && selectables[cur] <= dist)
+			continue;
+
+		selectables[cur] = dist;
+
+		pair<int, int> coord = IndexToCoord(cur);
+
+		int nDist = dist + 1;
+		for (int i = 0; i < 4; i++) {
+			int nx = coord.first + dx[i];
+			int ny = coord.second + dy[i];
+
+			if (nx < 0 || nx >= col || ny < 0 || ny >= row)
+				continue;
+
+			pq.push({ nDist, CoordToIndex(nx, ny) });
+		}
+	}
 }

@@ -30,6 +30,7 @@ public:
         bool bgm = false, bool loop = false);
 
     void Play(string key, float valume = 1.0f);
+    void Play(string key, Float3 position, Float3 velocity, float valume = 1.0f);
     void Stop(string key);
     void Pause(string key);
     void Resume(string key);

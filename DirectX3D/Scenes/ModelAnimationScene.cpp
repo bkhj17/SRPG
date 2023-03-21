@@ -3,9 +3,9 @@
 
 ModelAnimationScene::ModelAnimationScene()
 {
-	modelAnimator = new ModelAnimator("Master");
-	modelAnimator->ReadClip("Idle", 0);
-	//modelAnimator->ReadClip("Run", 0);
+	modelAnimator = new ModelAnimator("Dante");
+	//modelAnimator->ReadClip("Idle", 0);
+	modelAnimator->ReadClip("Airtrick_ground", 0);
 
 	//modelAnimator->GetClip(2)->SetEvent(bind(&ModelAnimationScene::SetIdle, this), 0.55f);
 }

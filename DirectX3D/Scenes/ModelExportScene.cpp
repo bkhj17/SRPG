@@ -3,7 +3,7 @@
 
 ModelExportScene::ModelExportScene()
 {
-	string name = "Master";
+	string name = "Dante";
 	string file = "Models/FBX/" + name + ".fbx";
 	ModelExporter* exporter = nullptr;
 	
@@ -12,9 +12,10 @@ ModelExportScene::ModelExportScene()
 	exporter->ExportMesh();
 	delete exporter;
 	
-	
 	vector<string> clipNames = {
-		"Idle"
+		"Airtrick_start",
+		"Airtrick_air",
+		"Airtrick_ground"
 	};
 	
 	for (const auto& clipName : clipNames) {

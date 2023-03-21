@@ -45,8 +45,6 @@ void Naruto::Update()
 	rightHand->SetWorld(GetTransformByNode(38));
 	ModelAnimator::Update();
 
-
-
 	kunai->UpdateWorld();
 }
 
@@ -120,7 +118,6 @@ void Naruto::Move()
 
 void Naruto::Rotate()
 {
-
 	Vector3 delta = mousePos - Vector3(CENTER_X, CENTER_Y);
 	SetCursorPos(clientCenterPos.x, clientCenterPos.y);
 

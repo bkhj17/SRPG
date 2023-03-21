@@ -1,0 +1,58 @@
+#include "framework.h"
+#include "MapCursor.h"
+#include "GridedTerrain.h"
+
+MapCursor::MapCursor()
+{
+	object = new SphereCollider;
+}
+
+MapCursor::~MapCursor()
+{
+	delete object;
+}
+
+void MapCursor::Update()
+{
+	if (!isMoving) {
+		if (KEY_PRESS(VK_UP)) {
+			if (h > 0)
+				h--;
+		}
+		if (KEY_PRESS(VK_DOWN)) {
+			if (h < row - 1)
+				h++;
+		}
+		if (KEY_PRESS(VK_LEFT)) {
+			if (w > 0)
+				w--;
+
+		}
+		if (KEY_PRESS(VK_RIGHT)) {
+			if (w < col - 1)
+				w++;
+		}
+	}
+
+	if (terrain) {
+		Pos() = terrain->CoordToPos(w, h);
+		Pos().y += 3.0f;
+	}
+	UpdateWorld();
+
+	isMoving = ((GlobalPos() - object->Pos()).Length() > 1.0f);
+	if (isMoving)
+		object->Pos() = Lerp(object->Pos(), GlobalPos(), 20.0f * DELTA);
+	else
+		object->Pos() = GlobalPos();
+	object->UpdateWorld();
+}
+
+void MapCursor::Render()
+{
+	object->Render();
+}
+
+void MapCursor::SetTargetPos()
+{
+}

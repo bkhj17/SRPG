@@ -56,6 +56,29 @@ void Audio::Play(string key, float valume)
     sounds[key]->channel->setVolume(valume);
 }
 
+void Audio::Play(string key, Float3 position, Float3 velocity, float valume)
+{
+    if (sounds.count(key) == 0) return;
+    
+    FMOD_VECTOR pos = { position.x, position.y, position.z };
+    FMOD_VECTOR dir = { velocity.x, velocity.y, velocity.z };
+
+    sounds[key]->channel->set3DAttributes(&pos, &dir);
+    sounds[key]->channel->setMode(FMOD_3D);
+
+    FMOD_VECTOR listenerPos = { CAM->Pos().x, CAM->Pos().y, CAM->Pos().z };
+    FMOD_VECTOR listenerVel = {};
+    FMOD_VECTOR listenerUp = { CAM->Up().x, CAM->Up().y, CAM->Up().z };
+    FMOD_VECTOR listenerForward = { CAM->Forward().x, CAM->Forward().y, CAM->Forward().z };
+
+    soundSystem->set3DListenerAttributes(0, &listenerPos, &listenerVel, &listenerForward, &listenerUp);
+
+
+
+    soundSystem->playSound(sounds[key]->sound,
+        nullptr, false, &sounds[key]->channel);
+}
+
 void Audio::Stop(string key)
 {
     if (sounds.count(key) == 0) return;

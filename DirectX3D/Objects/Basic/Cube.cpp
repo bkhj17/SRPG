@@ -38,7 +38,7 @@ void Cube::Render()
 {
 	if (!Active())
 		return;
-
+	
 	SetRender();
 	mesh->Draw();
 }

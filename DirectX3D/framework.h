@@ -57,6 +57,8 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+//FMOD
+#include <FMOD/fmod.hpp>
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -66,6 +68,7 @@
 #pragma comment(lib, "d2d1.lib")
 #pragma comment(lib, "dwrite.lib")
 #pragma comment(lib, "assimp-vc143-mtd.lib")
+#pragma comment(lib, "fmod_vc.lib")
 
 using namespace std;
 using namespace DirectX;
@@ -90,6 +93,7 @@ typedef function<void(int)> IntParamEvent;
 #include "Framework/Utilities/tinyxml2.h"
 #include "Framework/Utilities/Font.h"
 #include "Framework/Utilities/Observer.h"
+#include "Framework/Utilities/Audio.h"
 #include "Framework/Utilities/Utility.h"
 
 using namespace Utility;
@@ -108,6 +112,7 @@ using namespace Utility;
 #include "Framework/Shader/VertexShader.h"
 #include "Framework/Shader/PixelShader.h"
 #include "Framework/Shader/ComputeShader.h"
+#include "Framework/Shader/GeometryShader.h"
 
 #include "Framework/State/RasterizerState.h"
 #include "Framework/State/SamplerState.h"

@@ -13,11 +13,12 @@
 #include "Scenes/ModelAnimationScene.h"
 //#include "Scenes/ActionScene.h"
 //#include "Scenes/InstancingScene.h"
-//#include "Scenes/GameScene.h"
+#include "Scenes/GameScene.h"
 #include "Scenes/RenderTargetScene.h"
 #include "Scenes/DeferredScene.h"
 #include "Scenes/ShadowScene.h"
 #include "Scenes/AStarScene.h"
+#include "Scenes/BillboardScene.h"
 //#include "Homework/230221/Scene230221.h"
 //#include "Homework/230222/GridScene230222.h"
 //#include "Homework/230222/TerrainScene230222.h"
@@ -41,7 +42,7 @@ GameManager::GameManager()
 
     //SceneManager::Get()->Create("ModelExport", new ModelExportScene);
     //SceneManager::Get()->Create("Start", new ModelRenderScene);
-    SceneManager::Get()->Create("Start", new ModelAnimationScene);
+    //SceneManager::Get()->Create("Start", new ModelAnimationScene);
 
     //SceneManager::Get()->Create("Start", new TutorialScene());
     //SceneManager::Get()->Create("Start", new CubeScene());
@@ -57,6 +58,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Start", new DeferredScene);
     //SceneManager::Get()->Create("Start", new ShadowScene);
     //SceneManager::Get()->Create("Start", new AStarScene);
+    //SceneManager::Get()->Create("Start", new BillboardScene);
     
     //SceneManager::Get()->Create("Grid", new GridScene230222());
     //SceneManager::Get()->Create("Start", new SphereScene);
@@ -72,7 +74,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Terrain", new TerrainScene230313);
     //SceneManager::Get()->Create("Start", new Scene230313);
     
-    //SceneManager::Get()->Create("Start", new TestScene230310);
+    SceneManager::Get()->Create("Start", new TestScene230310);
     
     SceneManager::Get()->Add("Grid");
     //SceneManager::Get()->Add("Terrain");
@@ -92,6 +94,8 @@ void GameManager::Update()
     SceneManager::Get()->Update();
 
     Environment::Get()->Update();
+
+    Audio::Get()->Update();
 }
 
 void GameManager::Render()
@@ -140,6 +144,7 @@ void GameManager::Create()
     Device::Get();
     Environment::Get();
     Observer::Get();
+    Audio::Get();
     
     Font::Get()->AddColor("White", 1, 1, 1);
     Font::Get()->AddStyle("Default", L"배달의민족 주아");
@@ -168,6 +173,7 @@ void GameManager::Delete()
     Texture::Delete();
     Observer::Delete();
     Font::Delete();
+    Audio::Delete();
 
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();

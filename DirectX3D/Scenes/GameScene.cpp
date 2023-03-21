@@ -14,14 +14,19 @@ GameScene::GameScene()
 	blendState[1] = new BlendState;
 	blendState[1]->AlphaToCoverage(true);
 
-	//CAM->SetTarget(naruto);
-	//CAM->TargetOptionLoad("Naruto");
-	//CAM->LookAtTarget();
+	CAM->SetTarget(naruto);
+	CAM->TargetOptionLoad("Naruto");
+	CAM->LookAtTarget();
 
 	KunaiManager::Get();
 	RobotManager::Get()->SetTarget(naruto);
 
 	skyBox = new SkyBox(L"Textures/LandScape/Snow_ENV.dds");
+
+	Audio::Get()->Add("bgm", "Sounds/naruto.mp3", true, true);
+	Audio::Get()->Add("move", "Sounds/move.wav", false, true);
+	Audio::Get()->Add("hit", "Sounds/hit.wav", false, false);
+	//Audio::Get()->Play("bgm");
 }
 
 GameScene::~GameScene()
@@ -40,7 +45,7 @@ GameScene::~GameScene()
 
 void GameScene::Update()
 {
-	//naruto->Update();
+	naruto->Update();
 
 	KunaiManager::Get()->Update();
 	RobotManager::Get()->Update();

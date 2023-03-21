@@ -18,18 +18,23 @@ ModelExporter::ModelExporter(string name, string file)
 
 	scene = importer->ReadFile(file,
 		aiProcessPreset_TargetRealtime_MaxQuality |
-		aiProcess_Triangulate |
-		aiProcess_GenSmoothNormals |
-		aiProcess_FixInfacingNormals |
-		aiProcess_RemoveRedundantMaterials |
-		aiProcess_OptimizeMeshes |
-		aiProcess_ValidateDataStructure |
-		aiProcess_ImproveCacheLocality |
-		aiProcess_JoinIdenticalVertices |
-		aiProcess_FindInvalidData |
-		aiProcess_TransformUVCoords |
-		aiProcess_FlipUVs |
-		aiProcess_ConvertToLeftHanded);
+		aiProcess_CalcTangentSpace | //메쉬의 접선공간 계산
+		aiProcess_GenSmoothNormals | //메쉬의 모든 정점에서 부드러운 법선 생성
+		aiProcess_JoinIdenticalVertices | //모든 메쉬에서 동일한(중복) 정점 데이터 세트를 식별하고 합체 - 인덱스
+		aiProcess_OptimizeMeshes | //메쉬의 수를 줄이기위한 후처리 단계(메시 수를 줄이기 위한 최적화)
+		aiProcess_ImproveCacheLocality | //정점 캐시의 지역성을 높이기위해 삼각형 재정리.정렬
+		aiProcess_LimitBoneWeights | // 단일 정점에 동시에 영향을 미치는 본의 수를 제한
+		aiProcess_SplitLargeMeshes | //큰메쉬를 작은메쉬로 분할
+		aiProcess_Triangulate | //모든 메쉬의 면을 삼각화
+		aiProcess_GenUVCoords | //비 UV매핑을 적절한 텍스쳐 좌표 체널로 변경
+		aiProcess_SortByPType | //p:primitvetopology= 연결성 정보, P Type정렬
+		aiProcess_FindDegenerates | //선or점 정렬된것들 정리(지우거나 채우거나)
+		aiProcess_FindInvalidData | //유효하지않은 데이터 찾기
+		aiProcess_FindInstances | //중복메시 찾아 첫번째 메시로 참조
+		aiProcess_ValidateDataStructure | //구조체 검사
+		aiProcess_Debone | //무손실로 또는 일부 임계 값에 따라 본 제거 
+		aiProcess_ConvertToLeftHanded//왼손좌표계로 바꿔라
+	);
 
 	if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		return;
@@ -323,11 +328,48 @@ Clip* ModelExporter::ReadClip(aiAnimation* animation)
 		ClipNode node;
 		node.name = srcNode->mNodeName;
 
+		/*
 		UINT keyCount = max(srcNode->mNumPositionKeys, srcNode->mNumRotationKeys);
 		keyCount = max(keyCount, srcNode->mNumScalingKeys);
 
 		node.transforms.reserve(keyCount);
+		*/
 
+		KeyData data;
+		data.positions.resize(srcNode->mNumPositionKeys);
+		for (int k = 0; k < srcNode->mNumPositionKeys; k++) {
+			KeyVector keyPos = {};
+			aiVectorKey key = srcNode->mPositionKeys[k];
+			keyPos.time = key.mTime;
+			memcpy_s(&keyPos.value, sizeof(Float3), &key.mValue, sizeof(aiVector3D));
+
+			data.positions[k] = keyPos;
+		}
+
+		data.rotations.resize(srcNode->mNumRotationKeys);
+		for (int k = 0; k < srcNode->mNumRotationKeys; k++) {
+			KeyQuat keyRot = {};
+			aiQuatKey key = srcNode->mRotationKeys[k];
+			keyRot.time = key.mTime;
+			
+			keyRot.value.x = key.mValue.x;
+			keyRot.value.y = key.mValue.y;
+			keyRot.value.z = key.mValue.z;
+			keyRot.value.w = key.mValue.w;
+
+			data.rotations[k] = keyRot;
+		}
+
+		data.scales.resize(srcNode->mNumScalingKeys);
+		for (int k = 0; k < srcNode->mNumScalingKeys; k++) {
+			KeyVector keyScale = {};
+			aiVectorKey key = srcNode->mScalingKeys[k];
+			keyScale.time = key.mTime;
+			memcpy_s(&keyScale.value, sizeof(Float3), &key.mValue, sizeof(aiVector3D));
+
+			data.scales[k] = keyScale;
+		}
+		/*
 		KeyTransform transform = {};
 		for (UINT k = 0; k < keyCount; k++) {
 			bool isFound = false;
@@ -360,7 +402,7 @@ Clip* ModelExporter::ReadClip(aiAnimation* animation)
 			if (isFound)
 				node.transforms.push_back(transform);
 		}
-
+		
 		if (node.transforms.size() < clip->frameCount) {
 			//남은 분량은 마지막 프레임으로 채운다
 			UINT count = clip->frameCount - node.transforms.size();
@@ -369,6 +411,10 @@ Clip* ModelExporter::ReadClip(aiAnimation* animation)
 			for (int i = 0; i < count; i++)
 				node.transforms.push_back(keyTransfrom);
 		}
+		*/
+		if(!data.positions.empty() && !data.rotations.empty() && !data.scales.empty())
+			SetClipNode(data, clip->frameCount, node);
+
 		clipNodes.push_back(node);
 	}
 
@@ -433,4 +479,61 @@ void ModelExporter::WriteClip(Clip* clip, string clipName, UINT index)
 	}
 	delete clip;
 	delete writer;
+}
+
+void ModelExporter::SetClipNode(const KeyData& keyData, const UINT& frameCount, ClipNode& clipNode)
+{
+	UINT posCount = 0;
+	UINT rotCount = 0;
+	UINT scaleCount = 0;
+
+	clipNode.transforms.resize(frameCount);
+	for (int i = 0; i < frameCount; i++) {
+		clipNode.transforms[i].pos = CalcInterpolationVector(keyData.positions, posCount, i);
+		clipNode.transforms[i].rot = CalcInterpolationQuat(keyData.rotations, rotCount, i);
+		clipNode.transforms[i].scale = CalcInterpolationVector(keyData.scales, scaleCount, i);
+	}
+}
+
+Float3 ModelExporter::CalcInterpolationVector(const vector<KeyVector>& keyData, UINT& count, int curFrame)
+{
+	if (count >= keyData.size() || keyData.size() == 1)
+		return keyData.back().value;
+
+	KeyVector curValue = keyData[count];
+	KeyVector nextValue = curValue;
+	if (keyData.size() > (size_t)count+1)
+		nextValue = keyData[(size_t)count + 1];
+	float t = ((float)curFrame - curValue.time) / (nextValue.time - nextValue.time);
+	Vector3 pos = Lerp(curValue.value, nextValue.value, t);
+
+	if (curFrame == (int)nextValue.time)
+		count++;
+
+	return pos;
+}
+
+Float4 ModelExporter::CalcInterpolationQuat(const vector<KeyQuat>& keyData, UINT& count, int curFrame)
+{
+	if (count >= keyData.size() || keyData.size() == 1)
+		return keyData.back().value;
+
+	KeyQuat curValue = keyData[count];
+	KeyQuat nextValue = curValue;
+	if (keyData.size() > count+1)
+		nextValue = keyData[(size_t)count + 1];
+	float t = ((float)curFrame - curValue.time) / (nextValue.time - curValue.time);
+
+	if (curFrame == (int)nextValue.time)
+		count++;
+
+	Vector4 cur = XMLoadFloat4(&curValue.value);
+	Vector4 next = XMLoadFloat4(&nextValue.value);
+
+	Vector4 rot = XMQuaternionSlerp(cur, next, t);
+
+	Float4 result = {};
+	XMStoreFloat4(&result, rot);
+
+	return result;
 }

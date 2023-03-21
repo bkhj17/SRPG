@@ -9,9 +9,15 @@ public:
 	void Update();
 	void Render();
 
-private:
 
+	int CoordToIndex(int x, int y);
 	Vector3 CoordToPos(int x, int y);
+	pair<int, int> IndexToCoord(int index);
+	pair<int, int> PosToCoord(Vector3 pos);
+
+	void AddObject(Transform* object);
+private:
+	void Test();
 
 private:
 	FloatValueBuffer* widthHeightBuffer;
@@ -24,9 +30,10 @@ private:
 	int selected;
 	ColorBuffer* tileColorBuffer;
 
+	class MapCursor* cursor;
 
-	int w, h;
-	bool isMoving = false;
-	SphereCollider* testCursor;
+	//필드 위 오브젝트는 등록 방식으로 
+	vector<Transform*> objects;
+	unordered_map<int, int> selectables;
 };
 
