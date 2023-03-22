@@ -15,10 +15,10 @@ Font::Font()
 	device->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_ENABLE_MULTITHREADED_OPTIMIZATIONS,
 		&context);
 
-	IDXGISurface* dxgiSurface;
+	IDXGISurface* dxgiSurface = nullptr;
 	Device::Get()->GetSwapChain()->GetBuffer(0, __uuidof(IDXGISurface), (void**)&dxgiSurface);
 
-	D2D1_BITMAP_PROPERTIES1 bp;
+	D2D1_BITMAP_PROPERTIES1 bp = {};
 	bp.pixelFormat.format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	bp.pixelFormat.alphaMode = D2D1_ALPHA_MODE_IGNORE;
 	bp.dpiX = 96;
@@ -96,7 +96,7 @@ void Font::RenderText(wstring text, Float2 pos, Float2 size)
 
 	pos.y = WIN_HEIGHT - pos.y;
 
-	D2D1_RECT_F rectF;
+	D2D1_RECT_F rectF = {};
 	rectF.left = pos.x - halfSize.x;
 	rectF.right = pos.x + halfSize.x;
 	rectF.top = pos.y - halfSize.y;
@@ -118,7 +118,7 @@ void Font::RenderText(string text, Float2 pos, Float2 size)
 
 	pos.y = WIN_HEIGHT - pos.y;
 
-	D2D1_RECT_F rectF;
+	D2D1_RECT_F rectF = {};
 	rectF.left = pos.x - halfSize.x;
 	rectF.right = pos.x + halfSize.x;
 	rectF.top = pos.y - halfSize.y;
@@ -142,7 +142,7 @@ void Font::RenderTextLeft(wstring text, Float2 pos, Float2 size)
 
 	pos.y = WIN_HEIGHT - pos.y;
 
-	D2D1_RECT_F rectF;
+	D2D1_RECT_F rectF = {};
 	rectF.left = pos.x;
 	rectF.right = pos.x + size.x;
 	rectF.top = pos.y - halfSize.y;
@@ -159,9 +159,9 @@ void Font::RenderTextLeft(string text, Float2 pos, Float2 size)
 
 wstring Font::ChangeWString(string value)
 {
-	int nLen = MultiByteToWideChar(CP_ACP, 0, &value[0], value.size(), nullptr, 0);
+	int nLen = MultiByteToWideChar(CP_ACP, 0, &value[0], (int)value.size(), nullptr, 0);
 	wstring strUni(nLen + 1, 0);
-	int len = MultiByteToWideChar(CP_ACP, 0, value.c_str(), value.size(), &strUni[0], nLen);
+	int len = MultiByteToWideChar(CP_ACP, 0, value.c_str(), (int)value.size(), &strUni[0], nLen);
 	strUni[len] = 0;
 
 	return strUni;

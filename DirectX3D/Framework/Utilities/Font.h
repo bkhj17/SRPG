@@ -37,6 +37,6 @@ private:
     map<string, ID2D1SolidColorBrush*> brushes;
     map<string, IDWriteTextFormat*> formats;
 
-    ID2D1SolidColorBrush* curBrush;
-    IDWriteTextFormat* curFormat;
+    ID2D1SolidColorBrush* curBrush = nullptr;
+    IDWriteTextFormat* curFormat = nullptr;
 };

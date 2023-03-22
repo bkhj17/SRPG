@@ -33,7 +33,7 @@ void BlockManager230306::CreateBlocks(UINT width, UINT height)
 	for (UINT z = 0; z < height; z++) {
 		for (UINT x = 0; x < width; x++) {
 			Vector3 pos = { (float)x, 0, (float)z };
-			wstring file = textures[Random(0, textures.size())];
+			wstring file = textures[Random(0, (int)textures.size())];
 
 			Cube* cube = new Cube;
 			cube->GetMaterial()->SetDiffuseMap(file);

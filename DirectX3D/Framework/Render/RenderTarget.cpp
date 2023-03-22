@@ -30,7 +30,7 @@ void RenderTarget::Set(DepthStencil* depthStencil, Float4 clearColor)
 void RenderTarget::SetMulti(RenderTarget** targets, UINT count, DepthStencil* depthStencil, Float4 clearColor)
 {
     vector<ID3D11RenderTargetView*> rtvs;
-    for (int i = 0; i < count; i++) {
+    for (UINT i = 0; i < count; i++) {
         rtvs.push_back(targets[i]->GetRTV());
         DC->ClearRenderTargetView(rtvs.back(), (float*)&clearColor);
     }

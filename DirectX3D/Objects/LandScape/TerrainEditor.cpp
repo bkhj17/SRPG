@@ -222,8 +222,8 @@ void TerrainEditor::MakeMesh()
 	vector<UINT>& indices = mesh->GetIndices();
 	indices.clear();
 	indices.reserve(((size_t)width - 1) * ((size_t)height - 1) * 6);
-	for (int z = 0; z < height - 1; z++) {
-		for (int x = 0; x < width - 1; x++) {
+	for (UINT z = 0; z < height - 1; z++) {
+		for (UINT x = 0; x < width - 1; x++) {
 			for (int i = 0; i < 6; i++)
 				indices.push_back(width * (z + dxz[i].second) + x + dxz[i].first);
 		}

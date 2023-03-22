@@ -25,7 +25,7 @@ private:
 
         int type = 0;
 
-        float padding[3];
+        float padding[3] = {};
     };
 public:
     WorldBuffer() : ConstBuffer(&data, sizeof(Data))
@@ -126,8 +126,8 @@ public:
     struct Data {
         Light lights[MAX_LIGHT];
         UINT lightCount = 1;
-        Float3 ambientLight = { 0.3f, 0.3f, 0.3f };
-        Float3 ambientCeil = { 0.3f, 0.3f, 0.3f };
+        Float3 ambientLight = { 0.1f, 0.1f, 0.1f };
+        Float3 ambientCeil = { 0.1f, 0.1f, 0.1f };
         float padding = 0.0f;
     };
 public:
@@ -138,4 +138,55 @@ public:
     Data& Get() { return data; }
 private:
     Data data;
+};
+
+
+class WeatherBuffer : public ConstBuffer
+{
+private:
+    struct Data {
+        Float3 velocity = { 0, -1, 0 };
+        float distance = 100.0f;
+
+        Float4 color = { 1, 1, 1, 1 };
+
+        Float3 origin = {};
+        float time = 0.0f;
+
+        Float3 size = { 50.0f, 50.0f, 50.0f };
+        float turbulence = 5.0f;
+    };
+
+public:
+    WeatherBuffer() : ConstBuffer(&data, sizeof(Data))
+    {
+    }
+
+    Data& Get() { return data; }
+
+private:
+    Data data;
+};
+
+class FogBuffer : public ConstBuffer
+{
+private:
+    struct Data {
+        Float4 color = { 1, 1, 1, 1 };
+        float start = 0.0f;
+        float random = 1.0f;
+
+        float padding[2] = {};
+    };
+
+public:
+    FogBuffer() : ConstBuffer(&data, sizeof(Data))
+    {
+    }
+
+    Data& Get() { return data; }
+
+private:
+    Data data;
+
 };

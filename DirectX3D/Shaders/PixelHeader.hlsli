@@ -260,7 +260,7 @@ float4 CalcLights(LightPixelInput input)
     float4 color = 0;
     
     [unroll(MAX_LIGHT)] //반복 횟수 제한 
-    for (int i = 0; i < lightCount; i++)
+    for (uint i = 0; i < lightCount; i++)
     {
         [flatten]
         if(!lights[i].active)

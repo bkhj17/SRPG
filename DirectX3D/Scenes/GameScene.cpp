@@ -4,9 +4,11 @@
 GameScene::GameScene()
 {
 	forest = new Model("Forest");
-	forest->SetShader(L"");//L"Basic/Texture.hlsl");
 	forest->Scale() *= 10.0f;
 	forest->UpdateWorld();
+	forest->SetShader(L"PostEffect/Fog.hlsl");
+
+	fogBuffer = new FogBuffer();
 
 	naruto = new Naruto;
 
@@ -62,6 +64,7 @@ void GameScene::Render()
 	naruto->Render();
 
 	blendState[1]->SetState();
+	fogBuffer->SetPS(10);
 	forest->Render();
 	blendState[0]->SetState();
 

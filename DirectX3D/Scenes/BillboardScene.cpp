@@ -45,6 +45,8 @@ BillboardScene::BillboardScene()
 
 BillboardScene::~BillboardScene()
 {
+	delete terrain;
+
 	delete material;
 	delete vertexBuffer;
 

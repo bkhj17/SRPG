@@ -14,7 +14,7 @@ public:
 	float GetHeight(const Vector3& pos, Vector3* normal = nullptr) const;
 	Vector3 Picking();
 
-	Vector2 GetSize() { return Vector2(width, height); }
+	Vector2 GetSize() { return Vector2((float)width, (float)height); }
 private:
 	void MakeNormal();
 	void MakeMesh();

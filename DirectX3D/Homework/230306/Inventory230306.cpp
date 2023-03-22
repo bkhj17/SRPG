@@ -6,7 +6,7 @@ Inventory230306::Inventory230306()
 	inventory.resize(10);
 	for (int i = 0; i < inventory.size(); i++) {
 		inventory[i].first = new Quad(Vector2(30.0f, 30.0f));
-		inventory[i].first->Pos() = startPos + posStep * i;
+		inventory[i].first->Pos() = startPos + posStep * (float)i;
 		inventory[i].first->GetMaterial()->SetShader(L"SelectTexture230306.hlsl");
 		inventory[i].first->UpdateWorld();
 		inventory[i].second = 0;

@@ -101,15 +101,15 @@ void GridScene230222::SetUpVertices(vector<VertexColor>& vertices)
 	for (int x = -halfH; x <= halfH; x++) {
 		if (x == 0)
 			continue;
-		vertices[index++] = VertexColor(x, 0, -halfW, 0.5f, 0.5f, 0.5f);
-		vertices[index++] = VertexColor(x, 0, +halfW, 0.5f, 0.5f, 0.5f);
+		vertices[index++] = VertexColor((float)x, 0, -(float)halfW, 0.5f, 0.5f, 0.5f);
+		vertices[index++] = VertexColor((float)x, 0, +(float)halfW, 0.5f, 0.5f, 0.5f);
 	}
 
 	for (int z = -halfW; z <= halfW; z++) {
 		if (z == 0)
 			continue;
-		vertices[index++] = VertexColor(-halfH, 0, z, 0.5f, 0.5f, 0.5f);
-		vertices[index++] = VertexColor(+halfH, 0, z, 0.5f, 0.5f, 0.5f);
+		vertices[index++] = VertexColor(-(float)halfH, 0, (float)z, 0.5f, 0.5f, 0.5f);
+		vertices[index++] = VertexColor(+(float)halfH, 0, (float)z, 0.5f, 0.5f, 0.5f);
 	}
 }
 

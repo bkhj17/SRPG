@@ -37,7 +37,7 @@ void BlockManager::CreateBlocks(UINT width, UINT height)
 	for (UINT z = 0; z < height; z++) {
 		for (UINT x = 0; x < width; x++) {
 			Vector3 pos = { (float)x, 0, (float)z };
-			wstring file = textures[Random(0, textures.size())];
+			wstring file = textures[Random(0, (int)textures.size())];
 
 			Cube* block = new Cube;
 			block->GetMaterial()->SetDiffuseMap(file);
@@ -206,7 +206,7 @@ wstring BlockManager::GetTextureFile(int index)
 void BlockManager::Save(wstring saveFile)
 {
 	BinaryWriter* writer = new BinaryWriter(saveFile);
-	writer->UInt(blocks.size());
+	writer->UInt((UINT)blocks.size());
 	for (auto block : blocks) {
 		Vector3 pos = block->GlobalPos();
 		Vector3 rot = block->Rot();

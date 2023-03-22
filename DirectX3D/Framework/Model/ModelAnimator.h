@@ -16,7 +16,7 @@ protected:
             float takeTime = 0.2f;      //클립 전환 시간
             float tweenTime = 0.0f;     
             float runningTime = 0.0f;   
-            float padding;
+            float padding = 0.0f;
 
             Frame cur, next;
         };
@@ -60,5 +60,5 @@ protected:
     ClipTransform* nodeTransforms = nullptr;
 
     ID3D11Texture2D* texture = nullptr;
-    ID3D11ShaderResourceView* srv;
+    ID3D11ShaderResourceView* srv = nullptr;
 };

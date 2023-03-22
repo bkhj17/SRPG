@@ -43,7 +43,7 @@ void AStar::SetNode(Terrain* terrain)
 			Vector3 pos = Vector3(x * intervel.x, 0, z * intervel.y);
 			pos.y = terrain->GetHeight(pos);
 
-			nodes.push_back(new Node(pos, nodes.size()));
+			nodes.push_back(new Node(pos, (int)nodes.size()));
 			nodes.back()->Scale() = {intervel.x, 50.0f, intervel.y};
 			nodes.back()->UpdateWorld();
 
@@ -86,7 +86,7 @@ int AStar::FindRandomPos(Vector3 pos, float range)
 		}
 	}
 
-	Node* findNode = findNodes[Random(0, findNodes.size())];
+	Node* findNode = findNodes[Random(0, (int)findNodes.size())];
 
 	return findNode->index;
 }
@@ -136,7 +136,7 @@ void AStar::MakeDirectPath(IN Vector3 start, IN Vector3 end, OUT vector<Vector3>
 	//장애물을 만나지 않는 가장 먼 노드를 찾는다
 	for (int i = 0; i < path.size(); i++) {
 		if (!IsCollisionObstacle(start, path[i])) {
-			cutNodeNum = path.size() - i - 1;
+			cutNodeNum = (int)path.size() - i - 1;
 			break;
 		}
 	}
@@ -149,7 +149,7 @@ void AStar::MakeDirectPath(IN Vector3 start, IN Vector3 end, OUT vector<Vector3>
 
 	for (int i = 0; i < path.size(); i++) {
 		if (!IsCollisionObstacle(end, path[path.size() - i - 1])) {
-			cutNodeNum = path.size() - i - 1;
+			cutNodeNum = (int)path.size() - i - 1;
 			break;
 		}
 	}

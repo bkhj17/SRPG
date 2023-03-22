@@ -117,7 +117,7 @@ void ModelExporter::WriteMaterial()
 
 	BinaryWriter* writer = new BinaryWriter(savePath + file);
 
-	writer->UInt(materials.size());
+	writer->UInt((UINT)materials.size());
 	for (Material* material : materials) {
 		string path = savePath + material->GetName() + ".mat";
 		material->Save(path);
@@ -233,14 +233,14 @@ void ModelExporter::ReadNode(aiNode* node, int index, int parent)
 	nodeData->transform = XMMatrixTranspose(matrix);	//전치행렬
 	nodes.push_back(nodeData);
 
-	for (int i = 0; i < node->mNumChildren; i++)
-		ReadNode(node->mChildren[i], nodes.size(), index);
+	for (UINT i = 0; i < node->mNumChildren; i++)
+		ReadNode(node->mChildren[i], (int)nodes.size(), index);
 }
 
 void ModelExporter::ReadBone(aiMesh* mesh, vector<VertexWeights>& vertexWeights)
 {
 	//mNumBones : 메시에 있는 본 정보
-	for (int i = 0; i < mesh->mNumBones; i++) {
+	for (UINT i = 0; i < mesh->mNumBones; i++) {
 		UINT boneIndex = 0;
 		string name = mesh->mBones[i]->mName.C_Str();
 
@@ -273,23 +273,23 @@ void ModelExporter::WriteMesh()
 	CreateFolders(path);
 	BinaryWriter* writer = new BinaryWriter(path);
 
-	writer->UInt(meshes.size());
+	writer->UInt((UINT)meshes.size());
 	for (auto mesh : meshes) {
 		writer->String(mesh->name);
 		writer->UInt(mesh->materialIndex);
 
-		writer->UInt(mesh->vertices.size());
-		writer->Byte(mesh->vertices.data(), sizeof(ModelVertex) * mesh->vertices.size());
+		writer->UInt((UINT)mesh->vertices.size());
+		writer->Byte(mesh->vertices.data(), (UINT)(sizeof(ModelVertex) * mesh->vertices.size()));
 
-		writer->UInt(mesh->indices.size());
-		writer->Byte(mesh->indices.data(), sizeof(UINT) * mesh->indices.size());
+		writer->UInt((UINT)mesh->indices.size());
+		writer->Byte(mesh->indices.data(), (UINT)(sizeof(UINT) * mesh->indices.size()));
 
 		delete mesh;
 	}
 	meshes.clear();
 
 	//Node
-	writer->UInt(nodes.size());
+	writer->UInt((UINT)nodes.size());
 	for (auto node : nodes) {
 		writer->Int(node->index);
 		writer->String(node->name);
@@ -300,7 +300,7 @@ void ModelExporter::WriteMesh()
 	}
 	nodes.clear();
 
-	writer->UInt(bones.size());
+	writer->UInt((UINT)bones.size());
 	for (auto bone : bones) {
 		writer->Int(bone->index);
 		writer->String(bone->name);
@@ -322,7 +322,7 @@ Clip* ModelExporter::ReadClip(aiAnimation* animation)
 
 	vector<ClipNode> clipNodes;
 	clipNodes.reserve(animation->mNumChannels);
-	for (int i = 0; i < animation->mNumChannels; i++) {
+	for (UINT i = 0; i < animation->mNumChannels; i++) {
 		aiNodeAnim* srcNode = animation->mChannels[i];
 
 		ClipNode node;
@@ -337,20 +337,20 @@ Clip* ModelExporter::ReadClip(aiAnimation* animation)
 
 		KeyData data;
 		data.positions.resize(srcNode->mNumPositionKeys);
-		for (int k = 0; k < srcNode->mNumPositionKeys; k++) {
+		for (UINT k = 0; k < srcNode->mNumPositionKeys; k++) {
 			KeyVector keyPos = {};
 			aiVectorKey key = srcNode->mPositionKeys[k];
-			keyPos.time = key.mTime;
+			keyPos.time = (float)key.mTime;
 			memcpy_s(&keyPos.value, sizeof(Float3), &key.mValue, sizeof(aiVector3D));
 
 			data.positions[k] = keyPos;
 		}
 
 		data.rotations.resize(srcNode->mNumRotationKeys);
-		for (int k = 0; k < srcNode->mNumRotationKeys; k++) {
+		for (UINT k = 0; k < srcNode->mNumRotationKeys; k++) {
 			KeyQuat keyRot = {};
 			aiQuatKey key = srcNode->mRotationKeys[k];
-			keyRot.time = key.mTime;
+			keyRot.time = (float)key.mTime;
 			
 			keyRot.value.x = key.mValue.x;
 			keyRot.value.y = key.mValue.y;
@@ -361,7 +361,7 @@ Clip* ModelExporter::ReadClip(aiAnimation* animation)
 		}
 
 		data.scales.resize(srcNode->mNumScalingKeys);
-		for (int k = 0; k < srcNode->mNumScalingKeys; k++) {
+		for (UINT k = 0; k < srcNode->mNumScalingKeys; k++) {
 			KeyVector keyScale = {};
 			aiVectorKey key = srcNode->mScalingKeys[k];
 			keyScale.time = key.mTime;
@@ -456,7 +456,7 @@ void ModelExporter::ReadKeyFrame(Clip* clip, aiNode* node, vector<ClipNode>& cli
 	}
 
 	clip->keyFrame.push_back(keyFrame);
-	for (int i = 0; i < node->mNumChildren; i++)
+	for (UINT i = 0; i < node->mNumChildren; i++)
 		ReadKeyFrame(clip, node->mChildren[i], clipNodes);
 }
 
@@ -470,11 +470,11 @@ void ModelExporter::WriteClip(Clip* clip, string clipName, UINT index)
 	writer->UInt(clip->frameCount);
 	writer->Float(clip->tickPerSecond);
 
-	writer->UInt(clip->keyFrame.size());
+	writer->UInt((UINT)clip->keyFrame.size());
 	for (KeyFrame* keyFrame : clip->keyFrame) {
 		writer->String(keyFrame->boneName);
-		writer->UInt(keyFrame->transforms.size());
-		writer->Byte(keyFrame->transforms.data(), sizeof(KeyTransform) * keyFrame->transforms.size());
+		writer->UInt((UINT)keyFrame->transforms.size());
+		writer->Byte(keyFrame->transforms.data(), sizeof(KeyTransform) * (UINT)keyFrame->transforms.size());
 		delete keyFrame;
 	}
 	delete clip;
@@ -488,7 +488,7 @@ void ModelExporter::SetClipNode(const KeyData& keyData, const UINT& frameCount, 
 	UINT scaleCount = 0;
 
 	clipNode.transforms.resize(frameCount);
-	for (int i = 0; i < frameCount; i++) {
+	for (UINT i = 0; i < frameCount; i++) {
 		clipNode.transforms[i].pos = CalcInterpolationVector(keyData.positions, posCount, i);
 		clipNode.transforms[i].rot = CalcInterpolationQuat(keyData.rotations, rotCount, i);
 		clipNode.transforms[i].scale = CalcInterpolationVector(keyData.scales, scaleCount, i);

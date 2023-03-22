@@ -1,5 +1,4 @@
 #include "framework.h"
-#include "GeometryShader.h"
 
 GeometryShader::GeometryShader(wstring file)
 {

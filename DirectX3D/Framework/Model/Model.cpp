@@ -55,7 +55,7 @@ void Model::ReadMaterial()
 	UINT size = reader->UInt();
 	materials.reserve(size);
 
-	for (int i = 0; i < size; i++) {
+	for (UINT i = 0; i < size; i++) {
 		Material* material = new Material();
 		material->Load(reader->String());
 		materials.push_back(material);
@@ -74,7 +74,7 @@ void Model::ReadMesh()
 	UINT size = reader->UInt();
 	meshes.reserve(size);
 
-	for (int i = 0; i < size; i++) {
+	for (UINT i = 0; i < size; i++) {
 		auto mesh = new ModelMesh(reader->String());
 		mesh->SetMaterial(materials[reader->UInt()]);
 

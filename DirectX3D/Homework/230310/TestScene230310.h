@@ -14,7 +14,10 @@ public:
 	virtual void PostRender() override;
 	virtual void GUIRender() override;
 private:
+	void CharacterMoveEnd(void* characterPtr);
+private:
 	class GridedTerrain* terrain;
+	class MapCursor* cursor;
 	class Character* testCharacter;
 };
 

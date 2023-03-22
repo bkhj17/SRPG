@@ -19,6 +19,7 @@
 #include "Scenes/ShadowScene.h"
 #include "Scenes/AStarScene.h"
 #include "Scenes/BillboardScene.h"
+#include "Scenes/ParticleScene.h"
 //#include "Homework/230221/Scene230221.h"
 //#include "Homework/230222/GridScene230222.h"
 //#include "Homework/230222/TerrainScene230222.h"
@@ -59,6 +60,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Start", new ShadowScene);
     //SceneManager::Get()->Create("Start", new AStarScene);
     //SceneManager::Get()->Create("Start", new BillboardScene);
+    //SceneManager::Get()->Create("Start", new ParticleScene);
     
     //SceneManager::Get()->Create("Grid", new GridScene230222());
     //SceneManager::Get()->Create("Start", new SphereScene);

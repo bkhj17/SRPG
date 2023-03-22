@@ -96,8 +96,8 @@ void Environment::PostSet()
 
 void Environment::SetViewport(UINT width, UINT height)
 {
-    viewport.Width = width;
-    viewport.Height = height;
+    viewport.Width = (float)width;
+    viewport.Height = (float)height;
     viewport.MinDepth = 0.0f;
     viewport.MaxDepth = 1.0f;
     viewport.TopLeftX = 0.0f;

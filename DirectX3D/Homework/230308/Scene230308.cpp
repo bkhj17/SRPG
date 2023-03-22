@@ -92,7 +92,7 @@ void Scene230308::Update()
 
 	spawnTime -= DELTA;
 	if (curTargetNum < targets.size() && spawnTime <= 0.0f) {
-		Vector3 spawnPos = spots[Random(0, spots.size())]->GlobalPos();
+		Vector3 spawnPos = spots[Random(0, (int)spots.size())]->GlobalPos();
 		for (auto target : targets) {
 			if (target->Active())
 				continue;

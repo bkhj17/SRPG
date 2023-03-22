@@ -109,7 +109,6 @@ void Naruto::Move()
 	if (!isMoveZ)
 		velocity.z = Lerp(velocity.z, 0, deceleration * DELTA);
 
-
 	Matrix rotY = XMMatrixRotationY(Rot().y);
 	Vector3 direction = XMVector3TransformCoord(velocity, rotY);
 

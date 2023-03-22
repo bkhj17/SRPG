@@ -4,7 +4,7 @@
 void Heap::Insert(Node* node)
 {
     heap.push_back(node);
-    UpdateUpper(heap.size() - 1);
+    UpdateUpper((int)heap.size() - 1);
 }
 
 void Heap::UpdateUpper(int index)
@@ -25,7 +25,7 @@ void Heap::UpdateUpper(int index)
 Node* Heap::DeleteRoot()
 {
     Node* root = heap.front();
-    Swap(0, heap.size() - 1);
+    Swap(0, (int)heap.size() - 1);
     heap.pop_back();
     UpdateLower(0);
 

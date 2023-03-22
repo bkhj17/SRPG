@@ -143,7 +143,7 @@ HRESULT TerrainEditor230302::SaveHeightMapPng(wstring file)
 	uint8_t* pixels = new uint8_t[size];
 	for (UINT i = 0; i < size / 4; i++) {
 		float y = vertices[i].pos.y;
-		uint8_t height = (y - MIN_HEIGHT) / (MAX_HEIGHT - MIN_HEIGHT) * 255;
+		uint8_t height = (uint8_t)((y - MIN_HEIGHT) / (MAX_HEIGHT - MIN_HEIGHT) * 255);
 		pixels[i * 4 + 0] = height;
 		pixels[i * 4 + 1] = height;
 		pixels[i * 4 + 2] = height;

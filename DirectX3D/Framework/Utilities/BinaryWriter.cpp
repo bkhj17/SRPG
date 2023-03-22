@@ -34,18 +34,18 @@ void BinaryWriter::Float(float data)
 
 void BinaryWriter::String(string data)
 {
-    UInt(data.size());
+    UInt((UINT)data.size());
 
     const char* str = data.c_str();
-    WriteFile(file, str, sizeof(char) * data.size(), &size, nullptr);
+    WriteFile(file, str, sizeof(char) * (DWORD)data.size(), &size, nullptr);
 }
 
 void BinaryWriter::WString(wstring data)
 {
-    UInt(data.size());
+    UInt((UINT)data.size());
 
     const WCHAR* str = data.c_str();
-    WriteFile(file, str, sizeof(WCHAR) * data.size(), &size, nullptr);
+    WriteFile(file, str, sizeof(WCHAR) * (DWORD)data.size(), &size, nullptr);
 }
 
 void BinaryWriter::Vector(Vector3 data)

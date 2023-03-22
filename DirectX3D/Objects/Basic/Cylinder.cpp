@@ -38,7 +38,7 @@ void Cylinder::MakeMesh()
 	vertex.uv = { 0.5f, 0.5f };
 	vertices.push_back(vertex);
 
-	for (int i = 0; i <= sliceCount; i++) {
+	for (UINT i = 0; i <= sliceCount; i++) {
 		float theta = thetaStep * i;
 		float x = cosf(theta);
 		float z = sinf(theta);
@@ -49,12 +49,12 @@ void Cylinder::MakeMesh()
 	}
 
 	//bottom
-	int bottomIndex = vertices.size();
+	int bottomIndex = (int)vertices.size();
 	vertex.pos = { 0, -height * 0.5f, 0 };
 	vertex.uv = { 0.5f, 0.5f };
 	vertices.push_back(vertex);
 
-	for (int i = 0; i <= sliceCount; i++) {
+	for (UINT i = 0; i <= sliceCount; i++) {
 		float theta = thetaStep * i;
 		float x = cosf(theta);
 		float z = sinf(theta);
@@ -66,7 +66,7 @@ void Cylinder::MakeMesh()
 
 	//side
 	int sideIndex = vertices.size();
-	for (int i = 0; i <= sliceCount; i++) {
+	for (UINT i = 0; i <= sliceCount; i++) {
 		float theta = thetaStep * i;
 		float x = cosf(theta);
 		float z = sinf(theta);
@@ -81,20 +81,20 @@ void Cylinder::MakeMesh()
 	}
 
 	vector<UINT>& indices = mesh->GetIndices();
-	indices.reserve(sliceCount * 6);
-	for (int i = 0; i < sliceCount; i++) {
+	indices.reserve((size_t)sliceCount * 6);
+	for (UINT i = 0; i < sliceCount; i++) {
 		indices.push_back(0);
 		indices.push_back(i+2);
 		indices.push_back(i+1);
 	}
 
-	for (int i = 0; i < sliceCount; i++) {
+	for (UINT i = 0; i < sliceCount; i++) {
 		indices.push_back(bottomIndex);
 		indices.push_back(bottomIndex + i + 1);
 		indices.push_back(bottomIndex + i + 2);
 	}
 
-	for (int i = 0; i < sliceCount; i++) {
+	for (UINT i = 0; i < sliceCount; i++) {
 		indices.push_back(sideIndex + 2*i);
 		indices.push_back(sideIndex + 2*i + 2);
 		indices.push_back(sideIndex + 2*i + 1);
@@ -137,10 +137,10 @@ void Cylinder::MakeTangent()
 	vector<VertexType>& vertices = mesh->GetVertices();
 	vector<UINT>& indices = mesh->GetIndices();
 
-	for (int i = 0; i * 3 < indices.size(); i++) {
-		int index0 = indices[(size_t)i * 3];
-		int index1 = indices[(size_t)i * 3 + 1];
-		int index2 = indices[(size_t)i * 3 + 2];
+	for (size_t i = 0; i * 3 < indices.size(); i++) {
+		int index0 = indices[i * 3];
+		int index1 = indices[i * 3 + 1];
+		int index2 = indices[i * 3 + 2];
 
 		Float2 uv0 = vertices[index0].uv;
 		Float2 uv1 = vertices[index1].uv;

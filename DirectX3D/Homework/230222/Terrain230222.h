@@ -4,7 +4,7 @@ class Terrain230222 : public GameObject
 private:
 	typedef VertexUV VertexType;
 
-	const float DEFAULT_VALUE = 100;
+	const UINT DEFAULT_VALUE = 100;
 
 public:
 	Terrain230222();

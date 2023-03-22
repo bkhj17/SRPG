@@ -69,6 +69,7 @@ public:
 		case 1:	return y;
 		case 2:	return z;
 		}	
+		return 0.0f;
 	}
 
 	float Length() const { return XMVectorGetX(XMVector3Length(value)); }

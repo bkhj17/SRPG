@@ -96,7 +96,7 @@ void VertexShader::CreateInputLayout()
         if (temp == "POSITION")
             elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
 
-        int n = temp.find_first_of('_');
+        size_t n = temp.find_first_of('_');
         temp = temp.substr(0, n);
 
         if (temp == "INSTANCE")
@@ -109,7 +109,7 @@ void VertexShader::CreateInputLayout()
         inputLayouts.push_back(elementDesc);
     }
 
-    DEVICE->CreateInputLayout(inputLayouts.data(), inputLayouts.size(),
+    DEVICE->CreateInputLayout(inputLayouts.data(), (UINT)inputLayouts.size(),
         blob->GetBufferPointer(), blob->GetBufferSize(),
         &inputLayout);
 }

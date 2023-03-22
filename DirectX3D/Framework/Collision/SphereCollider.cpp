@@ -21,9 +21,9 @@ bool SphereCollider::IsRayCollision(IN Ray ray, OUT Contact* contact)
 	Vector3 A = P - C;
 
 	float b = 2 * Dot(D, A);
-	float c = Dot(A, A) - pow(Radius(), 2);
+	float c = Dot(A, A) - powf(Radius(), 2);
 
-	float root = pow(b, 2) - 4 * c;
+	float root = powf(b, 2) - 4 * c;
 	if (root >= 0.0f) {
 		if (contact != nullptr) {
 			float t = (-b - sqrt(root)) * 0.5f;
@@ -77,17 +77,12 @@ void SphereCollider::MakeMesh()
 
 	vector<UINT>& indices = mesh->GetIndices();
 	indices.reserve(stackCount * sliceCount * 6);
-	for (int i = 0; i < stackCount; i++) {
-		for (int j = 0; j < sliceCount; j++) {
+	for (UINT i = 0; i < stackCount; i++) {
+		for (UINT j = 0; j < sliceCount; j++) {
 			indices.push_back((sliceCount + 1) * i + j);
 			indices.push_back((sliceCount + 1) * i + (j + 1));
 			indices.push_back((sliceCount + 1) * i + j);
 			indices.push_back((sliceCount + 1) * (i + 1) + j);
-			/*
-			indices.push_back((sliceCount + 1) * (i + 1) + j);
-			indices.push_back((sliceCount + 1) * i + (j + 1));
-			indices.push_back((sliceCount + 1) * (i + 1) + (j + 1));
-			*/
 		}
 	}
 }

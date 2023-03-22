@@ -163,8 +163,8 @@ void CapsuleCollider::MakeMesh()
 
 	vector<UINT>& indices = mesh->GetIndices();
 	indices.reserve(stackCount * sliceCount * 6);
-	for (int i = 0; i < stackCount; i++) {
-		for (int j = 0; j < sliceCount; j++) {
+	for (UINT i = 0; i < stackCount; i++) {
+		for (UINT j = 0; j < sliceCount; j++) {
 			indices.push_back((sliceCount + 1) * i + j);
 			indices.push_back((sliceCount + 1) * i + (j + 1));
 			indices.push_back((sliceCount + 1) * i + j);

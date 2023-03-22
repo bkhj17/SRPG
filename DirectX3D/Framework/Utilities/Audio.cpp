@@ -4,6 +4,8 @@ Audio::Audio()
 {
     System_Create(&soundSystem);
     soundSystem->init(MAX_CHANNEL, FMOD_INIT_NORMAL, nullptr);
+
+    soundSystem->set3DSettings(1.0f, 100.0f, 0.01f);
 }
 
 Audio::~Audio()
@@ -16,6 +18,10 @@ Audio::~Audio()
 
 void Audio::Update()
 {
+    FMOD_VECTOR listenerPos = { CAM->Pos().x, CAM->Pos().y, CAM->Pos().z };
+
+    soundSystem->set3DListenerAttributes(0, &listenerPos, nullptr, nullptr, nullptr);
+
     soundSystem->update();
 }
 
@@ -26,57 +32,38 @@ void Audio::Add(string key, string file, bool bgm, bool loop)
     SoundInfo* info = new SoundInfo();
 
     if (bgm)
-    {
         soundSystem->createStream(file.c_str(),
             FMOD_LOOP_NORMAL, nullptr, &info->sound);
-    }
     else
     {
-        if (loop)
-        {
-            soundSystem->createSound(file.c_str(),
-                FMOD_LOOP_NORMAL, nullptr, &info->sound);
-        }
-        else
-        {
-            soundSystem->createSound(file.c_str(),
-                FMOD_DEFAULT, nullptr, &info->sound);
-        }
+        if (loop) 
+            soundSystem->createSound(file.c_str(), FMOD_LOOP_NORMAL, nullptr, &info->sound);
+        else 
+            soundSystem->createSound(file.c_str(), FMOD_DEFAULT, nullptr, &info->sound);
     }
 
     sounds[key] = info;
 }
 
-void Audio::Play(string key, float valume)
+void Audio::Play(string key, float volume)
 {
     if (sounds.count(key) == 0) return;
 
-    soundSystem->playSound(sounds[key]->sound,
-        nullptr, false, &sounds[key]->channel);
-    sounds[key]->channel->setVolume(valume);
+    soundSystem->playSound(sounds[key]->sound, nullptr, false, &sounds[key]->channel);
+    sounds[key]->channel->setVolume(volume);
 }
 
-void Audio::Play(string key, Float3 position, Float3 velocity, float valume)
+void Audio::Play(string key, Float3 position, float volume) 
 {
     if (sounds.count(key) == 0) return;
+
+    soundSystem->playSound(sounds[key]->sound, nullptr, false, &sounds[key]->channel);
+    sounds[key]->channel->setVolume(volume);
     
-    FMOD_VECTOR pos = { position.x, position.y, position.z };
-    FMOD_VECTOR dir = { velocity.x, velocity.y, velocity.z };
-
-    sounds[key]->channel->set3DAttributes(&pos, &dir);
-    sounds[key]->channel->setMode(FMOD_3D);
-
-    FMOD_VECTOR listenerPos = { CAM->Pos().x, CAM->Pos().y, CAM->Pos().z };
-    FMOD_VECTOR listenerVel = {};
-    FMOD_VECTOR listenerUp = { CAM->Up().x, CAM->Up().y, CAM->Up().z };
-    FMOD_VECTOR listenerForward = { CAM->Forward().x, CAM->Forward().y, CAM->Forward().z };
-
-    soundSystem->set3DListenerAttributes(0, &listenerPos, &listenerVel, &listenerForward, &listenerUp);
-
-
-
-    soundSystem->playSound(sounds[key]->sound,
-        nullptr, false, &sounds[key]->channel);
+    FMOD_VECTOR audioPos = { position.x, position.y, position.z };
+    
+    sounds[key]->channel->set3DAttributes(&audioPos, nullptr);
+    sounds[key]->channel->set3DMinMaxDistance(1.0f, 10000.0f);
 }
 
 void Audio::Stop(string key)

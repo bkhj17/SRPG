@@ -14,6 +14,38 @@ MapCursor::~MapCursor()
 
 void MapCursor::Update()
 {
+	Control();
+	Move();
+}
+
+void MapCursor::Render()
+{
+	object->Render();
+}
+
+void MapCursor::SetPosCoord(int w, int h, bool teleport)
+{
+	if (!terrain)
+		return;
+
+	Pos() = terrain->CoordToPos(w, h);
+	Pos().y += 3.0f;
+
+	if (teleport)
+		object->Pos() = Pos();
+}
+
+void MapCursor::SetGridTerrain(GridedTerrain* terrain)
+{
+	this->terrain = terrain;
+	SetMapGrid(terrain->Row(), terrain->Col());
+
+
+	terrain->SetSelected(w, h);
+}
+
+void MapCursor::Control()
+{
 	if (!isMoving) {
 		if (KEY_PRESS(VK_UP)) {
 			if (h > 0)
@@ -26,17 +58,19 @@ void MapCursor::Update()
 		if (KEY_PRESS(VK_LEFT)) {
 			if (w > 0)
 				w--;
-
 		}
 		if (KEY_PRESS(VK_RIGHT)) {
 			if (w < col - 1)
 				w++;
 		}
 	}
+}
 
-	if (terrain) {
-		Pos() = terrain->CoordToPos(w, h);
-		Pos().y += 3.0f;
+void MapCursor::Move()
+{
+	if (!isMoving && terrain) {
+		SetPosCoord(w, h);
+		terrain->SetSelected(w, h);
 	}
 	UpdateWorld();
 
@@ -46,13 +80,4 @@ void MapCursor::Update()
 	else
 		object->Pos() = GlobalPos();
 	object->UpdateWorld();
-}
-
-void MapCursor::Render()
-{
-	object->Render();
-}
-
-void MapCursor::SetTargetPos()
-{
 }

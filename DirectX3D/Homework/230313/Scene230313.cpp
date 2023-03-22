@@ -80,7 +80,7 @@ void Scene230313::Update()
 
 	spawnTime -= DELTA;
 	if (spawnTime <= 0.0f) {
-		Vector3 spawnPos = spots[Random(0, spots.size())]->GlobalPos();
+		Vector3 spawnPos = spots[Random(0, (int)spots.size())]->GlobalPos();
 		if(inst->Spawn(spawnPos))
 			spawnTime = spawnRate;
 	}

@@ -27,5 +27,7 @@ private:
 	BlendState* blendState[2];
 
 	SkyBox* skyBox;
+
+	FogBuffer* fogBuffer;
 };
 

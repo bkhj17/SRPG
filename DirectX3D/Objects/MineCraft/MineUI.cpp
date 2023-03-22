@@ -152,7 +152,7 @@ void MineUI::Save(wstring saveFile)
 {
 	BinaryWriter* writer = new BinaryWriter(saveFile);
 
-	writer->UInt(iconData.size());
+	writer->UInt((UINT)iconData.size());
 	for (auto& data : iconData) {
 		writer->Int(data.first);
 		writer->Int(data.second.first);

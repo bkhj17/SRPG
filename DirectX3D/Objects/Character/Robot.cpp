@@ -115,8 +115,7 @@ void Robot::Hit()
 		return;
 	}
 
-	Vector3 velocity = (target->Pos() - transform->Pos()).GetNormalized();
-	Audio::Get()->Play("hit", transform->Pos(), velocity);
+	Audio::Get()->Play("hit", transform->Pos());
 
 	curState = HIT;
 	instancing->PlayClip(index, curState);
@@ -133,8 +132,7 @@ void Robot::Spawn(Vector3 pos)
 	hpBar->SetAmount(curHp / maxHp);
 	transform->Pos() = pos;
 
-	//Vector3 velocity = (target->Pos() - transform->Pos()).GetNormalized();
-	//Audio::Get()->Play("move", transform->Pos(), velocity);
+	Audio::Get()->Play("move", transform->Pos());
 }
 
 void Robot::SetState(State state)

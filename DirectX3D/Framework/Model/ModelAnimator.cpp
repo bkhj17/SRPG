@@ -87,12 +87,12 @@ void ModelAnimator::ReadClip(string clipName, UINT clipNum, string lockBone)
 
 void ModelAnimator::CreateTexture()
 {
-	UINT clipCount = clips.size();
+	size_t clipCount = clips.size();
 
 	clipTransforms = new ClipTransform[clipCount];
 	nodeTransforms = new ClipTransform[clipCount];
 
-	for (int i = 0; i < clipCount; i++) {
+	for (size_t i = 0; i < clipCount; i++) {
 		CreateClipTransform(i);
 	}
 
@@ -111,7 +111,7 @@ void ModelAnimator::CreateTexture()
 
 	//데이터가 크기에 한번에 다 할당하는건 위험 => 가상으로 메모리 잡고 하나씩 쓰기
 	void* p = VirtualAlloc(nullptr, pageSize * clipCount, MEM_RESERVE, PAGE_READWRITE);
-	for (int i = 0; i < clipCount; i++) {
+	for (size_t i = 0; i < clipCount; i++) {
 		UINT start = i * pageSize;
 		for (UINT y = 0; y < MAX_FRAME; y++) {
 			void* temp = (BYTE*)p + pitchSize * y + start;
@@ -121,7 +121,7 @@ void ModelAnimator::CreateTexture()
 	}
 
 	D3D11_SUBRESOURCE_DATA* subResource = new D3D11_SUBRESOURCE_DATA[clipCount];
-	for (int i = 0; i < clipCount; i++) {
+	for (size_t i = 0; i < clipCount; i++) {
 		void* temp = (BYTE*)p + i * pageSize;
 		subResource[i].pSysMem = temp;
 		subResource[i].SysMemPitch = pitchSize;
@@ -129,7 +129,7 @@ void ModelAnimator::CreateTexture()
 	}
 	DEVICE->CreateTexture2D(&desc, subResource, &texture);
 
-	delete subResource;
+	delete[] subResource;
 	VirtualFree(p, 0, MEM_RELEASE);
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
@@ -145,7 +145,7 @@ void ModelAnimator::CreateClipTransform(UINT index)
 {
 	ModelClip* clip = clips[index];
 
-	for (int i = 0; i < clip->frameCount; i++) {
+	for (UINT i = 0; i < clip->frameCount; i++) {
 		UINT nodeIndex = 0;
 		for (const NodeData& node : nodes) {
 			Matrix animation;

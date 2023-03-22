@@ -142,6 +142,9 @@
     <ClInclude Include="Framework\Utilities\Audio.h" />
     <ClInclude Include="Homework\230310\Character.h" />
     <ClInclude Include="Homework\230310\MapCursor.h" />
+    <ClInclude Include="Objects\Particle\Particle.h" />
+    <ClInclude Include="Objects\Particle\Rain.h" />
+    <ClInclude Include="Scenes\ParticleScene.h" />
     <ClInclude Include="Scenes\BillboardScene.h" />
     <ClInclude Include="Objects\Character\Fox.h" />
     <ClInclude Include="Objects\Algorithm\AStar.h" />
@@ -266,6 +269,9 @@
     <ClInclude Include="Objects\LandScape\SkyBox.h" />
     <ClInclude Include="Scenes\ShadowScene.h" />
     <ClInclude Include="Framework\Environment\Shadow.h" />
+    <ClInclude Include="Objects\Particle\Sprite.h" />
+    <ClInclude Include="Objects\Particle\Spark.h" />
+    <ClInclude Include="Objects\Particle\Snow.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Scenes\TutorialScene.h" />
     <ClInclude Include="Framework\Math\Vector3.h" />
@@ -287,6 +293,9 @@
     <ClCompile Include="Framework\Utilities\Audio.cpp" />
     <ClCompile Include="Homework\230310\Character.cpp" />
     <ClCompile Include="Homework\230310\MapCursor.cpp" />
+    <ClCompile Include="Objects\Particle\Particle.cpp" />
+    <ClCompile Include="Objects\Particle\Rain.cpp" />
+    <ClCompile Include="Scenes\ParticleScene.cpp" />
     <ClCompile Include="Scenes\BillboardScene.cpp" />
     <ClCompile Include="Objects\Character\Fox.cpp" />
     <ClCompile Include="Objects\Algorithm\AStar.cpp" />
@@ -420,6 +429,9 @@
     <ClCompile Include="Objects\LandScape\SkyBox.cpp" />
     <ClCompile Include="Scenes\ShadowScene.cpp" />
     <ClCompile Include="Framework\Environment\Shadow.cpp" />
+    <ClCompile Include="Objects\Particle\Sprite.cpp" />
+    <ClCompile Include="Objects\Particle\Spark.cpp" />
+    <ClCompile Include="Objects\Particle\Snow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX3D.rc" />
@@ -491,6 +503,30 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">main</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="Shaders\Geometry\Rain.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\Geometry\Snow.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\Geometry\Spark.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\Geometry\Sprite.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Shaders\Light\AnimDepthMap.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
@@ -577,6 +613,12 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Shaders\PostEffect\Bloom.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\PostEffect\Fog.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>

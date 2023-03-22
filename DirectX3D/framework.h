@@ -163,6 +163,12 @@ using namespace GameMath;
 #include "Framework/Model/ModelInstancing.h"
 #include "Framework/Model/ModelAnimatorInstancing.h"
 
+#include "Objects/Particle/Particle.h"
+#include "Objects/Particle/Sprite.h"
+#include "Objects/Particle/Spark.h"
+#include "Objects/Particle/Rain.h"
+#include "Objects/Particle/Snow.h"
+
 #include "Objects/LandScape/Terrain.h"
 #include "Objects/LandScape/TerrainEditor.h"
 #include "Objects/LandScape/SkyBox.h"

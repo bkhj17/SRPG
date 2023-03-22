@@ -3,12 +3,16 @@
 class GridedTerrain : public Terrain
 {
 public:
+	enum SelectAction {
+		MOVE, ATTACK,
+	};
+
+public:
 	GridedTerrain();
 	~GridedTerrain();
 
 	void Update();
 	void Render();
-
 
 	int CoordToIndex(int x, int y);
 	Vector3 CoordToPos(int x, int y);
@@ -16,9 +20,18 @@ public:
 	pair<int, int> PosToCoord(Vector3 pos);
 
 	void AddObject(Transform* object);
-private:
-	void Test();
 
+	void SetSelected(int w, int h);
+	int GetSelected() { return selected; }
+
+	void InputAction(int w, int h);
+
+	bool& Hold() { return hold; }
+
+	void CheckMovableArea();
+
+	UINT Row() { return row; }
+	UINT Col() { return col; }
 private:
 	FloatValueBuffer* widthHeightBuffer;
 
@@ -27,13 +40,13 @@ private:
 	UINT tileWidth = 10, tileHeight = 10;
 	UINT row, col;
 
-	int selected;
-	ColorBuffer* tileColorBuffer;
+	bool hold = false;
+	int selected = -1;
 
-	class MapCursor* cursor;
+	ColorBuffer* tileColorBuffer;
 
 	//필드 위 오브젝트는 등록 방식으로 
 	vector<Transform*> objects;
-	unordered_map<int, int> selectables;
+	unordered_map<int, pair<int, int>> movables;
 };
 

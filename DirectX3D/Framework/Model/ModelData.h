@@ -15,13 +15,13 @@ struct NodeData {
 	int index;
 	string name;
 	int parent;
-	Matrix transform;
+	Matrix transform = {};
 };
 
 struct BoneData {
 	int index;
 	string name;
-	Matrix offset;
+	Matrix offset = {};
 };
 
 struct VertexWeights

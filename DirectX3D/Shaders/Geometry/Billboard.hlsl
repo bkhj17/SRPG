@@ -20,7 +20,7 @@ GeometryInput VS(VertexUV input)
 {
     GeometryInput output;
     output.pos = input.pos;
-    output.size = input.uv;
+    output.size = input.uv; //size로서 사용
     output.viewPos = invView._41_42_43;
     output.view = view;
     output.projection = projection;

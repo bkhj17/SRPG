@@ -58,7 +58,7 @@ void Cube230220::Render()
 	worldBuffer->Set(world);
 	worldBuffer->SetVS(0);
 
-	DC->DrawIndexed(indices.size(), 0, 0);
+	DC->DrawIndexed((UINT)indices.size(), 0, 0);
 }
 
 void Cube230220::GUIRender()
