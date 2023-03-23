@@ -11,7 +11,7 @@ public:
     ~Quad();
 
     virtual void Render();
-
+    virtual void SetRender() override;
 private:
     void MakeMesh();
 protected:

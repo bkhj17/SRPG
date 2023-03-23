@@ -168,6 +168,8 @@ using namespace GameMath;
 #include "Objects/Particle/Spark.h"
 #include "Objects/Particle/Rain.h"
 #include "Objects/Particle/Snow.h"
+#include "Objects/Particle/ParticleSystem.h"
+#include "Objects/Particle/Trail.h"
 
 #include "Objects/LandScape/Terrain.h"
 #include "Objects/LandScape/TerrainEditor.h"

@@ -23,7 +23,7 @@ protected:
 	Vector3 position;
 
 	Material* material;
-	VertexBuffer* vertexBuffer;
+	VertexBuffer* vertexBuffer = nullptr;
 	GeometryShader* geometryShader;
 
 	BlendState* blendState[2];

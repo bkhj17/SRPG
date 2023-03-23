@@ -37,11 +37,11 @@ void TestScene230310::Update()
 	
 	testCharacter->Update();
 
-	cursor->Update();
 
 	if (testCharacter->IsActing())
 		return;
 	
+	cursor->Update();
 	if (KEY_DOWN(VK_SPACE))
 		terrain->InputAction(cursor->GetW(), cursor->GetH());
 
@@ -54,8 +54,10 @@ void TestScene230310::PreRender()
 void TestScene230310::Render()
 {
 	terrain->Render();
-	cursor->Render();
 	testCharacter->Render();
+
+	if(!testCharacter->IsActing())
+		cursor->Render();
 }
 
 void TestScene230310::PostRender()

@@ -8,6 +8,7 @@ public:
 	void SetState();
 
 	void FillMode(D3D11_FILL_MODE value);
+	void CullMode(D3D11_CULL_MODE value);
 	void FrontCounterClockwise(bool value);
 	void Changed();
 

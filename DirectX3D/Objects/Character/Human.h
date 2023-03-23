@@ -13,5 +13,10 @@ public:
 private:
 	Crowbar* crowbar;
 	Transform* rightHand;
+
+	Transform* startEdge;
+	Transform* endEdge;
+
+	Trail* trail;
 };
 

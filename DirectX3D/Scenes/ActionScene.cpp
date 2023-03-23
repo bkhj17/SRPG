@@ -13,6 +13,13 @@ ActionScene::~ActionScene()
 
 void ActionScene::Update()
 {
+	if (KEY_DOWN('1'))
+		human->PlayClip(0);
+	if (KEY_DOWN('2'))
+		human->PlayClip(1, 0.5f);
+	if (KEY_DOWN('3'))
+		human->PlayClip(2);
+
 	human->Update();
 
 }

@@ -20,7 +20,7 @@ public:
 
 	int GetMaxMove() { return move; }
 private:
-	bool IsMoving() { return !movePath.empty(); }
+	bool IsMoving();
 
 	void SetAnimState(AnimState state);
 

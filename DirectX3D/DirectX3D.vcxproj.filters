@@ -462,6 +462,21 @@
     <ClInclude Include="Objects\Particle\Snow.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\Particle\ParticleSystem.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\ParticleToolScene.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Manager\ParticleManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\TrailEffectScene.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Particle\Trail.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX3D.cpp">
@@ -887,6 +902,21 @@
     <ClCompile Include="Objects\Particle\Snow.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Objects\Particle\ParticleSystem.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\ParticleToolScene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Manager\ParticleManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\TrailEffectScene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Particle\Trail.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX3D.rc">
@@ -920,7 +950,7 @@
     <FxCompile Include="Shaders\ProgressBar230313.hlsl" />
     <FxCompile Include="Shaders\UI\ProgressBar.hlsl" />
     <FxCompile Include="Shaders\LandScape\SkyBox.hlsl" />
-    <FxCompile Include="Shaders\PostEffect\Bloom.hlsl" />
+    <FxCompile Include="Shaders\Effect\Bloom.hlsl" />
     <FxCompile Include="Shaders\Light\GBuffer.hlsl" />
     <FxCompile Include="Shaders\Light\AnimGBuffer.hlsl" />
     <FxCompile Include="Shaders\Light\Deferred.hlsl" />
@@ -934,7 +964,8 @@
     <FxCompile Include="Shaders\Geometry\Spark.hlsl" />
     <FxCompile Include="Shaders\Geometry\Rain.hlsl" />
     <FxCompile Include="Shaders\Geometry\Snow.hlsl" />
-    <FxCompile Include="Shaders\PostEffect\Fog.hlsl" />
+    <FxCompile Include="Shaders\Effect\Fog.hlsl" />
+    <FxCompile Include="Shaders\Effect\Particle.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\VertexHeader.hlsli" />

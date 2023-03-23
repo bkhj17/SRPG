@@ -35,15 +35,13 @@ void Character::Update()
 				//이동 종료
 				Observer::Get()->ExcuteParamEvent("CharacterMoveEnd", this);
 		}
-		else {
+		else
 			dir = velocity.GetNormalized();
-		}
 	}
 
 	UpdateWorld();
 
-	float ry = atan2f(dir.x, dir.z) + XM_PI;
-	Rot().y = Lerp(Rot().y, ry, DELTA * 5.0f);
+	Rot().y = atan2f(dir.x, dir.z) + XM_PI;
 
 	SetAnimState(IsMoving() ? RUN : IDLE);
 	body->Update();
@@ -66,6 +64,11 @@ void Character::SetMovePath(vector<Vector3>& path)
 	lerpValue = 0.0f;
 	movePath.resize(path.size());
 	copy(path.begin(), path.end(), movePath.begin());
+}
+
+bool Character::IsMoving() 
+{
+	return !movePath.empty(); 
 }
 
 void Character::SetAnimState(AnimState state)
