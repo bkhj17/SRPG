@@ -20,7 +20,8 @@ Character::~Character()
 
 void Character::Update()
 {
-	if (movePath.size() > 0) {
+	//Move
+	if (IsMoving()) {
 		lerpValue += DELTA * moveSpeed;
 		Pos() = Lerp(Pos(), movePath.back(), lerpValue);
 
@@ -31,17 +32,17 @@ void Character::Update()
 			movePath.pop_back();
 			lerpValue = 0.0f;
 
+			//이동 종료
 			if (movePath.empty())
-				//이동 종료
 				Observer::Get()->ExcuteParamEvent("CharacterMoveEnd", this);
 		}
-		else
+		else {
 			dir = velocity.GetNormalized();
+			Rot().y = atan2f(dir.x, dir.z) + XM_PI;
+		}
 	}
 
 	UpdateWorld();
-
-	Rot().y = atan2f(dir.x, dir.z) + XM_PI;
 
 	SetAnimState(IsMoving() ? RUN : IDLE);
 	body->Update();
