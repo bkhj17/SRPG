@@ -6,7 +6,6 @@ public:
 	TestScene230310();
 	~TestScene230310();
 
-	
 	// Scene을(를) 통해 상속됨
 	virtual void Update() override;
 	virtual void PreRender() override;
