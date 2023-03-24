@@ -15,7 +15,7 @@ Human::Human()
 	startEdge = new Transform();
 	endEdge = new Transform();
 
-	trail = new Trail(L"Textures/Effect/Trail.png", startEdge, endEdge, 10, 10.0f);
+	trail = new Trail(L"Textures/Effect/Trail.png", startEdge, endEdge, 50, 100.0f);
 }
 
 Human::~Human()
@@ -35,11 +35,10 @@ void Human::Update()
 	rightHand->SetWorld((Matrix&)GetTransformByNode(51));
 	crowbar->Update();
 
-	startEdge->Pos() = crowbar->GlobalPos() + crowbar->Up() * 4.0f;
+	startEdge->Pos() = crowbar->GlobalPos() + crowbar->Up() * 2.0f;
 	startEdge->UpdateWorld();
 	endEdge->Pos() = crowbar->GlobalPos() - crowbar->Up();
 	endEdge->UpdateWorld();
-
 
 	trail->Update();
 }

@@ -24,6 +24,8 @@ public:
     void TargetOptionLoad(string file);
 
     bool ContainPoint(Vector3 point);
+
+    ViewBuffer* GetViewBuffer() { return viewBuffer; }
 private:
     void FreeMode();
     void FollowMode();

@@ -21,6 +21,7 @@
 #include "Scenes/BillboardScene.h"
 #include "Scenes/ParticleScene.h"
 #include "Scenes/ParticleToolScene.h"
+#include "Scenes/WaterScene.h"
 //#include "Homework/230221/Scene230221.h"
 //#include "Homework/230222/GridScene230222.h"
 //#include "Homework/230222/TerrainScene230222.h"
@@ -63,6 +64,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Start", new BillboardScene);
     //SceneManager::Get()->Create("Start", new ParticleScene);
     //SceneManager::Get()->Create("Start", new ParticleToolScene);
+    //SceneManager::Get()->Create("Start", new WaterScene);
     
     //SceneManager::Get()->Create("Grid", new GridScene230222());
     //SceneManager::Get()->Create("Start", new SphereScene);
@@ -80,7 +82,7 @@ GameManager::GameManager()
     
     SceneManager::Get()->Create("Start", new TestScene230310);
     
-    SceneManager::Get()->Add("Grid");
+    //SceneManager::Get()->Add("Grid");
     //SceneManager::Get()->Add("Terrain");
     SceneManager::Get()->Add("Start");
 }

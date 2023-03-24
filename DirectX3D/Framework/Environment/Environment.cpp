@@ -6,14 +6,20 @@ Environment::Environment()
     CreateState();
 
     mainCamera = new Camera();
+    mainCamera->Load();
+    
     lightBuffer = new LightBuffer;
 
     uiViewBuffer = new ViewBuffer;
+
+
 }
 
 Environment::~Environment()
 {
     delete projectionBuffer;
+
+    mainCamera->Save();
     delete mainCamera;
 
     delete lightBuffer;

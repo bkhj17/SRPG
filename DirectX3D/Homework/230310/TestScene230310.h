@@ -18,5 +18,6 @@ private:
 	class GridedTerrain* terrain;
 	class MapCursor* cursor;
 	class Character* testCharacter;
+	class Character* testCharacter2;
 };
 

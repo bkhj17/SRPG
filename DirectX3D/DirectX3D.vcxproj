@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Homework\230310\CharacterManager.h" />
     <ClInclude Include="Framework\Shader\GeometryShader.h" />
     <ClInclude Include="Framework\Utilities\Audio.h" />
     <ClInclude Include="Homework\230310\Character.h" />
@@ -146,6 +147,8 @@
     <ClInclude Include="Objects\Particle\ParticleSystem.h" />
     <ClInclude Include="Objects\Particle\Rain.h" />
     <ClInclude Include="Objects\Manager\ParticleManager.h" />
+    <ClInclude Include="Framework\Environment\Reflection.h" />
+    <ClInclude Include="Framework\Environment\Refraction.h" />
     <ClInclude Include="Scenes\ParticleToolScene.h" />
     <ClInclude Include="Scenes\ParticleScene.h" />
     <ClInclude Include="Scenes\BillboardScene.h" />
@@ -292,8 +295,11 @@
     <ClInclude Include="Homework\230313\Terrain230313.h" />
     <ClInclude Include="Objects\Particle\Trail.h" />
     <ClInclude Include="Scenes\TrailEffectScene.h" />
+    <ClInclude Include="Scenes\WaterScene.h" />
+    <ClInclude Include="Objects\LandScape\Water.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Homework\230310\CharacterManager.cpp" />
     <ClCompile Include="Framework\Shader\GeometryShader.cpp" />
     <ClCompile Include="Framework\Utilities\Audio.cpp" />
     <ClCompile Include="Homework\230310\Character.cpp" />
@@ -302,6 +308,8 @@
     <ClCompile Include="Objects\Particle\ParticleSystem.cpp" />
     <ClCompile Include="Objects\Particle\Rain.cpp" />
     <ClCompile Include="Objects\Manager\ParticleManager.cpp" />
+    <ClCompile Include="Framework\Environment\Reflection.cpp" />
+    <ClCompile Include="Framework\Environment\Refraction.cpp" />
     <ClCompile Include="Scenes\ParticleToolScene.cpp" />
     <ClCompile Include="Scenes\ParticleScene.cpp" />
     <ClCompile Include="Scenes\BillboardScene.cpp" />
@@ -442,6 +450,8 @@
     <ClCompile Include="Objects\Particle\Snow.cpp" />
     <ClCompile Include="Objects\Particle\Trail.cpp" />
     <ClCompile Include="Scenes\TrailEffectScene.cpp" />
+    <ClCompile Include="Scenes\WaterScene.cpp" />
+    <ClCompile Include="Objects\LandScape\Water.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX3D.rc" />
@@ -494,6 +504,24 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CS</EntryPointName>
     </FxCompile>
     <FxCompile Include="Shaders\Effect\Particle.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\Environment\Reflection.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\Environment\Refraction.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\Environment\Water.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>

@@ -15,6 +15,8 @@ public:
 	void Render();
 
 	int CoordToIndex(int x, int y);
+	int CoordToIndex(pair<int, int> coord);
+
 	Vector3 CoordToPos(int x, int y);
 	pair<int, int> IndexToCoord(int index);
 	pair<int, int> PosToCoord(Vector3 pos);
@@ -26,12 +28,14 @@ public:
 
 	void InputAction(int w, int h);
 
-	bool& Hold() { return hold; }
-
 	void CheckMovableArea();
+	void CheckAttackableArea();
 
 	UINT Row() { return row; }
 	UINT Col() { return col; }
+
+	Transform* ObjectOnIndex(int index);
+
 private:
 	FloatValueBuffer* widthHeightBuffer;
 
@@ -40,7 +44,6 @@ private:
 	UINT tileWidth = 10, tileHeight = 10;
 	UINT row, col;
 
-	bool hold = false;
 	int selected = -1;
 
 	ColorBuffer* tileColorBuffer;

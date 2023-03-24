@@ -7,16 +7,12 @@ Camera::Camera()
     viewBuffer = new ViewBuffer();
     viewBuffer->SetVS(1);
 
-    Load();
-
     prevMousePos = mousePos;
 }
 
 Camera::~Camera()
 {
     delete viewBuffer;
-
-    Save();
 }
 
 void Camera::Update()
@@ -39,9 +35,6 @@ void Camera::Update()
         Rot().y += 360.0f;
 
     UpdateWorld();
-
-    view = XMMatrixInverse(nullptr, world);
-    viewBuffer->Set(view, world);
 }
 
 void Camera::GUIRender()
@@ -82,6 +75,9 @@ void Camera::GUIRender()
 
 void Camera::SetView()
 {
+    view = XMMatrixInverse(nullptr, world);
+    viewBuffer->Set(view, world);
+
     viewBuffer->SetVS(1);
     viewBuffer->SetPS(1);
 }

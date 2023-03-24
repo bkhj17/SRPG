@@ -136,6 +136,8 @@ using namespace GameMath;
 #include "Framework/Environment/Camera.h"
 #include "Framework/Environment/Environment.h"
 #include "Framework/Environment/Shadow.h"
+#include "Framework/Environment/Reflection.h"
+#include "Framework/Environment/Refraction.h"
 
 #include "Objects/Basic/GameObject.h"
 #include "Objects/Basic/Cube.h"
@@ -174,6 +176,7 @@ using namespace GameMath;
 #include "Objects/LandScape/Terrain.h"
 #include "Objects/LandScape/TerrainEditor.h"
 #include "Objects/LandScape/SkyBox.h"
+#include "Objects/LandScape/Water.h"
 
 #include "Objects/MineCraft/BlockManager.h"
 #include "Objects/MineCraft/MineUI.h"

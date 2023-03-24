@@ -3,23 +3,30 @@
 #include "GridedTerrain.h"
 #include "MapCursor.h"
 #include "Character.h"
+#include "CharacterManager.h"
 
 TestScene230310::TestScene230310()
 {
 	terrain = new GridedTerrain;
 
+	pair<int, int> coord = { 5, 5 };
+	
+	CharacterManager::Get();
 
 	testCharacter = new Character;
-	pair<int, int> coord = { 5, 5 };
 	testCharacter->Pos() = terrain->CoordToPos(coord.first, coord.second);
 	testCharacter->UpdateWorld();
-
 	terrain->AddObject(testCharacter);
+
+	coord = { 6, 8 };
+	testCharacter2 = new Character;
+	testCharacter2->Pos() = terrain->CoordToPos(coord.first, coord.second);
+	testCharacter2->UpdateWorld();
+	terrain->AddObject(testCharacter2);
 
 	cursor = new MapCursor;
 	cursor->SetGridTerrain(terrain);
-	cursor->GetW() = 5;
-	cursor->GetH() = 5;
+	cursor->SetPosCoord(5, 5, true);
 
 	Observer::Get()->AddParamEvent("CharacterMoveEnd", bind(&TestScene230310::CharacterMoveEnd, this, placeholders::_1));
 }
@@ -28,17 +35,20 @@ TestScene230310::~TestScene230310()
 {
 	delete terrain;
 	delete testCharacter;
+	delete testCharacter2;
+	delete cursor;
+
+	CharacterManager::Delete();
 }
 
 void TestScene230310::Update()
 {
 	terrain->Update();
 
-	
 	testCharacter->Update();
+	testCharacter2->Update();
 
-
-	if (testCharacter->IsActing())
+	if (testCharacter->IsActing() || testCharacter2->IsActing())
 		return;
 	
 	cursor->Update();
@@ -55,9 +65,12 @@ void TestScene230310::Render()
 {
 	terrain->Render();
 	testCharacter->Render();
+	testCharacter2->Render();
 
-	if(!testCharacter->IsActing())
-		cursor->Render();
+	if (testCharacter->IsActing() || testCharacter2->IsActing())
+		return;
+
+	cursor->Render();
 }
 
 void TestScene230310::PostRender()

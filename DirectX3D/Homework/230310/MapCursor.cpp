@@ -31,15 +31,18 @@ void MapCursor::SetPosCoord(int w, int h, bool teleport)
 	Pos() = terrain->CoordToPos(w, h);
 	Pos().y += 3.0f;
 
-	if (teleport)
+	if (teleport) {
 		object->Pos() = Pos();
+		isMoving = true;
+	}
+	if(isMoved)
+		terrain->SetSelected(w, h);
 }
 
 void MapCursor::SetGridTerrain(GridedTerrain* terrain)
 {
 	this->terrain = terrain;
 	SetMapGrid(terrain->Row(), terrain->Col());
-
 
 	terrain->SetSelected(w, h);
 }
@@ -68,16 +71,16 @@ void MapCursor::Control()
 
 void MapCursor::Move()
 {
-	if (!isMoving && terrain) {
+	if (!isMoving)
 		SetPosCoord(w, h);
-		terrain->SetSelected(w, h);
-	}
 	UpdateWorld();
 
+	isMoved = isMoving;
 	isMoving = ((GlobalPos() - object->Pos()).Length() > 1.0f);
 	if (isMoving)
 		object->Pos() = Lerp(object->Pos(), GlobalPos(), 20.0f * DELTA);
 	else
 		object->Pos() = GlobalPos();
+	
 	object->UpdateWorld();
 }

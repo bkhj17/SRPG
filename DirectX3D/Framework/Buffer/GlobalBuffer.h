@@ -190,3 +190,31 @@ private:
     Data data;
 
 };
+
+
+class WaterBuffer : public ConstBuffer
+{
+private:
+    struct Data {
+        Float4 color = { 1, 1, 1, 1 };
+
+        float waveTime = 0.0f;
+        float waveSpeed = 0.1f;
+        float waveScale = 0.1f;
+        float waveShininess = 0.1f;
+
+        float fresnel = 0.5f;
+        float padding[3] = {};
+    };
+
+public:
+    WaterBuffer() : ConstBuffer(&data, sizeof(Data))
+    {
+    }
+
+    Data& Get() { return data; }
+
+private:
+    Data data;
+
+};
