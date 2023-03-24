@@ -65,7 +65,7 @@ void Cylinder::MakeMesh()
 	}
 
 	//side
-	int sideIndex = vertices.size();
+	size_t sideIndex = vertices.size();
 	for (UINT i = 0; i <= sliceCount; i++) {
 		float theta = thetaStep * i;
 		float x = cosf(theta);

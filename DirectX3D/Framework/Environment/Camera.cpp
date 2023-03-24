@@ -25,15 +25,6 @@ void Camera::Update()
     else
         FreeMode();
 
-    if (Rot().x > 360.0f)
-        Rot().x -= 360.0f;    
-    if (Rot().x < -360.0f)
-        Rot().x += 360.0f;
-    if (Rot().y > 360.0f)
-        Rot().y -= 360.0f;
-    if (Rot().y < -360.0f)
-        Rot().y += 360.0f;
-
     UpdateWorld();
 }
 
@@ -242,9 +233,8 @@ void Camera::Frustum()
     planes[5] = XMVectorSet(a, b, c, d);
 
 
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 6; i++)
         planes[i] = XMPlaneNormalize(planes[i]);
-    }
 }
 
 void Camera::TargetOptionSave(string file)

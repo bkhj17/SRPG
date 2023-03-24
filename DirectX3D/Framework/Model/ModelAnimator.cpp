@@ -87,7 +87,7 @@ void ModelAnimator::ReadClip(string clipName, UINT clipNum, string lockBone)
 
 void ModelAnimator::CreateTexture()
 {
-	size_t clipCount = clips.size();
+	UINT clipCount = (UINT)clips.size();
 
 	clipTransforms = new ClipTransform[clipCount];
 	nodeTransforms = new ClipTransform[clipCount];
@@ -112,7 +112,7 @@ void ModelAnimator::CreateTexture()
 	//데이터가 크기에 한번에 다 할당하는건 위험 => 가상으로 메모리 잡고 하나씩 쓰기
 	void* p = VirtualAlloc(nullptr, pageSize * clipCount, MEM_RESERVE, PAGE_READWRITE);
 	for (size_t i = 0; i < clipCount; i++) {
-		UINT start = i * pageSize;
+		size_t start = i * pageSize;
 		for (UINT y = 0; y < MAX_FRAME; y++) {
 			void* temp = (BYTE*)p + pitchSize * y + start;
 			VirtualAlloc(temp, pitchSize, MEM_COMMIT, PAGE_READWRITE);

@@ -10,7 +10,7 @@ WaterScene::WaterScene()
 	//reflection = new Reflection(forest);
 	//refraction = new Refraction(L"Textures/LandScape/Wave.dds");
 
-	water = new Water(L"Textures/LandScape/Wave.dds");
+	water = new Water(L"Textures/LandScape/Wave.dds", 500, 500);
 }
 
 WaterScene::~WaterScene()
@@ -25,21 +25,23 @@ WaterScene::~WaterScene()
 void WaterScene::Update()
 {
 	human->Update();
-	water->Update();
-
 	forest->UpdateWorld();
+
+	water->Update();
 }
 
 void WaterScene::PreRender()
 {
-	water->SetReflection();
-
-	skybox->Render();
-	human->Render();
-	
 	water->SetRefraction();
 
 	skybox->Render();
+	forest->Render();
+	human->Render();
+	
+	water->SetReflection();
+
+	skybox->Render();
+	forest->Render();
 	human->Render();
 }
 
@@ -48,8 +50,9 @@ void WaterScene::Render()
 	skybox->Render();
 
 	//forest->SetShader(L"Environment/Refraction.hlsl");
-	human->Render();
+	forest->Render();
 	water->Render();
+	human->Render();
 }
 
 void WaterScene::PostRender()

@@ -201,7 +201,7 @@ private:
         float waveTime = 0.0f;
         float waveSpeed = 0.1f;
         float waveScale = 0.1f;
-        float waveShininess = 0.1f;
+        float waveShininess = 24.0f;
 
         float fresnel = 0.5f;
         float padding[3] = {};

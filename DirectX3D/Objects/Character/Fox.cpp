@@ -91,7 +91,7 @@ void Fox::SetPath()
 	astar->MakeDirectPath(GlobalPos(), destPos, path);
 
 
-	UINT pathSize = path.size();
+	size_t pathSize = path.size();
 
 	while (path.size() > 2) {
 		vector<Vector3> tempPath = path;

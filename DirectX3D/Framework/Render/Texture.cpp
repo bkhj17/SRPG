@@ -21,7 +21,7 @@ void Texture::PSSet(UINT slot)
 void Texture::ReadPixels(vector<Float4>& pixels)
 {
     uint8_t* colors = image.GetPixels();
-    UINT size = image.GetPixelsSize();
+    size_t size = image.GetPixelsSize();
 
     pixels.resize(size / 4);
 
