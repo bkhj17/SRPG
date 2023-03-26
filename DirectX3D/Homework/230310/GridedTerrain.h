@@ -29,7 +29,7 @@ public:
 	void InputAction(int w, int h);
 
 	void CheckMovableArea();
-	void CheckAttackableArea();
+	void CheckAttackableArea(int mn, int mx);
 
 	UINT Row() { return row; }
 	UINT Col() { return col; }
@@ -51,5 +51,6 @@ private:
 	//필드 위 오브젝트는 등록 방식으로 
 	vector<Transform*> objects;
 	unordered_map<int, pair<int, int>> movables;
+	unordered_map<int, bool> attackables;
 };
 

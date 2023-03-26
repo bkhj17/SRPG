@@ -20,28 +20,7 @@ Character::~Character()
 
 void Character::Update()
 {
-	//Move
-	if (IsMoving()) {
-		lerpValue += DELTA * moveSpeed;
-		Pos() = Lerp(Pos(), movePath.back(), lerpValue);
-
-		Vector3 velocity = movePath.back() - Pos();
-		
-		if (velocity.Length() <= 0.1f) {
-			Pos() = movePath.back();
-			movePath.pop_back();
-			lerpValue = 0.0f;
-
-			//이동 종료
-			if (movePath.empty())
-				Observer::Get()->ExcuteParamEvent("CharacterMoveEnd", this);
-		}
-		else {
-			dir = velocity.GetNormalized();
-			Rot().y = atan2f(dir.x, dir.z) + XM_PI;
-		}
-	}
-
+	Move();
 	UpdateWorld();
 
 	SetAnimState(IsMoving() ? RUN : IDLE);
@@ -67,7 +46,34 @@ void Character::SetMovePath(vector<Vector3>& path)
 	copy(path.begin(), path.end(), movePath.begin());
 }
 
-bool Character::IsMoving() 
+void Character::Move()
+{
+	//Move
+	if (IsMoving()) {
+		lerpValue += DELTA * moveSpeed;
+		Pos() = Lerp(Pos(), movePath.back(), lerpValue);
+
+		Vector3 velocity = movePath.back() - Pos();
+
+		if (velocity.Length() <= 0.1f) {
+			Pos() = movePath.back();
+			movePath.pop_back();
+			lerpValue = 0.0f;
+
+			//이동 종료
+			if (movePath.empty()) {
+				moved = true;
+				Observer::Get()->ExcuteParamEvent("CharacterMoveEnd", this);
+			}
+		}
+		else {
+			dir = velocity.GetNormalized();
+			Rot().y = atan2f(dir.x, dir.z) + XM_PI;
+		}
+	}
+}
+
+bool Character::IsMoving()
 {
 	return !movePath.empty(); 
 }

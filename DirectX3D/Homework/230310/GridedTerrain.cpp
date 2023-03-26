@@ -106,6 +106,8 @@ void GridedTerrain::Render()
 
 		if (movables.find(i) != movables.end())
 			tileColorBuffer->Get() = Float4(0.0f, 0.0f, 1.0f, 0.7f);
+		else if (attackables.find(i) != attackables.end())
+			tileColorBuffer->Get() = Float4(1.0f, 0.0f, 0.0f, 0.7f);
 		else
 			tileColorBuffer->Get() = Float4(1.0f, 1.0f, 1.0f, 0.2f);
 		tileColorBuffer->SetPS(9);
@@ -280,9 +282,15 @@ void GridedTerrain::CheckMovableArea()
 			pq.push({ nDist, CoordToIndex(nx, ny) });
 		}
 	}
+
+
+	if (objectsOnIndex.find(selected) != objectsOnIndex.end())
+		CheckAttackableArea(1, 1);
+	else
+		attackables.clear();
 }
 
-void GridedTerrain::CheckAttackableArea()
+void GridedTerrain::CheckAttackableArea(int mn, int mx)
 {
 	//공격범위 설정
 	//이론 상 이동 가능한 각 칸 + 공격범위 내에 있는 전부를 공격범위로 설정해야겠다만...
@@ -291,6 +299,29 @@ void GridedTerrain::CheckAttackableArea()
 	//활 사용 시에는 1칸 거리 공격은 안 되기는 하는데....
 
 	//어떡하지?
+	attackables.clear();
+	if (mx == 0)
+		return;
+
+	for (auto& movable : movables) {
+		pair<int, int> coord = IndexToCoord(movable.first);
+
+		for (int y = -mx; y <= mx; y++) {
+			for (int x = -(mx-abs(y)); x <= mx - abs(y); x++) {
+				if (abs(x) + abs(y) < mn)
+					continue;
+
+				int nx = coord.first + x;
+				int ny = coord.second + y;
+
+				if (nx < 0 || nx >= col || ny < 0 || ny >= row)
+					continue;
+
+				int index = CoordToIndex({ nx, ny });
+				attackables[index] = cubes[index]->Active();
+			}
+		}
+	}
 }
 
 Transform* GridedTerrain::ObjectOnIndex(int index)
