@@ -13,11 +13,12 @@ public:
 	virtual void PostRender() override;
 	virtual void GUIRender() override;
 private:
+	void Control();
+
+
 	void CharacterMoveEnd(void* characterPtr);
 private:
 	class GridedTerrain* terrain;
 	class MapCursor* cursor;
-	class Character* testCharacter;
-	class Character* testCharacter2;
 };
 

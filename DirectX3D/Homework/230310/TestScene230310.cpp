@@ -11,31 +11,28 @@ TestScene230310::TestScene230310()
 
 	pair<int, int> coord = { 5, 5 };
 	
-	CharacterManager::Get();
-
-	testCharacter = new Character;
-	testCharacter->Pos() = terrain->CoordToPos(coord.first, coord.second);
-	testCharacter->UpdateWorld();
-	terrain->AddObject(testCharacter);
+	Character* test = CharacterManager::Get()->Spawn();
+	test->Pos() = terrain->CoordToPos(coord.first, coord.second);
+	test->UpdateWorld();
+	terrain->AddObject(test);
 
 	coord = { 6, 8 };
-	testCharacter2 = new Character;
-	testCharacter2->Pos() = terrain->CoordToPos(coord.first, coord.second);
-	testCharacter2->UpdateWorld();
-	terrain->AddObject(testCharacter2);
+	test = CharacterManager::Get()->Spawn();
+	test->Pos() = terrain->CoordToPos(coord.first, coord.second);
+	test->UpdateWorld();
+	terrain->AddObject(test);
+
+	//코드가 안 예뻐......
 
 	cursor = new MapCursor;
 	cursor->SetGridTerrain(terrain);
-	cursor->SetPosCoord(5, 5, true);
-
+	cursor->SetPosCoord(5, 6, true);
 	Observer::Get()->AddParamEvent("CharacterMoveEnd", bind(&TestScene230310::CharacterMoveEnd, this, placeholders::_1));
 }
 
 TestScene230310::~TestScene230310()
 {
 	delete terrain;
-	delete testCharacter;
-	delete testCharacter2;
 	delete cursor;
 
 	CharacterManager::Delete();
@@ -44,17 +41,12 @@ TestScene230310::~TestScene230310()
 void TestScene230310::Update()
 {
 	terrain->Update();
+	CharacterManager::Get()->Update();
 
-	testCharacter->Update();
-	testCharacter2->Update();
-
-	if (testCharacter->IsActing() || testCharacter2->IsActing())
+	if (CharacterManager::Get()->IsActing())
 		return;
 	
-	cursor->Update();
-	if (KEY_DOWN(VK_SPACE))
-		terrain->InputAction(cursor->GetW(), cursor->GetH());
-
+	Control();
 }
 
 void TestScene230310::PreRender()
@@ -64,13 +56,10 @@ void TestScene230310::PreRender()
 void TestScene230310::Render()
 {
 	terrain->Render();
-	testCharacter->Render();
-	testCharacter2->Render();
+	CharacterManager::Get()->Render();
 
-	if (testCharacter->IsActing() || testCharacter2->IsActing())
-		return;
-
-	cursor->Render();
+	if (!CharacterManager::Get()->IsActing())
+		cursor->Render();
 }
 
 void TestScene230310::PostRender()
@@ -80,6 +69,13 @@ void TestScene230310::PostRender()
 void TestScene230310::GUIRender()
 {
 	terrain->GUIRender();
+}
+
+void TestScene230310::Control()
+{
+	cursor->Update();
+	if (KEY_DOWN(VK_SPACE))
+		terrain->InputAction(cursor->GetW(), cursor->GetH());
 }
 
 void TestScene230310::CharacterMoveEnd(void* characterPtr)

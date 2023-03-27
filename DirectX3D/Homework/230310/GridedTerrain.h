@@ -4,7 +4,7 @@ class GridedTerrain : public Terrain
 {
 public:
 	enum SelectAction {
-		MOVE, ATTACK,
+		SELECT, MOVE, ATTACK,
 	};
 
 public:
@@ -26,16 +26,19 @@ public:
 	void SetSelected(int w, int h);
 	int GetSelected() { return selected; }
 
-	void InputAction(int w, int h);
+	void InputAction(int w, int h, SelectAction selectAction = MOVE);
 
 	void CheckMovableArea();
-	void CheckAttackableArea(int mn, int mx);
+	void CheckAttackableArea(int minRange, int maxRange, bool isStand = false);
 
 	UINT Row() { return row; }
 	UINT Col() { return col; }
 
 	Transform* ObjectOnIndex(int index);
-
+private:
+	void SelectCharacter(int w, int h);
+	void SelectMove(int w, int h);
+	void SelectAttack(int w, int h);
 private:
 	FloatValueBuffer* widthHeightBuffer;
 
@@ -48,8 +51,10 @@ private:
 
 	ColorBuffer* tileColorBuffer;
 
-	//필드 위 오브젝트는 등록 방식으로 
+	//필드 위 오브젝트는 등록하는 방식으로 
 	vector<Transform*> objects;
+	
+	//행동 범위 저장 : 이동, 공격
 	unordered_map<int, pair<int, int>> movables;
 	unordered_map<int, bool> attackables;
 };

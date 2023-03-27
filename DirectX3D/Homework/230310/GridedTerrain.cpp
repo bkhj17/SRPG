@@ -106,7 +106,7 @@ void GridedTerrain::Render()
 
 		if (movables.find(i) != movables.end())
 			tileColorBuffer->Get() = Float4(0.0f, 0.0f, 1.0f, 0.7f);
-		else if (attackables.find(i) != attackables.end())
+		else if(attackables.find(i) != attackables.end())
 			tileColorBuffer->Get() = Float4(1.0f, 0.0f, 0.0f, 0.7f);
 		else
 			tileColorBuffer->Get() = Float4(1.0f, 1.0f, 1.0f, 0.2f);
@@ -114,7 +114,6 @@ void GridedTerrain::Render()
 
 		cubes[i]->Render();
 	}
-
 }
 
 int GridedTerrain::CoordToIndex(int x, int y)
@@ -163,57 +162,26 @@ void GridedTerrain::SetSelected(int w, int h)
 	}
 }
 
-void GridedTerrain::InputAction(int w, int h)
+void GridedTerrain::InputAction(int w, int h, SelectAction selectAction)
 {
-	if (CharacterManager::Get()->HoldedCharacter() == nullptr) {
-		//오브젝트 중 유효한 것이 있는지 확인
-		for (auto object : objects) {
-			Character* character = (Character*)object;
-			if (character == nullptr)
-				continue;
-
-			pair<int, int> coord = PosToCoord(character->GlobalPos());
-			if (coord.first != w || coord.second != h)
-				continue;
-
-			//사실 턴 플레이어인지도 알아야 한다
-			//나중에 싱글톤으로 턴 정보 만들어야 함
-			CharacterManager::Get()->CharacterHold(character);
-			break;
-		}
-		if (CharacterManager::Get()->HoldedCharacter() == nullptr)
-			CheckMovableArea();
-	}
-	else {
-		//test : 이동을 선택한 것으로 가정
-		//현재 위치(w, h)가 이동 가능한 위치라면
-		//경로 역추적해서
-		//character에 경로 째로 넘겨줘야 한다
-
-		//경로 역추적. 이걸 위해 movable.value.second를 이전 노드로 설정했다
-
-		int index = CoordToIndex(w, h);
-		//갈 수 있는 위치가 아닌데 그냥 커서만 올라가 있는 거
-		if (movables.find(index) == movables.end())
-			return;
-
-		if (movables[index].second == -1) {
-			//캐릭터 위치 그 자체 == 선택해제
-			CharacterManager::Get()->CharacterHold(nullptr);
-			return;
-		}
-
-		vector<Vector3> path;
-		while (index != -1) {
-			pair<int, int> pathCoord = IndexToCoord(index);
-			path.push_back(CoordToPos(pathCoord.first, pathCoord.second));
-			index = movables[index].second;
-		}
-		//맨 뒤 == 현 위치
-		path.pop_back();
-		
-		CharacterManager::Get()->HoldedCharacter()->SetMovePath(path);
-	}
+	//아직 선택된 캐릭터가 없음
+	if (CharacterManager::Get()->HoldedCharacter() == nullptr)
+		selectAction = SELECT;
+	
+	switch (selectAction)
+	{
+	case GridedTerrain::SELECT:	
+		SelectCharacter(w, h);
+		break;
+	case GridedTerrain::MOVE:
+		SelectMove(w, h);
+		break;
+	case GridedTerrain::ATTACK:
+		SelectAttack(w, h);
+		break;
+	default:
+		break;
+	}	
 }
 
 void GridedTerrain::CheckMovableArea()
@@ -228,10 +196,13 @@ void GridedTerrain::CheckMovableArea()
 
 	//선택 위치에 오브젝트가 있다면 최대 이동 거리 구하기
 	int moveRange = 0;
+	pair<int, int> attackRange = { 0, 0 };
 	if (objectsOnIndex.find(selected) != objectsOnIndex.end()) {
 		Character* character = (Character*)objectsOnIndex[selected];
-		if (character)
+		if (character) {
 			moveRange = character->GetMaxMove();
+			attackRange = character->GetAttackRange();
+		}
 	}
 
 	movables.clear();
@@ -283,42 +254,43 @@ void GridedTerrain::CheckMovableArea()
 		}
 	}
 
-
-	if (objectsOnIndex.find(selected) != objectsOnIndex.end())
-		CheckAttackableArea(1, 1);
-	else
-		attackables.clear();
+	CheckAttackableArea(attackRange.first, attackRange.second);
 }
 
-void GridedTerrain::CheckAttackableArea(int mn, int mx)
+void GridedTerrain::CheckAttackableArea(int minRange, int maxRange, bool isStand)
 {
 	//공격범위 설정
-	//이론 상 이동 가능한 각 칸 + 공격범위 내에 있는 전부를 공격범위로 설정해야겠다만...
-	//다소 비효율 적이지 않을까 싶은 마음도 있다
-	//이동 가능한 거리는 공격이 가능하지 않나?
-	//활 사용 시에는 1칸 거리 공격은 안 되기는 하는데....
+	//movable
 
-	//어떡하지?
+	vector<int> checkIndices;
+
 	attackables.clear();
-	if (mx == 0)
-		return;
+	if (isStand) {
+		checkIndices.push_back(selected);
+	}
+	else {
+		for (auto& movable : movables)
+			checkIndices.push_back(movable.first);
+	}
 
-	for (auto& movable : movables) {
-		pair<int, int> coord = IndexToCoord(movable.first);
-
-		for (int y = -mx; y <= mx; y++) {
-			for (int x = -(mx-abs(y)); x <= mx - abs(y); x++) {
-				if (abs(x) + abs(y) < mn)
+	pair<int, int> coord;
+	for (int index : checkIndices) {		
+		coord = IndexToCoord(index);
+		for (int y = -maxRange; y <= maxRange; y++) {
+			for (int x = -(maxRange - abs(y)); x <= maxRange - abs(y); x++) {
+				if (abs(y) + abs(x) < minRange)
 					continue;
 
 				int nx = coord.first + x;
 				int ny = coord.second + y;
-
-				if (nx < 0 || nx >= col || ny < 0 || ny >= row)
+				if (nx < 0 || nx >= (int)col || ny < 0 || ny >= (int)row)
 					continue;
 
-				int index = CoordToIndex({ nx, ny });
-				attackables[index] = cubes[index]->Active();
+				int nIndex = CoordToIndex(nx, ny);
+				if (!cubes[nIndex]->Active())
+					continue;
+
+				attackables[nIndex] = true;
 			}
 		}
 	}
@@ -333,4 +305,103 @@ Transform* GridedTerrain::ObjectOnIndex(int index)
 	}
 
 	return nullptr;
+}
+
+void GridedTerrain::SelectCharacter(int w, int h)
+{
+	//해당 위치의 오브젝트 중 유효한 것이 있는지 확인
+	for (auto object : objects) {
+		Character* character = (Character*)object;
+		if (character == nullptr)
+			continue;
+
+		pair<int, int> coord = PosToCoord(character->GlobalPos());
+		if (coord.first != w || coord.second != h)
+			continue;
+
+		//사실 턴 플레이어인지도 알아야 한다
+		//나중에 싱글톤으로 턴 정보 만들어야 함
+		if (!character->IsActed()) {
+			CharacterManager::Get()->CharacterHold(character);
+			break;
+		}
+	}
+
+	//거치고도 선택된 것이 없음
+	if (CharacterManager::Get()->HoldedCharacter() == nullptr)
+		CheckMovableArea();
+}
+
+void GridedTerrain::SelectMove(int w, int h)
+{
+	//이동 선택
+	
+	//이미 검사하고 들어오기는 하지만 그래도 일단 예외처리
+	if (CharacterManager::Get()->HoldedCharacter() == nullptr)
+		return;
+
+	//커서 위치
+	int index = CoordToIndex(w, h);
+	if (movables[index].second == -1) {
+		//캐릭터 위치 그 자체 == 선택해제
+		CharacterManager::Get()->CharacterUnhold();
+		return;
+	}
+
+	//갈 수 있는 위치가 아닌데 그냥 커서만 올라가 있는 거
+	if (movables.find(index) == movables.end())
+		return;
+
+	//현재 위치(w, h)가 이동 가능한 위치
+	vector<Vector3> path;
+	while (index != -1) {
+		pair<int, int> pathCoord = IndexToCoord(index);
+		path.push_back(CoordToPos(pathCoord.first, pathCoord.second));
+		//경로 역추적. 이걸 위해 movable.value.second를 이전 노드로 설정했다
+		index = movables[index].second;
+	}
+	//맨 뒤 == 현 위치
+	path.pop_back();
+
+	//character에 경로 째로 넘겨줘야 한다
+	CharacterManager::Get()->HoldedCharacter()->SetMovePath(path);
+}
+
+void GridedTerrain::SelectAttack(int w, int h)
+{
+	//공격 선택
+
+	//이미 검사하고 들어오기는 하지만 그래도 일단 예외처리
+	auto holded = CharacterManager::Get()->HoldedCharacter();
+	if (holded == nullptr)
+		return;
+
+	auto holdedPos = PosToCoord(holded->Pos());
+	auto& range = holded->GetAttackRange();
+
+	//커서 위치가 사거리 밖이면 패스
+	int dist = abs(holdedPos.first - w) + abs(holdedPos.second - h);
+	if (range.first > dist || range.second < dist)
+		return;
+	
+	//커서 위치에 캐릭터가 있기는 한지 확인
+	Character* attacked = nullptr;
+	for (auto object : objects) {
+		Character* character = (Character*)object;
+		//캐릭터가 아니거나 비활성 상태면 패스
+		if (character == nullptr || !character->Active())
+			continue;
+
+		auto coord = PosToCoord(character->Pos());
+		if (coord.first == w && coord.second == h) {
+			attacked = character;
+			break;
+		}
+	}
+
+	if (attacked == nullptr)
+		return;
+
+	//있으면 배틀 시작 - 진짜 시작할지는 매니저에서 판단하도록 하자
+	CharacterManager::Get()->BattleStart(holded, attacked);
 }
