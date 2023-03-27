@@ -4,6 +4,9 @@
 LightPixelInput VS(VertexUVNormalTangent input)
 {
     LightPixelInput output;
+    //float4 height = heightMap.Load(int3(input.pos.x, input.pos.z, 0));
+    //input.pos.y = height.x;
+    
     output.pos = mul(input.pos, world);
     
     output.viewPos = normalize(invView._31_32_33);

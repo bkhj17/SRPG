@@ -177,6 +177,8 @@ using namespace GameMath;
 #include "Objects/LandScape/TerrainEditor.h"
 #include "Objects/LandScape/SkyBox.h"
 #include "Objects/LandScape/Water.h"
+#include "Objects/LandScape/TerrainData.h"
+#include "Objects/LandScape/QuadTreeTerrain.h"
 
 #include "Objects/MineCraft/BlockManager.h"
 #include "Objects/MineCraft/MineUI.h"

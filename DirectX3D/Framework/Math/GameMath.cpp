@@ -61,6 +61,13 @@ Matrix GameMath::Lerp(const Matrix& start, const Matrix& end, float t)
     return start + (end - start) * t;
 }
 
+float GameMath::SLerp(const float& start, const float& end, float t)
+{
+    t = Clamp(0.0f, 1.0f, t);
+
+    return start + (end - start) * t;
+}
+
 Vector2 GameMath::SLerp(const Vector2& start, const Vector2& end, float t)
 {
     t = Clamp(0.0f, 1.0f, t);

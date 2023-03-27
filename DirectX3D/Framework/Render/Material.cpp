@@ -1,19 +1,6 @@
 #include "framework.h"
 #include "Material.h"
 
-Material::Material()
-{
-	diffuseMap = Texture::Add(DEFAULT_DIFFUSE_MAP, L"DM");
-	specularMap = Texture::Add(DEFAULT_SPECULAR_MAP, L"SM");
-	normalMap = Texture::Add(DEFAULT_NORMAL_MAP, L"NM");
-
-	buffer = new MaterialBuffer;
-
-	char path[128];
-	GetCurrentDirectoryA(128, path);
-	projectPath = path;
-}
-
 Material::Material(wstring shaderFile)
 {
 	SetShader(shaderFile);

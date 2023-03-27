@@ -13,6 +13,10 @@ public:
 	virtual void GUIRender() override;
 
 private:
+	void SaveMaterial();
+private:
+	int selectMeshNum;
+
 	Model* model;
 };
 

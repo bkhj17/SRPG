@@ -1,6 +1,5 @@
 #pragma once
 
-
 class Character : public Transform
 {
 private:
@@ -31,13 +30,18 @@ public:
 
 	bool IsActing();
 	int GetMaxMove() { return moved ? 0 : status.move; }
-	const pair<int, int>& GetAttackRange() { return acted ? make_pair(0, 0) : status.attackRange; }
+	pair<int, int> GetAttackRange() { return acted ? make_pair(0, 0) : status.attackRange; }
+
+	void SetDir(Vector3 dir);
 private:
 	bool IsMoving();
 	void Move();
 
 	void SetAnimState(AnimState state);
+	void AttackEnd();
 
+	void AttackHit();
+	void Damaged(int damage);
 private:
 	ModelAnimator* body;					//위치 테스트 용. 추후 모델 애니메이터로 변경
 	AnimState animState = IDLE;				//현재 애니메이션
@@ -50,5 +54,7 @@ private:
 	float moveSpeed = 0.2f;					//이동 속도(보간값 변화) 
 	Vector3 dir = { 0, 0, -1 };				//보고 있는 방향
 	vector<Vector3> movePath;
+
+	class FloatingDamage* floatingDamage;
 };
 

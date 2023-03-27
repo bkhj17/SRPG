@@ -276,3 +276,79 @@ bool Camera::ContainPoint(Vector3 point)
     }
     return true;
 }
+
+bool Camera::ContainSphere(Vector3 center, float radius)
+{
+    Vector3 edge;
+    Vector3 dot;
+
+    for (int i = 0; i < 6; i++) {
+        //1
+        edge.x = center.x - radius;
+        edge.y = center.y - radius;
+        edge.z = center.z - radius;
+        dot = XMPlaneDotCoord(planes[i], edge);
+        if (dot.x > 0.0f)
+            continue;
+
+        //2
+        edge.x = center.x + radius;
+        edge.y = center.y - radius;
+        edge.z = center.z - radius;
+        dot = XMPlaneDotCoord(planes[i], edge);
+        if (dot.x > 0.0f)
+            continue;
+
+        //3
+        edge.x = center.x - radius;
+        edge.y = center.y + radius;
+        edge.z = center.z - radius;
+        dot = XMPlaneDotCoord(planes[i], edge);
+        if (dot.x > 0.0f)
+            continue;
+
+        //4
+        edge.x = center.x - radius;
+        edge.y = center.y - radius;
+        edge.z = center.z + radius;
+        dot = XMPlaneDotCoord(planes[i], edge);
+        if (dot.x > 0.0f)
+            continue;
+
+        //5
+        edge.x = center.x + radius;
+        edge.y = center.y + radius;
+        edge.z = center.z - radius;
+        dot = XMPlaneDotCoord(planes[i], edge);
+        if (dot.x > 0.0f)
+            continue;
+
+        //6
+        edge.x = center.x + radius;
+        edge.y = center.y - radius;
+        edge.z = center.z + radius;
+        dot = XMPlaneDotCoord(planes[i], edge);
+        if (dot.x > 0.0f)
+            continue;
+
+        //7
+        edge.x = center.x - radius;
+        edge.y = center.y + radius;
+        edge.z = center.z + radius;
+        dot = XMPlaneDotCoord(planes[i], edge);
+        if (dot.x > 0.0f)
+            continue;
+
+        //8
+        edge.x = center.x + radius;
+        edge.y = center.y + radius;
+        edge.z = center.z + radius;
+        dot = XMPlaneDotCoord(planes[i], edge);
+        if (dot.x > 0.0f)
+            continue;
+
+        return false;
+    }
+    
+    return true;
+}

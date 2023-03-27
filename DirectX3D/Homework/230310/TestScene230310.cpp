@@ -4,6 +4,7 @@
 #include "MapCursor.h"
 #include "Character.h"
 #include "CharacterManager.h"
+#include "SRPGUIManager.h"
 
 TestScene230310::TestScene230310()
 {
@@ -28,6 +29,8 @@ TestScene230310::TestScene230310()
 	cursor->SetGridTerrain(terrain);
 	cursor->SetPosCoord(5, 6, true);
 	Observer::Get()->AddParamEvent("CharacterMoveEnd", bind(&TestScene230310::CharacterMoveEnd, this, placeholders::_1));
+
+	SRPGUIManager::Get();
 }
 
 TestScene230310::~TestScene230310()
@@ -36,6 +39,7 @@ TestScene230310::~TestScene230310()
 	delete cursor;
 
 	CharacterManager::Delete();
+	SRPGUIManager::Delete();
 }
 
 void TestScene230310::Update()
@@ -43,10 +47,10 @@ void TestScene230310::Update()
 	terrain->Update();
 	CharacterManager::Get()->Update();
 
-	if (CharacterManager::Get()->IsActing())
-		return;
-	
-	Control();
+	if (!CharacterManager::Get()->IsActing())
+		Control();
+	SRPGUIManager::Get()->Update();
+
 }
 
 void TestScene230310::PreRender()
@@ -56,14 +60,16 @@ void TestScene230310::PreRender()
 void TestScene230310::Render()
 {
 	terrain->Render();
-	CharacterManager::Get()->Render();
 
+	CharacterManager::Get()->Render();
 	if (!CharacterManager::Get()->IsActing())
 		cursor->Render();
+
 }
 
 void TestScene230310::PostRender()
 {
+	SRPGUIManager::Get()->Render();
 }
 
 void TestScene230310::GUIRender()
@@ -76,6 +82,8 @@ void TestScene230310::Control()
 	cursor->Update();
 	if (KEY_DOWN(VK_SPACE))
 		terrain->InputAction(cursor->GetW(), cursor->GetH());
+	else if(KEY_DOWN('X'))
+		terrain->InputAction(cursor->GetW(), cursor->GetH(), GridedTerrain::ATTACK);
 }
 
 void TestScene230310::CharacterMoveEnd(void* characterPtr)

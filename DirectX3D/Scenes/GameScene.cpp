@@ -6,7 +6,7 @@ GameScene::GameScene()
 	forest = new Model("Forest");
 	forest->Scale() *= 10.0f;
 	forest->UpdateWorld();
-	forest->SetShader(L"PostEffect/Fog.hlsl");
+	forest->SetShader(L"Effect/Fog.hlsl");
 
 	fogBuffer = new FogBuffer();
 
@@ -15,10 +15,6 @@ GameScene::GameScene()
 	blendState[0] = new BlendState;
 	blendState[1] = new BlendState;
 	blendState[1]->AlphaToCoverage(true);
-
-	CAM->SetTarget(naruto);
-	CAM->TargetOptionLoad("Naruto");
-	CAM->LookAtTarget();
 
 	KunaiManager::Get();
 	RobotManager::Get()->SetTarget(naruto);
@@ -85,6 +81,9 @@ void GameScene::GUIRender()
 
 void GameScene::Start()
 {
+	CAM->SetTarget(naruto);
+	CAM->TargetOptionLoad("Naruto");
+	CAM->LookAtTarget();
 }
 
 void GameScene::End()

@@ -9,6 +9,9 @@ CharacterManager::CharacterManager()
 		character = new Character();
 		character->SetActive(false);
 	}
+
+	Observer::Get()->AddParamEvent("CharacterAttackHit", bind(&CharacterManager::AttackHit, this, placeholders::_1));
+	Observer::Get()->AddParamEvent("CharacterAttackEnd", bind(&CharacterManager::AttackEnd, this, placeholders::_1));
 }
 
 CharacterManager::~CharacterManager()
@@ -22,6 +25,9 @@ void CharacterManager::Update()
 {
 	for (auto character : characterPool)
 		character->Update();
+
+	if (isBattle)
+		BattleUpdate();
 }
 
 void CharacterManager::Render()
@@ -40,6 +46,9 @@ void CharacterManager::CharacterUnhold()
 
 bool CharacterManager::IsActing()
 {
+	if (isBattle)
+		return true;
+
 	for (auto character : characterPool) {
 		if (character->IsActing())
 			return true;
@@ -63,11 +72,70 @@ Character* CharacterManager::Spawn()
 void CharacterManager::BattleStart(Character* offense, Character* defense)
 {
 	if (!offense || !offense->Active()
-		|| !defense || !defense->Active()) {
+		|| !defense || !defense->Active())
+		return;
+	
+	isBattle = true;
+	curOffense = offense;
+	curDefense = defense;
+	//스테이터스에 따라 공방 설정
+	attacks.push({ 1, offense, defense });
+	attacks.push({ 1, defense, offense });
 
+	//카메라 설정
+
+}
+
+void CharacterManager::BattleUpdate()
+{
+	if (attacks.empty() || !curOffense->Active() || !curDefense->Active()) {
+		BattleEnd();
+		return;
+	}
+
+	auto attacker = attacks.front().attacker;
+	auto hit = attacks.front().hit;
+	if (!attacker->IsActing()) {
+		//공격 아직 시작 안 됨 -> 시작명령
+		//공격 방향
+		Vector3 hitPos = hit->Pos();
+		Vector3 attackerPos = attacker->Pos();
+		Vector3 dir = hit->Pos() - attacker->Pos();
+		dir.y = 0.0f;
+		attacker->SetDir(dir);
+
+		attacker->SetAnimState(Character::ATTACK);
 	}
 }
 
 void CharacterManager::BattleEnd()
 {
+	curOffense->ActEnd();
+
+	isBattle = false;
+	curOffense = nullptr;
+	curDefense = nullptr;
+		
+	//카메라 설정
+
+	Observer::Get()->ExcuteEvent("BattleEnd");
+
+	if (HoldedCharacter()->IsActed())
+		CharacterUnhold();
+}
+
+void CharacterManager::AttackHit(void* ptr)
+{
+	auto attacked = (Character*)ptr;
+	if (attacks.empty() || attacks.front().attacker != attacked)
+		return;
+
+	attacks.front().hit->Damaged(1);
+}
+
+void CharacterManager::AttackEnd(void* ptr)
+{
+	auto attacked = (Character*)ptr;
+	if (!attacks.empty() && attacks.front().attacker == attacked)
+		attacks.pop();
 }

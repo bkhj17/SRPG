@@ -17,7 +17,6 @@ ModelAnimationScene::~ModelAnimationScene()
 
 void ModelAnimationScene::Update()
 {
-
 	for (int i = 0; i < 4; i++) {
 		if (KEY_DOWN('1'+i))
 			modelAnimator->PlayClip(i);

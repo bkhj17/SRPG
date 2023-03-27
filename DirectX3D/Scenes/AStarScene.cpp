@@ -21,6 +21,11 @@ AStarScene::~AStarScene()
 
 void AStarScene::Update()
 {
+	if (KEY_DOWN(VK_F3)) {
+		SceneManager::Get()->Remove("Start");
+		SceneManager::Get()->Add("Game");
+	}
+
 	aStar->Update();
 	fox->Update();
 }

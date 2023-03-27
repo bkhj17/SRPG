@@ -94,14 +94,14 @@ void Cylinder::MakeMesh()
 		indices.push_back(bottomIndex + i + 2);
 	}
 
-	for (UINT i = 0; i < sliceCount; i++) {
-		indices.push_back(sideIndex + 2*i);
-		indices.push_back(sideIndex + 2*i + 2);
-		indices.push_back(sideIndex + 2*i + 1);
+	for (size_t i = 0; i < sliceCount; i++) {
+		indices.push_back(sideIndex + 2 * i);
+		indices.push_back(sideIndex + 2 * i + 2);
+		indices.push_back(sideIndex + 2 * i + 1);
 
-		indices.push_back(sideIndex + 2*i + 1);
-		indices.push_back(sideIndex + 2*i + 2);
-		indices.push_back(sideIndex + 2*i + 3);
+		indices.push_back(sideIndex + 2 * i + 1);
+		indices.push_back(sideIndex + 2 * i + 2);
+		indices.push_back(sideIndex + 2 * i + 3);
 	}
 }
 

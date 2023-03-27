@@ -24,6 +24,7 @@ public:
     void TargetOptionLoad(string file);
 
     bool ContainPoint(Vector3 point);
+    bool ContainSphere(Vector3 center, float radius);
 
     ViewBuffer* GetViewBuffer() { return viewBuffer; }
 private:

@@ -53,6 +53,9 @@ GridedTerrain::GridedTerrain()
 		}
 	}
 	tileColorBuffer = new ColorBuffer;
+
+
+	Observer::Get()->AddEvent("BattleEnd", bind(&GridedTerrain::BattleEnd, this));
 }
 
 GridedTerrain::~GridedTerrain()
@@ -377,7 +380,7 @@ void GridedTerrain::SelectAttack(int w, int h)
 		return;
 
 	auto holdedPos = PosToCoord(holded->Pos());
-	auto& range = holded->GetAttackRange();
+	auto range = holded->GetAttackRange();
 
 	//커서 위치가 사거리 밖이면 패스
 	int dist = abs(holdedPos.first - w) + abs(holdedPos.second - h);
@@ -392,6 +395,9 @@ void GridedTerrain::SelectAttack(int w, int h)
 		if (character == nullptr || !character->Active())
 			continue;
 
+		if (character == holded)
+			continue;
+
 		auto coord = PosToCoord(character->Pos());
 		if (coord.first == w && coord.second == h) {
 			attacked = character;
@@ -404,4 +410,9 @@ void GridedTerrain::SelectAttack(int w, int h)
 
 	//있으면 배틀 시작 - 진짜 시작할지는 매니저에서 판단하도록 하자
 	CharacterManager::Get()->BattleStart(holded, attacked);
+}
+
+void GridedTerrain::BattleEnd()
+{
+	CheckMovableArea();
 }

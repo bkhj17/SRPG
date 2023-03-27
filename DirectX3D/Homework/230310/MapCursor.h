@@ -20,6 +20,7 @@ public:
 private:
 	void Control();
 	void Move();
+
 private:
 	int row = 10, col = 10;
 	int w = 5, h = 5;

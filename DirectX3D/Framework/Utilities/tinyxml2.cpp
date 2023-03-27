@@ -2613,7 +2613,6 @@ void XMLPrinter::Write( const char* data, size_t size )
     }
 }
 
-
 void XMLPrinter::Putc( char ch )
 {
     if ( _fp ) {

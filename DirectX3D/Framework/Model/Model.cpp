@@ -44,6 +44,17 @@ void Model::SetShader(wstring file)
 		material->SetShader(file);
 }
 
+Material* Model::AddMaterial(string file)
+{
+	auto material = new Material;
+
+	material->Load(file);
+	
+	
+	materials.push_back(material);
+	return material;
+}
+
 void Model::ReadMaterial()
 {
 	string file = "Models/Materials/" + name + "/" + name + ".mats";

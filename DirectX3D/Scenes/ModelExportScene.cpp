@@ -3,7 +3,7 @@
 
 ModelExportScene::ModelExportScene()
 {
-	string name = "Dante";
+	string name = "Boogeyman";
 	string file = "Models/FBX/" + name + ".fbx";
 	ModelExporter* exporter = nullptr;
 	
@@ -17,13 +17,14 @@ ModelExportScene::ModelExportScene()
 		"Airtrick_air",
 		"Airtrick_ground"
 	};
-	
+	/*
 	for (const auto& clipName : clipNames) {
 		file = "Models/Animations/" + name + "/" + clipName + ".fbx";
 		exporter = new ModelExporter(name, file);
 		exporter->ExportClip(clipName);
 		delete exporter;
 	}
+	*/
 }
 
 void ModelExportScene::Update()

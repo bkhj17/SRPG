@@ -5,6 +5,7 @@
 MapCursor::MapCursor()
 {
 	object = new SphereCollider;
+
 }
 
 MapCursor::~MapCursor()

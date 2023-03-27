@@ -9,6 +9,13 @@ public:
 	void GUIRender();
 
 	void SetShader(wstring file);
+	Material* AddMaterial(string name = "");
+	int GetMeshNum() { return meshes.size(); }
+	ModelMesh* GetMesh(UINT index) { return meshes[index]; }
+
+
+	string GetName() { return name; }
+	vector<Material*> GetMatetials() { return materials; }
 private:
 	void ReadMaterial();
 	void ReadMesh();

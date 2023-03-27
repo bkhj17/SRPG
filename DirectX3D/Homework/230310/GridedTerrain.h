@@ -29,6 +29,7 @@ public:
 	void InputAction(int w, int h, SelectAction selectAction = MOVE);
 
 	void CheckMovableArea();
+
 	void CheckAttackableArea(int minRange, int maxRange, bool isStand = false);
 
 	UINT Row() { return row; }
@@ -39,6 +40,8 @@ private:
 	void SelectCharacter(int w, int h);
 	void SelectMove(int w, int h);
 	void SelectAttack(int w, int h);
+
+	void BattleEnd();
 private:
 	FloatValueBuffer* widthHeightBuffer;
 

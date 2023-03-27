@@ -39,8 +39,8 @@ float Terrain::GetHeight(const Vector3& pos, Vector3* normal) const
 	int x = (int)pos.x;
 	int z = (int)(height - pos.z - 1);
 
-	if (x < 0 || x >= width - 1) return 0.0f;
-	if (z < 0 || z >= height - 1) return 0.0f;
+	if (x < 0 || x >= (int)width - 1) return 0.0f;
+	if (z < 0 || z >= (int)height - 1) return 0.0f;
 
 	UINT index[4];
 	index[0] = width * z + x;

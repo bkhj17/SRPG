@@ -31,8 +31,7 @@ public:
 	};
 
 public:
-	Material();
-	Material(wstring shaderFile);
+	Material(wstring shaderFile = L"Light/Light.hlsl");
 	~Material();
 
 	void Set();

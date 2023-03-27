@@ -208,7 +208,7 @@ void ModelExporter::ReadMesh(aiNode* node)
 			mesh->vertices[v] = vertex;
 		}
 
-		mesh->indices.resize(srcMesh->mNumFaces * 3);
+		mesh->indices.resize((size_t)srcMesh->mNumFaces * 3);
 		for (UINT f = 0; f < srcMesh->mNumFaces; f++) {
 			aiFace& face = srcMesh->mFaces[f];
 			for (UINT k = 0; k < face.mNumIndices; k++)
@@ -520,7 +520,7 @@ Float4 ModelExporter::CalcInterpolationQuat(const vector<KeyQuat>& keyData, UINT
 
 	KeyQuat curValue = keyData[count];
 	KeyQuat nextValue = curValue;
-	if (keyData.size() > count+1)
+	if (keyData.size() > (size_t)count+1)
 		nextValue = keyData[(size_t)count + 1];
 	float t = ((float)curFrame - curValue.time) / (nextValue.time - curValue.time);
 
