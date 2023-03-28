@@ -23,7 +23,6 @@ private:
 		int move = 3;
 		pair<int, int> attackRange = { 1, 1 };	//최소, 최대 공격사거리. 나중에 무기 스펙으로
 
-		
 	};
 public:
 

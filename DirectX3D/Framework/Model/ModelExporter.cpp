@@ -214,10 +214,8 @@ void ModelExporter::ReadMesh(aiNode* node)
 		mesh->indices.resize((size_t)srcMesh->mNumFaces * 3);
 		for (UINT f = 0; f < srcMesh->mNumFaces; f++) {
 			aiFace& face = srcMesh->mFaces[f];
-//			for (UINT k = 0; k < face.mNumIndices; k++)
-			mesh->indices[(size_t)f * 3 + 1] = face.mIndices[k];
-			mesh->indices[(size_t)f * 3 + 0] = face.mIndices[k];
-			mesh->indices[(size_t)f * 3 + 2] = face.mIndices[k];
+			for (UINT k = 0; k < face.mNumIndices; k++)
+				mesh->indices[(size_t)f * 3 + k] = face.mIndices[k];
 		}
 
 		meshes.push_back(mesh);

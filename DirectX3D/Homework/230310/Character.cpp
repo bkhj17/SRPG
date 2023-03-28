@@ -135,7 +135,7 @@ void Character::Damaged(int damage)
 {
 	status.curHp -= damage;
 
-	SetAnimState(status.curHp <= 0 ? DIE : HIT);
+	//SetAnimState(status.curHp <= 0 ? DIE : HIT);
 
 	SRPGUIManager::Get()->SpawnDamage(Pos(), damage);
 }

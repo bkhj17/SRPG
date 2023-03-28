@@ -46,8 +46,8 @@ GameManager::GameManager()
 
     SceneManager::Get()->Create("Grid", new GridScene());
 
-    SceneManager::Get()->Create("ModelExport", new ModelExportScene);
-    SceneManager::Get()->Create("Start", new ModelRenderScene);
+    //SceneManager::Get()->Create("ModelExport", new ModelExportScene);
+    //SceneManager::Get()->Create("Start", new ModelRenderScene);
     //SceneManager::Get()->Create("Start", new ModelAnimationScene);
 
     //SceneManager::Get()->Create("Start", new TutorialScene());
@@ -86,7 +86,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Terrain", new TerrainScene230313);
     //SceneManager::Get()->Create("Start", new Scene230313);
     
-    //SceneManager::Get()->Create("Start", new TestScene230310);
+    SceneManager::Get()->Create("Start", new TestScene230310);
     
     SceneManager::Get()->Add("Grid");
     //SceneManager::Get()->Add("Terrain");
