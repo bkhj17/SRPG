@@ -507,6 +507,21 @@
     <ClInclude Include="Homework\230310\SRPGUIManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Scenes\TessellationScene.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Shader\HullShader.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Shader\DomainShader.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\LandScape\TerrainLOD.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\TerrainLODScene.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX3D.cpp">
@@ -977,6 +992,21 @@
     <ClCompile Include="Homework\230310\SRPGUIManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Scenes\TessellationScene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Shader\HullShader.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Shader\DomainShader.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\LandScape\TerrainLOD.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\TerrainLODScene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX3D.rc">
@@ -1015,7 +1045,6 @@
     <FxCompile Include="Shaders\Light\AnimGBuffer.hlsl" />
     <FxCompile Include="Shaders\Light\Deferred.hlsl" />
     <FxCompile Include="Shaders\Light\DepthMap.hlsl" />
-    <FxCompile Include="Shaders\Light\AnimDepthMap.hlsl" />
     <FxCompile Include="Shaders\Light\Shadow.hlsl" />
     <FxCompile Include="Shaders\Tile\Tile.hlsl" />
     <FxCompile Include="Shaders\Geometry\GeometryShader.hlsl" />
@@ -1029,6 +1058,10 @@
     <FxCompile Include="Shaders\Environment\Reflection.hlsl" />
     <FxCompile Include="Shaders\Environment\Refraction.hlsl" />
     <FxCompile Include="Shaders\Environment\Water.hlsl" />
+    <FxCompile Include="Shaders\SRPG\Character.hlsl" />
+    <FxCompile Include="Shaders\TS\Triangle.hlsl" />
+    <FxCompile Include="Shaders\TS\Rectangle.hlsl" />
+    <FxCompile Include="Shaders\TS\TerrainLOD.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\VertexHeader.hlsli" />

@@ -6,14 +6,12 @@ struct Vertex
 {
     Float3 pos;
 
-    Vertex()
+    Vertex() : pos(0, 0, 0)
     {
-        pos = { 0.0f, 0.0f, 0.0f };
     }
 
-    Vertex(float x, float y, float z)
+    Vertex(float x, float y, float z) : pos(x, y, z)  
     {
-        pos = { x, y, z };
     }
 };
 

@@ -57,7 +57,5 @@ private:
 
 	vector<map<float, Event>> totalEvents;
 	vector<map<float, Event>::iterator> eventIters;
-
-
 };
 

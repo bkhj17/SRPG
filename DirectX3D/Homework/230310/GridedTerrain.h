@@ -36,12 +36,11 @@ public:
 	UINT Col() { return col; }
 
 	Transform* ObjectOnIndex(int index);
-private:
+
 	void SelectCharacter(int w, int h);
 	void SelectMove(int w, int h);
 	void SelectAttack(int w, int h);
 
-	void BattleEnd();
 private:
 	FloatValueBuffer* widthHeightBuffer;
 

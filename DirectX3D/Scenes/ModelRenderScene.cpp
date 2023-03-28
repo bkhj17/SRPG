@@ -3,11 +3,7 @@
 
 ModelRenderScene::ModelRenderScene()
 {
-	model = new Model("Boogeyman");
-	model->GetMesh(1)->SetMaterial(model->AddMaterial("Skin"));
-	model->GetMesh(2)->SetMaterial(model->AddMaterial("Teeth"));
-	model->GetMesh(3)->SetMaterial(model->AddMaterial("Teeth2"));
-	model->GetMesh(4)->SetMaterial(model->AddMaterial("Hair"));
+	model = new Model("Spear");
 }
 
 ModelRenderScene::~ModelRenderScene()

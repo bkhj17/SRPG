@@ -8,6 +8,7 @@ private:
 
 public:
     void PSSet(UINT slot = 0);
+    void DSSet(UINT slot = 0);
     
     Vector2 GetSize() {
         return Vector2((float)image.GetMetadata().width, (float)image.GetMetadata().height);

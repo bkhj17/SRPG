@@ -7,37 +7,40 @@ ModelExporter::ModelExporter(string name, string file)
 	importer = new Assimp::Importer();
 	
 	//필요한 정보 빼고 제외 
-	importer->SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
 	/*
+	importer->SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
 	scene = importer->ReadFile(file,
 		aiProcess_ConvertToLeftHanded 
 		| aiProcessPreset_TargetRealtime_MaxQuality);
-	assert(scene != nullptr);
 	*/
+	importer->SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
 	importer->SetPropertyInteger(AI_CONFIG_PP_RVC_FLAGS, aiComponent_TANGENTS_AND_BITANGENTS);
 
 	scene = importer->ReadFile(file,
 		aiProcessPreset_TargetRealtime_MaxQuality |
-		aiProcess_CalcTangentSpace | //메쉬의 접선공간 계산
+		aiProcess_Triangulate | //모든 메쉬의 면을 삼각화
 		aiProcess_GenSmoothNormals | //메쉬의 모든 정점에서 부드러운 법선 생성
-		aiProcess_JoinIdenticalVertices | //모든 메쉬에서 동일한(중복) 정점 데이터 세트를 식별하고 합체 - 인덱스
+		aiProcess_FixInfacingNormals |
+		aiProcess_RemoveRedundantMaterials |
 		aiProcess_OptimizeMeshes | //메쉬의 수를 줄이기위한 후처리 단계(메시 수를 줄이기 위한 최적화)
+		aiProcess_CalcTangentSpace | //메쉬의 접선공간 계산
+		aiProcess_ValidateDataStructure | //구조체 검사
 		aiProcess_ImproveCacheLocality | //정점 캐시의 지역성을 높이기위해 삼각형 재정리.정렬
+		aiProcess_JoinIdenticalVertices | //모든 메쉬에서 동일한(중복) 정점 데이터 세트를 식별하고 합체 - 인덱스
 		aiProcess_LimitBoneWeights | // 단일 정점에 동시에 영향을 미치는 본의 수를 제한
 		aiProcess_SplitLargeMeshes | //큰메쉬를 작은메쉬로 분할
-		aiProcess_Triangulate | //모든 메쉬의 면을 삼각화
 		aiProcess_GenUVCoords | //비 UV매핑을 적절한 텍스쳐 좌표 체널로 변경
 		aiProcess_SortByPType | //p:primitvetopology= 연결성 정보, P Type정렬
 		aiProcess_FindDegenerates | //선or점 정렬된것들 정리(지우거나 채우거나)
 		aiProcess_FindInvalidData | //유효하지않은 데이터 찾기
 		aiProcess_FindInstances | //중복메시 찾아 첫번째 메시로 참조
-		aiProcess_ValidateDataStructure | //구조체 검사
-		aiProcess_Debone | //무손실로 또는 일부 임계 값에 따라 본 제거 
-		aiProcess_ConvertToLeftHanded//왼손좌표계로 바꿔라
+		//aiProcess_Debone | //무손실로 또는 일부 임계 값에 따라 본 제거 (메시 여러개 있는거 날려먹더라)
+		aiProcess_TransformUVCoords |
+		aiProcess_FlipUVs |
+		aiProcess_ConvertToLeftHanded//왼손좌표계로 바꿔라(중요!)
 	);
 
-	if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
-		return;
+	assert(scene && (scene->mFlags & ~AI_SCENE_FLAGS_INCOMPLETE) && scene->mRootNode);
 }
 
 ModelExporter::~ModelExporter()
@@ -211,8 +214,10 @@ void ModelExporter::ReadMesh(aiNode* node)
 		mesh->indices.resize((size_t)srcMesh->mNumFaces * 3);
 		for (UINT f = 0; f < srcMesh->mNumFaces; f++) {
 			aiFace& face = srcMesh->mFaces[f];
-			for (UINT k = 0; k < face.mNumIndices; k++)
-				mesh->indices[(size_t)f * 3 + k] = face.mIndices[k];
+//			for (UINT k = 0; k < face.mNumIndices; k++)
+			mesh->indices[(size_t)f * 3 + 1] = face.mIndices[k];
+			mesh->indices[(size_t)f * 3 + 0] = face.mIndices[k];
+			mesh->indices[(size_t)f * 3 + 2] = face.mIndices[k];
 		}
 
 		meshes.push_back(mesh);
@@ -328,13 +333,6 @@ Clip* ModelExporter::ReadClip(aiAnimation* animation)
 		ClipNode node;
 		node.name = srcNode->mNodeName;
 
-		/*
-		UINT keyCount = max(srcNode->mNumPositionKeys, srcNode->mNumRotationKeys);
-		keyCount = max(keyCount, srcNode->mNumScalingKeys);
-
-		node.transforms.reserve(keyCount);
-		*/
-
 		KeyData data;
 		data.positions.resize(srcNode->mNumPositionKeys);
 		for (UINT k = 0; k < srcNode->mNumPositionKeys; k++) {
@@ -352,10 +350,10 @@ Clip* ModelExporter::ReadClip(aiAnimation* animation)
 			aiQuatKey key = srcNode->mRotationKeys[k];
 			keyRot.time = (float)key.mTime;
 			
-			keyRot.value.x = key.mValue.x;
-			keyRot.value.y = key.mValue.y;
-			keyRot.value.z = key.mValue.z;
-			keyRot.value.w = key.mValue.w;
+			keyRot.value.x = (float)key.mValue.x;
+			keyRot.value.y = (float)key.mValue.y;
+			keyRot.value.z = (float)key.mValue.z;
+			keyRot.value.w = (float)key.mValue.w;
 
 			data.rotations[k] = keyRot;
 		}
@@ -364,7 +362,7 @@ Clip* ModelExporter::ReadClip(aiAnimation* animation)
 		for (UINT k = 0; k < srcNode->mNumScalingKeys; k++) {
 			KeyVector keyScale = {};
 			aiVectorKey key = srcNode->mScalingKeys[k];
-			keyScale.time = key.mTime;
+			keyScale.time = (float)key.mTime;
 			memcpy_s(&keyScale.value, sizeof(Float3), &key.mValue, sizeof(aiVector3D));
 
 			data.scales[k] = keyScale;
@@ -412,8 +410,8 @@ Clip* ModelExporter::ReadClip(aiAnimation* animation)
 				node.transforms.push_back(keyTransfrom);
 		}
 		*/
-		if(!data.positions.empty() && !data.rotations.empty() && !data.scales.empty())
-			SetClipNode(data, clip->frameCount, node);
+		
+		SetClipNode(data, clip->frameCount, node);
 
 		clipNodes.push_back(node);
 	}
@@ -437,7 +435,7 @@ void ModelExporter::ReadKeyFrame(Clip* clip, aiNode* node, vector<ClipNode>& cli
 			}
 		}
 
-		KeyTransform keyTransform;
+		KeyTransform keyTransform = {};
 		if (clipNode == nullptr) {
 			Matrix transform(node->mTransformation[0]);
 			transform = XMMatrixTranspose(transform);
@@ -497,7 +495,7 @@ void ModelExporter::SetClipNode(const KeyData& keyData, const UINT& frameCount, 
 
 Float3 ModelExporter::CalcInterpolationVector(const vector<KeyVector>& keyData, UINT& count, int curFrame)
 {
-	if (count >= keyData.size() || keyData.size() == 1)
+	if (keyData.size() <= count || keyData.size() == 1)
 		return keyData.back().value;
 
 	KeyVector curValue = keyData[count];
@@ -505,12 +503,11 @@ Float3 ModelExporter::CalcInterpolationVector(const vector<KeyVector>& keyData, 
 	if (keyData.size() > (size_t)count+1)
 		nextValue = keyData[(size_t)count + 1];
 	float t = ((float)curFrame - curValue.time) / (nextValue.time - nextValue.time);
-	Vector3 pos = Lerp(curValue.value, nextValue.value, t);
-
+	
 	if (curFrame == (int)nextValue.time)
 		count++;
 
-	return pos;
+	return Lerp(curValue.value, nextValue.value, t);
 }
 
 Float4 ModelExporter::CalcInterpolationQuat(const vector<KeyQuat>& keyData, UINT& count, int curFrame)

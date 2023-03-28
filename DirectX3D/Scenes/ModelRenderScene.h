@@ -15,7 +15,7 @@ public:
 private:
 	void SaveMaterial();
 private:
-	int selectMeshNum;
+	int selectMeshNum = 0;
 
 	Model* model;
 };

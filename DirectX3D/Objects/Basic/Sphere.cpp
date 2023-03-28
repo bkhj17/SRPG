@@ -52,8 +52,8 @@ void Sphere::MakeMesh()
 
 	vector<UINT>& indices = mesh->GetIndices();
 	indices.reserve(stackCount * sliceCount * 6);
-	for (int i = 0; i < stackCount; i++) {
-		for (int j = 0; j < sliceCount; j++) {
+	for (UINT i = 0; i < stackCount; i++) {
+		for (UINT j = 0; j < sliceCount; j++) {
 			indices.push_back((sliceCount+1) * i + j);
 			indices.push_back((sliceCount+1) * i + (j+1));
 			indices.push_back((sliceCount+1) * (i+1) + j);
@@ -69,7 +69,7 @@ void Sphere::MakeTangent()
 	vector<VertexType>& vertices = mesh->GetVertices();
 	vector<UINT>& indices = mesh->GetIndices();
 	
-	for (int i = 0; i * 3 < indices.size(); i++) {
+	for (size_t i = 0; i * 3 < indices.size(); i++) {
 		int index0 = indices[i * 3];
 		int index1 = indices[i * 3 + 1];
 		int index2 = indices[i * 3 + 2];

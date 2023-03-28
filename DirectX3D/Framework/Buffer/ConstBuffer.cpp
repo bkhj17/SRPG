@@ -56,3 +56,21 @@ void ConstBuffer::SetGS(UINT slot)
 
     DC->GSSetConstantBuffers(slot, 1, &buffer);
 }
+
+void ConstBuffer::SetHS(UINT slot)
+{
+    DC->Map(buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource);
+    memcpy(subResource.pData, data, dataSize);
+    DC->Unmap(buffer, 0);
+
+    DC->HSSetConstantBuffers(slot, 1, &buffer);
+}
+
+void ConstBuffer::SetDS(UINT slot)
+{
+    DC->Map(buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource);
+    memcpy(subResource.pData, data, dataSize);
+    DC->Unmap(buffer, 0);
+
+    DC->DSSetConstantBuffers(slot, 1, &buffer);
+}

@@ -36,8 +36,12 @@ void MapCursor::SetPosCoord(int w, int h, bool teleport)
 		object->Pos() = Pos();
 		isMoving = true;
 	}
-	if(isMoved)
+	if (isMoved) {
 		terrain->SetSelected(w, h);
+
+		//커서 올라간 칸에 캐릭터가 있다면 오브젝트 높이 올리기
+
+	}
 }
 
 void MapCursor::SetGridTerrain(GridedTerrain* terrain)

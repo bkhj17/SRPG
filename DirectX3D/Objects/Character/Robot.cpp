@@ -17,7 +17,7 @@ Robot::Robot(Transform* transform, ModelAnimatorInstancing* instancing, UINT ind
 	eventIters.resize(instancing->GetClipSize());
 
 	SetEvent(STAND_UP, bind(&Robot::EndStandUp, this), 0.7f);
-	SetEvent(HIT, bind(&Robot::EndHit, this), 0.9f);
+	SetEvent(HIT, bind(&Robot::SetState, this, WALK), 0.9f);
 	SetEvent(DIE, bind(&Robot::EndDying, this), 0.9f);
 
 	for (UINT i = 0; i < totalEvents.size(); i++)

@@ -4,13 +4,13 @@
 QuadTreeTerrain::QuadTreeTerrain(wstring heightFile)
 {
     terrainData = new TerrainData(heightFile);
-    width = terrainData->GetSize().x;
-    height = terrainData->GetSize().y;
+    width = (UINT)terrainData->GetSize().x;
+    height = (UINT)terrainData->GetSize().y;
 
     material->SetDiffuseMap(L"Textures/LandScape/Dirt2.png");
 
     vertices = terrainData->GetVertices();
-    UINT vertexCount = vertices.size();
+    UINT vertexCount = (UINT)vertices.size();
     triangleCount = vertexCount / 3;
 
     float centerX = 0.0f;
@@ -78,7 +78,7 @@ void QuadTreeTerrain::DeleteNode(Node* node)
 
 void QuadTreeTerrain::CalcMeshDimensions(UINT vertexCount, float& centerX, float& centerZ, float& size)
 {
-    for (int i = 0; i < vertexCount; i++) {
+    for (UINT i = 0; i < vertexCount; i++) {
         centerX += vertices[i].pos.x;
         centerZ += vertices[i].pos.z;
     }
@@ -87,7 +87,7 @@ void QuadTreeTerrain::CalcMeshDimensions(UINT vertexCount, float& centerX, float
     centerZ /= (float) vertexCount;
 
     float maxX = 0.0f, maxZ = 0.0f;
-    for (int i = 0; i < vertexCount; i++) {
+    for (UINT i = 0; i < vertexCount; i++) {
         float width = abs(vertices[i].pos.x - centerX);
         float depth = abs(vertices[i].pos.z - centerZ);
 

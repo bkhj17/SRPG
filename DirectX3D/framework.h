@@ -9,7 +9,7 @@
 
 #define MAX_LIGHT 10
 #define MAX_BONE 512	//적으면 추후 수정
-#define MAX_FRAME 512	//적으면 추후 수정
+#define MAX_FRAME 4096	//적으면 추후 수정
 #define MAX_INSTANCE 128
 
 #define CENTER_X (WIN_WIDTH * 0.5f)
@@ -113,6 +113,8 @@ using namespace Utility;
 #include "Framework/Shader/PixelShader.h"
 #include "Framework/Shader/ComputeShader.h"
 #include "Framework/Shader/GeometryShader.h"
+#include "Framework/Shader/HullShader.h"
+#include "Framework/Shader/DomainShader.h"
 
 #include "Framework/State/RasterizerState.h"
 #include "Framework/State/SamplerState.h"
@@ -179,6 +181,7 @@ using namespace GameMath;
 #include "Objects/LandScape/Water.h"
 #include "Objects/LandScape/TerrainData.h"
 #include "Objects/LandScape/QuadTreeTerrain.h"
+#include "Objects/LandScape/TerrainLOD.h"
 
 #include "Objects/MineCraft/BlockManager.h"
 #include "Objects/MineCraft/MineUI.h"

@@ -5,30 +5,37 @@
 
 Character::Character()
 {
-	body = new ModelAnimator("Human");
+	body = new ModelAnimator("Naruto");
 	
-	body->ReadClip("idle", 1);
-	body->ReadClip("run", 1);
-	body->ReadClip("jump", 1);
-	body->GetClip(2)->SetEvent(bind(&Character::AttackEnd, this), 0.8f);
-	body->GetClip(2)->SetEvent(bind(&Character::AttackHit, this), 0.3f);
-
+	body->ReadClip("idle");		//IDLE
+	body->ReadClip("run");		//RUN
+	body->ReadClip("Throw");	//ATTACK
+	body->GetClip(ATTACK)->SetEvent(bind(&Character::AttackEnd, this), 0.8f);
+	body->GetClip(ATTACK)->SetEvent(bind(&Character::AttackHit, this), 0.3f);
+	
 	body->PlayClip(0);
 	body->SetParent(this);
 
-	body->Scale() *= 3.0f;
+	body->Scale() *= 0.05f;
 	body->Pos().y = body->Scale().y;
+
+	body->SetShader(L"SRPG/Character.hlsl");
+
+	valueBuffer = new IntValueBuffer;
 }
 
 Character::~Character()
 {
 	delete body;
 
-	delete floatingDamage;
+	delete valueBuffer;
 }
 
 void Character::Update()
 {
+	if (!Active())
+		return;
+
 	//Move
 	if (IsMoving())
 		Move();
@@ -43,6 +50,11 @@ void Character::Update()
 
 void Character::Render()
 {
+	if (!Active())
+		return;
+
+	valueBuffer->Get()[0] = (int)acted;
+	valueBuffer->SetPS(8);
 	body->Render();
 }
 
@@ -121,5 +133,9 @@ void Character::AttackHit()
 
 void Character::Damaged(int damage)
 {
+	status.curHp -= damage;
+
+	SetAnimState(status.curHp <= 0 ? DIE : HIT);
+
 	SRPGUIManager::Get()->SpawnDamage(Pos(), damage);
 }

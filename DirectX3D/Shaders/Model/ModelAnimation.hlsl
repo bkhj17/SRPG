@@ -8,7 +8,7 @@ LightPixelInput VS(VertexUVNormalTangentBlend input)
     
     output.pos = mul(input.pos, transform);    
     
-    output.viewPos = invView._41_42_43; //forward
+    output.viewPos = invView._41_42_43;
     output.worldPos = output.pos;
     
     output.pos = mul(output.pos, view);

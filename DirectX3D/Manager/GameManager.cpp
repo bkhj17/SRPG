@@ -23,6 +23,8 @@
 #include "Scenes/ParticleToolScene.h"
 #include "Scenes/WaterScene.h"
 #include "Scenes/QuadTreeScene.h"
+#include "Scenes/TessellationScene.h"
+#include "Scenes/TerrainLODScene.h"
 //#include "Homework/230221/Scene230221.h"
 //#include "Homework/230222/GridScene230222.h"
 //#include "Homework/230222/TerrainScene230222.h"
@@ -44,8 +46,8 @@ GameManager::GameManager()
 
     SceneManager::Get()->Create("Grid", new GridScene());
 
-    //SceneManager::Get()->Create("ModelExport", new ModelExportScene);
-    //SceneManager::Get()->Create("Start", new ModelRenderScene);
+    SceneManager::Get()->Create("ModelExport", new ModelExportScene);
+    SceneManager::Get()->Create("Start", new ModelRenderScene);
     //SceneManager::Get()->Create("Start", new ModelAnimationScene);
 
     //SceneManager::Get()->Create("Start", new TutorialScene());
@@ -67,6 +69,8 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Start", new ParticleToolScene);
     //SceneManager::Get()->Create("Start", new WaterScene);
     //SceneManager::Get()->Create("Start", new QuadTreeScene);
+    //SceneManager::Get()->Create("Start", new TessellationScene);
+    //SceneManager::Get()->Create("Start", new TerrainLODScene);
     
     //SceneManager::Get()->Create("Grid", new GridScene230222());
     //SceneManager::Get()->Create("Start", new SphereScene);
@@ -82,7 +86,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Terrain", new TerrainScene230313);
     //SceneManager::Get()->Create("Start", new Scene230313);
     
-    SceneManager::Get()->Create("Start", new TestScene230310);
+    //SceneManager::Get()->Create("Start", new TestScene230310);
     
     SceneManager::Get()->Add("Grid");
     //SceneManager::Get()->Add("Terrain");

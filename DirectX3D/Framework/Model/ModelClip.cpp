@@ -1,10 +1,11 @@
-#include "framework.h"
+#include "Framework.h"
 
 ModelClip::~ModelClip()
 {
-    for (auto& keyFrame : keyFrames)
+    for (auto keyFrame : keyFrames)
+    {
         delete keyFrame.second;
-    keyFrames.clear();
+    }
 }
 
 void ModelClip::Init()
@@ -16,8 +17,8 @@ void ModelClip::Init()
 
 void ModelClip::Execute()
 {
-    if (events.empty()) return;             //실행할 게 없다
-    if (eventIter == events.end()) return;  //남은 이벤트가 없다
+    if (events.empty()) return;
+    if (eventIter == events.end()) return;
 
     float ratio = playTime / duration;
 
@@ -29,13 +30,15 @@ void ModelClip::Execute()
 
 KeyFrame* ModelClip::GetKeyFrame(string boneName)
 {
-    if(keyFrames.count(boneName) == 0)
+    if (keyFrames.count(boneName) == 0)
         return nullptr;
+
     return keyFrames[boneName];
 }
 
 void ModelClip::SetEvent(Event event, float timeRatio)
 {
     if (events.count(timeRatio) > 0) return;
+
     events[timeRatio] = event;
 }

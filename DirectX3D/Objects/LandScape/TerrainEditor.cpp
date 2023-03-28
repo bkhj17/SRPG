@@ -197,8 +197,8 @@ void TerrainEditor::MakeMesh()
 	vector<VertexType>& vertices = mesh->GetVertices();
 	vertices.clear();
 	vertices.reserve((size_t)width * height);
-	for (int z = 0; z < height; z++) {
-		for (int x = 0; x < width; x++) {
+	for (UINT z = 0; z < height; z++) {
+		for (UINT x = 0; x < width; x++) {
 			VertexType vertex;
 			vertex.pos = { (float)x, 0.0f, (float)(height - z - 1) };
 			vertex.uv.x = x / (float)(width - 1);
@@ -296,7 +296,7 @@ void TerrainEditor::MakeComputeData()
 	vector<VertexType>& vertices = mesh->GetVertices();
 	vector<UINT>& indices = mesh->GetIndices();
 
-	triangleSize = indices.size() / 3;
+	triangleSize = (UINT)(indices.size() / 3);
 
 	inputs.resize(triangleSize);
 	outputs.resize(triangleSize);

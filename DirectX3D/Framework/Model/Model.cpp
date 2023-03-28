@@ -44,14 +44,22 @@ void Model::SetShader(wstring file)
 		material->SetShader(file);
 }
 
-Material* Model::AddMaterial(string file)
+Material* Model::AddMaterial()
 {
-	auto material = new Material;
-
-	material->Load(file);
-	
-	
+	Material* material = new Material(L"Light/Light.hlsl");
 	materials.push_back(material);
+
+	return material;
+}
+
+Material* Model::AddMaterial(string materialName)
+{
+	Material* material = new Material(L"Light/Light.hlsl");
+	string path = "Models/Materials/" + name + "/";
+	string file = path + materialName + ".mat";
+	material->Load(file);
+	materials.push_back(material);
+
 	return material;
 }
 

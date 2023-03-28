@@ -71,6 +71,8 @@ void Camera::SetView()
 
     viewBuffer->SetVS(1);
     viewBuffer->SetPS(1);
+    viewBuffer->SetHS(1);
+    viewBuffer->SetDS(1);
 }
 
 Vector3 Camera::ScreenToWorld(Vector3 screenPos)

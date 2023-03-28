@@ -15,6 +15,8 @@ public:
 private:
 	void Control();
 
+	void InputAction();
+	void InputAttackAction();
 
 	void CharacterMoveEnd(void* characterPtr);
 private:

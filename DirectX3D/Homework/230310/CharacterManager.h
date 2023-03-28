@@ -36,6 +36,8 @@ public:
     bool IsBattle() { return isBattle; }
     void BattleStart(Character* offense, Character* defense);
 
+    void TurnStart();
+
 private:
     void BattleUpdate();
     void BattleEnd();

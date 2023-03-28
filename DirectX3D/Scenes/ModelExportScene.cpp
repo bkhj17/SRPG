@@ -3,7 +3,7 @@
 
 ModelExportScene::ModelExportScene()
 {
-	string name = "Boogeyman";
+	string name = "Spear";
 	string file = "Models/FBX/" + name + ".fbx";
 	ModelExporter* exporter = nullptr;
 	
@@ -12,19 +12,18 @@ ModelExportScene::ModelExportScene()
 	exporter->ExportMesh();
 	delete exporter;
 	
+	
 	vector<string> clipNames = {
-		"Airtrick_start",
-		"Airtrick_air",
-		"Airtrick_ground"
+	//	"SpearIdle"
 	};
-	/*
+	
 	for (const auto& clipName : clipNames) {
 		file = "Models/Animations/" + name + "/" + clipName + ".fbx";
 		exporter = new ModelExporter(name, file);
 		exporter->ExportClip(clipName);
 		delete exporter;
 	}
-	*/
+	
 }
 
 void ModelExportScene::Update()

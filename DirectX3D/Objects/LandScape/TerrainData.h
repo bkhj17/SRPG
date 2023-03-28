@@ -9,7 +9,7 @@ public:
 	~TerrainData() = default;
 
 	vector<VertexType>& GetVertices() { return alignedVertices; }
-	Vector2 GetSize() { return Vector2(width, height); }
+	Vector2 GetSize() { return Vector2((float)width, (float)height); }
 private:
 	void MakeMesh();
 	void MakeNormal();

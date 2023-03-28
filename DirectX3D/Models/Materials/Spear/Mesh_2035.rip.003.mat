@@ -1,0 +1,10 @@
+<Material Name="Mesh_2035.rip.003">
+    <Shader Vertex="Shaders/Light/Light.hlsl" Pixel="Shaders/Light/Light.hlsl"/>
+    <Texture Diffuse="Textures/Color/White.png" Specular="Textures/Color/White.png" Normal="Textures/Color/White.png"/>
+    <Property Shininess="9.4117651" HasNormalMap="0">
+        <Diffuse R="0.63999999" G="0.63999999" B="0.63999999" A="1"/>
+        <Diffuse R="0.63999999" G="0.63999999" B="0.63999999" A="1"/>
+        <Amibient R="0" G="0" B="0" A="1"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Property>
+</Material>

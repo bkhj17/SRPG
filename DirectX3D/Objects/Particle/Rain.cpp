@@ -45,7 +45,7 @@ void Rain::Create()
 	particleCount = MAX_COUNT;
 	vertices.resize(particleCount);
 
-	for (int i = 0; i < particleCount; i++) {
+	for (UINT i = 0; i < particleCount; i++) {
 		Float2 size = {};
 		size.x = Random(0.1f, 0.4f);
 		size.y = Random(4.0f, 8.0f);

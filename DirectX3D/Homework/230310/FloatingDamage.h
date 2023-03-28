@@ -15,5 +15,6 @@ private:
 
 	float startY = 0.0f, endY = 0.0f;
 
+	float speed = 3.0f;
 };
 

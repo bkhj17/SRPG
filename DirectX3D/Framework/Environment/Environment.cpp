@@ -117,6 +117,7 @@ void Environment::SetPerspective()
     projectionBuffer->Set(perspective);
     projectionBuffer->SetVS(2);
     projectionBuffer->SetPS(2);
+    projectionBuffer->SetDS(2);
 }
 
 void Environment::SetOrthographic()

@@ -42,8 +42,8 @@ void TerrainData::MakeMesh()
 	};
 
 	indices.reserve((size_t)(width - 1) * (size_t)(height - 1) * 6);
-	for (int z = 0; z < height - 1; z++) {
-		for (int x = 0; x < width - 1; x++) {
+	for (int z = 0; z < (int)height - 1; z++) {
+		for (int x = 0; x < (int)width - 1; x++) {
 			for (int i = 0; i < 6; i++)
 				indices.push_back(width * (z + dxz[i].second) + x + dxz[i].first);
 		}

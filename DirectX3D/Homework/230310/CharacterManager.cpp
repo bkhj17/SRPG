@@ -86,6 +86,14 @@ void CharacterManager::BattleStart(Character* offense, Character* defense)
 
 }
 
+void CharacterManager::TurnStart()
+{
+	for (auto character : characterPool) {
+		if (character->Active())
+			character->TurnStart();
+	}
+}
+
 void CharacterManager::BattleUpdate()
 {
 	if (attacks.empty() || !curOffense->Active() || !curDefense->Active()) {
@@ -94,15 +102,16 @@ void CharacterManager::BattleUpdate()
 	}
 
 	auto attacker = attacks.front().attacker;
-	auto hit = attacks.front().hit;
+	auto defender = attacks.front().hit;
 	if (!attacker->IsActing()) {
 		//공격 아직 시작 안 됨 -> 시작명령
 		//공격 방향
-		Vector3 hitPos = hit->Pos();
+		Vector3 hitPos = defender->Pos();
 		Vector3 attackerPos = attacker->Pos();
-		Vector3 dir = hit->Pos() - attacker->Pos();
+		Vector3 dir = defender->Pos() - attacker->Pos();
 		dir.y = 0.0f;
 		attacker->SetDir(dir);
+		//defender->SetDir(-dir); //기습 당하는 느낌인게 좋겠다 싶어 제외
 
 		attacker->SetAnimState(Character::ATTACK);
 	}

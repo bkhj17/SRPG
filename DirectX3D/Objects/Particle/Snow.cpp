@@ -46,7 +46,7 @@ void Snow::Create()
 	particleCount = MAX_COUNT;
 	vertices.resize(particleCount);
 
-	for (int i = 0; i < particleCount; i++) {
+	for (UINT i = 0; i < particleCount; i++) {
 		Float2 size = {};
 		size.x = Random(0.5f, 2.0f);
 		size.y = size.x;

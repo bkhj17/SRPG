@@ -28,5 +28,5 @@ private:
 	unordered_map<string, Scene*> scenes;
 	list<Scene*> curScenes;
 
-	string addScene, removeScene;
+	vector<string> addScenes, removeScenes;
 };

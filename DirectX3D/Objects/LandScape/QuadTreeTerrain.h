@@ -7,7 +7,7 @@ private:
 	typedef VertexUVNormal VertexType;
 
 	struct Node {
-		float x, z, size;
+		float x = 0, z = 0, size = 0;
 		UINT triangleCount = 0;
 
 		Mesh<VertexType>* mesh = nullptr;

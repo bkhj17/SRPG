@@ -1,5 +1,6 @@
 #pragma once
 
+
 class Character : public Transform
 {
 private:
@@ -9,13 +10,21 @@ private:
 		IDLE, RUN, ATTACK, HIT, DIE
 	};
 
-	struct Status {
-		int move = 3;							//최대 이동 거리. 나중에 스테이터스로 빼자 
-		pair<int, int> attackRange = { 1, 1 };	//최소, 최대 공격사거리. 마찬가지로 나중에 스테이터스로
-	};
-
 	Character();
 	~Character();
+
+	struct Status {
+		int maxHp = 10;
+		int curHp = 10;
+
+		int attack = 3;
+		int defence = 3;
+
+		int move = 3;
+		pair<int, int> attackRange = { 1, 1 };	//최소, 최대 공격사거리. 나중에 무기 스펙으로
+
+		
+	};
 public:
 
 	void Update();
@@ -55,6 +64,6 @@ private:
 	Vector3 dir = { 0, 0, -1 };				//보고 있는 방향
 	vector<Vector3> movePath;
 
-	class FloatingDamage* floatingDamage;
+	IntValueBuffer* valueBuffer;
 };
 

@@ -55,7 +55,7 @@ GridedTerrain::GridedTerrain()
 	tileColorBuffer = new ColorBuffer;
 
 
-	Observer::Get()->AddEvent("BattleEnd", bind(&GridedTerrain::BattleEnd, this));
+	Observer::Get()->AddEvent("BattleEnd", bind(&GridedTerrain::CheckMovableArea, this));
 }
 
 GridedTerrain::~GridedTerrain()
@@ -345,15 +345,15 @@ void GridedTerrain::SelectMove(int w, int h)
 
 	//커서 위치
 	int index = CoordToIndex(w, h);
+	//갈 수 있는 위치가 아닌데 그냥 커서만 올라가 있는 거
+	if (movables.find(index) == movables.end())
+		return;
+
 	if (movables[index].second == -1) {
 		//캐릭터 위치 그 자체 == 선택해제
 		CharacterManager::Get()->CharacterUnhold();
 		return;
 	}
-
-	//갈 수 있는 위치가 아닌데 그냥 커서만 올라가 있는 거
-	if (movables.find(index) == movables.end())
-		return;
 
 	//현재 위치(w, h)가 이동 가능한 위치
 	vector<Vector3> path;
@@ -410,9 +410,4 @@ void GridedTerrain::SelectAttack(int w, int h)
 
 	//있으면 배틀 시작 - 진짜 시작할지는 매니저에서 판단하도록 하자
 	CharacterManager::Get()->BattleStart(holded, attacked);
-}
-
-void GridedTerrain::BattleEnd()
-{
-	CheckMovableArea();
 }

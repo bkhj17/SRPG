@@ -23,6 +23,7 @@ SamplerState::~SamplerState()
 void SamplerState::SetState(UINT slot)
 {
     DC->PSSetSamplers(slot, 1, &state);
+    DC->DSSetSamplers(slot, 1, &state);
 }
 
 void SamplerState::Filter(D3D11_FILTER value)

@@ -50,6 +50,11 @@ cbuffer FrameInstancingBuffer : register(b4)
 //모션 여러개 하려면 3차원배열 필요
 Texture2DArray transformMap : register(t0);
 
+struct Vertex
+{
+    float4 pos : POSITION;
+};
+
 struct VertexUV
 {
     float4 pos : POSITION;

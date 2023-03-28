@@ -30,6 +30,9 @@ TestScene230310::TestScene230310()
 	cursor->SetPosCoord(5, 6, true);
 	Observer::Get()->AddParamEvent("CharacterMoveEnd", bind(&TestScene230310::CharacterMoveEnd, this, placeholders::_1));
 
+	Observer::Get()->AddEvent("InputAction", bind(&TestScene230310::InputAction, this));
+	Observer::Get()->AddEvent("InputAttack", bind(&TestScene230310::InputAttackAction, this));
+
 	SRPGUIManager::Get();
 }
 
@@ -81,9 +84,21 @@ void TestScene230310::Control()
 {
 	cursor->Update();
 	if (KEY_DOWN(VK_SPACE))
-		terrain->InputAction(cursor->GetW(), cursor->GetH());
-	else if(KEY_DOWN('X'))
-		terrain->InputAction(cursor->GetW(), cursor->GetH(), GridedTerrain::ATTACK);
+		Observer::Get()->ExcuteEvent("InputAction");
+	else if (KEY_DOWN('X'))
+		Observer::Get()->ExcuteEvent("InputAttack");
+	else if (KEY_DOWN('Q'))
+		CharacterManager::Get()->TurnStart();
+}
+
+void TestScene230310::InputAction()
+{
+	terrain->InputAction(cursor->GetW(), cursor->GetH());
+}
+
+void TestScene230310::InputAttackAction()
+{
+	terrain->InputAction(cursor->GetW(), cursor->GetH(), GridedTerrain::ATTACK);
 }
 
 void TestScene230310::CharacterMoveEnd(void* characterPtr)

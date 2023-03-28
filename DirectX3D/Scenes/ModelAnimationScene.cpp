@@ -3,9 +3,9 @@
 
 ModelAnimationScene::ModelAnimationScene()
 {
-	modelAnimator = new ModelAnimator("Human");
-	modelAnimator->ReadClip("idle", 1);
-	modelAnimator->ReadClip("run", 1);
+	modelAnimator = new ModelAnimator("Soldier");
+	modelAnimator->ReadClip("SpearIdle", 0);
+	modelAnimator->ReadClip("SpearAttack", 0);
 
 	//modelAnimator->GetClip(2)->SetEvent(bind(&ModelAnimationScene::SetIdle, this), 0.55f);
 }
@@ -17,7 +17,7 @@ ModelAnimationScene::~ModelAnimationScene()
 
 void ModelAnimationScene::Update()
 {
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 2; i++) {
 		if (KEY_DOWN('1'+i))
 			modelAnimator->PlayClip(i);
 	}

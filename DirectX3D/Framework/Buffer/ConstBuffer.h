@@ -10,11 +10,13 @@ public:
     void SetPS(UINT slot);
     void SetCS(UINT slot);
     void SetGS(UINT slot);
+    void SetHS(UINT slot);
+    void SetDS(UINT slot);
 private:
     ID3D11Buffer* buffer;
 
     void* data;
     UINT dataSize;
 
-    D3D11_MAPPED_SUBRESOURCE subResource;
+    D3D11_MAPPED_SUBRESOURCE subResource = {};
 };

@@ -17,7 +17,7 @@ void FloatingDamage::Update()
 	if (!isActive)
 		return;
 
-	t += DELTA;
+	t += DELTA * speed;
 
 	float y = SLerp(startY, endY, t);
 	Pos().y = y;
