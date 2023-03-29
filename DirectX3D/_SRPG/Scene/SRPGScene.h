@@ -1,10 +1,10 @@
 #pragma once
 
-class TestScene230310 : public Scene
+class SRPGScene : public Scene
 {
 public:
-	TestScene230310();
-	~TestScene230310();
+	SRPGScene();
+	~SRPGScene();
 
 	// Scene을(를) 통해 상속됨
 	virtual void Update() override;
@@ -22,5 +22,7 @@ private:
 private:
 	class GridedTerrain* terrain;
 	class MapCursor* cursor;
+
+	int inputMode = 0;
 };
 

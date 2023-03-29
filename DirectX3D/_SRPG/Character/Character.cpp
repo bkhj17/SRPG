@@ -1,7 +1,6 @@
 #include "framework.h"
 #include "Character.h"
-#include "FloatingDamage.h"
-#include "SRPGUIManager.h"
+#include "../UI/SRPGUIManager.h"
 
 Character::Character()
 {

@@ -18,23 +18,17 @@ void Observer::AddIntParamEvent(string key, IntParamEvent paramEvent)
 void Observer::ExcuteEvent(string key)
 {
     for (Event event : totalEvent[key])
-    {
         event();
-    }
 }
 
 void Observer::ExcuteParamEvent(string key, void* object)
 {
     for (ParamEvent paramEvent : totalParamEvent[key])
-    {
         paramEvent(object);
-    }
 }
 
 void Observer::ExcuteIntParamEvent(string key, int value)
 {
     for (IntParamEvent paramEvent : totalIntParamEvent[key])
-    {
         paramEvent(value);
-    }
 }

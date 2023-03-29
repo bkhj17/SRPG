@@ -23,15 +23,16 @@ public:
     void Render();
 
     void CharacterHold(Character* character) { holded = character; }
+    void CharacterHold(Character* character, int w, int h) { holded = character; holdedW = w; holdedH = h; }
     Character* HoldedCharacter() { return holded; }
     void CharacterUnhold();
-
 
     bool IsActing();
 
     //출현
     //출현 좌표 설정 : 1. 안에서 2. 밖에서
     Character* Spawn();
+    Character* Spawn(class GridedTerrain* terrain, int w, int h);
 
     bool IsBattle() { return isBattle; }
     void BattleStart(Character* offense, Character* defense);
@@ -45,6 +46,7 @@ private:
     void AttackHit(void* ptr);
     void AttackEnd(void* ptr);
 private:
+    int holdedW = -1, holdedH = -1;
     Character* holded = nullptr;    
    
     //전투 중인 캐릭터들 : 배틀은 따로 뺄 수도 있을 것 같다만

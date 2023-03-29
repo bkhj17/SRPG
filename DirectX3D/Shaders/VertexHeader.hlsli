@@ -136,9 +136,7 @@ matrix SkinWorld(float4 indices, float4 weights)
         c3 = transformMap.Load(int4(indices[i] * 4 + 3, curFrame, clip, 0));
         
         cur = matrix(c0, c1, c2, c3);
-        transform += mul(weights[i], cur);
         
-        //프레임 보간
         n0 = transformMap.Load(int4(indices[i] * 4 + 0, curFrame+1, clip, 0));
         n1 = transformMap.Load(int4(indices[i] * 4 + 1, curFrame+1, clip, 0));
         n2 = transformMap.Load(int4(indices[i] * 4 + 2, curFrame+1, clip, 0));
@@ -159,7 +157,6 @@ matrix SkinWorld(float4 indices, float4 weights)
             c3 = transformMap.Load(int4(indices[i] * 4 + 3, curFrame, clip, 0));
         
             cur = matrix(c0, c1, c2, c3);
-            transform += mul(weights[i], cur);
         
             n0 = transformMap.Load(int4(indices[i] * 4 + 0, curFrame + 1, clip, 0));
             n1 = transformMap.Load(int4(indices[i] * 4 + 1, curFrame + 1, clip, 0));
@@ -173,7 +170,6 @@ matrix SkinWorld(float4 indices, float4 weights)
             curAnim = lerp(curAnim, nextAnim, motion.tweenTime);
         }
         transform += mul(weights[i], curAnim);
-
     }
     return transform;
 }
@@ -200,7 +196,6 @@ matrix SkinWorld(int instanceID, float4 indices, float4 weights)
         c3 = transformMap.Load(int4(indices[i] * 4 + 3, curFrame, clip, 0));
         
         cur = matrix(c0, c1, c2, c3);
-        transform += mul(weights[i], cur);
         
         //프레임 보간
         n0 = transformMap.Load(int4(indices[i] * 4 + 0, curFrame + 1, clip, 0));
@@ -223,8 +218,7 @@ matrix SkinWorld(int instanceID, float4 indices, float4 weights)
             c3 = transformMap.Load(int4(indices[i] * 4 + 3, curFrame, clip, 0));
         
             cur = matrix(c0, c1, c2, c3);
-            transform += mul(weights[i], cur);
-        
+            
             n0 = transformMap.Load(int4(indices[i] * 4 + 0, curFrame + 1, clip, 0));
             n1 = transformMap.Load(int4(indices[i] * 4 + 1, curFrame + 1, clip, 0));
             n2 = transformMap.Load(int4(indices[i] * 4 + 2, curFrame + 1, clip, 0));

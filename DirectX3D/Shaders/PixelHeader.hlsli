@@ -118,8 +118,8 @@ float4 CalcEmissive(Material material)
     if (mEmissive.a > 0.0f)
     {
         float3 viewDir = normalize(material.viewPos - material.worldPos);
+
         float t = saturate(dot(material.normal, viewDir));
-        
         emissiveIntensity = smoothstep(1.0f - mEmissive.a, 1.0f, 1.0f - t);
     }
     
@@ -192,7 +192,6 @@ float4 CalcSpot(Material material, Light light)
     {
         float3 viewDir = normalize(material.worldPos - material.viewPos);
         float3 halfWay = normalize(viewDir + toLight);
-        
         float specular = saturate(dot(material.normal, -halfWay));
         
         finalColor += light.color * pow(specular, shininess)

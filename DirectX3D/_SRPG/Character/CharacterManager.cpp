@@ -1,6 +1,7 @@
 #include "framework.h"
 #include "CharacterManager.h"
 #include "Character.h"
+#include "../Field/GridedTerrain.h"
 
 CharacterManager::CharacterManager()
 {
@@ -69,6 +70,17 @@ Character* CharacterManager::Spawn()
 	return nullptr;
 }
 
+Character* CharacterManager::Spawn(GridedTerrain* terrain, int w, int h)
+{
+	Character* spawned = Spawn();
+
+	spawned->Pos() = terrain->CoordToPos(w, h);
+	spawned->UpdateWorld();
+	terrain->AddObject(spawned);
+
+	return nullptr;
+}
+
 void CharacterManager::BattleStart(Character* offense, Character* defense)
 {
 	if (!offense || !offense->Active()
@@ -83,7 +95,6 @@ void CharacterManager::BattleStart(Character* offense, Character* defense)
 	attacks.push({ 1, defense, offense });
 
 	//카메라 설정
-
 }
 
 void CharacterManager::TurnStart()

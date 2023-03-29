@@ -17,10 +17,13 @@ public:
 	bool IsMoving() { return isMoving; }
 
 	void SetGridTerrain(GridedTerrain* terrain);
+
+	bool IsActiveCoord(int w, int h);
 private:
 	void Control();
 	void Move();
 
+	void CamMove();
 private:
 	int row = 10, col = 10;
 	int w = 5, h = 5;
@@ -28,6 +31,7 @@ private:
 	bool isMoved = false;
 	bool isMoving = false;
 
+	Vector3 objectPos = { 0,0,0 };
 	SphereCollider* object;
 
 	GridedTerrain* terrain = nullptr;

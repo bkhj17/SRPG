@@ -20,8 +20,8 @@ ModelAnimator::~ModelAnimator()
     delete[] clipTransforms;
     delete[] nodeTransforms;
 
-    texture->Release();
-    srv->Release();
+    if(texture) texture->Release();
+    if(srv) srv->Release();
 }
 
 void ModelAnimator::Update()

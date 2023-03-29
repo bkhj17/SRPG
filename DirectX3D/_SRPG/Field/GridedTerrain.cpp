@@ -1,7 +1,7 @@
 #include "framework.h"
 #include "GridedTerrain.h"
-#include "Character.h"
-#include "CharacterManager.h"
+#include "../Character/Character.h"
+#include "../Character/CharacterManager.h"
 
 GridedTerrain::GridedTerrain()
 {
@@ -151,6 +151,11 @@ pair<int, int> GridedTerrain::PosToCoord(Vector3 pos)
 
 void GridedTerrain::AddObject(Transform* object)
 {
+	for (auto o : objects) {
+		if (o == object)
+			return;
+	}
+
 	objects.push_back(object);
 }
 
@@ -325,7 +330,7 @@ void GridedTerrain::SelectCharacter(int w, int h)
 		//사실 턴 플레이어인지도 알아야 한다
 		//나중에 싱글톤으로 턴 정보 만들어야 함
 		if (!character->IsActed()) {
-			CharacterManager::Get()->CharacterHold(character);
+			CharacterManager::Get()->CharacterHold(character, w, h);
 			break;
 		}
 	}
@@ -410,4 +415,12 @@ void GridedTerrain::SelectAttack(int w, int h)
 
 	//있으면 배틀 시작 - 진짜 시작할지는 매니저에서 판단하도록 하자
 	CharacterManager::Get()->BattleStart(holded, attacked);
+}
+
+bool GridedTerrain::IsActiveCoord(int w, int h)
+{
+	if (w < 0 || w >= col || h < 0 || h >= row)
+		return false;
+
+	return cubes[CoordToIndex(w, h)]->Active();
 }

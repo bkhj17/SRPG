@@ -41,6 +41,8 @@ public:
 	void SelectMove(int w, int h);
 	void SelectAttack(int w, int h);
 
+	bool IsActiveCoord(int w, int h);
+	Vector3 GetTileSize() { return Vector3((float)tileWidth, 0.0f, (float)tileHeight); }
 private:
 	FloatValueBuffer* widthHeightBuffer;
 

@@ -333,10 +333,10 @@
     <ClInclude Include="Objects\Weapon\Crowbar.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Homework\230310\GridedTerrain.h">
+    <ClInclude Include="_SRPG\Field\GridedTerrain.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Homework\230310\TestScene230310.h">
+    <ClInclude Include="_SRPG\Scene\SRPGScene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Scenes\InstancingScene.h">
@@ -432,10 +432,10 @@
     <ClInclude Include="Scenes\BillboardScene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Homework\230310\Character.h">
+    <ClInclude Include="_SRPG\Character\Character.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Homework\230310\MapCursor.h">
+    <ClInclude Include="_SRPG\Field\MapCursor.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Framework\Shader\GeometryShader.h">
@@ -489,7 +489,7 @@
     <ClInclude Include="Objects\LandScape\Water.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Homework\230310\CharacterManager.h">
+    <ClInclude Include="_SRPG\Character\CharacterManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Scenes\QuadTreeScene.h">
@@ -501,10 +501,10 @@
     <ClInclude Include="Objects\LandScape\QuadTreeTerrain.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Homework\230310\FloatingDamage.h">
+    <ClInclude Include="_SRPG\UI\FloatingDamage.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Homework\230310\SRPGUIManager.h">
+    <ClInclude Include="_SRPG\UI\SRPGUIManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Scenes\TessellationScene.h">
@@ -520,6 +520,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Scenes\TerrainLODScene.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="_SRPG\UI\UIWindow.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -818,10 +821,10 @@
     <ClCompile Include="Objects\Weapon\Crowbar.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Homework\230310\GridedTerrain.cpp">
+    <ClCompile Include="_SRPG\Field\GridedTerrain.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Homework\230310\TestScene230310.cpp">
+    <ClCompile Include="_SRPG\Scene\SRPGScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Scenes\InstancingScene.cpp">
@@ -917,10 +920,10 @@
     <ClCompile Include="Scenes\BillboardScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Homework\230310\Character.cpp">
+    <ClCompile Include="_SRPG\Character\Character.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Homework\230310\MapCursor.cpp">
+    <ClCompile Include="_SRPG\Field\MapCursor.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Framework\Shader\GeometryShader.cpp">
@@ -974,7 +977,7 @@
     <ClCompile Include="Objects\LandScape\Water.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Homework\230310\CharacterManager.cpp">
+    <ClCompile Include="_SRPG\Character\CharacterManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Scenes\QuadTreeScene.cpp">
@@ -986,10 +989,10 @@
     <ClCompile Include="Objects\LandScape\QuadTreeTerrain.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Homework\230310\FloatingDamage.cpp">
+    <ClCompile Include="_SRPG\UI\FloatingDamage.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Homework\230310\SRPGUIManager.cpp">
+    <ClCompile Include="_SRPG\UI\SRPGUIManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Scenes\TessellationScene.cpp">
@@ -1005,6 +1008,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Scenes\TerrainLODScene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="_SRPG\UI\UIWindow.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1062,6 +1068,7 @@
     <FxCompile Include="Shaders\TS\Triangle.hlsl" />
     <FxCompile Include="Shaders\TS\Rectangle.hlsl" />
     <FxCompile Include="Shaders\TS\TerrainLOD.hlsl" />
+    <FxCompile Include="Shaders\SRPG\WindowFrame.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\VertexHeader.hlsli" />

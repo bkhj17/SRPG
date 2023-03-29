@@ -5,14 +5,11 @@ ModelExporter::ModelExporter(string name, string file)
 	: name(name)
 {
 	importer = new Assimp::Importer();
+
+	//importer->SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
+	//scene = importer->ReadFile(file, 
+	//	aiProcess_ConvertToLeftHanded | aiProcessPreset_TargetRealtime_MaxQuality);
 	
-	//필요한 정보 빼고 제외 
-	/*
-	importer->SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
-	scene = importer->ReadFile(file,
-		aiProcess_ConvertToLeftHanded 
-		| aiProcessPreset_TargetRealtime_MaxQuality);
-	*/
 	importer->SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
 	importer->SetPropertyInteger(AI_CONFIG_PP_RVC_FLAGS, aiComponent_TANGENTS_AND_BITANGENTS);
 
@@ -23,17 +20,17 @@ ModelExporter::ModelExporter(string name, string file)
 		aiProcess_FixInfacingNormals |
 		aiProcess_RemoveRedundantMaterials |
 		aiProcess_OptimizeMeshes | //메쉬의 수를 줄이기위한 후처리 단계(메시 수를 줄이기 위한 최적화)
-		aiProcess_CalcTangentSpace | //메쉬의 접선공간 계산
+		//aiProcess_CalcTangentSpace | //메쉬의 접선공간 계산
 		aiProcess_ValidateDataStructure | //구조체 검사
 		aiProcess_ImproveCacheLocality | //정점 캐시의 지역성을 높이기위해 삼각형 재정리.정렬
-		aiProcess_JoinIdenticalVertices | //모든 메쉬에서 동일한(중복) 정점 데이터 세트를 식별하고 합체 - 인덱스
-		aiProcess_LimitBoneWeights | // 단일 정점에 동시에 영향을 미치는 본의 수를 제한
-		aiProcess_SplitLargeMeshes | //큰메쉬를 작은메쉬로 분할
-		aiProcess_GenUVCoords | //비 UV매핑을 적절한 텍스쳐 좌표 체널로 변경
-		aiProcess_SortByPType | //p:primitvetopology= 연결성 정보, P Type정렬
-		aiProcess_FindDegenerates | //선or점 정렬된것들 정리(지우거나 채우거나)
+		//aiProcess_JoinIdenticalVertices | //모든 메쉬에서 동일한(중복) 정점 데이터 세트를 식별하고 합체 - 인덱스
+		//aiProcess_LimitBoneWeights | // 단일 정점에 동시에 영향을 미치는 본의 수를 제한
+		//aiProcess_SplitLargeMeshes | //큰메쉬를 작은메쉬로 분할
+		//aiProcess_GenUVCoords | //비 UV매핑을 적절한 텍스쳐 좌표 체널로 변경
+		//aiProcess_SortByPType | //p:primitvetopology= 연결성 정보, P Type정렬
+		//aiProcess_FindDegenerates | //선or점 정렬된것들 정리(지우거나 채우거나)
 		aiProcess_FindInvalidData | //유효하지않은 데이터 찾기
-		aiProcess_FindInstances | //중복메시 찾아 첫번째 메시로 참조
+		//aiProcess_FindInstances | //중복메시 찾아 첫번째 메시로 참조
 		//aiProcess_Debone | //무손실로 또는 일부 임계 값에 따라 본 제거 (메시 여러개 있는거 날려먹더라)
 		aiProcess_TransformUVCoords |
 		aiProcess_FlipUVs |
@@ -154,7 +151,7 @@ string ModelExporter::CreateTexture(string file)
 		w.Byte(texture->pcData, texture->mWidth);
 	}
 	else {
-		Image image;
+		Image image = {};
 		image.width = texture->mWidth;
 		image.height = texture->mHeight;
 		image.pixels = (uint8_t*)texture->pcData;

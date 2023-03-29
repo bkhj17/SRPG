@@ -36,6 +36,7 @@
 #include <stack>
 #include <queue>
 #include <functional>
+#include <bitset>
 #include <algorithm>
 #include <assert.h>
 
