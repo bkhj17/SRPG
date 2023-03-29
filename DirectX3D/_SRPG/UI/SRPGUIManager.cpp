@@ -38,11 +38,16 @@ void SRPGUIManager::Render()
 	for (auto d : floatingDamages)
 		d->Render();
 
+	/*
 	for (auto window : openned)
 		window->Render();
+	*/
+	
 
-	if (!openned.empty())
+	if (!openned.empty()) {
+		openned.back()->Render();
 		openned.back()->RenderCursor();
+	}
 }
 
 void SRPGUIManager::SpawnDamage(Vector3 pos, int damage)
@@ -105,4 +110,9 @@ void SRPGUIManager::CloseUI(string key)
 bool SRPGUIManager::IsActing()
 {
 	return !openned.empty();
+}
+
+bool SRPGUIManager::IsMapControl()
+{
+	return !openned.empty() && openned.back()->IsMapControl();
 }

@@ -138,6 +138,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="_SRPG\UI\MapSelectUI.h" />
+    <ClInclude Include="_SRPG\UI\ActSelectUI.h" />
     <ClInclude Include="Framework\Shader\DomainShader.h" />
     <ClInclude Include="_SRPG\UI\FloatingDamage.h" />
     <ClInclude Include="_SRPG\Character\CharacterManager.h" />
@@ -310,6 +312,8 @@
     <ClInclude Include="_SRPG\UI\UIWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="_SRPG\UI\MapSelectUI.cpp" />
+    <ClCompile Include="_SRPG\UI\ActSelectUI.cpp" />
     <ClCompile Include="Framework\Shader\DomainShader.cpp" />
     <ClCompile Include="_SRPG\UI\FloatingDamage.cpp" />
     <ClCompile Include="_SRPG\Character\CharacterManager.cpp" />

@@ -22,6 +22,7 @@ public:
 	void CloseUI(string key);
 
 	bool IsActing();
+	bool IsMapControl();
 private:
 	vector<class FloatingDamage*> floatingDamages;
 

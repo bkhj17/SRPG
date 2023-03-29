@@ -23,7 +23,7 @@ SRPGScene::SRPGScene()
 	Observer::Get()->AddEvent("InputAction", bind(&SRPGScene::InputAction, this));
 	Observer::Get()->AddEvent("InputAttack", bind(&SRPGScene::InputAttackAction, this));
 
-	//SRPGUIManager::Get()->OpenUI("Test", Vector3(CENTER_X - 300.0f, CENTER_Y));
+	SRPGUIManager::Get()->OpenUI("Test", Vector3(CENTER_X - 300.0f, CENTER_Y));
 }
 
 SRPGScene::~SRPGScene()
@@ -70,7 +70,7 @@ void SRPGScene::GUIRender()
 
 void SRPGScene::Control()
 {
-	if (SRPGUIManager::Get()->IsActing())
+	if (SRPGUIManager::Get()->IsActing() && !SRPGUIManager::Get()->IsMapControl())
 		return;
 
 	cursor->Update();

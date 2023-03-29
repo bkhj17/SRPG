@@ -21,6 +21,8 @@ public:
     virtual void Render() override;
 
     virtual void Close();
+
+    bool IsMapControl() { return mapControl; }
 private:
     void SetShaderInfo();
     void CreateCursor(Vector2 size);
@@ -34,5 +36,8 @@ protected:
     bool renderCursor = false;
     int cursor = 0;
     int maxCursor = 1;
+
+    bool mapControl = true;        //맵 커서 움직이는 녀석인지 여부
+    function<void()> ActiveFunc;    //형식 미정
 };
 

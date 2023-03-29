@@ -525,6 +525,12 @@
     <ClInclude Include="_SRPG\UI\UIWindow.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="_SRPG\UI\ActSelectUI.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="_SRPG\UI\MapSelectUI.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX3D.cpp">
@@ -1011,6 +1017,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="_SRPG\UI\UIWindow.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="_SRPG\UI\ActSelectUI.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="_SRPG\UI\MapSelectUI.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
