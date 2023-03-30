@@ -35,9 +35,7 @@ void Character::Update()
 	if (!Active())
 		return;
 
-	//Move
-	if (IsMoving())
-		Move();
+	Move();
 
 	UpdateWorld();
 
@@ -67,6 +65,7 @@ bool Character::IsActing()
 void Character::TurnStart()
 {
 	acted = moved = false;
+	originPos = Pos();
 }
 
 void Character::SetMovePath(vector<Vector3>& path)
@@ -82,6 +81,18 @@ void Character::SetDir(Vector3 dir)
 	Rot().y = atan2f(dir.x, dir.z) + XM_PI;
 }
 
+void Character::CancelMove()
+{
+	if (acted || !moved)
+		return;
+
+	moved = false;
+	Pos() = originPos;
+	UpdateWorld();
+
+	Observer::Get()->ExcuteParamEvent("FocusPos", &originPos);
+}
+
 bool Character::IsMoving()
 {
 	return !movePath.empty(); 
@@ -89,6 +100,9 @@ bool Character::IsMoving()
 
 void Character::Move()
 {
+	if (movePath.empty())
+		return;
+
 	lerpValue += DELTA * moveSpeed;
 	Pos() = Lerp(Pos(), movePath.back(), lerpValue);
 

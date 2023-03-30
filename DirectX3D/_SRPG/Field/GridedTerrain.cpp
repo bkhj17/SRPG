@@ -54,8 +54,12 @@ GridedTerrain::GridedTerrain()
 	}
 	tileColorBuffer = new ColorBuffer;
 
-
 	Observer::Get()->AddEvent("BattleEnd", bind(&GridedTerrain::CheckMovableArea, this));
+
+	Observer::Get()->AddEvent("CheckMovable", bind(&GridedTerrain::CheckMovableArea, this));
+
+	Observer::Get()->AddEvent("SetStandingAttack", bind(&GridedTerrain::StandingAttack, this, true));
+	Observer::Get()->AddEvent("UnsetStandingAttack", bind(&GridedTerrain::StandingAttack, this, false));
 }
 
 GridedTerrain::~GridedTerrain()
@@ -93,6 +97,10 @@ void GridedTerrain::Update()
 		}
 	}
 	*/
+
+	if (CharacterManager::Get()->HoldedCharacter() == nullptr)
+		standingAttack = false;
+
 	UpdateWorld();
 }
 
@@ -102,19 +110,41 @@ void GridedTerrain::Render()
 
 	__super::Render();
 
+	auto holded = CharacterManager::Get()->HoldedCharacter();
+	pair<int, int> holdedPos = {};
+	pair<int, int> range = {};
+
+	if (holded && standingAttack) {
+		holdedPos = PosToCoord(holded->Pos());
+		range = holded->GetAttackRange();
+	}
+
 	int index = 0;
 	for (int i = 0; i < cubes.size(); i++) {
 		if(!cubes[i]->Active())
 			continue;
 
-		if (movables.find(i) != movables.end())
-			tileColorBuffer->Get() = Float4(0.0f, 0.0f, 1.0f, 0.7f);
-		else if(attackables.find(i) != attackables.end())
-			tileColorBuffer->Get() = Float4(1.0f, 0.0f, 0.0f, 0.7f);
-		else
-			tileColorBuffer->Get() = Float4(1.0f, 1.0f, 1.0f, 0.2f);
-		tileColorBuffer->SetPS(9);
+		if (holded && standingAttack) {
+			auto coord = IndexToCoord(i);
 
+			//큐브 위치가 사거리 안인지 확인
+			int dist = abs(holdedPos.first - coord.first) + abs(holdedPos.second - coord.second);
+			if (dist == 0)
+				tileColorBuffer->Get() = Float4(0.0f, 0.0f, 1.0f, 0.7f);
+			else if (dist >= range.first && dist <= range.second)
+				tileColorBuffer->Get() = Float4(1.0f, 0.0f, 0.0f, 0.7f);
+			else
+				tileColorBuffer->Get() = Float4(1.0f, 1.0f, 1.0f, 0.2f);
+		}
+		else {
+			if (movables.find(i) != movables.end())
+				tileColorBuffer->Get() = Float4(0.0f, 0.0f, 1.0f, 0.7f);
+			else if (attackables.find(i) != attackables.end())
+				tileColorBuffer->Get() = Float4(1.0f, 0.0f, 0.0f, 0.7f);
+			else
+				tileColorBuffer->Get() = Float4(1.0f, 1.0f, 1.0f, 0.2f);
+		}
+		tileColorBuffer->SetPS(9);
 		cubes[i]->Render();
 	}
 }
@@ -159,13 +189,13 @@ void GridedTerrain::AddObject(Transform* object)
 	objects.push_back(object);
 }
 
-void GridedTerrain::SetSelected(int w, int h)
+void GridedTerrain::SetSelected(int w, int h, bool forced)
 {
 	int s = CoordToIndex(w, h);
-	if (s != selected) {
+	if (s != selected || forced) {
 		selected = s;
 
-		if(CharacterManager::Get()->HoldedCharacter() == nullptr)
+		if(CharacterManager::Get()->HoldedCharacter() == nullptr || forced)
 			CheckMovableArea();
 	}
 }
@@ -274,6 +304,7 @@ void GridedTerrain::CheckAttackableArea(int minRange, int maxRange, bool isStand
 
 	attackables.clear();
 	if (isStand) {
+		movables.clear();
 		checkIndices.push_back(selected);
 	}
 	else {

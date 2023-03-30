@@ -11,6 +11,7 @@ CharacterManager::CharacterManager()
 		character->SetActive(false);
 	}
 
+	Observer::Get()->AddEvent("CharacterUnhold", bind(&CharacterManager::CharacterUnhold, this));
 	Observer::Get()->AddParamEvent("CharacterAttackHit", bind(&CharacterManager::AttackHit, this, placeholders::_1));
 	Observer::Get()->AddParamEvent("CharacterAttackEnd", bind(&CharacterManager::AttackEnd, this, placeholders::_1));
 }
@@ -39,10 +40,13 @@ void CharacterManager::Render()
 
 void CharacterManager::CharacterUnhold()
 {
+	if (holded == nullptr)
+		return;
+
 	if (holded->moved)
 		holded->ActEnd();
 	
-	CharacterHold(nullptr);
+	CharacterHold(nullptr, -1, -1);
 }
 
 bool CharacterManager::IsActing()
@@ -72,9 +76,10 @@ Character* CharacterManager::Spawn()
 
 Character* CharacterManager::Spawn(GridedTerrain* terrain, int w, int h)
 {
-	Character* spawned = Spawn();
+	assert(terrain != nullptr);
 
-	spawned->Pos() = terrain->CoordToPos(w, h);
+	Character* spawned = Spawn();
+	spawned->originPos = spawned->Pos() = terrain->CoordToPos(w, h);
 	spawned->UpdateWorld();
 	terrain->AddObject(spawned);
 
@@ -103,6 +108,14 @@ void CharacterManager::TurnStart()
 		if (character->Active())
 			character->TurnStart();
 	}
+}
+
+void CharacterManager::CancelMove()
+{
+	if (holded == nullptr)
+		return;
+
+	holded->CancelMove();
 }
 
 void CharacterManager::BattleUpdate()

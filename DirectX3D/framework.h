@@ -183,6 +183,7 @@ using namespace GameMath;
 #include "Objects/LandScape/TerrainData.h"
 #include "Objects/LandScape/QuadTreeTerrain.h"
 #include "Objects/LandScape/TerrainLOD.h"
+#include "Objects/LandScape/Scattering.h"
 
 #include "Objects/MineCraft/BlockManager.h"
 #include "Objects/MineCraft/MineUI.h"

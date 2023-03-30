@@ -525,10 +525,22 @@
     <ClInclude Include="_SRPG\UI\UIWindow.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="_SRPG\UI\ActSelectUI.h">
+    <ClInclude Include="_SRPG\UI\MapSelectUI.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="_SRPG\UI\MapSelectUI.h">
+    <ClInclude Include="Scenes\ScatteringScene.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\LandScape\Scattering.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="_SRPG\UI\ActionSelectUI.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="_SRPG\UI\InfoUI.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="_SRPG\UI\AttackSelectUI.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1019,10 +1031,22 @@
     <ClCompile Include="_SRPG\UI\UIWindow.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="_SRPG\UI\ActSelectUI.cpp">
+    <ClCompile Include="_SRPG\UI\MapSelectUI.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="_SRPG\UI\MapSelectUI.cpp">
+    <ClCompile Include="Scenes\ScatteringScene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\LandScape\Scattering.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="_SRPG\UI\ActionSelectUI.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="_SRPG\UI\InfoUI.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="_SRPG\UI\AttackSelectUI.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1081,6 +1105,8 @@
     <FxCompile Include="Shaders\TS\Rectangle.hlsl" />
     <FxCompile Include="Shaders\TS\TerrainLOD.hlsl" />
     <FxCompile Include="Shaders\SRPG\WindowFrame.hlsl" />
+    <FxCompile Include="Shaders\LandScape\ScatteringTarget.hlsl" />
+    <FxCompile Include="Shaders\LandScape\Scattering.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\VertexHeader.hlsli" />

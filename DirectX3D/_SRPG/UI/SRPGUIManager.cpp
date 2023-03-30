@@ -2,6 +2,9 @@
 #include "SRPGUIManager.h"
 #include "FloatingDamage.h"
 #include "UIWindow.h"
+#include "ActionSelectUI.h"
+#include "MapSelectUI.h"
+#include "AttackSelectUI.h"
 
 SRPGUIManager::SRPGUIManager()
 {
@@ -9,7 +12,12 @@ SRPGUIManager::SRPGUIManager()
 	for (auto& d : floatingDamages)
 		d = new FloatingDamage(L"Textures/UI/Cancel.png");
 
-	totalUI["Test"] = new UIWindow(Vector2(300.0f, 400.0f), Vector3(CENTER_X, CENTER_Y));
+
+	totalUI["ActionSelect"] = new ActionSelectUI(Vector3(200.0f, CENTER_Y));
+	totalUI["MapSelectMove"] = new MapSelectUI("InputAction");
+	totalUI["MapSelectAttack"] = new AttackSelectUI;
+
+	Observer::Get()->AddEvent("BattleEnd", bind(&SRPGUIManager::CloseAll, this));
 }
 
 SRPGUIManager::~SRPGUIManager()
@@ -29,6 +37,7 @@ void SRPGUIManager::Update()
 	while (!openned.empty() && !openned.back()->Active())
 		openned.pop_back();
 
+	//앞에서 빼기 때문에 축약 불가
 	if (!openned.empty())
 		openned.back()->Update();
 }
@@ -38,16 +47,8 @@ void SRPGUIManager::Render()
 	for (auto d : floatingDamages)
 		d->Render();
 
-	/*
-	for (auto window : openned)
-		window->Render();
-	*/
-	
-
-	if (!openned.empty()) {
+	if (!openned.empty())
 		openned.back()->Render();
-		openned.back()->RenderCursor();
-	}
 }
 
 void SRPGUIManager::SpawnDamage(Vector3 pos, int damage)
@@ -76,8 +77,8 @@ UIWindow* SRPGUIManager::OpenUI(string key)
 	if (totalUI.find(key) == totalUI.end())
 		return nullptr;
 
+	totalUI[key]->Init();
 	openned.push_back(totalUI[key]);
-	openned.back()->Init();
 
 	return openned.back();
 }

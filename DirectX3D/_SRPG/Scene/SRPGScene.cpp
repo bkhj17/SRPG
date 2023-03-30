@@ -15,9 +15,9 @@ SRPGScene::SRPGScene()
 	CharacterManager::Get()->Spawn(terrain, 5, 5);
 	CharacterManager::Get()->Spawn(terrain, 6, 8);
 
-	cursor = new MapCursor;
-	cursor->SetGridTerrain(terrain);
-	cursor->SetPosCoord(5, 6, true);
+	mapCursor = new MapCursor;
+	mapCursor->SetGridTerrain(terrain);
+	mapCursor->SetPosCoord(5, 6, true);
 	Observer::Get()->AddParamEvent("CharacterMoveEnd", bind(&SRPGScene::CharacterMoveEnd, this, placeholders::_1));
 
 	Observer::Get()->AddEvent("InputAction", bind(&SRPGScene::InputAction, this));
@@ -29,7 +29,7 @@ SRPGScene::SRPGScene()
 SRPGScene::~SRPGScene()
 {
 	delete terrain;
-	delete cursor;
+	delete mapCursor;
 
 	CharacterManager::Delete();
 	SRPGUIManager::Delete();
@@ -40,9 +40,9 @@ void SRPGScene::Update()
 	terrain->Update();
 	CharacterManager::Get()->Update();
 
+	SRPGUIManager::Get()->Update();
 	if (!CharacterManager::Get()->IsActing())
 		Control();
-	SRPGUIManager::Get()->Update();
 }
 
 void SRPGScene::PreRender()
@@ -55,7 +55,7 @@ void SRPGScene::Render()
 
 	CharacterManager::Get()->Render();
 	if (!CharacterManager::Get()->IsActing())
-		cursor->Render();
+		mapCursor->Render();
 }
 
 void SRPGScene::PostRender()
@@ -70,26 +70,29 @@ void SRPGScene::GUIRender()
 
 void SRPGScene::Control()
 {
-	if (SRPGUIManager::Get()->IsActing() && !SRPGUIManager::Get()->IsMapControl())
-		return;
+	if (SRPGUIManager::Get()->IsActing()) {
+		if (!SRPGUIManager::Get()->IsMapControl())
+			return;
+	}
+	else {
+		if (KEY_DOWN('Z')) {
+			InputAction();
+			if (CharacterManager::Get()->HoldedCharacter())
+				SRPGUIManager::Get()->OpenUI("ActionSelect");
+		}
+	}
 
-	cursor->Update();
-	if (KEY_DOWN(VK_SPACE)) 
-		Observer::Get()->ExcuteEvent("InputAction");
-	else if (KEY_DOWN('X'))
-		Observer::Get()->ExcuteEvent("InputAttack");
-	else if (KEY_DOWN('Q'))
-		CharacterManager::Get()->TurnStart();
+	mapCursor->Update();
 }
 
 void SRPGScene::InputAction()
 {
-	terrain->InputAction(cursor->GetW(), cursor->GetH());
+	terrain->InputAction(mapCursor->GetW(), mapCursor->GetH());
 }
 
 void SRPGScene::InputAttackAction()
 {
-	terrain->InputAction(cursor->GetW(), cursor->GetH(), GridedTerrain::ATTACK);
+	terrain->InputAction(mapCursor->GetW(), mapCursor->GetH(), GridedTerrain::ATTACK);
 }
 
 void SRPGScene::CharacterMoveEnd(void* characterPtr)
@@ -99,6 +102,8 @@ void SRPGScene::CharacterMoveEnd(void* characterPtr)
 		return;
 
 	pair<int, int> characterPosCoord = terrain->PosToCoord(character->GlobalPos());
-	cursor->SetPosCoord(characterPosCoord.first, characterPosCoord.second, true);
+	mapCursor->SetPosCoord(characterPosCoord.first, characterPosCoord.second, true);
 	terrain->CheckMovableArea();
+
+	SRPGUIManager::Get()->CloseUI("MapSelectMove");
 }

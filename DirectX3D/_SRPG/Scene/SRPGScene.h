@@ -21,7 +21,7 @@ private:
 	void CharacterMoveEnd(void* characterPtr);
 private:
 	class GridedTerrain* terrain;
-	class MapCursor* cursor;
+	class MapCursor* mapCursor;
 
 	int inputMode = 0;
 };

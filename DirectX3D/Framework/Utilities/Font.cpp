@@ -108,26 +108,8 @@ void Font::RenderText(wstring text, Float2 pos, Float2 size)
 
 void Font::RenderText(string text, Float2 pos, Float2 size)
 {
-	if (size.x == 0.0f && size.y == 0.0f)
-	{
-		size.x = text.size() * curFormat->GetFontSize();
-		size.y = curFormat->GetFontSize();
-	}
-
-	Float2 halfSize = { size.x * 0.5f, size.y * 0.5f };
-
-	pos.y = WIN_HEIGHT - pos.y;
-
-	D2D1_RECT_F rectF = {};
-	rectF.left = pos.x - halfSize.x;
-	rectF.right = pos.x + halfSize.x;
-	rectF.top = pos.y - halfSize.y;
-	rectF.bottom = pos.y + halfSize.y;
-
 	wstring temp = ChangeWString(text);
-
-	context->DrawTextW(temp.c_str(), (UINT32)temp.size(),
-		curFormat, &rectF, curBrush);
+	RenderText(temp, pos, size);
 }
 
 void Font::RenderTextLeft(wstring text, Float2 pos, Float2 size)

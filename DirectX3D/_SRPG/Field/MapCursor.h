@@ -18,7 +18,7 @@ public:
 
 	void SetGridTerrain(GridedTerrain* terrain);
 
-	bool IsActiveCoord(int w, int h);
+	void FocusPos(void* posPtr);
 private:
 	void Control();
 	void Move();

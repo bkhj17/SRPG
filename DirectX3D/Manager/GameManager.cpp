@@ -25,6 +25,7 @@
 #include "Scenes/QuadTreeScene.h"
 #include "Scenes/TessellationScene.h"
 #include "Scenes/TerrainLODScene.h"
+#include "Scenes/ScatteringScene.h"
 
 //#include "Homework/230221/Scene230221.h"
 //#include "Homework/230222/GridScene230222.h"
@@ -46,7 +47,7 @@ GameManager::GameManager()
 {
     Create();
 
-    //SceneManager::Get()->Create("Grid", new GridScene());
+    SceneManager::Get()->Create("Grid", new GridScene());
 
     //SceneManager::Get()->Create("ModelExport", new ModelExportScene);
     //SceneManager::Get()->Create("Start", new ModelRenderScene);
@@ -73,6 +74,7 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("Start", new QuadTreeScene);
     //SceneManager::Get()->Create("Start", new TessellationScene);
     //SceneManager::Get()->Create("Start", new TerrainLODScene);
+    //SceneManager::Get()->Create("Start", new ScatteringScene);
     
     //SceneManager::Get()->Create("Grid", new GridScene230222());
     //SceneManager::Get()->Create("Start", new SphereScene);
@@ -90,7 +92,7 @@ GameManager::GameManager()
     
     SceneManager::Get()->Create("Start", new SRPGScene);
     
-    //SceneManager::Get()->Add("Grid");
+    SceneManager::Get()->Add("Grid");
     //SceneManager::Get()->Add("Terrain");
     SceneManager::Get()->Add("Start");
     //SceneManager::Get()->Add("Game");

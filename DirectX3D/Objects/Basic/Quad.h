@@ -12,6 +12,9 @@ public:
 
     virtual void Render();
     virtual void SetRender() override;
+
+    Vector2 GetSize() { return size; }
+    Vector2 Half() { return size * 0.5f; }
 private:
     void MakeMesh();
 protected:

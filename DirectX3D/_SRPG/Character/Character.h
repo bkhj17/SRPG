@@ -31,16 +31,20 @@ public:
 
 	void TurnStart();
 	
-	void ActEnd() { acted = true; }
+	void ActEnd() { acted = true; originPos = Pos(); }
 	bool IsActed() { return acted; }
 
 	void SetMovePath(vector<Vector3>& path);
 
 	bool IsActing();
-	int GetMaxMove() { return moved ? 0 : status.move; }
+	int GetMaxMove() { return IsMovable() ? status.move : 0; }
 	pair<int, int> GetAttackRange() { return acted ? make_pair(0, 0) : status.attackRange; }
 
 	void SetDir(Vector3 dir);
+
+	bool IsMoved() { return moved; }
+	bool IsMovable() { return !acted && !moved; }
+	void CancelMove();
 private:
 	bool IsMoving();
 	void Move();
@@ -56,6 +60,8 @@ private:
 
 	bool acted = false;						//해당 턴 행동 여부 : 공격, 혹은 행동 완료 선택 시 true로 변경. 턴 시작시 false
 	bool moved = false;						//해당 턴 이동 여부
+	Vector3 originPos = {};					//행동 선택 전의 위치
+
 	Status status;
 
 	float lerpValue = 0.0f;					//위치 이동 선형 보간을 위한 저장값. 칸 여러개를 거쳐야 하기에 비선형은 부자연스럽다

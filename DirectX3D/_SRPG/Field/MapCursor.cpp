@@ -6,6 +6,7 @@ MapCursor::MapCursor()
 {
 	object = new SphereCollider;
 
+	Observer::Get()->AddParamEvent("FocusPos", bind(&MapCursor::FocusPos, this, placeholders::_1));
 }
 
 MapCursor::~MapCursor()
@@ -26,6 +27,9 @@ void MapCursor::Render()
 
 void MapCursor::SetPosCoord(int w, int h, bool teleport)
 {
+	this->w = w;
+	this->h = h;
+
 	if (!terrain)
 		return;
 
@@ -44,8 +48,8 @@ void MapCursor::SetPosCoord(int w, int h, bool teleport)
 		isMoving = true;
 	}
 
-	if (isMoved) {
-		terrain->SetSelected(w, h);
+	if (isMoved || teleport) {
+		terrain->SetSelected(w, h, teleport);
 		CamMove();
 	}
 }
@@ -56,6 +60,14 @@ void MapCursor::SetGridTerrain(GridedTerrain* terrain)
 	SetMapGrid(terrain->Row(), terrain->Col());
 
 	terrain->SetSelected(w, h);
+}
+
+void MapCursor::FocusPos(void* posPtr)
+{
+	auto pos = (Vector3*)posPtr;
+
+	auto coord = terrain->PosToCoord(*pos);
+	SetPosCoord(coord.first, coord.second, true);
 }
 
 void MapCursor::Control()

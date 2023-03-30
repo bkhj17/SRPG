@@ -23,13 +23,12 @@ public:
 
 	void AddObject(Transform* object);
 
-	void SetSelected(int w, int h);
+	void SetSelected(int w, int h, bool forced = false);
 	int GetSelected() { return selected; }
 
 	void InputAction(int w, int h, SelectAction selectAction = MOVE);
 
 	void CheckMovableArea();
-
 	void CheckAttackableArea(int minRange, int maxRange, bool isStand = false);
 
 	UINT Row() { return row; }
@@ -40,6 +39,8 @@ public:
 	void SelectCharacter(int w, int h);
 	void SelectMove(int w, int h);
 	void SelectAttack(int w, int h);
+
+	void StandingAttack(bool is) { standingAttack = is; }
 
 	bool IsActiveCoord(int w, int h);
 	Vector3 GetTileSize() { return Vector3((float)tileWidth, 0.0f, (float)tileHeight); }
@@ -61,5 +62,7 @@ private:
 	//행동 범위 저장 : 이동, 공격
 	unordered_map<int, pair<int, int>> movables;
 	unordered_map<int, bool> attackables;
+
+	bool standingAttack = false;
 };
 
