@@ -33,6 +33,7 @@ public:
     //ÃâÇö
     Character* Spawn();
     Character* Spawn(class GridedTerrain* terrain, int w, int h);
+    Character* Spawn(string name, int teamNum, class GridedTerrain* terrain, int w, int h);
 
     bool IsBattle() { return isBattle; }
     void BattleStart(Character* offense, Character* defense);
@@ -43,6 +44,8 @@ public:
     void CancelMove();
 
     void SetTerrain(class GridedTerrain* terrain) { }
+
+    Character* GetActableCharacter(Character::Team team);
 private:
     void BattleUpdate();
     void BattleEnd();

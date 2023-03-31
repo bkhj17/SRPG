@@ -9,7 +9,7 @@ private:
 		struct Data {
 			Float3 waveLength = Float3(0.65f, 0.57f, 0.475f);	//각 색깔별 파장 길이
 			int sampleCount = 5;
-			Float3 invWaveLength;
+			Float3 invWaveLength = {};
 			float padding = 0.0f;
 		};
 	public:

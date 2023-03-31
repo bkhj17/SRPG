@@ -138,6 +138,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="_SRPG\Controller\PlayerController.h" />
+    <ClInclude Include="_SRPG\Controller\TurnManager.h" />
+    <ClInclude Include="_SRPG\Controller\Controller.h" />
     <ClInclude Include="_SRPG\UI\AttackSelectUI.h" />
     <ClInclude Include="_SRPG\UI\InfoUI.h" />
     <ClInclude Include="_SRPG\UI\ActionSelectUI.h" />
@@ -316,6 +319,8 @@
     <ClInclude Include="_SRPG\UI\UIWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="_SRPG\Controller\PlayerController.cpp" />
+    <ClCompile Include="_SRPG\Controller\TurnManager.cpp" />
     <ClCompile Include="_SRPG\UI\AttackSelectUI.cpp" />
     <ClCompile Include="_SRPG\UI\InfoUI.cpp" />
     <ClCompile Include="_SRPG\UI\ActionSelectUI.cpp" />

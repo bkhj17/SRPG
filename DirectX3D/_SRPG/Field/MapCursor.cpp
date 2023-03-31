@@ -14,10 +14,43 @@ MapCursor::~MapCursor()
 	delete object;
 }
 
+void MapCursor::Control()
+{
+	if (!isMoving && !isMoved) {
+		int nh = h;
+		int nw = w;
+
+		if (KEY_PRESS(VK_UP))		nh--;
+		if (KEY_PRESS(VK_DOWN))		nh++;
+		if (KEY_PRESS(VK_LEFT))		nw--;
+		if (KEY_PRESS(VK_RIGHT))	nw++;
+
+		if (terrain && terrain->IsActiveCoord(nw, nh)) {
+			w = nw;
+			h = nh;
+		}
+	}
+}
+
 void MapCursor::Update()
 {
-	Control();
 	Move();
+	UpdateWorld();
+}
+
+void MapCursor::UpdateWorld()
+{
+	__super::UpdateWorld();
+
+	//커서 올라간 칸에 오브젝트가 있다면 커서 오브젝트 높이 올리기
+	Transform* inPoint = terrain->ObjectOnIndex(terrain->CoordToIndex({ w, h }));
+	if (inPoint)
+		objectPos.y = ON_OBJECT_Y;
+
+	object->Pos() = (isMoving) ? Lerp(object->Pos(), objectPos, MOVE_SPEED * DELTA) : objectPos;
+	object->UpdateWorld();
+
+	CamMove();
 }
 
 void MapCursor::Render()
@@ -38,20 +71,13 @@ void MapCursor::SetPosCoord(int w, int h, bool teleport)
 	UpdateWorld();
 	objectPos = GlobalPos();
 
-	//커서 올라간 칸에 오브젝트가 있다면 커서 오브젝트 높이 올리기
-	Transform* inPoint = terrain->ObjectOnIndex(terrain->CoordToIndex({ w, h }));
-	if (inPoint)
-		objectPos.y += 6.0f;
-
 	if (teleport) {
 		object->Pos() = objectPos;
 		isMoving = true;
 	}
 
-	if (isMoved || teleport) {
+	if (isMoved || teleport)
 		terrain->SetSelected(w, h, teleport);
-		CamMove();
-	}
 }
 
 void MapCursor::SetGridTerrain(GridedTerrain* terrain)
@@ -70,50 +96,31 @@ void MapCursor::FocusPos(void* posPtr)
 	SetPosCoord(coord.first, coord.second, true);
 }
 
-void MapCursor::Control()
-{
-	if (!isMoving) {
-		int nh = h;
-		int nw = w;
-
-		if (KEY_PRESS(VK_UP))		nh--;
-		if (KEY_PRESS(VK_DOWN))		nh++;
-		if (KEY_PRESS(VK_LEFT))		nw--;
-		if (KEY_PRESS(VK_RIGHT))	nw++;
-
-		if (terrain && terrain->IsActiveCoord(nw, nh)) {
-			w = nw;
-			h = nh;
-		}
-	}
-}
-
 void MapCursor::Move()
 {
 	if (!isMoving)
 		SetPosCoord(w, h);
 
 	isMoved = isMoving;
-	isMoving = (objectPos - object->Pos()).Length() > 1.0f;
-	
-	object->Pos() = (isMoving) ? Lerp(object->Pos(), objectPos, 20.0f * DELTA) : objectPos;
-	object->UpdateWorld();
+	Vector3 vel = objectPos - object->Pos();
+	vel.y = 0.0f;
+
+	isMoving = vel.Length() > 1.0f;
 }
 
 void MapCursor::CamMove()
 {
-	//연속 시키기 힘듦. 원래 정확한 값을 연산해보려 했으나....
-	//보간 없는 상황
+	Vector3 camMove = {};
 	Vector3 cursorScreen = CAM->WorldToScreen(GlobalPos());
-	Vector3 camMove;
-	if (cursorScreen.x <= WIN_WIDTH * 0.1f)
-		camMove.x = -terrain->GetTileSize().x;
-	if (cursorScreen.x >= WIN_WIDTH * 0.9f)
-		camMove.x = terrain->GetTileSize().x;
-	if (cursorScreen.y <= WIN_HEIGHT * 0.1f)
-		camMove.z = -terrain->GetTileSize().z;
-	if (cursorScreen.y >= WIN_HEIGHT * 0.9f)
-		camMove.z = terrain->GetTileSize().z;
+
+	if (cursorScreen.x <= WIN_WIDTH * CAM_MOVE_VALUE)
+		camMove.x -= terrain->GetTileSize().x;
+	if (cursorScreen.x >= WIN_WIDTH * (1 - CAM_MOVE_VALUE))
+		camMove.x += terrain->GetTileSize().x;
+	if (cursorScreen.y <= WIN_HEIGHT * CAM_MOVE_VALUE)
+		camMove.z -= terrain->GetTileSize().z;
+	if (cursorScreen.y >= WIN_HEIGHT * (1 - CAM_MOVE_VALUE))
+		camMove.z += terrain->GetTileSize().z;
 
 	CAM->Pos() += camMove;
 }

@@ -1,5 +1,4 @@
 #include "Framework.h"
-#include "UIWindow.h"
 
 UIWindow::UIWindow(Vector2 size, Vector3 pos)
 	: Quad(size)
@@ -77,13 +76,11 @@ void UIWindow::Close()
 
 void UIWindow::Control()
 {
-	if (KEY_DOWN('Z')) {
+	if (KEY_DOWN('Z'))
 		ActiveFunc();
-	}
-	if (KEY_DOWN('X')) {
-		Close();
+	if (KEY_DOWN('X'))
+		CancelFunc();
 		return;
-	}
 }
 
 void UIWindow::SetShaderInfo()

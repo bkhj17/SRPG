@@ -200,6 +200,22 @@ using namespace GameMath;
 #include "Objects/Manager/KunaiManager.h"
 #include "Objects/Manager/RobotManager.h"
 
+//포트폴리오
+#include "_SRPG/Field/GridedTerrain.h"
+#include "_SRPG/Field/MapCursor.h"
+#include "_SRPG/Character/Character.h"
+#include "_SRPG/Character/CharacterManager.h"
+#include "_SRPG/UI/UIWindow.h"
+#include "_SRPG/UI/ActionSelectUI.h"
+#include "_SRPG/UI/MapSelectUI.h"
+#include "_SRPG/UI/AttackSelectUI.h"
+#include "_SRPG/UI/InfoUI.h"
+#include "_SRPG/UI/FloatingDamage.h"
+#include "_SRPG/UI/SRPGUIManager.h"
+#include "_SRPG/Controller/Controller.h"
+#include "_SRPG/Controller/PlayerController.h"
+#include "_SRPG/Controller/TurnManager.h"
+
 #include "Scenes/Scene.h"
 #include "Manager/SceneManager.h"
 #include "Manager/GameManager.h"

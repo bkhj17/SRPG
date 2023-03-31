@@ -1,7 +1,5 @@
 #include "framework.h"
 #include "GridedTerrain.h"
-#include "../Character/Character.h"
-#include "../Character/CharacterManager.h"
 
 GridedTerrain::GridedTerrain()
 {
@@ -54,7 +52,7 @@ GridedTerrain::GridedTerrain()
 	}
 	tileColorBuffer = new ColorBuffer;
 
-	Observer::Get()->AddEvent("BattleEnd", bind(&GridedTerrain::CheckMovableArea, this));
+	Observer::Get()->AddEvent("BattleEnd", bind(&GridedTerrain::Reselect, this));
 
 	Observer::Get()->AddEvent("CheckMovable", bind(&GridedTerrain::CheckMovableArea, this));
 
@@ -197,6 +195,8 @@ void GridedTerrain::SetSelected(int w, int h, bool forced)
 
 		if(CharacterManager::Get()->HoldedCharacter() == nullptr || forced)
 			CheckMovableArea();
+
+		Observer::Get()->ExcuteParamEvent("SetInfo", ObjectOnIndex(selected));
 	}
 }
 
@@ -208,7 +208,7 @@ void GridedTerrain::InputAction(int w, int h, SelectAction selectAction)
 	
 	switch (selectAction)
 	{
-	case GridedTerrain::SELECT:	
+	case GridedTerrain::SELECT:
 		SelectCharacter(w, h);
 		break;
 	case GridedTerrain::MOVE:
@@ -220,6 +220,12 @@ void GridedTerrain::InputAction(int w, int h, SelectAction selectAction)
 	default:
 		break;
 	}	
+}
+
+void GridedTerrain::InputAction(SelectAction selectAction)
+{
+	auto coord = IndexToCoord(selected);
+	InputAction(coord.first, coord.second, selectAction);
 }
 
 void GridedTerrain::CheckMovableArea()
@@ -313,7 +319,7 @@ void GridedTerrain::CheckAttackableArea(int minRange, int maxRange, bool isStand
 	}
 
 	pair<int, int> coord;
-	for (int index : checkIndices) {		
+	for (int index : checkIndices) {
 		coord = IndexToCoord(index);
 		for (int y = -maxRange; y <= maxRange; y++) {
 			for (int x = -(maxRange - abs(y)); x <= maxRange - abs(y); x++) {
@@ -348,22 +354,28 @@ Transform* GridedTerrain::ObjectOnIndex(int index)
 
 void GridedTerrain::SelectCharacter(int w, int h)
 {
-	//해당 위치의 오브젝트 중 유효한 것이 있는지 확인
+	//해당 위치의 오브젝트 중 유효한 캐릭터가 있는지 확인
 	for (auto object : objects) {
 		Character* character = (Character*)object;
-		if (character == nullptr)
+		//오브젝트가 유효한 캐릭터인가?
+		if (character == nullptr || !character->Active())
 			continue;
 
+		//턴 플레이어의 캐릭터인가?
+		if (character->GetStatus().teamNum != TurnManager::Get()->GetCurPlayer())
+			continue;
+
+		//커서 위치에 있는가?
 		pair<int, int> coord = PosToCoord(character->GlobalPos());
 		if (coord.first != w || coord.second != h)
 			continue;
-
-		//사실 턴 플레이어인지도 알아야 한다
+				
 		//나중에 싱글톤으로 턴 정보 만들어야 함
-		if (!character->IsActed()) {
-			CharacterManager::Get()->CharacterHold(character, w, h);
-			break;
-		}
+		if (character->IsActed())
+			continue;
+		
+		CharacterManager::Get()->CharacterHold(character, w, h);
+		break;
 	}
 
 	//거치고도 선택된 것이 없음
@@ -454,4 +466,30 @@ bool GridedTerrain::IsActiveCoord(int w, int h)
 		return false;
 
 	return cubes[CoordToIndex(w, h)]->Active();
+}
+
+vector<Character*> GridedTerrain::AttackableCharacters(int targetTeam)
+{
+	//attackable 포인트 기준
+
+	vector<Character*> result;
+	for (auto object : objects) {
+		auto character = (Character*)object;
+		if (!character->Active())
+			continue;
+
+		if (character->GetStatus().teamNum != targetTeam)
+			continue;
+
+		result.push_back(character);
+	}
+
+	return result;
+}
+
+void GridedTerrain::Reselect()
+{
+	auto coord = IndexToCoord(selected);
+
+	SetSelected(coord.first, coord.second, true);
 }

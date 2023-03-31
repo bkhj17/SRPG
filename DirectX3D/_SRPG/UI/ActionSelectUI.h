@@ -11,6 +11,7 @@ public:
     void Close() override;
 private:
     void ActiveFunc() override;
+    void CancelFunc() override;
 
     float CursorX();
     float LineY(int lineNum);

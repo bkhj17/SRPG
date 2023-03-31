@@ -27,6 +27,7 @@ public:
 	int GetSelected() { return selected; }
 
 	void InputAction(int w, int h, SelectAction selectAction = MOVE);
+	void InputAction(SelectAction selectAction = MOVE);
 
 	void CheckMovableArea();
 	void CheckAttackableArea(int minRange, int maxRange, bool isStand = false);
@@ -44,6 +45,12 @@ public:
 
 	bool IsActiveCoord(int w, int h);
 	Vector3 GetTileSize() { return Vector3((float)tileWidth, 0.0f, (float)tileHeight); }
+
+	int GetSelectedIndex() { return selected; }
+	vector<class Character*> AttackableCharacters(int targetTeam);
+
+private:
+	void Reselect();
 private:
 	FloatValueBuffer* widthHeightBuffer;
 

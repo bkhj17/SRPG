@@ -1,5 +1,4 @@
 #include "framework.h"
-#include "FloatingDamage.h"
 
 void FloatingDamage::Spawn(Vector3 pos, int damage)
 {

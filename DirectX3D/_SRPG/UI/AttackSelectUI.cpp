@@ -1,5 +1,4 @@
 #include "framework.h"
-#include "AttackSelectUI.h"
 
 AttackSelectUI::AttackSelectUI()
 	: MapSelectUI("InputAttack")

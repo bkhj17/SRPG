@@ -10,6 +10,7 @@ public:
 	void Render() override;
 protected:
 	virtual void ActiveFunc() override;
+	virtual void CancelFunc() override;
 private:
 	string eventKey = "";
 };

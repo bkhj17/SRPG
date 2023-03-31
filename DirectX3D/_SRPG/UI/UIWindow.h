@@ -27,7 +27,7 @@ private:
 
 protected:
     virtual void ActiveFunc() {}
-
+    virtual void CancelFunc() { Close(); }
 protected:
     FloatValueBuffer* floatBuffer;
 

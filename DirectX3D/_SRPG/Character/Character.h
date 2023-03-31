@@ -12,8 +12,15 @@ private:
 
 	Character();
 	~Character();
+public:
+	enum Team {
+		PLAYER, ENEMY, NONE
+	};
 
 	struct Status {
+		string name = "";
+		int teamNum = NONE;
+
 		int maxHp = 10;
 		int curHp = 10;
 
@@ -45,6 +52,8 @@ public:
 	bool IsMoved() { return moved; }
 	bool IsMovable() { return !acted && !moved; }
 	void CancelMove();
+
+	const Status& GetStatus() { return status; }
 private:
 	bool IsMoving();
 	void Move();

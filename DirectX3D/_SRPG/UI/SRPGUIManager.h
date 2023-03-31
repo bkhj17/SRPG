@@ -24,6 +24,8 @@ public:
 	bool IsActing();
 	bool IsMapControl();
 private:
+	void SetInfo(void* characterPtr);
+private:
 	vector<class FloatingDamage*> floatingDamages;
 
 	unordered_map<string, UIWindow*> totalUI;

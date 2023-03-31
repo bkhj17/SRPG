@@ -79,11 +79,24 @@ Character* CharacterManager::Spawn(GridedTerrain* terrain, int w, int h)
 	assert(terrain != nullptr);
 
 	Character* spawned = Spawn();
+	if (spawned == nullptr)
+		return nullptr;
+
 	spawned->originPos = spawned->Pos() = terrain->CoordToPos(w, h);
 	spawned->UpdateWorld();
 	terrain->AddObject(spawned);
+	return spawned;
+}
 
-	return nullptr;
+Character* CharacterManager::Spawn(string name, int teamNum, GridedTerrain* terrain, int w, int h)
+{
+	Character* character = Spawn(terrain, w, h);
+	if(character == nullptr)
+		return nullptr;
+
+	character->status.name = name;
+	character->status.teamNum = teamNum;
+	return character;
 }
 
 void CharacterManager::BattleStart(Character* offense, Character* defense)
@@ -118,6 +131,18 @@ void CharacterManager::CancelMove()
 	holded->CancelMove();
 }
 
+Character* CharacterManager::GetActableCharacter(Character::Team team)
+{
+	for (auto character : characterPool) {
+		if (!character->Active() || character->IsActed())
+			continue;
+
+		if (character->GetStatus().teamNum == team)
+			return character;
+	}
+	return nullptr;
+}
+
 void CharacterManager::BattleUpdate()
 {
 	if (attacks.empty() || !curOffense->Active() || !curDefense->Active()) {
@@ -150,11 +175,8 @@ void CharacterManager::BattleEnd()
 	curDefense = nullptr;
 		
 	//카메라 설정
-
 	Observer::Get()->ExcuteEvent("BattleEnd");
-
-	if (HoldedCharacter()->IsActed())
-		CharacterUnhold();
+	CharacterUnhold();
 }
 
 void CharacterManager::AttackHit(void* ptr)

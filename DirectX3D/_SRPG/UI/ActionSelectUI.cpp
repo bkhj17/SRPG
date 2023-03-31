@@ -1,8 +1,4 @@
 #include "framework.h"
-#include "ActionSelectUI.h"
-#include "SRPGUIManager.h"
-#include "../Character/CharacterManager.h"
-#include "../Character/Character.h"
 
 ActionSelectUI::ActionSelectUI(Vector3 pos)
 	: UIWindow({ 200.0f, 200.0f }, pos)
@@ -56,16 +52,20 @@ void ActionSelectUI::ActiveFunc()
 		Close();
 		break;
 	default:
-		auto holded = CharacterManager::Get()->HoldedCharacter();
-		if (holded != nullptr && holded->IsMoved()) {
-			CharacterManager::Get()->HoldedCharacter()->CancelMove();
-			SRPGUIManager::Get()->OpenUI("MapSelectMove");
-		}
-		else {
-			Close();
-		}
-
+		CancelFunc();
 		break;
+	}
+}
+
+void ActionSelectUI::CancelFunc()
+{
+	auto holded = CharacterManager::Get()->HoldedCharacter();
+	if (holded != nullptr && holded->IsMoved()) {
+		CharacterManager::Get()->HoldedCharacter()->CancelMove();
+		SRPGUIManager::Get()->OpenUI("MapSelectMove");
+	}
+	else {
+		Close();
 	}
 }
 

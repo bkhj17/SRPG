@@ -1,10 +1,4 @@
 #include "framework.h"
-#include "SRPGUIManager.h"
-#include "FloatingDamage.h"
-#include "UIWindow.h"
-#include "ActionSelectUI.h"
-#include "MapSelectUI.h"
-#include "AttackSelectUI.h"
 
 SRPGUIManager::SRPGUIManager()
 {
@@ -12,16 +6,23 @@ SRPGUIManager::SRPGUIManager()
 	for (auto& d : floatingDamages)
 		d = new FloatingDamage(L"Textures/UI/Cancel.png");
 
-
 	totalUI["ActionSelect"] = new ActionSelectUI(Vector3(200.0f, CENTER_Y));
 	totalUI["MapSelectMove"] = new MapSelectUI("InputAction");
 	totalUI["MapSelectAttack"] = new AttackSelectUI;
 
+	totalUI["Info1"] = new InfoUI(Vector3(200.0f, 150.0f));
+	totalUI["Info2"] = new InfoUI(Vector3(WIN_WIDTH - 200.0f, 150.0f));
+
 	Observer::Get()->AddEvent("BattleEnd", bind(&SRPGUIManager::CloseAll, this));
+
+	Observer::Get()->AddParamEvent("SetInfo", bind(&SRPGUIManager::SetInfo, this, placeholders::_1));
+
 }
 
 SRPGUIManager::~SRPGUIManager()
 {
+	openned.clear();
+
 	for (auto d : floatingDamages)
 		delete d;
 
@@ -40,6 +41,10 @@ void SRPGUIManager::Update()
 	//앞에서 빼기 때문에 축약 불가
 	if (!openned.empty())
 		openned.back()->Update();
+
+
+	totalUI["Info1"]->UpdateWorld();
+	totalUI["Info2"]->UpdateWorld();
 }
 
 void SRPGUIManager::Render()
@@ -47,8 +52,12 @@ void SRPGUIManager::Render()
 	for (auto d : floatingDamages)
 		d->Render();
 
+	totalUI["Info1"]->Render();
+	totalUI["Info2"]->Render();
+
 	if (!openned.empty())
 		openned.back()->Render();
+
 }
 
 void SRPGUIManager::SpawnDamage(Vector3 pos, int damage)
@@ -116,4 +125,24 @@ bool SRPGUIManager::IsActing()
 bool SRPGUIManager::IsMapControl()
 {
 	return !openned.empty() && openned.back()->IsMapControl();
+}
+
+void SRPGUIManager::SetInfo(void* characterPtr)
+{
+	auto character = (Character*)characterPtr;
+	if (character != nullptr && !character->Active())
+		character = nullptr;
+
+	auto info1 = (InfoUI*)totalUI["Info1"];
+	auto info2 = (InfoUI*)totalUI["Info2"];
+
+	auto holded = CharacterManager::Get()->HoldedCharacter();
+	if (holded && holded != character) {
+		info1->SetCharacter(holded);
+		info2->SetCharacter(character);
+	}
+	else {
+		info1->SetCharacter(character);
+		info2->SetCharacter(nullptr);
+	}
 }

@@ -2,11 +2,17 @@
 class GridedTerrain;
 class MapCursor : public Transform
 {
+private:
+	const float CAM_MOVE_VALUE = 0.1f;
+	const float MOVE_SPEED = 20.0f;
+	const float ON_OBJECT_Y = 10.0f;
 public:
 	MapCursor();
 	~MapCursor();
 
+	void Control();
 	void Update();
+	virtual void UpdateWorld() override;
 	void Render();
 
 	int& GetW() { return w; }
@@ -20,7 +26,6 @@ public:
 
 	void FocusPos(void* posPtr);
 private:
-	void Control();
 	void Move();
 
 	void CamMove();
