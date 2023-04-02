@@ -12,6 +12,8 @@ PlayerController::~PlayerController()
 void PlayerController::Control()
 {
 	/*
+	//mapCursor만 어떻게 할 수 있으면 되는데...
+	//포기
 	if (SRPGUIManager::Get()->IsActing()) {
 		if (!SRPGUIManager::Get()->IsMapControl()) {
 			mapCursor->UpdateWorld();

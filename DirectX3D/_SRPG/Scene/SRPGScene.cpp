@@ -102,8 +102,8 @@ void SRPGScene::Control()
 
 		if(holded) {
 			vector<Character*> attackableEnemies = terrain->AttackableCharacters(Character::Team::PLAYER);
-
-			//사거리 내에 적이 있다
+			
+			//적이 사거리 내에 있다
 
 			{
 				//해당 적을 타겟으로 전투
