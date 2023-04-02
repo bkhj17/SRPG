@@ -114,13 +114,12 @@ void MapCursor::CamMove()
 	Vector3 cursorScreen = CAM->WorldToScreen(GlobalPos());
 
 	if (cursorScreen.x <= WIN_WIDTH * CAM_MOVE_VALUE)
-		camMove.x -= terrain->GetTileSize().x;
+		camMove.x -= 1.0f;
 	if (cursorScreen.x >= WIN_WIDTH * (1 - CAM_MOVE_VALUE))
-		camMove.x += terrain->GetTileSize().x;
+		camMove.x += 1.0f;
 	if (cursorScreen.y <= WIN_HEIGHT * CAM_MOVE_VALUE)
-		camMove.z -= terrain->GetTileSize().z;
+		camMove.z -= 1.0f;
 	if (cursorScreen.y >= WIN_HEIGHT * (1 - CAM_MOVE_VALUE))
-		camMove.z += terrain->GetTileSize().z;
-
-	CAM->Pos() += camMove;
+		camMove.z += 1.0f;
+	CAM->Pos() += camMove * 3.0f * MOVE_SPEED * DELTA;
 }

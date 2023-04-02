@@ -16,7 +16,7 @@ public:
 	int GetCurPlayer() { return curPlayer; }
 private:
 	int curTurn = 0;
-	int curPlayer = 0;
+	int curPlayer = 1;
 	vector<class Controller*> controllers;
 };
 
