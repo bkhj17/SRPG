@@ -47,7 +47,7 @@ public:
 	Vector3 GetTileSize() { return Vector3((float)tileWidth, 0.0f, (float)tileHeight); }
 
 	int GetSelectedIndex() { return selected; }
-	vector<class Character*> AttackableCharacters(int targetTeam);
+	vector<pair<class Character*, pair<int, int>>> AttackableCharacters(int targetTeam);
 
 private:
 	void Reselect();
@@ -68,7 +68,7 @@ private:
 	
 	//행동 범위 저장 : 이동, 공격
 	unordered_map<int, pair<int, int>> movables;
-	unordered_map<int, bool> attackables;
+	unordered_map<int, pair<int, int>> attackables;
 
 	bool standingAttack = false;
 };

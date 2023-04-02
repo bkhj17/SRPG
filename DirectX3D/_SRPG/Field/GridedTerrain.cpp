@@ -335,7 +335,11 @@ void GridedTerrain::CheckAttackableArea(int minRange, int maxRange, bool isStand
 				if (!cubes[nIndex]->Active())
 					continue;
 
-				attackables[nIndex] = true;
+				if (attackables.find(nIndex) != attackables.end()) {
+					if (attackables[nIndex].first < movables[index].first)
+						continue;
+				}
+				attackables[nIndex] = make_pair(movables[index].first, index);
 			}
 		}
 	}
@@ -468,11 +472,11 @@ bool GridedTerrain::IsActiveCoord(int w, int h)
 	return cubes[CoordToIndex(w, h)]->Active();
 }
 
-vector<Character*> GridedTerrain::AttackableCharacters(int targetTeam)
+vector<pair<Character*, pair<int, int>>> GridedTerrain::AttackableCharacters(int targetTeam)
 {
-	//attackable 포인트 기준
+	//attackables 기준으로 공격범위 내의 targetTeam 캐릭터를 받는다
 
-	vector<Character*> result;
+	vector<pair<Character*, pair<int, int>>> result;
 	for (auto object : objects) {
 		auto character = (Character*)object;
 		if (!character->Active())
@@ -481,8 +485,17 @@ vector<Character*> GridedTerrain::AttackableCharacters(int targetTeam)
 		if (character->GetStatus().teamNum != targetTeam)
 			continue;
 
-		result.push_back(character);
+		auto coord = PosToCoord(character->GlobalPos());
+		auto index = CoordToIndex(coord);
+		if (attackables.find(index) == attackables.end())
+			continue;
+
+		result.push_back(make_pair(character, attackables[index]));
 	}
+	//이동거리 순으로 정렬
+	sort(result.begin(), result.end(), [](const pair<Character*, pair<int, int>>& l, const pair<Character*, pair<int, int>>& r) -> bool {
+		return l.second.first < r.second.first;
+	});
 
 	return result;
 }
