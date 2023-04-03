@@ -2,21 +2,22 @@
 
 SRPGUIManager::SRPGUIManager()
 {
-	floatingDamages.resize(50);
+	floatingDamages.resize(10);
 	for (auto& d : floatingDamages)
 		d = new FloatingDamage(L"Textures/UI/Cancel.png");
 
+	totalUI["MainSelect"] = new MainSelectUI(Vector3(200.0f, CENTER_Y));
 	totalUI["ActionSelect"] = new ActionSelectUI(Vector3(200.0f, CENTER_Y));
 	totalUI["MapSelectMove"] = new MapSelectUI("InputAction");
 	totalUI["MapSelectAttack"] = new AttackSelectUI;
+	totalUI["TurnChangeUI"] = new TurnChangeUI;
 
 	totalUI["Info1"] = new InfoUI(Vector3(200.0f, 150.0f));
 	totalUI["Info2"] = new InfoUI(Vector3(WIN_WIDTH - 200.0f, 150.0f));
+	totalUI["Turn"] = new TurnUI(Vector3(CENTER_X, WIN_HEIGHT - 30));
 
 	Observer::Get()->AddEvent("BattleEnd", bind(&SRPGUIManager::CloseAll, this));
-
 	Observer::Get()->AddParamEvent("SetInfo", bind(&SRPGUIManager::SetInfo, this, placeholders::_1));
-
 }
 
 SRPGUIManager::~SRPGUIManager()
@@ -35,6 +36,7 @@ void SRPGUIManager::Update()
 	for (auto d : floatingDamages)
 		d->Update();
 
+	//²¨Áø UIµé »©±â
 	while (!openned.empty() && !openned.back()->Active())
 		openned.pop_back();
 
@@ -42,9 +44,9 @@ void SRPGUIManager::Update()
 	if (!openned.empty())
 		openned.back()->Update();
 
-
 	totalUI["Info1"]->UpdateWorld();
 	totalUI["Info2"]->UpdateWorld();
+	totalUI["Turn"]->UpdateWorld();
 }
 
 void SRPGUIManager::Render()
@@ -54,6 +56,7 @@ void SRPGUIManager::Render()
 
 	totalUI["Info1"]->Render();
 	totalUI["Info2"]->Render();
+	totalUI["Turn"]->Render();
 
 	if (!openned.empty())
 		openned.back()->Render();

@@ -552,6 +552,21 @@
     <ClInclude Include="_SRPG\Controller\PlayerController.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="_SRPG\UI\TurnUI.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="_SRPG\UI\MainSelectUI.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="_SRPG\Controller\EnemyController.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="_SRPG\UI\SelectUI.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="_SRPG\UI\TurnChangeUI.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX3D.cpp">
@@ -1062,6 +1077,21 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="_SRPG\Controller\PlayerController.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="_SRPG\UI\TurnUI.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="_SRPG\UI\MainSelectUI.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="_SRPG\Controller\EnemyController.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="_SRPG\UI\SelectUI.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="_SRPG\UI\TurnChangeUI.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

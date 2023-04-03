@@ -4,11 +4,11 @@
 
 Character::Character()
 {
-	body = new ModelAnimator("Naruto");
+	body = new ModelAnimator("Soldier");
 	
-	body->ReadClip("idle");		//IDLE
+	body->ReadClip("SpearIdle");		//IDLE
 	body->ReadClip("run");		//RUN
-	body->ReadClip("Throw");	//ATTACK
+	body->ReadClip("SpearAttack");		//ATTACK
 	body->GetClip(ATTACK)->SetEvent(bind(&Character::AttackEnd, this), 0.8f);
 	body->GetClip(ATTACK)->SetEvent(bind(&Character::AttackHit, this), 0.3f);
 	
@@ -16,7 +16,7 @@ Character::Character()
 	body->SetParent(this);
 
 	body->Scale() *= 0.05f;
-	body->Pos().y = body->Scale().y;
+	body->Pos().y = body->Scale().y + 0.8f;
 
 	body->SetShader(L"SRPG/Character.hlsl");
 

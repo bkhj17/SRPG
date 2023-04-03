@@ -95,7 +95,6 @@ void GridedTerrain::Update()
 		}
 	}
 	*/
-
 	if (CharacterManager::Get()->HoldedCharacter() == nullptr)
 		standingAttack = false;
 
@@ -206,6 +205,8 @@ void GridedTerrain::InputAction(int w, int h, SelectAction selectAction)
 	if (CharacterManager::Get()->HoldedCharacter() == nullptr)
 		selectAction = SELECT;
 	
+	SetSelected(w, h);
+
 	switch (selectAction)
 	{
 	case GridedTerrain::SELECT:
@@ -240,11 +241,14 @@ void GridedTerrain::CheckMovableArea()
 
 	//선택 위치에 오브젝트가 있다면 최대 이동 거리 구하기
 	int moveRange = 0;
+	int team = -1;
 	pair<int, int> attackRange = { 0, 0 };
+
 	if (objectsOnIndex.find(selected) != objectsOnIndex.end()) {
 		Character* character = (Character*)objectsOnIndex[selected];
 		if (character) {
 			moveRange = character->GetMaxMove();
+			team = character->GetStatus().teamNum;
 			attackRange = character->GetAttackRange();
 		}
 	}
@@ -257,7 +261,7 @@ void GridedTerrain::CheckMovableArea()
 	pair<int, int> coord = IndexToCoord(selected);
 	priority_queue<pair<int, int>> pq;
 	pq.push({ 0, selected });
-	movables[selected] = { 0, -1 };
+	movables[selected] = { 0, -1, true };
 
 	while (!pq.empty()) {
 		int dist = pq.top().first;
@@ -283,17 +287,28 @@ void GridedTerrain::CheckMovableArea()
 			if (!cubes[nIndex]->Active())
 				continue;
 
+			bool standable = true;
 			//해당하는 위치에 다른 오브젝트가 있다
 			if (objectsOnIndex.find(nIndex) != objectsOnIndex.end()) {
-				//같은 편 유닛이면 지나갈 수는 있다.
-				//커서에서 칸 선택 시 오브젝트 유무도 판별해야겠네
-				continue;
+				//같은 편 유닛이면 지나갈 수는 있다.(도착점으로는 사용 불가)
+				auto c = (Character*)objectsOnIndex[nIndex];
+				//캐릭터가 아니거나 다른 편 캐릭터면 막힘
+				if (c == nullptr || c->GetStatus().teamNum != team) {
+					continue;
+				}
+				
+				//시작지점은 제외하고
+				if (nIndex != selected) {
+					//같은 편 캐릭터라면 설 수 없는 위치로 설정
+					standable = false;
+				}
+				
 			}
 			//이미 탐색한 타일이다
-			if (movables.find(nIndex) != movables.end() && movables[nIndex].first <= nDist)
+			if (movables.find(nIndex) != movables.end() && movables[nIndex].dist <= nDist)
 				continue;
 
-			movables[nIndex] = { nDist, cur };
+			movables[nIndex] = { nDist, cur, standable };
 			pq.push({ nDist, CoordToIndex(nx, ny) });
 		}
 	}
@@ -305,7 +320,6 @@ void GridedTerrain::CheckAttackableArea(int minRange, int maxRange, bool isStand
 {
 	//공격범위 설정
 	//movable
-
 	vector<int> checkIndices;
 
 	attackables.clear();
@@ -314,8 +328,10 @@ void GridedTerrain::CheckAttackableArea(int minRange, int maxRange, bool isStand
 		checkIndices.push_back(selected);
 	}
 	else {
-		for (auto& movable : movables)
-			checkIndices.push_back(movable.first);
+		for (auto& movable : movables) {
+			if(movable.second.standable)
+				checkIndices.push_back(movable.first);
+		}
 	}
 
 	pair<int, int> coord;
@@ -336,10 +352,10 @@ void GridedTerrain::CheckAttackableArea(int minRange, int maxRange, bool isStand
 					continue;
 
 				if (attackables.find(nIndex) != attackables.end()) {
-					if (attackables[nIndex].first < movables[index].first)
+					if (attackables[nIndex].first < movables[index].dist)
 						continue;
 				}
-				attackables[nIndex] = make_pair(movables[index].first, index);
+				attackables[nIndex] = make_pair(movables[index].dist, index);
 			}
 		}
 	}
@@ -401,7 +417,10 @@ void GridedTerrain::SelectMove(int w, int h)
 	if (movables.find(index) == movables.end())
 		return;
 
-	if (movables[index].second == -1) {
+	if (!movables[index].standable)
+		return;
+
+	if (movables[index].prev == -1) {
 		//캐릭터 위치 그 자체 == 선택해제
 		CharacterManager::Get()->CharacterUnhold();
 		return;
@@ -413,7 +432,7 @@ void GridedTerrain::SelectMove(int w, int h)
 		pair<int, int> pathCoord = IndexToCoord(index);
 		path.push_back(CoordToPos(pathCoord.first, pathCoord.second));
 		//경로 역추적. 이걸 위해 movable.value.second를 이전 노드로 설정했다
-		index = movables[index].second;
+		index = movables[index].prev;
 	}
 	//맨 뒤 == 현 위치
 	path.pop_back();

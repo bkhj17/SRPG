@@ -1,32 +1,10 @@
 #include "framework.h"
 
 ActionSelectUI::ActionSelectUI(Vector3 pos)
-	: UIWindow({ 200.0f, 200.0f }, pos)
+	: SelectUI({ 200.0f, 200.0f }, pos)
 {
-	renderCursor = true;
+	text = { "이동", "공격", "행동종료", "취소" };
 	maxCursor = text.size();
-}
-
-void ActionSelectUI::Update()
-{
-	if (!Active())
-		return;
-
-	__super::Update();
-
-	cQuad->Pos().x = CursorX();
-	cQuad->Pos().y = LineY(cursor);
-	cQuad->UpdateWorld();
-}
-
-void ActionSelectUI::Render()
-{
-	if (!Active())
-		return;
-
-	__super::Render();
-	for(int i = 0; i < text.size(); i++)
-		Font::Get()->RenderText(text[i], Vector2(GlobalPos().x, GlobalPos().y + LineY(i)));
 }
 
 void ActionSelectUI::Close()
@@ -67,14 +45,4 @@ void ActionSelectUI::CancelFunc()
 	else {
 		Close();
 	}
-}
-
-float ActionSelectUI::CursorX()
-{
-	return -Half().x + 30.0f;
-}
-
-float ActionSelectUI::LineY(int lineNum)
-{
-	return Half().y - 40.0f - lineNum * (cQuad->Half().y + 30.0f);
 }

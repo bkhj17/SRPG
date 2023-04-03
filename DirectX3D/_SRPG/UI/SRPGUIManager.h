@@ -31,4 +31,3 @@ private:
 	unordered_map<string, UIWindow*> totalUI;
 	list<UIWindow*> openned;
 };
-

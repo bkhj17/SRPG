@@ -3,7 +3,7 @@
 
 ModelExportScene::ModelExportScene()
 {
-	string name = "Spear";
+	string name = "Soldier";
 	string file = "Models/FBX/" + name + ".fbx";
 	ModelExporter* exporter = nullptr;
 	
@@ -14,7 +14,14 @@ ModelExportScene::ModelExportScene()
 	
 	
 	vector<string> clipNames = {
-	//	"SpearIdle"
+		"SpearIdle",
+		"SpearAttack",
+		"Run",
+		"AxeIdle",
+		"AxeAttack",
+		"SwordIdle",
+		"SwordAttack",
+		"Death"
 	};
 	
 	for (const auto& clipName : clipNames) {

@@ -4,7 +4,7 @@
 TurnManager::TurnManager()
 {
 	controllers.push_back(new PlayerController);
-	//controllers.push_back(new EnemyController);
+	controllers.push_back(new EnemyController);
 }
 
 TurnManager::~TurnManager()
@@ -13,12 +13,12 @@ TurnManager::~TurnManager()
 		delete controller;
 }
 
-void TurnManager::Control()
+void TurnManager::Control(void* pack)
 {
 	if (curPlayer >= controllers.size())
 		return;
 
-	controllers[curPlayer]->Control();
+	controllers[curPlayer]->Control(pack);
 }
 
 void TurnManager::NextTurn()
@@ -29,4 +29,5 @@ void TurnManager::NextTurn()
 	}
 
 	Observer::Get()->ExcuteEvent("TurnStart");
+	SRPGUIManager::Get()->OpenUI("TurnChangeUI");
 }

@@ -8,7 +8,7 @@ private:
     const float INNER_ALPHA = 0.8f;
 
 public:
-    UIWindow(Vector2 size, Vector3 pos);
+    UIWindow(Vector2 size, Vector3 pos, bool renderCursor = false);
     UIWindow(float left, float right, float up, float down);
     virtual ~UIWindow();
 

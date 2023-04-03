@@ -4,10 +4,9 @@ class PlayerController :
     public Controller
 {
 public:
-    PlayerController();
-    ~PlayerController();
+    PlayerController() = default;
+    ~PlayerController() = default;
     
-    void Control() override;
-
+    void Control(void *pack = nullptr) override;
 };
 

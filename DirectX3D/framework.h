@@ -27,6 +27,8 @@
 #define CAM Environment::Get()->GetMainCamera()
 #define DIALOG ImGuiFileDialog::Instance()
 
+#define FOR(n) for(int i = 0; i < n; i++)
+
 #include <windows.h>
 #include <string>
 #include <vector>
@@ -203,17 +205,25 @@ using namespace GameMath;
 //포트폴리오
 #include "_SRPG/Field/GridedTerrain.h"
 #include "_SRPG/Field/MapCursor.h"
+
 #include "_SRPG/Character/Character.h"
 #include "_SRPG/Character/CharacterManager.h"
+
 #include "_SRPG/UI/UIWindow.h"
+#include "_SRPG/UI/SelectUI.h"
 #include "_SRPG/UI/ActionSelectUI.h"
+#include "_SRPG/UI/MainSelectUI.h"
 #include "_SRPG/UI/MapSelectUI.h"
 #include "_SRPG/UI/AttackSelectUI.h"
 #include "_SRPG/UI/InfoUI.h"
+#include "_SRPG/UI/TurnUI.h"
 #include "_SRPG/UI/FloatingDamage.h"
+#include "_SRPG/UI/TurnChangeUI.h"
 #include "_SRPG/UI/SRPGUIManager.h"
+
 #include "_SRPG/Controller/Controller.h"
 #include "_SRPG/Controller/PlayerController.h"
+#include "_SRPG/Controller/EnemyController.h"
 #include "_SRPG/Controller/TurnManager.h"
 
 #include "Scenes/Scene.h"

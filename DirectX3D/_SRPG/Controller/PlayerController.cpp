@@ -1,19 +1,14 @@
 #include "framework.h"
 #include "PlayerController.h"
 
-PlayerController::PlayerController()
+void PlayerController::Control(void* pack)
 {
-}
+	MapCursor* mapCursor = (MapCursor*)pack;
 
-PlayerController::~PlayerController()
-{
-}
+	if (mapCursor == nullptr)
+		return;
 
-void PlayerController::Control()
-{
-	/*
-	//mapCursor만 어떻게 할 수 있으면 되는데...
-	//포기
+	//플레이어 컨트롤
 	if (SRPGUIManager::Get()->IsActing()) {
 		if (!SRPGUIManager::Get()->IsMapControl()) {
 			mapCursor->UpdateWorld();
@@ -21,14 +16,16 @@ void PlayerController::Control()
 		}
 	}
 	else {
+		if (KEY_DOWN('A')) {
+			SRPGUIManager::Get()->OpenUI("MainSelect");
+		}
 		if (KEY_DOWN('Z')) {
-			InputAction();
+			Observer::Get()->ExcuteEvent("InputAction");
 			if (CharacterManager::Get()->HoldedCharacter())
 				SRPGUIManager::Get()->OpenUI("ActionSelect");
 		}
 	}
 
 	mapCursor->Control();
-	mapCursor->Update(); 
-	*/
+	mapCursor->Update();
 }

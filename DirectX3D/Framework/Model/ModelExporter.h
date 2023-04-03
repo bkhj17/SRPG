@@ -22,7 +22,7 @@ private:
 	//Clip
 	Clip* ReadClip(aiAnimation* animation);
 	void ReadKeyFrame(Clip* clip, aiNode* node, vector<ClipNode>& clipNodes);
-	void WriteClip(Clip* clip, string clipName, UINT index);
+	void WriterClip(Clip* clip, string clipName, UINT index);
 	void SetClipNode(const KeyData& keyData, const UINT& frameCount, ClipNode& clipNode);
 	Float3 CalcInterpolationVector(const vector<KeyVector>& keyData, UINT& count, int curFrame);
 	Float4 CalcInterpolationQuat(const vector<KeyQuat>& keyData, UINT& count, int curFrame);

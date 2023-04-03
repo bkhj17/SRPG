@@ -14,6 +14,9 @@ CharacterManager::CharacterManager()
 	Observer::Get()->AddEvent("CharacterUnhold", bind(&CharacterManager::CharacterUnhold, this));
 	Observer::Get()->AddParamEvent("CharacterAttackHit", bind(&CharacterManager::AttackHit, this, placeholders::_1));
 	Observer::Get()->AddParamEvent("CharacterAttackEnd", bind(&CharacterManager::AttackEnd, this, placeholders::_1));
+
+	Observer::Get()->AddEvent("TurnStart", bind(&CharacterManager::TurnStart, this));
+
 }
 
 CharacterManager::~CharacterManager()

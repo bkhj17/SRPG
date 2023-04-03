@@ -4,8 +4,20 @@
 ModelAnimationScene::ModelAnimationScene()
 {
 	modelAnimator = new ModelAnimator("Soldier");
-	modelAnimator->ReadClip("SpearIdle", 0);
-	modelAnimator->ReadClip("SpearAttack", 0);
+	v = {
+		{"SpearIdle", 0},
+		{"SpearAttack", 0},
+		{"Run", 0},
+		{"AxeIdle", 0},
+		{"AxeAttack", 0},
+		{"SwordIdle", 0},
+		{"SwordAttack", 0},
+		{"Death", 0}
+	};
+
+	for(auto& p : v)
+ 		modelAnimator->ReadClip(p.first, p.second);
+	
 
 	//modelAnimator->GetClip(2)->SetEvent(bind(&ModelAnimationScene::SetIdle, this), 0.55f);
 }
@@ -17,7 +29,7 @@ ModelAnimationScene::~ModelAnimationScene()
 
 void ModelAnimationScene::Update()
 {
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < v.size(); i++) {
 		if (KEY_DOWN('1'+i))
 			modelAnimator->PlayClip(i);
 	}

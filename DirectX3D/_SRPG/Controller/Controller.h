@@ -5,6 +5,6 @@ public:
 	Controller() = default;
 	~Controller() = default;
 
-	virtual void Control() = 0;
+	virtual void Control(void *pack = nullptr) = 0;
 };
 

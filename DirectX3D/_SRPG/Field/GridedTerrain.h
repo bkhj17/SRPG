@@ -7,6 +7,13 @@ public:
 		SELECT, MOVE, ATTACK,
 	};
 
+
+	struct MovableInfo {
+		int dist;
+		int prev;
+		bool standable = true;
+	};
+
 public:
 	GridedTerrain();
 	~GridedTerrain();
@@ -67,7 +74,7 @@ private:
 	vector<Transform*> objects;
 	
 	//행동 범위 저장 : 이동, 공격
-	unordered_map<int, pair<int, int>> movables;
+	unordered_map<int, MovableInfo> movables;
 	unordered_map<int, pair<int, int>> attackables;
 
 	bool standingAttack = false;

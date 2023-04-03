@@ -13,7 +13,9 @@ SRPGScene::SRPGScene()
 	
 	//예뻐지긴 했는데 나중에 뭔가 더 해야할 것 같다
 	CharacterManager::Get()->Spawn("test1", Character::Team::PLAYER, terrain, 5, 5);
+	CharacterManager::Get()->Spawn("test1-1", Character::Team::PLAYER, terrain, 5, 6);
 	CharacterManager::Get()->Spawn("test2", Character::Team::ENEMY, terrain, 6, 8);
+	CharacterManager::Get()->Spawn("test2-1", Character::Team::ENEMY, terrain, 6, 7);
 
 	mapCursor = new MapCursor;
 	mapCursor->SetGridTerrain(terrain);
@@ -23,7 +25,7 @@ SRPGScene::SRPGScene()
 	Observer::Get()->AddEvent("InputAction", bind(&SRPGScene::InputAction, this));
 	Observer::Get()->AddEvent("InputAttack", bind(&SRPGScene::InputAttackAction, this));
 
-	SRPGUIManager::Get()->OpenUI("Test", Vector3(CENTER_X - 300.0f, CENTER_Y));
+	SRPGUIManager::Get()->OpenUI("TurnChangeUI", Vector3(CENTER_X, CENTER_Y));
 
 	TurnManager::Get();
 }
@@ -74,86 +76,10 @@ void SRPGScene::GUIRender()
 
 void SRPGScene::Control()
 {
-	if (TurnManager::Get()->GetCurPlayer() == Character::Team::PLAYER) {
-		//플레이어 컨트롤
-		if (SRPGUIManager::Get()->IsActing()) {
-			if (!SRPGUIManager::Get()->IsMapControl()) {
-				mapCursor->UpdateWorld();
-				return;
-			}
-		}
-		else {
-			if (KEY_DOWN('Z')) {
-				InputAction();
-				if (CharacterManager::Get()->HoldedCharacter())
-					SRPGUIManager::Get()->OpenUI("ActionSelect");
-			}
-		}
-
-		mapCursor->Control();
-		mapCursor->Update();
-	}
-	else {
-		//에너미 컨트롤
-		//홀드된 캐릭터가 있다
-		auto holded = CharacterManager::Get()->HoldedCharacter();
-		if(holded) {
-			if (holded->IsActed())
-				CharacterManager::Get()->CharacterUnhold();
-			int holdedIndex = terrain->CoordToIndex(terrain->PosToCoord(holded->GlobalPos()));
-			//공격범위 내의 적들 찾기
-			auto vAttackables = terrain->AttackableCharacters(Character::Team::PLAYER);
-			if (vAttackables.empty()) {
-				holded->ActEnd();
-				CharacterManager::Get()->CharacterUnhold();
-				return;
-			}
-			
-			//가장 가까운 적과 그 적을 공격할 위치
-			Character* target = vAttackables.front().first;
-			int tile = vAttackables.front().second.second;
-			//사거리 내에 적이 있다 == 현재 위치가 적을 공격할 위치
-			if(tile == holdedIndex)
-			{
-
-				//해당 적을 타겟으로 전투
-				auto coord = terrain->PosToCoord(target->GlobalPos());
-				terrain->InputAction(coord.first, coord.second, GridedTerrain::ATTACK);
-			}
-			else {
-				if(holded->IsMoved())
-				{
-					//이동 했다면
-					CharacterManager::Get()->CharacterUnhold();
-				}
-				else {
-					//이동 안 했다면
-					//가장 가까운 적을 향해
-					//이동
-					auto coord = terrain->IndexToCoord(tile);
-					terrain->InputAction(coord.first, coord.second);
-				}
-			}
-			return;
-		}
-
-		//자기편 캐릭터 중 안 움직인 캐릭터 찾기
-		Character* character = CharacterManager::Get()->GetActableCharacter(Character::Team::ENEMY);
-		
-		//행동 안 한 캐릭터 없으면
-		if(character == nullptr)
-		{
-			//턴 엔드
-			TurnManager::Get()->NextTurn();
-			return;
-		}
-		else {
-			//있으면 해당 캐릭터 선택
-			auto coord = terrain->PosToCoord(character->Pos());
-			terrain->SetSelected(coord.first, coord.second, true);
-			terrain->InputAction();
-		}
-	}
+	if (TurnManager::Get()->GetCurPlayer() == Character::Team::PLAYER)
+		TurnManager::Get()->Control(mapCursor);
+	else
+		TurnManager::Get()->Control(terrain);
 }
 
 void SRPGScene::InputAction()

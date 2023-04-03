@@ -21,7 +21,8 @@ void InfoUI::Render()
 	//ÀÌ¸§
 	Font::Get()->RenderTextLeft(character->GetStatus().name, { x, y });
 	//ÆÀ
-	Font::Get()->RenderText(to_wstring(character->GetStatus().teamNum), { Pos().x + Half().x - 20.0f, y});
+	wstring team = character->GetStatus().teamNum == Character::Team::PLAYER ? L"Player" : L"Enemy";
+	Font::Get()->RenderText(team, { Pos().x + Half().x - 20.0f, y});
 	
 	//hp
 	Font::Get()->RenderTextLeft(hpText, {x , y - 30.0f});

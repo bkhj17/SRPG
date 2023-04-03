@@ -1,7 +1,7 @@
 #include "Framework.h"
 
-UIWindow::UIWindow(Vector2 size, Vector3 pos)
-	: Quad(size)
+UIWindow::UIWindow(Vector2 size, Vector3 pos, bool renderCursor)
+	: Quad(size), renderCursor(renderCursor)
 {
 	localPosition = pos;
 

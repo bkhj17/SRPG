@@ -18,5 +18,6 @@ private:
 
 private:
 	ModelAnimator* modelAnimator;
+	vector<pair<string, int>> v;
 };
 
