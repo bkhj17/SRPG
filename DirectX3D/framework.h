@@ -202,10 +202,13 @@ using namespace GameMath;
 #include "Objects/Manager/KunaiManager.h"
 #include "Objects/Manager/RobotManager.h"
 
+#include "Objects/UI/ImageFont.h"
+
 //포트폴리오
 #include "_SRPG/Field/GridedTerrain.h"
 #include "_SRPG/Field/MapCursor.h"
 
+#include "_SRPG/Character/Weapon.h"
 #include "_SRPG/Character/Character.h"
 #include "_SRPG/Character/CharacterManager.h"
 
@@ -219,6 +222,7 @@ using namespace GameMath;
 #include "_SRPG/UI/TurnUI.h"
 #include "_SRPG/UI/FloatingDamage.h"
 #include "_SRPG/UI/TurnChangeUI.h"
+#include "_SRPG/UI/MessageUI.h"
 #include "_SRPG/UI/SRPGUIManager.h"
 
 #include "_SRPG/Controller/Controller.h"

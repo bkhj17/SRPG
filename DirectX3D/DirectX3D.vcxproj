@@ -138,6 +138,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Objects\UI\ImageFont.h" />
+    <ClInclude Include="_SRPG\UI\MessageUI.h" />
+    <ClInclude Include="_SRPG\Character\Weapon.h" />
     <ClInclude Include="_SRPG\UI\TurnChangeUI.h" />
     <ClInclude Include="_SRPG\UI\SelectUI.h" />
     <ClInclude Include="_SRPG\Controller\EnemyController.h" />
@@ -324,6 +327,9 @@
     <ClInclude Include="_SRPG\UI\UIWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Objects\UI\ImageFont.cpp" />
+    <ClCompile Include="_SRPG\UI\MessageUI.cpp" />
+    <ClCompile Include="_SRPG\Character\Weapon.cpp" />
     <ClCompile Include="_SRPG\UI\TurnChangeUI.cpp" />
     <ClCompile Include="_SRPG\UI\SelectUI.cpp" />
     <ClCompile Include="_SRPG\Controller\EnemyController.cpp" />
@@ -761,6 +767,9 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\UI\ImageFont.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="Shaders\UI\ProgressBar.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>

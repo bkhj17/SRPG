@@ -19,5 +19,9 @@ private:
 private:
 	ModelAnimator* modelAnimator;
 	vector<pair<string, int>> v;
+
+	Transform* hand;
+	Model* sword;
+	int handNode = 37;
 };
 

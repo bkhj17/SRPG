@@ -21,8 +21,8 @@ public:
 		string name = "";
 		int teamNum = NONE;
 
-		int maxHp = 10;
-		int curHp = 10;
+		int maxHp = 2;
+		int curHp = 2;
 
 		int attack = 3;
 		int defence = 3;
@@ -32,6 +32,7 @@ public:
 
 	};
 public:
+	void Init();
 
 	void Update();
 	void Render();
@@ -66,6 +67,8 @@ private:
 private:
 	ModelAnimator* body;					//위치 테스트 용. 추후 모델 애니메이터로 변경
 	AnimState animState = IDLE;				//현재 애니메이션
+
+	Weapon* weapon;
 
 	bool acted = false;						//해당 턴 행동 여부 : 공격, 혹은 행동 완료 선택 시 true로 변경. 턴 시작시 false
 	bool moved = false;						//해당 턴 이동 여부

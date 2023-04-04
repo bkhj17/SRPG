@@ -8,9 +8,9 @@ ImageFont::ImageFont(wstring textureFile, float interval)
 	for (auto i = 0; i < MAX_LENGTH; i++) {
 		quads[i] = new Quad(textureFile, Vector2(), Vector2(0.1f, 1.0f));
 		quads[i]->SetParent(this);
-		quads[i]->GetMaterial()->SetShader(L"ImageFont.hlsl");
+		quads[i]->GetMaterial()->SetShader(L"UI/ImageFont.hlsl");
 	}
-	fontSize = quads[0]->;
+	fontSize = quads[0]->GetSize();
 
 	valueBuffer = new IntValueBuffer;
 }
@@ -48,7 +48,6 @@ void ImageFont::Update()
 		quads[i]->Pos().x = i * -quads[i]->GetSize().x - interval * i + start;
 		quads[i]->UpdateWorld();
 	}
-
 }
 
 void ImageFont::Render()

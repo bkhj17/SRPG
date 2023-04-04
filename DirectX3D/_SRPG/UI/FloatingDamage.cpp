@@ -1,8 +1,15 @@
 #include "framework.h"
 
+FloatingDamage::FloatingDamage(wstring file)
+	: ImageFont(file) 
+{
+	isActive = false; 
+}
+
 void FloatingDamage::Spawn(Vector3 pos, int damage)
 {
 	isActive = true;
+	SetValue(damage);
 	Pos() = CAM->WorldToScreen(pos);
 	UpdateWorld();
 
@@ -16,12 +23,13 @@ void FloatingDamage::Update()
 	if (!isActive)
 		return;
 
+
 	t += DELTA * speed;
 
 	float y = SLerp(startY, endY, t);
 	Pos().y = y;
-	UpdateWorld();
 
+	__super::Update();
 	if (t >= 1.0f)
 		isActive = false;
 }

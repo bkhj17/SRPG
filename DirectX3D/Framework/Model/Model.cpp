@@ -76,7 +76,8 @@ void Model::ReadMaterial()
 
 	for (UINT i = 0; i < size; i++) {
 		Material* material = new Material();
-		material->Load(reader->String());
+		string name = reader->String();
+		material->Load(name);
 		materials.push_back(material);
 	}
 

@@ -8,8 +8,7 @@ public:
 	enum AlignedType {
 		LEFT, CENTER, RIGHT
 	};
-
-	
+		
 public:
 	ImageFont(wstring textureFile, float interval = 1.0f);
 	~ImageFont();

@@ -2,10 +2,16 @@
 
 class SRPGScene : public Scene
 {
+private:
+	enum SceneState {
+		PLAYING, WIN, LOSE
+	};
+
 public:
 	SRPGScene();
 	~SRPGScene();
 
+	virtual void Start() override;
 	// Scene을(를) 통해 상속됨
 	virtual void Update() override;
 	virtual void PreRender() override;
@@ -24,5 +30,7 @@ private:
 	class MapCursor* mapCursor;
 
 	int inputMode = 0;
+
+	SceneState state = PLAYING;
 };
 

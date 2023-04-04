@@ -57,6 +57,9 @@ public:
 	vector<pair<class Character*, pair<int, int>>> AttackableCharacters(int targetTeam);
 
 private:
+	void CalledPosToCoord(void* pack);
+
+private:
 	void Reselect();
 private:
 	FloatValueBuffer* widthHeightBuffer;

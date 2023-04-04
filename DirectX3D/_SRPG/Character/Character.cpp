@@ -6,12 +6,17 @@ Character::Character()
 {
 	body = new ModelAnimator("Soldier");
 	
-	body->ReadClip("SpearIdle");		//IDLE
-	body->ReadClip("run");		//RUN
-	body->ReadClip("SpearAttack");		//ATTACK
+	body->ReadClip("SwordIdle");		//IDLE
+	body->ReadClip("run");				//RUN
+	body->ReadClip("SwordAttack");		//ATTACK
+	body->ReadClip("Hit");
+	body->ReadClip("Death");
+	
 	body->GetClip(ATTACK)->SetEvent(bind(&Character::AttackEnd, this), 0.8f);
 	body->GetClip(ATTACK)->SetEvent(bind(&Character::AttackHit, this), 0.3f);
-	
+	body->GetClip(HIT)->SetEvent(bind(&Character::SetAnimState, this, IDLE), 0.9f);
+	body->GetClip(DIE)->SetEvent(bind(&Character::SetActive, this, false), 0.9f);
+
 	body->PlayClip(0);
 	body->SetParent(this);
 
@@ -21,6 +26,9 @@ Character::Character()
 	body->SetShader(L"SRPG/Character.hlsl");
 
 	valueBuffer = new IntValueBuffer;
+
+	weapon = new Weapon("Sword");
+	weapon->SetOwner(body, 37);
 }
 
 Character::~Character()
@@ -28,6 +36,15 @@ Character::~Character()
 	delete body;
 
 	delete valueBuffer;
+
+	delete weapon;
+
+}
+
+void Character::Init()
+{
+	isActive = true;
+	status.curHp = status.maxHp;
 }
 
 void Character::Update()
@@ -43,6 +60,8 @@ void Character::Update()
 		SetAnimState(IsMoving() ? RUN : IDLE);
 
 	body->Update();
+
+	weapon->Update();
 }
 
 void Character::Render()
@@ -53,12 +72,18 @@ void Character::Render()
 	valueBuffer->Get()[0] = (int)acted;
 	valueBuffer->SetPS(8);
 	body->Render();
+
+	weapon->Render();
 }
 
 bool Character::IsActing()
 {
+	if (!Active())
+		return false;
+
 	bool acting = false;
 	acting |= IsMoving();
+	acting |= (animState >= ATTACK);
 	return acting;
 }
 
@@ -148,7 +173,7 @@ void Character::Damaged(int damage)
 {
 	status.curHp -= damage;
 
-	//SetAnimState(status.curHp <= 0 ? DIE : HIT);
+	SetAnimState(status.curHp <= 0 ? DIE : HIT);
 
 	SRPGUIManager::Get()->SpawnDamage(Pos(), damage);
 }

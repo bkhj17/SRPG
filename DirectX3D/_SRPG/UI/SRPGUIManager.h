@@ -13,7 +13,6 @@ public:
 
 	void SpawnDamage(Vector3 pos, int damage);
 
-	void OpenMenu();
 	void CloseAll();
 
 	UIWindow* OpenUI(string key);

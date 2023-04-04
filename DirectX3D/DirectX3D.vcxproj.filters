@@ -567,6 +567,15 @@
     <ClInclude Include="_SRPG\UI\TurnChangeUI.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="_SRPG\Character\Weapon.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="_SRPG\UI\MessageUI.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\UI\ImageFont.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX3D.cpp">
@@ -1094,6 +1103,15 @@
     <ClCompile Include="_SRPG\UI\TurnChangeUI.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="_SRPG\Character\Weapon.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="_SRPG\UI\MessageUI.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\UI\ImageFont.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX3D.rc">
@@ -1152,6 +1170,7 @@
     <FxCompile Include="Shaders\SRPG\WindowFrame.hlsl" />
     <FxCompile Include="Shaders\LandScape\ScatteringTarget.hlsl" />
     <FxCompile Include="Shaders\LandScape\Scattering.hlsl" />
+    <FxCompile Include="Shaders\UI\ImageFont.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\VertexHeader.hlsli" />

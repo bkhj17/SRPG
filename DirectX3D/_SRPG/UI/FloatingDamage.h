@@ -1,9 +1,9 @@
 #pragma once
 
-class FloatingDamage : public Quad
+class FloatingDamage : public ImageFont
 {
 public:
-	FloatingDamage(wstring file) : Quad(file) { isActive = false; }
+	FloatingDamage(wstring file);
 	~FloatingDamage() = default;
 
 	void Spawn(Vector3 pos, int damage = 1);

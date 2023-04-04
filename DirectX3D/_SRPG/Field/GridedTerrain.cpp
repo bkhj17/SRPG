@@ -58,6 +58,8 @@ GridedTerrain::GridedTerrain()
 
 	Observer::Get()->AddEvent("SetStandingAttack", bind(&GridedTerrain::StandingAttack, this, true));
 	Observer::Get()->AddEvent("UnsetStandingAttack", bind(&GridedTerrain::StandingAttack, this, false));
+
+	Observer::Get()->AddParamEvent("CallPosToCoord", bind(&GridedTerrain::CalledPosToCoord, this, placeholders::_1));
 }
 
 GridedTerrain::~GridedTerrain()
@@ -234,6 +236,9 @@ void GridedTerrain::CheckMovableArea()
 	//오브젝트들의 좌표 탐색
 	map<int, Transform*> objectsOnIndex;
 	for (auto object : objects) {
+		if (!object->Active())
+			continue;
+
 		auto coord = PosToCoord(object->GlobalPos());
 		int index = CoordToIndex(coord.first, coord.second);
 		objectsOnIndex[index] = object;
@@ -364,6 +369,9 @@ void GridedTerrain::CheckAttackableArea(int minRange, int maxRange, bool isStand
 Transform* GridedTerrain::ObjectOnIndex(int index)
 {
 	for (auto object : objects) {
+		if (!object->Active())
+			continue;
+
 		int oi = CoordToIndex(PosToCoord(object->Pos()));
 		if (oi == index)
 			return object;
@@ -517,6 +525,13 @@ vector<pair<Character*, pair<int, int>>> GridedTerrain::AttackableCharacters(int
 	});
 
 	return result;
+}
+
+void GridedTerrain::CalledPosToCoord(void* pack)
+{
+	pair<Vector3, pair<int, int>>* unpacked = (pair<Vector3, pair<int, int>>*)pack;
+
+	unpacked->second = PosToCoord(unpacked->first);
 }
 
 void GridedTerrain::Reselect()

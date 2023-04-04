@@ -71,7 +71,7 @@ Character* CharacterManager::Spawn()
 		if (character->Active())
 			continue;
 
-		character->SetActive(true);
+		character->Init();
 		return character;
 	}
 	return nullptr;
@@ -111,9 +111,30 @@ void CharacterManager::BattleStart(Character* offense, Character* defense)
 	isBattle = true;
 	curOffense = offense;
 	curDefense = defense;
-	//스테이터스에 따라 공방 설정
-	attacks.push({ 1, offense, defense });
-	attacks.push({ 1, defense, offense });
+	//스테이터스에 따라 미리 데미지 설정
+
+
+	//사거리에 따라 공격 불가능하게도 해야 한다
+	pair<Vector3, pair<int, int>> pack = {};
+	pack.first = offense->Pos();
+	Observer::Get()->ExcuteParamEvent("CallPosToCoord", &pack);
+
+	pair<int, int> coordO = pack.second;			//공격자 위치 coord
+
+	pack.first = offense->Pos();
+	Observer::Get()->ExcuteParamEvent("CallPosToCoord", &pack);
+	pair<int, int> coordD = pack.second;
+
+	int dist = abs(coordO.first - coordD.first) + abs(coordO.second - coordD.second);
+
+	//방어자가 공격자 사거리 밖 => 애초에 사거리 밖이라 전투 자체가 성립 안 함
+	if (offense->GetAttackRange().first > dist || offense->GetAttackRange().second < dist)
+		return;
+	attacks.push({ CalcDamage(offense, defense), offense, defense });		//공격자 공격
+	
+	//공격자가 방어자 사거리 안에 있을 때에만 반격을 실행
+	if (offense->GetAttackRange().first <= dist && offense->GetAttackRange().second >= dist)
+		attacks.push({ CalcDamage(defense, offense),defense, offense });	//방어자 반격
 
 	//카메라 설정
 }
@@ -146,6 +167,19 @@ Character* CharacterManager::GetActableCharacter(Character::Team team)
 	return nullptr;
 }
 
+int CharacterManager::NumActiveCharactersByTeam(Character::Team team)
+{
+	int cnt = 0;
+	for (auto character : characterPool) {
+		if (!character->Active())
+			continue;
+
+		if (character->GetStatus().teamNum == team)
+			cnt++;
+	}
+	return cnt;
+}
+
 void CharacterManager::BattleUpdate()
 {
 	if (attacks.empty() || !curOffense->Active() || !curDefense->Active()) {
@@ -155,11 +189,10 @@ void CharacterManager::BattleUpdate()
 
 	auto attacker = attacks.front().attacker;
 	auto defender = attacks.front().hit;
-	if (!attacker->IsActing()) {
+	if (!attacker->IsActing() && !defender->IsActing()) {
 		//공격 아직 시작 안 됨 -> 시작명령
 		//공격 방향
 		Vector3 hitPos = defender->Pos();
-		Vector3 attackerPos = attacker->Pos();
 		Vector3 dir = defender->Pos() - attacker->Pos();
 		dir.y = 0.0f;
 		attacker->SetDir(dir);
@@ -176,7 +209,10 @@ void CharacterManager::BattleEnd()
 	isBattle = false;
 	curOffense = nullptr;
 	curDefense = nullptr;
-		
+
+	while(!attacks.empty())
+		attacks.pop();
+
 	//카메라 설정
 	Observer::Get()->ExcuteEvent("BattleEnd");
 	CharacterUnhold();
@@ -196,4 +232,14 @@ void CharacterManager::AttackEnd(void* ptr)
 	auto attacked = (Character*)ptr;
 	if (!attacks.empty() && attacks.front().attacker == attacked)
 		attacks.pop();
+}
+
+int CharacterManager::CalcDamage(Character* attacker, Character* defender)
+{
+	//공격 = 힘 + 무기 위력 * (유효 ? 2 : 1) 
+	 
+	//피해량 = (공격 - 수비)*(1 or 3(크리티컬) )
+
+	//임시로 1
+	return 1;
 }

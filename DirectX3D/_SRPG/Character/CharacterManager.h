@@ -46,12 +46,16 @@ public:
     void SetTerrain(class GridedTerrain* terrain) { }
 
     Character* GetActableCharacter(Character::Team team);
+
+    int NumActiveCharactersByTeam(Character::Team team);
 private:
     void BattleUpdate();
     void BattleEnd();
 
     void AttackHit(void* ptr);
     void AttackEnd(void* ptr);
+
+    int CalcDamage(Character* attacker, Character* defender);
 private:
     Character* holded = nullptr;    
     int holdedW = -1, holdedH = -1;

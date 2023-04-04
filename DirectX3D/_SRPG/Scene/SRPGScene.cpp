@@ -11,15 +11,8 @@ SRPGScene::SRPGScene()
 {
 	terrain = new GridedTerrain;
 	
-	//예뻐지긴 했는데 나중에 뭔가 더 해야할 것 같다
-	CharacterManager::Get()->Spawn("test1", Character::Team::PLAYER, terrain, 5, 5);
-	CharacterManager::Get()->Spawn("test1-1", Character::Team::PLAYER, terrain, 5, 6);
-	CharacterManager::Get()->Spawn("test2", Character::Team::ENEMY, terrain, 6, 8);
-	CharacterManager::Get()->Spawn("test2-1", Character::Team::ENEMY, terrain, 6, 7);
-
 	mapCursor = new MapCursor;
 	mapCursor->SetGridTerrain(terrain);
-	mapCursor->SetPosCoord(5, 6, true);
 	Observer::Get()->AddParamEvent("CharacterMoveEnd", bind(&SRPGScene::CharacterMoveEnd, this, placeholders::_1));
 
 	Observer::Get()->AddEvent("InputAction", bind(&SRPGScene::InputAction, this));
@@ -41,6 +34,17 @@ SRPGScene::~SRPGScene()
 	TurnManager::Delete();
 }
 
+void SRPGScene::Start()
+{
+	//예뻐지긴 했는데 나중에 뭔가 더 해야할 것 같다
+	CharacterManager::Get()->Spawn("test1", Character::Team::PLAYER, terrain, 5, 5);
+	CharacterManager::Get()->Spawn("test1-1", Character::Team::PLAYER, terrain, 5, 6);
+	CharacterManager::Get()->Spawn("test2", Character::Team::ENEMY, terrain, 6, 8);
+	CharacterManager::Get()->Spawn("test2-1", Character::Team::ENEMY, terrain, 6, 7);
+
+	mapCursor->SetPosCoord(5, 6, true);
+}
+
 void SRPGScene::Update()
 {
 	terrain->Update();
@@ -49,6 +53,8 @@ void SRPGScene::Update()
 	SRPGUIManager::Get()->Update();
 	if (!CharacterManager::Get()->IsActing())
 		Control();
+
+
 }
 
 void SRPGScene::PreRender()
@@ -60,8 +66,15 @@ void SRPGScene::Render()
 	terrain->Render();
 
 	CharacterManager::Get()->Render();
-	if (!CharacterManager::Get()->IsActing())
+	if (!CharacterManager::Get()->IsActing() && state == PLAYING)
 		mapCursor->Render();
+
+	if (state == WIN) {
+
+	}
+	else if (state == LOSE) {
+
+	}
 }
 
 void SRPGScene::PostRender()
@@ -76,6 +89,26 @@ void SRPGScene::GUIRender()
 
 void SRPGScene::Control()
 {
+	if (state != PLAYING)
+		return;
+
+	if (CharacterManager::Get()->NumActiveCharactersByTeam(Character::Team::PLAYER) == 0) {
+		//플레이어 패배
+		state = LOSE;
+		SRPGUIManager::Get()->CloseAll();
+		SRPGUIManager::Get()->OpenUI("Lose");
+		Observer::Get()->ExcuteEvent("GameLose");
+		return;
+	}
+	else if(CharacterManager::Get()->NumActiveCharactersByTeam(Character::Team::ENEMY) == 0) {
+		//플레이어 승리
+		state = WIN;
+		SRPGUIManager::Get()->CloseAll();
+		SRPGUIManager::Get()->OpenUI("Win");
+		Observer::Get()->ExcuteEvent("GameWin");
+		return;
+	}
+
 	if (TurnManager::Get()->GetCurPlayer() == Character::Team::PLAYER)
 		TurnManager::Get()->Control(mapCursor);
 	else
