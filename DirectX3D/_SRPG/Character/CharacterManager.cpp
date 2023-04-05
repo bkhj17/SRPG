@@ -41,6 +41,12 @@ void CharacterManager::Render()
 		character->Render();
 }
 
+void CharacterManager::PostRender()
+{
+	for (auto character : characterPool)
+		character->PostRender();
+}
+
 void CharacterManager::CharacterUnhold()
 {
 	if (holded == nullptr)

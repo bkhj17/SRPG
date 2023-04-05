@@ -83,6 +83,7 @@ void SRPGScene::Render()
 
 void SRPGScene::PostRender()
 {
+	CharacterManager::Get()->PostRender();
 	SRPGUIManager::Get()->Render();
 }
 

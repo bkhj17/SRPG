@@ -29,6 +29,9 @@ Character::Character()
 	actCylinder->Pos().y += 2.0f;
 	actCylinder->SetParent(this);
 
+	hpBar = new ProgressBar(L"Textures/UI/hp_bar.png", L"Textures/UI/hp_bar_BG.png");
+	
+
 	valueBuffer = new IntValueBuffer;
 }
 
@@ -36,6 +39,7 @@ Character::~Character()
 {
 	delete body;
 	delete actCylinder;
+	delete hpBar;
 	delete valueBuffer;
 
 	if (weapon) weapon->SetOwner(nullptr);
@@ -46,6 +50,8 @@ void Character::Init()
 {
 	SetActive(true);
 	status.curHp = status.maxHp;
+
+	hpBar->SetAmount((float)status.curHp / status.maxHp);
 }
 
 void Character::Update()
@@ -62,6 +68,7 @@ void Character::Update()
 
 	body->Update();
 	actCylinder->UpdateWorld();
+	UpdateHPBar();
 
 	if(weapon)
 		weapon->Update();
@@ -72,13 +79,19 @@ void Character::Render()
 	if (!Active())
 		return;
 
-
 	valueBuffer->Get()[0] = (int)acted;
 	valueBuffer->SetPS(8);
 	body->Render();
-
 	if (status.teamNum == TurnManager::Get()->GetCurPlayer() && !IsActing() && !acted)
 		actCylinder->Render();
+}
+
+void Character::PostRender()
+{
+	if (!Active())
+		return;
+
+	hpBar->Render();
 }
 
 bool Character::IsActing()
@@ -198,6 +211,7 @@ void Character::AttackHit()
 void Character::Damaged(int damage)
 {
 	status.curHp -= damage;
+	hpBar->SetAmount((float)status.curHp / status.maxHp);
 
 	SetAnimState(status.curHp <= 0 ? DIE : HIT);
 
@@ -213,4 +227,12 @@ void Character::Die()
 		weapon->SetOwner(nullptr); 
 		weapon = nullptr;
 	}
+}
+
+void Character::UpdateHPBar()
+{
+	Vector3 barPos = Pos() + Vector3(0, 0.0f, 0);
+	hpBar->Pos() = CAM->WorldToScreen(barPos);
+
+	hpBar->UpdateWorld();
 }

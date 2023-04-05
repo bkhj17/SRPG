@@ -36,6 +36,7 @@ public:
 
 	void Update();
 	void Render();
+	void PostRender();
 
 	void TurnStart();
 	
@@ -70,6 +71,8 @@ private:
 	void Damaged(int damage);
 
 	void Die();
+
+	void UpdateHPBar();
 private:
 
 
@@ -79,6 +82,7 @@ private:
 	Weapon* weapon = nullptr;
 
 	Cylinder* actCylinder;
+	ProgressBar* hpBar;
 
 	bool acted = false;						//해당 턴 행동 여부 : 공격, 혹은 행동 완료 선택 시 true로 변경. 턴 시작시 false
 	bool moved = false;						//해당 턴 이동 여부

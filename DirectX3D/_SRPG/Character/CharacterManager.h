@@ -22,6 +22,7 @@ private:
 public:
     void Update();
     void Render();
+    void PostRender();
 
     //void CharacterHold(Character* character) { holded = character; }
     void CharacterHold(Character* character, int w, int h) { holded = character; holdedW = w; holdedH = h; }
