@@ -21,11 +21,13 @@ ModelAnimationScene::ModelAnimationScene()
 	
 	//modelAnimator->GetClip(2)->SetEvent(bind(&ModelAnimationScene::SetIdle, this), 0.55f);
 
+	string weaponTag = "Spear";
+
 	hand = new Transform;
-	sword = new Model("Sword");
-	sword->SetTag("Sword");
-	sword->Load();
-	sword->SetParent(hand);
+	weapon = new Model("Spear");
+	weapon->SetTag("Spear");
+	weapon->Load();
+	weapon->SetParent(hand);
 }
 
 ModelAnimationScene::~ModelAnimationScene()
@@ -33,7 +35,7 @@ ModelAnimationScene::~ModelAnimationScene()
 	delete modelAnimator;
 
 	delete hand;
-	delete sword;
+	delete weapon;
 }
 
 void ModelAnimationScene::Update()
@@ -46,7 +48,7 @@ void ModelAnimationScene::Update()
 	modelAnimator->Update();
 
 	hand->SetWorld(modelAnimator->GetTransformByNode(handNode));
-	sword->UpdateWorld();
+	weapon->UpdateWorld();
 }
 
 void ModelAnimationScene::PreRender()
@@ -57,7 +59,7 @@ void ModelAnimationScene::Render()
 {
 	modelAnimator->Render();
 
-	sword->Render();
+	weapon->Render();
 }
 
 void ModelAnimationScene::PostRender()
@@ -68,7 +70,7 @@ void ModelAnimationScene::GUIRender()
 {
 	modelAnimator->GUIRender();
 
-	sword->GUIRender();
+	weapon->GUIRender();
 
 	ImGui::SliderInt("HandNode", &handNode, 0, 100);
 }

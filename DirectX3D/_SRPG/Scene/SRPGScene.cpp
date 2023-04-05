@@ -13,6 +13,10 @@ SRPGScene::SRPGScene()
 	
 	mapCursor = new MapCursor;
 	mapCursor->SetGridTerrain(terrain);
+	
+	WeaponManager::Get();
+	CharacterManager::Get();
+
 	Observer::Get()->AddParamEvent("CharacterMoveEnd", bind(&SRPGScene::CharacterMoveEnd, this, placeholders::_1));
 
 	Observer::Get()->AddEvent("InputAction", bind(&SRPGScene::InputAction, this));
@@ -21,6 +25,7 @@ SRPGScene::SRPGScene()
 	SRPGUIManager::Get()->OpenUI("TurnChangeUI", Vector3(CENTER_X, CENTER_Y));
 
 	TurnManager::Get();
+
 }
 
 SRPGScene::~SRPGScene()
@@ -29,6 +34,8 @@ SRPGScene::~SRPGScene()
 	delete mapCursor;
 
 	CharacterManager::Delete();
+	WeaponManager::Delete();
+
 	SRPGUIManager::Delete();
 
 	TurnManager::Delete();
@@ -37,10 +44,10 @@ SRPGScene::~SRPGScene()
 void SRPGScene::Start()
 {
 	//예뻐지긴 했는데 나중에 뭔가 더 해야할 것 같다
-	CharacterManager::Get()->Spawn("test1", Character::Team::PLAYER, terrain, 5, 5);
-	CharacterManager::Get()->Spawn("test1-1", Character::Team::PLAYER, terrain, 5, 6);
-	CharacterManager::Get()->Spawn("test2", Character::Team::ENEMY, terrain, 6, 8);
-	CharacterManager::Get()->Spawn("test2-1", Character::Team::ENEMY, terrain, 6, 7);
+	CharacterManager::Get()->Spawn("test1", Character::Team::PLAYER, terrain, 3, 3);
+	CharacterManager::Get()->Spawn("test1-1", Character::Team::PLAYER, terrain, 4, 3);
+	CharacterManager::Get()->Spawn("test2", Character::Team::ENEMY, terrain, 7, 10);
+	CharacterManager::Get()->Spawn("test2-1", Character::Team::ENEMY, terrain, 9, 10);
 
 	mapCursor->SetPosCoord(5, 6, true);
 }
@@ -49,6 +56,8 @@ void SRPGScene::Update()
 {
 	terrain->Update();
 	CharacterManager::Get()->Update();
+	WeaponManager::Get()->Update();
+
 
 	SRPGUIManager::Get()->Update();
 	if (!CharacterManager::Get()->IsActing())
@@ -66,15 +75,10 @@ void SRPGScene::Render()
 	terrain->Render();
 
 	CharacterManager::Get()->Render();
+	WeaponManager::Get()->Render();
+	
 	if (!CharacterManager::Get()->IsActing() && state == PLAYING)
 		mapCursor->Render();
-
-	if (state == WIN) {
-
-	}
-	else if (state == LOSE) {
-
-	}
 }
 
 void SRPGScene::PostRender()

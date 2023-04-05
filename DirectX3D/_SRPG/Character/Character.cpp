@@ -15,35 +15,36 @@ Character::Character()
 	body->GetClip(ATTACK)->SetEvent(bind(&Character::AttackEnd, this), 0.8f);
 	body->GetClip(ATTACK)->SetEvent(bind(&Character::AttackHit, this), 0.3f);
 	body->GetClip(HIT)->SetEvent(bind(&Character::SetAnimState, this, IDLE), 0.9f);
-	body->GetClip(DIE)->SetEvent(bind(&Character::SetActive, this, false), 0.9f);
+	body->GetClip(DIE)->SetEvent(bind(&Character::Die, this), 0.9f);
 
 	body->PlayClip(0);
 	body->SetParent(this);
 
-	body->Scale() *= 0.05f;
+	body->Scale() *= 0.1f;
 	body->Pos().y = body->Scale().y + 0.8f;
 
 	body->SetShader(L"SRPG/Character.hlsl");
 
-	valueBuffer = new IntValueBuffer;
+	actCylinder = new Cylinder(10.0f, 1.0f);
+	actCylinder->Pos().y += 2.0f;
+	actCylinder->SetParent(this);
 
-	weapon = new Weapon("Sword");
-	weapon->SetOwner(body, 37);
+	valueBuffer = new IntValueBuffer;
 }
 
 Character::~Character()
 {
 	delete body;
-
+	delete actCylinder;
 	delete valueBuffer;
 
-	delete weapon;
-
+	if (weapon) weapon->SetOwner(nullptr);
+	weapon = nullptr;
 }
 
 void Character::Init()
 {
-	isActive = true;
+	SetActive(true);
 	status.curHp = status.maxHp;
 }
 
@@ -60,8 +61,10 @@ void Character::Update()
 		SetAnimState(IsMoving() ? RUN : IDLE);
 
 	body->Update();
+	actCylinder->UpdateWorld();
 
-	weapon->Update();
+	if(weapon)
+		weapon->Update();
 }
 
 void Character::Render()
@@ -69,11 +72,13 @@ void Character::Render()
 	if (!Active())
 		return;
 
+
 	valueBuffer->Get()[0] = (int)acted;
 	valueBuffer->SetPS(8);
 	body->Render();
 
-	weapon->Render();
+	if (status.teamNum == TurnManager::Get()->GetCurPlayer() && !IsActing() && !acted)
+		actCylinder->Render();
 }
 
 bool Character::IsActing()
@@ -116,6 +121,27 @@ void Character::CancelMove()
 	UpdateWorld();
 
 	Observer::Get()->ExcuteParamEvent("FocusPos", &originPos);
+}
+
+void Character::SetWeapon(Weapon* weapon)
+{
+	if (this->weapon) {
+		this->weapon->SetActive(false);
+		this->weapon->SetOwner(nullptr);
+	}
+
+	this->weapon = weapon;
+	this->weapon->SetOwner(body, 37);
+	this->weapon->SetActive(true);
+}
+
+int Character::CalcAttack()
+{
+	int result = status.attack;
+	if (weapon)
+		result += weapon->GetPower();
+	
+	return result;
 }
 
 bool Character::IsMoving()
@@ -176,4 +202,15 @@ void Character::Damaged(int damage)
 	SetAnimState(status.curHp <= 0 ? DIE : HIT);
 
 	SRPGUIManager::Get()->SpawnDamage(Pos(), damage);
+}
+
+void Character::Die()
+{ 
+	SetActive(false); 
+	if (weapon) {
+		//무기랑 연결 해제
+		weapon->SetActive(false);
+		weapon->SetOwner(nullptr); 
+		weapon = nullptr;
+	}
 }

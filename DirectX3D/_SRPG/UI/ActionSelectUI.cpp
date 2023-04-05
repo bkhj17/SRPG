@@ -18,6 +18,8 @@ void ActionSelectUI::ActiveFunc()
 	switch (cursor)
 	{
 	case 0:
+		if(CharacterManager::Get()->HoldedCharacter()->IsMoved())
+			CharacterManager::Get()->HoldedCharacter()->CancelMove();
 		SRPGUIManager::Get()->OpenUI("MapSelectMove");
 		break;
 	case 1:

@@ -1,17 +1,10 @@
 #include "framework.h"
-#include "Weapon.h"
-
-Weapon::Weapon(string tag)
-{
-	model = new Model(tag);
-	model->SetTag(tag);
-	model->Load();
-	model->SetParent(this);
-}
 
 Weapon::~Weapon()
 {
-	delete model;
+	data = nullptr;
+	modelTransform = nullptr;
+	owner = nullptr;
 }
 
 void Weapon::Update()
@@ -21,10 +14,20 @@ void Weapon::Update()
 	else
 		UpdateWorld();
 
-	model->UpdateWorld();
+	if (modelTransform)
+		modelTransform->UpdateWorld();
 }
 
-void Weapon::Render()
+void Weapon::SetModelTransform(string tag, Transform* transform)
 {
-	model->Render();
+	if (modelTransform) {
+		modelTransform->SetParent(nullptr);
+		modelTransform->SetActive(false);
+	}
+
+	if (transform) {
+		transform->Load(tag);
+		transform->SetParent(this);
+		transform->SetActive(true);
+	}
 }

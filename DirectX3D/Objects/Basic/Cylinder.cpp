@@ -40,8 +40,8 @@ void Cylinder::MakeMesh()
 
 	for (UINT i = 0; i <= sliceCount; i++) {
 		float theta = thetaStep * i;
-		float x = cosf(theta);
-		float z = sinf(theta);
+		float x = cosf(theta) * radius;
+		float z = sinf(theta) * radius;
 
 		vertex.pos = { x, height * 0.5f, z };
 		vertex.uv = { (x + 1) / 2, (z + 1) / 2 };
@@ -56,8 +56,8 @@ void Cylinder::MakeMesh()
 
 	for (UINT i = 0; i <= sliceCount; i++) {
 		float theta = thetaStep * i;
-		float x = cosf(theta);
-		float z = sinf(theta);
+		float x = cosf(theta) * radius;
+		float z = sinf(theta) * radius;
 		
 		vertex.pos = { x, -height * 0.5f, z };
 		vertex.uv = { (x+1)/2, (z+1)/2 };
@@ -68,8 +68,8 @@ void Cylinder::MakeMesh()
 	UINT sideIndex = (size_t)vertices.size();
 	for (UINT i = 0; i <= sliceCount; i++) {
 		float theta = thetaStep * i;
-		float x = cosf(theta);
-		float z = sinf(theta);
+		float x = cosf(theta) * radius;
+		float z = sinf(theta) * radius;
 
 		vertex.pos = { x, height * 0.5f, z };
 		vertex.uv = { (float)i / sliceCount, 0.0f};

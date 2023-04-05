@@ -26,7 +26,7 @@ public:
     void SetPivot(Vector3 pivot) { this->pivot = pivot; }
     void SetWorld(const Matrix& matrix) { world = matrix; }
 
-    bool Active();
+    virtual bool Active();
     bool ActiveSelf() { return isActive; }
 
     void SetActive(bool isActive) { this->isActive = isActive; }
@@ -38,8 +38,8 @@ public:
     Vector3& Scale() { return localScale; }
 
     void Save();
-    void Load();
-
+    void Load(string name);
+    void Load() { Load(tag); }
 protected:
     string tag;
 

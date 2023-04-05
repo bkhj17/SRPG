@@ -5,7 +5,6 @@ LightPixelInput VS(VertexUVNormalTangentBlend input)
 {
     LightPixelInput output;
     
-    
     matrix transform;
     [branch]
     if (animType)

@@ -21,7 +21,7 @@ private:
 	vector<pair<string, int>> v;
 
 	Transform* hand;
-	Model* sword;
+	Model* weapon;
 	int handNode = 37;
 };
 

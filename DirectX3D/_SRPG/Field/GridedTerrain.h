@@ -7,13 +7,13 @@ public:
 		SELECT, MOVE, ATTACK,
 	};
 
-
 	struct MovableInfo {
-		int dist;
-		int prev;
+		int dist = 1e9;
+		int prev = -1;
 		bool standable = true;
 	};
 
+	const UINT DEFAULT_TILE_SIZE = 20;
 public:
 	GridedTerrain();
 	~GridedTerrain();
@@ -66,7 +66,7 @@ private:
 
 	vector<Cube*> cubes;
 
-	UINT tileWidth = 10, tileHeight = 10;
+	UINT tileWidth = DEFAULT_TILE_SIZE, tileHeight = DEFAULT_TILE_SIZE;
 	UINT row, col;
 
 	int selected = -1;

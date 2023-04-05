@@ -72,6 +72,7 @@ Character* CharacterManager::Spawn()
 			continue;
 
 		character->Init();
+		character->SetWeapon(WeaponManager::Get()->Pop("Sword"));
 		return character;
 	}
 	return nullptr;
@@ -108,9 +109,6 @@ void CharacterManager::BattleStart(Character* offense, Character* defense)
 		|| !defense || !defense->Active())
 		return;
 	
-	isBattle = true;
-	curOffense = offense;
-	curDefense = defense;
 	//스테이터스에 따라 미리 데미지 설정
 
 
@@ -121,7 +119,7 @@ void CharacterManager::BattleStart(Character* offense, Character* defense)
 
 	pair<int, int> coordO = pack.second;			//공격자 위치 coord
 
-	pack.first = offense->Pos();
+	pack.first = defense->Pos();
 	Observer::Get()->ExcuteParamEvent("CallPosToCoord", &pack);
 	pair<int, int> coordD = pack.second;
 
@@ -133,8 +131,15 @@ void CharacterManager::BattleStart(Character* offense, Character* defense)
 	attacks.push({ CalcDamage(offense, defense), offense, defense });		//공격자 공격
 	
 	//공격자가 방어자 사거리 안에 있을 때에만 반격을 실행
-	if (offense->GetAttackRange().first <= dist && offense->GetAttackRange().second >= dist)
+	if (defense->GetAttackRange().first <= dist && defense->GetAttackRange().second >= dist)
 		attacks.push({ CalcDamage(defense, offense),defense, offense });	//방어자 반격
+
+
+	//전투가 성립했다
+	isBattle = !attacks.empty();
+	curOffense = offense;
+	curDefense = defense;
+
 
 	//카메라 설정
 }

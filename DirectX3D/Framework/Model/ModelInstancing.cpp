@@ -19,13 +19,14 @@ void ModelInstancing::Update()
 {
     drawCount = 0;
     for (UINT i = 0; i < transforms.size(); i++) {
-        if (transforms[i]->Active()) {
-            transforms[i]->UpdateWorld();
-            if (CAM->ContainPoint(transforms[i]->GlobalPos())) {
-                instanceDatas[drawCount].world = XMMatrixTranspose(transforms[i]->GetWorld());
-                instanceDatas[drawCount].index = i;
-                drawCount++;
-            }
+        if (!transforms[i]->Active())
+            continue;
+        
+        transforms[i]->UpdateWorld();
+        if (CAM->ContainPoint(transforms[i]->GlobalPos())) {
+            instanceDatas[drawCount].world = XMMatrixTranspose(transforms[i]->GetWorld());
+            instanceDatas[drawCount].index = i;
+            drawCount++;
         }
     }
 

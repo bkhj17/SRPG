@@ -44,7 +44,7 @@ void Transform::GUIRender()
         ImGui::DragFloat3(temp.c_str(), (float*)&localPosition, 0.1f);
 
         temp = tag + "_Rot";
-        Float3 rot;
+        Float3 rot = {};
         rot.x = XMConvertToDegrees(localRotation.x);
         rot.y = XMConvertToDegrees(localRotation.y);
         rot.z = XMConvertToDegrees(localRotation.z);
@@ -83,10 +83,7 @@ bool Transform::Active()
     if (parent == nullptr)
         return isActive;
 
-    if (isActive == false)
-        return false;
-
-    return parent->Active();
+    return isActive && parent->Active();
 }
 
 void Transform::Save()
@@ -108,9 +105,9 @@ void Transform::Save()
     delete writer;
 }
 
-void Transform::Load()
+void Transform::Load(string name)
 {
-    BinaryReader* reader = new BinaryReader("TextData/Transforms/" + tag + ".srt");
+    BinaryReader* reader = new BinaryReader("TextData/Transforms/" + name + ".srt");
 
     if (reader->IsFailed()) return;
 

@@ -24,7 +24,7 @@ public:
 		int maxHp = 2;
 		int curHp = 2;
 
-		int attack = 3;
+		int attack = 3;		//CalcAttack 있으니 직접 뽑아 쓰지 말 것
 		int defence = 3;
 
 		int move = 3;
@@ -55,6 +55,10 @@ public:
 	void CancelMove();
 
 	const Status& GetStatus() { return status; }
+
+	void SetWeapon(Weapon* weapon);
+
+	int CalcAttack();
 private:
 	bool IsMoving();
 	void Move();
@@ -64,11 +68,17 @@ private:
 
 	void AttackHit();
 	void Damaged(int damage);
+
+	void Die();
 private:
+
+
 	ModelAnimator* body;					//위치 테스트 용. 추후 모델 애니메이터로 변경
 	AnimState animState = IDLE;				//현재 애니메이션
 
-	Weapon* weapon;
+	Weapon* weapon = nullptr;
+
+	Cylinder* actCylinder;
 
 	bool acted = false;						//해당 턴 행동 여부 : 공격, 혹은 행동 완료 선택 시 true로 변경. 턴 시작시 false
 	bool moved = false;						//해당 턴 이동 여부

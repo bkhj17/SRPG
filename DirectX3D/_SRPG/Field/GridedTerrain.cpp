@@ -113,19 +113,26 @@ void GridedTerrain::Render()
 	pair<int, int> holdedPos = {};
 	pair<int, int> range = {};
 
-	if (holded && standingAttack) {
+	if (holded) {
 		holdedPos = PosToCoord(holded->Pos());
 		range = holded->GetAttackRange();
 	}
 
+	bool isEnemy = false;
+	if (CharacterManager::Get()->HoldedCharacter())
+		isEnemy = CharacterManager::Get()->HoldedCharacter()->GetStatus().teamNum == Character::Team::ENEMY;
+	else {
+		auto selectedCharacter = (Character*)ObjectOnIndex(selected);
+		if (selectedCharacter)
+			isEnemy = selectedCharacter->GetStatus().teamNum == Character::Team::ENEMY;
+	}
+
 	int index = 0;
 	for (int i = 0; i < cubes.size(); i++) {
-		if(!cubes[i]->Active())
+		if (!cubes[i]->Active())
 			continue;
-
 		if (holded && standingAttack) {
 			auto coord = IndexToCoord(i);
-
 			//큐브 위치가 사거리 안인지 확인
 			int dist = abs(holdedPos.first - coord.first) + abs(holdedPos.second - coord.second);
 			if (dist == 0)
@@ -136,7 +143,7 @@ void GridedTerrain::Render()
 				tileColorBuffer->Get() = Float4(1.0f, 1.0f, 1.0f, 0.2f);
 		}
 		else {
-			if (movables.find(i) != movables.end())
+			if (!isEnemy && movables.find(i) != movables.end())
 				tileColorBuffer->Get() = Float4(0.0f, 0.0f, 1.0f, 0.7f);
 			else if (attackables.find(i) != attackables.end())
 				tileColorBuffer->Get() = Float4(1.0f, 0.0f, 0.0f, 0.7f);

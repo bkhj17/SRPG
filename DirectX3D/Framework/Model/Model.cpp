@@ -8,6 +8,8 @@ Model::Model(string name)
 	ReadMesh();
 
 	worldBuffer = new WorldBuffer();
+
+
 }
 
 Model::~Model()
@@ -36,7 +38,6 @@ void Model::GUIRender()
 	for (auto material : materials)
 		material->GUIRender();
 }
-
 
 void Model::SetShader(wstring file)
 {

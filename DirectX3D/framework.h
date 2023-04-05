@@ -209,6 +209,7 @@ using namespace GameMath;
 #include "_SRPG/Field/MapCursor.h"
 
 #include "_SRPG/Character/Weapon.h"
+#include "_SRPG/Character/WeaponManager.h"
 #include "_SRPG/Character/Character.h"
 #include "_SRPG/Character/CharacterManager.h"
 
