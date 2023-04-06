@@ -79,6 +79,8 @@ void Character::Render()
 	if (!Active())
 		return;
 
+
+
 	valueBuffer->Get()[0] = (int)acted;
 	valueBuffer->SetPS(8);
 	body->Render();
