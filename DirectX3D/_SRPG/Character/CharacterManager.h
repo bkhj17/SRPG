@@ -10,7 +10,7 @@ private:
     CharacterManager();
     ~CharacterManager();
 
-    UINT MAX_POOL = 30;
+    UINT MAX_POOL = 20;
 
     struct Attack {
         int damage;
