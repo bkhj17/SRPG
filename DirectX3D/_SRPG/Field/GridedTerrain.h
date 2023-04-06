@@ -8,7 +8,7 @@ public:
 	};
 
 	struct MovableInfo {
-		int dist = 1e9;
+		int dist = 1000000000;
 		int prev = -1;
 		bool standable = true;
 	};

@@ -22,6 +22,7 @@ public:
 
 	bool IsActing();
 	bool IsMapControl();
+	
 private:
 	void SetInfo(void* characterPtr);
 private:
@@ -29,4 +30,5 @@ private:
 
 	unordered_map<string, UIWindow*> totalUI;
 	list<UIWindow*> openned;
+
 };

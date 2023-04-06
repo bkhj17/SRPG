@@ -5,10 +5,16 @@
 
 CharacterManager::CharacterManager()
 {
-	characterPool.resize(MAX_POOL);
-	for (auto& character : characterPool) {
-		character = new Character();
-		character->SetActive(false);
+	vector<pair<int, string>> v = {
+		{Character::Team::PLAYER, "Soldier"},
+		{Character::Team::ENEMY, "Enemy"}
+	};
+	for (auto& p : v) {
+		characterPool[p.first].resize(MAX_POOL);
+		for (auto& character : characterPool[p.first] ) {
+			character = new Character(p.second);
+			character->SetActive(false);
+		}
 	}
 
 	Observer::Get()->AddEvent("CharacterUnhold", bind(&CharacterManager::CharacterUnhold, this));
@@ -16,20 +22,23 @@ CharacterManager::CharacterManager()
 	Observer::Get()->AddParamEvent("CharacterAttackEnd", bind(&CharacterManager::AttackEnd, this, placeholders::_1));
 
 	Observer::Get()->AddEvent("TurnStart", bind(&CharacterManager::TurnStart, this));
-
 }
 
 CharacterManager::~CharacterManager()
 {
-	for (auto character : characterPool)
-		delete character;
+	for (auto& pool : characterPool) {
+		for (auto character : pool.second)
+			delete character;
+		pool.second.clear();
+	}	
 	characterPool.clear();
 }
 
 void CharacterManager::Update()
 {
-	for (auto character : characterPool)
-		character->Update();
+	for (auto& pool : characterPool)
+		for (auto character : pool.second)
+			character->Update();
 
 	if (isBattle)
 		BattleUpdate();
@@ -37,14 +46,16 @@ void CharacterManager::Update()
 
 void CharacterManager::Render()
 {
-	for (auto character : characterPool)
-		character->Render();
+	for (auto& pool : characterPool)
+		for (auto character : pool.second)
+			character->Render();
 }
 
 void CharacterManager::PostRender()
 {
-	for (auto character : characterPool)
-		character->PostRender();
+	for (auto& pool : characterPool)
+		for (auto character : pool.second)
+			character->PostRender();
 }
 
 void CharacterManager::CharacterUnhold()
@@ -63,32 +74,34 @@ bool CharacterManager::IsActing()
 	if (isBattle)
 		return true;
 
-	for (auto character : characterPool) {
-		if (character->IsActing())
-			return true;
+	for (auto& pool : characterPool) {
+		for (auto character : pool.second) {
+			if (character->IsActing())
+				return true;
+		}
 	}
 
 	return false;
 }
 
-Character* CharacterManager::Spawn()
+Character* CharacterManager::Spawn(int teamNum)
 {
-	for (auto character : characterPool) {
+	for (auto character : characterPool[teamNum]) {
 		if (character->Active())
 			continue;
 
 		character->Init();
-		character->SetWeapon(WeaponManager::Get()->Pop("Sword"));
 		return character;
 	}
+
 	return nullptr;
 }
 
-Character* CharacterManager::Spawn(GridedTerrain* terrain, int w, int h)
+Character* CharacterManager::Spawn(GridedTerrain* terrain, int teamNum, int w, int h)
 {
 	assert(terrain != nullptr);
 
-	Character* spawned = Spawn();
+	Character* spawned = Spawn(teamNum);
 	if (spawned == nullptr)
 		return nullptr;
 
@@ -100,7 +113,7 @@ Character* CharacterManager::Spawn(GridedTerrain* terrain, int w, int h)
 
 Character* CharacterManager::Spawn(string name, int teamNum, GridedTerrain* terrain, int w, int h)
 {
-	Character* character = Spawn(terrain, w, h);
+	Character* character = Spawn(terrain, teamNum, w, h);
 	if(character == nullptr)
 		return nullptr;
 
@@ -115,8 +128,6 @@ void CharacterManager::BattleStart(Character* offense, Character* defense)
 		|| !defense || !defense->Active())
 		return;
 	
-	//스테이터스에 따라 미리 데미지 설정
-
 
 	//사거리에 따라 공격 불가능하게도 해야 한다
 	pair<Vector3, pair<int, int>> pack = {};
@@ -134,6 +145,8 @@ void CharacterManager::BattleStart(Character* offense, Character* defense)
 	//방어자가 공격자 사거리 밖 => 애초에 사거리 밖이라 전투 자체가 성립 안 함
 	if (offense->GetAttackRange().first > dist || offense->GetAttackRange().second < dist)
 		return;
+
+	//스테이터스에 따라 미리 데미지 설정
 	attacks.push({ CalcDamage(offense, defense), offense, defense });		//공격자 공격
 	
 	//공격자가 방어자 사거리 안에 있을 때에만 반격을 실행
@@ -152,9 +165,12 @@ void CharacterManager::BattleStart(Character* offense, Character* defense)
 
 void CharacterManager::TurnStart()
 {
-	for (auto character : characterPool) {
-		if (character->Active())
-			character->TurnStart();
+
+	for (auto& pool : characterPool) {
+		for (auto character : pool.second) {
+			if (character->Active())
+				character->TurnStart();
+		}
 	}
 }
 
@@ -168,12 +184,14 @@ void CharacterManager::CancelMove()
 
 Character* CharacterManager::GetActableCharacter(Character::Team team)
 {
-	for (auto character : characterPool) {
-		if (!character->Active() || character->IsActed())
-			continue;
+	for (auto& pool : characterPool) {
+		for (auto character : pool.second) {
+			if (!character->Active() || character->IsActed())
+				continue;
 
-		if (character->GetStatus().teamNum == team)
-			return character;
+			if (character->GetStatus().teamNum == team)
+				return character;
+		}
 	}
 	return nullptr;
 }
@@ -181,12 +199,11 @@ Character* CharacterManager::GetActableCharacter(Character::Team team)
 int CharacterManager::NumActiveCharactersByTeam(Character::Team team)
 {
 	int cnt = 0;
-	for (auto character : characterPool) {
+	for (auto character : characterPool[team]) {
 		if (!character->Active())
 			continue;
 
-		if (character->GetStatus().teamNum == team)
-			cnt++;
+		cnt++;
 	}
 	return cnt;
 }
@@ -209,7 +226,7 @@ void CharacterManager::BattleUpdate()
 		attacker->SetDir(dir);
 		//defender->SetDir(-dir); //기습 당하는 느낌인게 좋겠다 싶어 제외
 
-		attacker->SetAnimState(Character::ATTACK);
+		attacker->SetAttackAnim();
 	}
 }
 
@@ -235,7 +252,9 @@ void CharacterManager::AttackHit(void* ptr)
 	if (attacks.empty() || attacks.front().attacker != attacked)
 		return;
 
-	attacks.front().hit->Damaged(1);
+	ParticleManager::Get()->Play("Hit", attacks.front().hit->GlobalPos() + Vector3(0, 2.0f, 0));
+
+	attacks.front().hit->Damaged(attacks.front().damage);
 }
 
 void CharacterManager::AttackEnd(void* ptr)
@@ -248,9 +267,11 @@ void CharacterManager::AttackEnd(void* ptr)
 int CharacterManager::CalcDamage(Character* attacker, Character* defender)
 {
 	//공격 = 힘 + 무기 위력 * (유효 ? 2 : 1) 
-	 
-	//피해량 = (공격 - 수비)*(1 or 3(크리티컬) )
+	int attack = attacker->CalcAttack();
+	int defence = defender->GetStatus().defence;
 
-	//임시로 1
-	return 1;
+	//피해량 = (공격 - 수비)*(1 or 3(크리티컬) )
+	int damage = attack - defence;
+
+	return damage;
 }

@@ -1,0 +1,10 @@
+<Material Name="Ch30_Body1">
+    <Shader Vertex="Shaders/Light/Light.hlsl" Pixel="Shaders/Light/Light.hlsl"/>
+    <Texture Diffuse="Textures/Model/Enemy/Ch30_1002_Diffuse.png" Specular="Textures/Model/Enemy/Ch30_1002_Specular.png" Normal="Textures/Model/Enemy/Ch30_1002_Normal.png"/>
+    <Property Shininess="20" HasNormalMap="1">
+        <Diffuse R="0.80000001" G="0.80000001" B="0.80000001" A="1"/>
+        <Diffuse R="0.5" G="0.5" B="0.5" A="1"/>
+        <Amibient R="0" G="0" B="0" A="1"/>
+        <Emissive R="0" G="0" B="0" A="1"/>
+    </Property>
+</Material>

@@ -32,8 +32,8 @@ public:
     bool IsActing();
 
     //출현
-    Character* Spawn();
-    Character* Spawn(class GridedTerrain* terrain, int w, int h);
+    Character* Spawn(int teamNum);
+    Character* Spawn(class GridedTerrain* terrain, int teamNum, int w, int h);
     Character* Spawn(string name, int teamNum, class GridedTerrain* terrain, int w, int h);
 
     bool IsBattle() { return isBattle; }
@@ -68,5 +68,5 @@ private:
     //공방 순서
     queue<Attack> attacks;
 
-    vector<Character*> characterPool;
+    map<int, vector<Character*>> characterPool;
 };

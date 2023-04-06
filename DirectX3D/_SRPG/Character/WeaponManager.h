@@ -11,12 +11,12 @@ public:
 	void Render();
 
 	Weapon* Pop(string key);
-	WeaponData* GetData(string key);
+	Weapon::WeaponData* GetData(string key);
 private:
 	void LoadDatas();
 
 private:
-	map<string, WeaponData> datas;
+	map<string, Weapon::WeaponData> datas;
 	map<string, ModelInstancing*> instances;
 
 	vector<Weapon*> weaponPool;

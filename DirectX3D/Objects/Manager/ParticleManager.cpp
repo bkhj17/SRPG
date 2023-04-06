@@ -1,16 +1,11 @@
 #include "framework.h"
 #include "ParticleManager.h"
 
-ParticleManager::ParticleManager()
-{
-}
-
 ParticleManager::~ParticleManager()
 {
 	for (auto& particles : totalParticle) {
 		for (auto particle : particles.second)
 			delete particle;
-		particles.second.clear();
 	}
 	totalParticle.clear();
 }

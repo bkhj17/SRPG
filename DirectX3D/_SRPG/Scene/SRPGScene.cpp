@@ -26,6 +26,7 @@ SRPGScene::SRPGScene()
 
 	TurnManager::Get();
 
+	ParticleManager::Get()->Add("Hit", "TextData/Particles/Hit.fx", 10);
 }
 
 SRPGScene::~SRPGScene()
@@ -39,15 +40,27 @@ SRPGScene::~SRPGScene()
 	SRPGUIManager::Delete();
 
 	TurnManager::Delete();
+
+	ParticleManager::Delete();
 }
 
 void SRPGScene::Start()
 {
 	//예뻐지긴 했는데 나중에 뭔가 더 해야할 것 같다
-	CharacterManager::Get()->Spawn("test1", Character::Team::PLAYER, terrain, 3, 3);
-	CharacterManager::Get()->Spawn("test1-1", Character::Team::PLAYER, terrain, 4, 3);
-	CharacterManager::Get()->Spawn("test2", Character::Team::ENEMY, terrain, 7, 10);
-	CharacterManager::Get()->Spawn("test2-1", Character::Team::ENEMY, terrain, 9, 10);
+	Character* character = CharacterManager::Get()->Spawn("test1", Character::Team::PLAYER, terrain, 3, 3);
+	character->SetWeapon(WeaponManager::Get()->Pop("Axe"));
+	
+	character = CharacterManager::Get()->Spawn("test1-1", Character::Team::PLAYER, terrain, 4, 3);
+	character->SetWeapon(WeaponManager::Get()->Pop("Sword"));
+	
+	character = CharacterManager::Get()->Spawn("test1-2", Character::Team::PLAYER, terrain, 3, 10);
+	character->SetWeapon(WeaponManager::Get()->Pop("Bow"), 12);
+	
+	character = CharacterManager::Get()->Spawn("test2", Character::Team::ENEMY, terrain, 7, 10);
+	character->SetWeapon(WeaponManager::Get()->Pop("Sword"));
+
+	character = CharacterManager::Get()->Spawn("test2-1", Character::Team::ENEMY, terrain, 9, 10);
+	character->SetWeapon(WeaponManager::Get()->Pop("Sword"));
 
 	mapCursor->SetPosCoord(5, 6, true);
 }
@@ -63,7 +76,7 @@ void SRPGScene::Update()
 	if (!CharacterManager::Get()->IsActing())
 		Control();
 
-
+	ParticleManager::Get()->Update();
 }
 
 void SRPGScene::PreRender()
@@ -79,12 +92,16 @@ void SRPGScene::Render()
 	
 	if (!CharacterManager::Get()->IsActing() && state == PLAYING)
 		mapCursor->Render();
+
+
+	ParticleManager::Get()->Render();
 }
 
 void SRPGScene::PostRender()
 {
 	CharacterManager::Get()->PostRender();
 	SRPGUIManager::Get()->Render();
+
 }
 
 void SRPGScene::GUIRender()

@@ -7,6 +7,7 @@ Cylinder::Cylinder(float radius, float height, UINT sliceCount)
 	tag = "Cylinder";
 
 	mesh = new Mesh<VertexType>;
+	
 	MakeMesh();
 	MakeNormal();
 	MakeTangent();

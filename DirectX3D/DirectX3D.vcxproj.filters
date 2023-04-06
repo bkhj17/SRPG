@@ -1177,6 +1177,7 @@
     <FxCompile Include="Shaders\LandScape\ScatteringTarget.hlsl" />
     <FxCompile Include="Shaders\LandScape\Scattering.hlsl" />
     <FxCompile Include="Shaders\UI\ImageFont.hlsl" />
+    <FxCompile Include="Shaders\SRPG\ActCylinder.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\VertexHeader.hlsli" />

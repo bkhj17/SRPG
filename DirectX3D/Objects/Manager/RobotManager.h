@@ -1,6 +1,6 @@
 #pragma once
 
-class RobotManager : public Singleton< RobotManager>
+class RobotManager : public Singleton<RobotManager>
 {
 private:
 	const UINT SIZE = 1;

@@ -39,7 +39,7 @@ void WeaponManager::Render()
 
 Weapon* WeaponManager::Pop(string key)
 {
-	WeaponData* data = GetData(key);
+	Weapon::WeaponData* data = GetData(key);
 	if (data == nullptr)
 		return nullptr;
 
@@ -54,7 +54,6 @@ Weapon* WeaponManager::Pop(string key)
 	if (weapon == nullptr)
 		return nullptr;
 
-
 	auto modelTransform = instances[data->modelName]->Add();
 	modelTransform->Load(key);
 	modelTransform->SetParent(weapon);
@@ -67,17 +66,36 @@ Weapon* WeaponManager::Pop(string key)
 
 void WeaponManager::LoadDatas()
 {
-	WeaponData data;
+	Weapon::WeaponData data;
 	data.name = "Sword";
-	data.power = 1;
+	data.type = Weapon::SWORD;
+	data.power = 2;
 	data.hit = 100.0f;
+	data.range = { 1, 1 };
 	data.modelName = "Sword";
 	instances[data.modelName] = new ModelInstancing(data.modelName);
+	datas[data.name] = data;
 
+	data.name = "Axe";
+	data.type = Weapon::AXE;
+	data.power = 4;
+	data.hit = 85.0f;
+	data.range = { 1, 1 };
+	data.modelName = "Axe";
+	instances[data.modelName] = new ModelInstancing(data.modelName);
+	datas[data.name] = data;
+
+	data.name = "Bow";
+	data.type = Weapon::BOW;
+	data.power = 2;
+	data.hit = 90.0f;
+	data.range = { 2, 2 };
+	data.modelName = "Bow";
+	instances[data.modelName] = new ModelInstancing(data.modelName);
 	datas[data.name] = data;
 }
 
-WeaponData* WeaponManager::GetData(string key)
+Weapon::WeaponData* WeaponManager::GetData(string key)
 {
 	if(datas.find(key) == datas.end())
 		return nullptr;

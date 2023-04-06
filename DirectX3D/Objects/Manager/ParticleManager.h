@@ -4,7 +4,7 @@ class ParticleManager : public Singleton<ParticleManager>
 {
 private:
 	friend class Singleton;
-	ParticleManager();
+	ParticleManager() = default;
 	~ParticleManager();
 public:
 	void Update();

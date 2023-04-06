@@ -7,10 +7,10 @@ private:
 	friend class CharacterManager;
 
 	enum AnimState {
-		IDLE, RUN, ATTACK, HIT, DIE
+		IDLE, RUN, HIT, DIE, SWORD_ATTACK, BOW_ATTACK
 	};
 
-	Character();
+	Character(string type = "Soldier");
 	~Character();
 public:
 	enum Team {
@@ -21,11 +21,11 @@ public:
 		string name = "";
 		int teamNum = NONE;
 
-		int maxHp = 2;
-		int curHp = 2;
+		int maxHp = 10;
+		int curHp = 10;
 
 		int attack = 3;		//CalcAttack 있으니 직접 뽑아 쓰지 말 것
-		int defence = 3;
+		int defence = 2;
 
 		int move = 3;
 		pair<int, int> attackRange = { 1, 1 };	//최소, 최대 공격사거리. 나중에 무기 스펙으로
@@ -47,7 +47,7 @@ public:
 
 	bool IsActing();
 	int GetMaxMove() { return IsMovable() ? status.move : 0; }
-	pair<int, int> GetAttackRange() { return acted ? make_pair(0, 0) : status.attackRange; }
+	pair<int, int> GetAttackRange() { return acted ? make_pair(0, 0) : (weapon ? weapon->GetRange() : status.attackRange); }
 
 	void SetDir(Vector3 dir);
 
@@ -57,7 +57,8 @@ public:
 
 	const Status& GetStatus() { return status; }
 
-	void SetWeapon(Weapon* weapon);
+	void SetWeapon(Weapon* weapon, int boneNum = 37);
+	void SetAttackAnim();
 
 	int CalcAttack();
 private:
@@ -74,7 +75,6 @@ private:
 
 	void UpdateHPBar();
 private:
-
 
 	ModelAnimator* body;					//위치 테스트 용. 추후 모델 애니메이터로 변경
 	AnimState animState = IDLE;				//현재 애니메이션

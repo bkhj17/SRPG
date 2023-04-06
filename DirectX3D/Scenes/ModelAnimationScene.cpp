@@ -3,17 +3,16 @@
 
 ModelAnimationScene::ModelAnimationScene()
 {
-	modelAnimator = new ModelAnimator("Soldier");
+	modelAnimator = new ModelAnimator("Enemy");
 	v = {
 		{"SpearIdle", 0},
 		{"SpearAttack", 0},
 		{"Run", 0},
 		{"Hit", 0},
-		{"AxeIdle", 0},
-		{"AxeAttack", 0},
 		{"SwordIdle", 0},
 		{"SwordAttack", 0},
-		{"Death", 0}
+		{"BowAttack", 0},
+		{"Death", 0},
 	};
 
 	for(auto& p : v)
@@ -21,11 +20,12 @@ ModelAnimationScene::ModelAnimationScene()
 	
 	//modelAnimator->GetClip(2)->SetEvent(bind(&ModelAnimationScene::SetIdle, this), 0.55f);
 
-	string weaponTag = "Spear";
+	string weaponTag = "Bow";
 
+	handNode = 37;
 	hand = new Transform;
-	weapon = new Model("Spear");
-	weapon->SetTag("Spear");
+	weapon = new Model(weaponTag);
+	weapon->SetTag(weaponTag);
 	weapon->Load();
 	weapon->SetParent(hand);
 }

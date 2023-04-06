@@ -194,7 +194,7 @@ void Terrain::MakeTangent()
 	vector<VertexType>& vertices = mesh->GetVertices();
 	vector<UINT>& indices = mesh->GetIndices();
 
-	for (int i = 0; i * 3 < indices.size(); i++) {
+	for (size_t i = 0; i * 3 < indices.size(); i++) {
 		int index0 = indices[i * 3];
 		int index1 = indices[i * 3 + 1];
 		int index2 = indices[i * 3 + 2];

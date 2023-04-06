@@ -19,24 +19,24 @@ BinaryReader::~BinaryReader()
 
 int BinaryReader::Int()
 {
-    int temp;
-    ReadFile(file, &temp, sizeof(int), &size, nullptr);
+    int temp = 0;
+    bool result = ReadFile(file, &temp, sizeof(int), &size, nullptr);
 
     return temp;
 }
 
 UINT BinaryReader::UInt()
 {
-    UINT temp;
-    ReadFile(file, &temp, sizeof(UINT), &size, nullptr);
+    UINT temp = 0;
+    bool result = ReadFile(file, &temp, sizeof(UINT), &size, nullptr);
 
     return temp;
 }
 
 float BinaryReader::Float()
 {
-    float temp;
-    ReadFile(file, &temp, sizeof(float), &size, nullptr);
+    float temp = 0;
+    bool result = ReadFile(file, &temp, sizeof(float), &size, nullptr);
 
     return temp;
 }
@@ -46,7 +46,7 @@ string BinaryReader::String()
     UINT strSize = UInt();
 
     char* temp = new char[strSize + 1];
-    ReadFile(file, temp, sizeof(char) * strSize, &size, nullptr);
+    bool result = ReadFile(file, temp, sizeof(char) * strSize, &size, nullptr);
     temp[strSize] = '\0';
 
     return temp;
@@ -57,7 +57,7 @@ wstring BinaryReader::WString()
     UINT strSize = UInt();
 
     WCHAR* temp = new WCHAR[strSize + 1];
-    ReadFile(file, temp, sizeof(WCHAR) * strSize, &size, nullptr);
+    bool result = ReadFile(file, temp, sizeof(WCHAR) * strSize, &size, nullptr);
     temp[strSize] = '\0';
 
     return temp;
@@ -76,18 +76,18 @@ Vector3 BinaryReader::Vector()
 bool BinaryReader::Bool()
 {
     bool temp = false;
-    ReadFile(file, &temp, sizeof(bool), &size, nullptr);
+    bool result = ReadFile(file, &temp, sizeof(bool), &size, nullptr);
     return temp;
 }
 
 XMMATRIX BinaryReader::Matrix()
 {
     XMMATRIX temp = {};
-    ReadFile(file, &temp, sizeof(XMMATRIX), &size, nullptr);
+    bool result = ReadFile(file, &temp, sizeof(XMMATRIX), &size, nullptr);
     return temp;
 }
 
 void BinaryReader::Byte(void** data, UINT dataSize)
 {
-    ReadFile(file, *data, dataSize, &size, nullptr);
+    bool result = ReadFile(file, *data, dataSize, &size, nullptr);
 }

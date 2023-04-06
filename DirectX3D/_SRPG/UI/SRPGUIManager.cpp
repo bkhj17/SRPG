@@ -20,6 +20,7 @@ SRPGUIManager::SRPGUIManager()
 
 	Observer::Get()->AddEvent("BattleEnd", bind(&SRPGUIManager::CloseAll, this));
 	Observer::Get()->AddParamEvent("SetInfo", bind(&SRPGUIManager::SetInfo, this, placeholders::_1));
+
 }
 
 SRPGUIManager::~SRPGUIManager()

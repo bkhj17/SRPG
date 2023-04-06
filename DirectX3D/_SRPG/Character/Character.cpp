@@ -2,18 +2,22 @@
 #include "Character.h"
 #include "../UI/SRPGUIManager.h"
 
-Character::Character()
+Character::Character(string type)
 {
-	body = new ModelAnimator("Soldier");
-	
+	body = new ModelAnimator(type);	//¾î¶±ÇÏÁö....
 	body->ReadClip("SwordIdle");		//IDLE
 	body->ReadClip("run");				//RUN
-	body->ReadClip("SwordAttack");		//ATTACK
 	body->ReadClip("Hit");
 	body->ReadClip("Death");
+	body->ReadClip("SwordAttack");		//ATTACK
+	body->ReadClip("BowAttack");		//ATTACK
 	
-	body->GetClip(ATTACK)->SetEvent(bind(&Character::AttackEnd, this), 0.8f);
-	body->GetClip(ATTACK)->SetEvent(bind(&Character::AttackHit, this), 0.3f);
+	body->GetClip(SWORD_ATTACK)->SetEvent(bind(&Character::AttackEnd, this), 0.8f);
+	body->GetClip(SWORD_ATTACK)->SetEvent(bind(&Character::AttackHit, this), 0.3f);
+
+	body->GetClip(BOW_ATTACK)->SetEvent(bind(&Character::AttackEnd, this), 0.8f);
+	body->GetClip(BOW_ATTACK)->SetEvent(bind(&Character::AttackHit, this), 0.6f);
+	
 	body->GetClip(HIT)->SetEvent(bind(&Character::SetAnimState, this, IDLE), 0.9f);
 	body->GetClip(DIE)->SetEvent(bind(&Character::Die, this), 0.9f);
 
@@ -26,11 +30,11 @@ Character::Character()
 	body->SetShader(L"SRPG/Character.hlsl");
 
 	actCylinder = new Cylinder(10.0f, 1.0f);
+	actCylinder->GetMaterial()->SetShader(L"Tile/Tile.hlsl");
 	actCylinder->Pos().y += 2.0f;
 	actCylinder->SetParent(this);
 
 	hpBar = new ProgressBar(L"Textures/UI/hp_bar.png", L"Textures/UI/hp_bar_BG.png");
-	
 
 	valueBuffer = new IntValueBuffer;
 }
@@ -49,9 +53,8 @@ Character::~Character()
 void Character::Init()
 {
 	SetActive(true);
-	status.curHp = status.maxHp;
 
-	hpBar->SetAmount((float)status.curHp / status.maxHp);
+	status.curHp = status.maxHp;
 }
 
 void Character::Update()
@@ -79,8 +82,6 @@ void Character::Render()
 	if (!Active())
 		return;
 
-
-
 	valueBuffer->Get()[0] = (int)acted;
 	valueBuffer->SetPS(8);
 	body->Render();
@@ -103,7 +104,7 @@ bool Character::IsActing()
 
 	bool acting = false;
 	acting |= IsMoving();
-	acting |= (animState >= ATTACK);
+	acting |= (animState > RUN);
 	return acting;
 }
 
@@ -138,7 +139,7 @@ void Character::CancelMove()
 	Observer::Get()->ExcuteParamEvent("FocusPos", &originPos);
 }
 
-void Character::SetWeapon(Weapon* weapon)
+void Character::SetWeapon(Weapon* weapon, int boneNum)
 {
 	if (this->weapon) {
 		this->weapon->SetActive(false);
@@ -146,8 +147,30 @@ void Character::SetWeapon(Weapon* weapon)
 	}
 
 	this->weapon = weapon;
-	this->weapon->SetOwner(body, 37);
+	
+	this->weapon->SetOwner(body, boneNum);
 	this->weapon->SetActive(true);
+}
+
+void Character::SetAttackAnim()
+{
+	if (!weapon) {
+		SetAnimState(SWORD_ATTACK);
+		return;
+	}
+	
+	
+	switch (weapon->GetType())
+	{
+	case Weapon::BOW:
+		SetAnimState(BOW_ATTACK);
+		break;
+	case Weapon::SWORD:
+	case Weapon::AXE:
+	default:
+		SetAnimState(SWORD_ATTACK);
+		break;
+	}
 }
 
 int Character::CalcAttack()
@@ -213,7 +236,6 @@ void Character::AttackHit()
 void Character::Damaged(int damage)
 {
 	status.curHp -= damage;
-	hpBar->SetAmount((float)status.curHp / status.maxHp);
 
 	SetAnimState(status.curHp <= 0 ? DIE : HIT);
 
@@ -233,8 +255,11 @@ void Character::Die()
 
 void Character::UpdateHPBar()
 {
-	Vector3 barPos = Pos() + Vector3(0, 0.0f, 0);
-	hpBar->Pos() = CAM->WorldToScreen(barPos);
+	hpBar->SetAmount((float)status.curHp / status.maxHp);
+	hpBar->Pos() = CAM->WorldToScreen(GlobalPos());
 
+	float dist = (GlobalPos() - CAM->GlobalPos()).Length();
+	hpBar->Scale() = { 70.0f / dist, 125.0f / dist, 1.0f };
+	
 	hpBar->UpdateWorld();
 }
