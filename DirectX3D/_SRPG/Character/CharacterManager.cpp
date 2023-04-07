@@ -10,16 +10,21 @@ CharacterManager::CharacterManager()
 		{Character::Team::ENEMY, "Enemy"}
 	};
 	for (auto& p : v) {
+		instances[p.first] = new ModelAnimatorInstancing(p.second);
+		instances[p.first]->ReadClip("SwordIdle");
+		instances[p.first]->ReadClip("Run");
+		instances[p.first]->ReadClip("Hit");
+		instances[p.first]->ReadClip("Death");
+		instances[p.first]->ReadClip("SwordAttack");
+		instances[p.first]->ReadClip("BowAttack");
+
 		characterPool[p.first].resize(MAX_POOL);
+
 		for (auto& character : characterPool[p.first] ) {
-			character = new Character(p.second);
+			character = new Character(instances[p.first]);
 			character->SetActive(false);
 		}
 	}
-
-	for(auto& p : v)
-		instances[p.first] = new ModelAnimatorInstancing(p.second);
-
 
 	Observer::Get()->AddEvent("CharacterUnhold", bind(&CharacterManager::CharacterUnhold, this));
 	Observer::Get()->AddParamEvent("CharacterAttackHit", bind(&CharacterManager::AttackHit, this, placeholders::_1));
@@ -33,15 +38,17 @@ CharacterManager::~CharacterManager()
 	for (auto& pool : characterPool) {
 		for (auto character : pool.second)
 			delete character;
-	}
+	}	
 
-	for (auto& p : instances) {
-		delete p.second;
+	for (auto& instance : instances) {
+		delete instance.second;
 	}
 }
 
 void CharacterManager::Update()
 {
+	for (auto& instance : instances)
+		instance.second->Update();
 	for (auto& pool : characterPool)
 		for (auto character : pool.second)
 			character->Update();
@@ -52,9 +59,14 @@ void CharacterManager::Update()
 
 void CharacterManager::Render()
 {
+	for (auto& instance : instances) {
+		instance.second->Render();
+	}
 	for (auto& pool : characterPool)
 		for (auto character : pool.second)
 			character->Render();
+
+
 }
 
 void CharacterManager::PostRender()

@@ -77,7 +77,7 @@ void Robot::ExecuteEvent()
 {
 	int index = curState;
 
-	if (totalEvents[index].empty()) return;				//현재 클립에 실행할 게 없다
+	if (totalEvents[index].empty()) return;						//현재 클립에 실행할 게 없다
 	if (eventIters[index] == totalEvents[index].end()) return;	//남은 이벤트가 없다
 
 	float ratio = motion->runningTime / motion->duration;

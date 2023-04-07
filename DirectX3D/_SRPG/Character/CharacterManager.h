@@ -10,7 +10,7 @@ private:
     CharacterManager();
     ~CharacterManager();
 
-    UINT MAX_POOL = 20;
+    UINT MAX_POOL = 10;
 
     struct Attack {
         int damage;
@@ -68,5 +68,6 @@ private:
     queue<Attack> attacks;
 
     map<int, vector<Character*>> characterPool;
+
     map<int, ModelAnimatorInstancing*> instances;
 };

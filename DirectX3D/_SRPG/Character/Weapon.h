@@ -23,7 +23,7 @@ public:
 	
 	void Update();
 
-	void SetOwner(ModelAnimator* owner, int boneNum = 37) { this->owner = owner; this->boneNum = boneNum; }
+	void SetOwner(Transform* owner) { this->owner = owner; }
 	bool HasOwner() { return owner; }
 
 	int GetPower() { return data ? data->power : 0; }
@@ -33,12 +33,10 @@ public:
 
 	void SetData(WeaponData* data) { this->data = data; }
 
-
 	void SetModelTransform(string tag, Transform* transform);
 private:
 	WeaponData* data = nullptr;
 	Transform* modelTransform = nullptr;
 
-	ModelAnimator* owner = nullptr;
-	int boneNum = 37;
+	Transform* owner = nullptr;
 };

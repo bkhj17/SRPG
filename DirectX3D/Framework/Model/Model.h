@@ -3,7 +3,7 @@ class Model : public Transform
 {
 public:
 	Model(string name);
-	~Model();
+	virtual ~Model();
 
 	void Render();
 	void GUIRender();

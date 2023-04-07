@@ -92,7 +92,7 @@ GameManager::GameManager()
     
     SceneManager::Get()->Create("Start", new SRPGScene);
     
-    SceneManager::Get()->Add("Grid");
+    //SceneManager::Get()->Add("Grid");
     //SceneManager::Get()->Add("Terrain");
     SceneManager::Get()->Add("Start");
     //SceneManager::Get()->Add("Game");
@@ -100,11 +100,15 @@ GameManager::GameManager()
 
 GameManager::~GameManager()
 {
+
     Delete();
 }
 
 void GameManager::Update()
 {
+
+
+
     Keyboard::Get()->Update();
     Timer::Get()->Update();
 

@@ -2,58 +2,37 @@
 #include "Character.h"
 #include "../UI/SRPGUIManager.h"
 
-Character::Character(string type)
+Character::Character(ModelAnimatorInstancing* instancing)
 {
-	body = new ModelAnimator(type);	//어떡하지....
-	body->ReadClip("SwordIdle");		//IDLE
-	body->ReadClip("run");				//RUN
-	body->ReadClip("Hit");
-	body->ReadClip("Death");
-	body->ReadClip("SwordAttack");		//ATTACK
-	body->ReadClip("BowAttack");		//ATTACK
-	
-	body->GetClip(SWORD_ATTACK)->SetEvent(bind(&Character::AttackEnd, this), 0.8f);
-	body->GetClip(SWORD_ATTACK)->SetEvent(bind(&Character::AttackHit, this), 0.3f);
-
-	body->GetClip(BOW_ATTACK)->SetEvent(bind(&Character::AttackEnd, this), 0.8f);
-	body->GetClip(BOW_ATTACK)->SetEvent(bind(&Character::AttackHit, this), 0.6f);
-	
-	body->GetClip(HIT)->SetEvent(bind(&Character::SetAnimState, this, IDLE), 0.9f);
-	body->GetClip(DIE)->SetEvent(bind(&Character::Die, this), 0.9f);
-
-	body->PlayClip(0);
-	body->SetParent(this);
-
-	body->Scale() *= 0.1f;
-	body->Pos().y = body->Scale().y + 0.8f;
-
-	body->SetShader(L"SRPG/Character.hlsl");
-
-	actCylinder = new Cylinder(10.0f, 1.0f);
-	actCylinder->GetMaterial()->SetShader(L"Tile/Tile.hlsl");
-	actCylinder->Pos().y += 2.0f;
-	actCylinder->SetParent(this);
+	SetInstanging(instancing);
 
 	hpBar = new ProgressBar(L"Textures/UI/hp_bar.png", L"Textures/UI/hp_bar_BG.png");
 
+	actCylinder = new Cylinder(10.0f, 1.0f);
+	actCylinder->GetMaterial()->SetShader(L"SRPG/ActCylinder.hlsl");
+	actCylinder->Pos().y += 2.0f;
+	actCylinder->SetParent(this);
+
 	valueBuffer = new IntValueBuffer;
+
+	weaponOwner = new Transform;
 }
 
 Character::~Character()
 {
-	delete body;
 	delete actCylinder;
 	delete hpBar;
 	delete valueBuffer;
 
 	if (weapon) weapon->SetOwner(nullptr);
 	weapon = nullptr;
+
+	delete weaponOwner;
 }
 
 void Character::Init()
 {
 	SetActive(true);
-
 	status.curHp = status.maxHp;
 }
 
@@ -63,18 +42,20 @@ void Character::Update()
 		return;
 
 	Move();
-
 	UpdateWorld();
 
 	if (animState <= RUN)
 		SetAnimState(IsMoving() ? RUN : IDLE);
 
-	body->Update();
+	ExecuteEvent();
+
 	actCylinder->UpdateWorld();
 	UpdateHPBar();
 
-	if(weapon)
+	if (weapon) {
+		weaponOwner->SetWorld(instancing->GetTransformByNode(index, weaponBoneNum));
 		weapon->Update();
+	}
 }
 
 void Character::Render()
@@ -84,7 +65,7 @@ void Character::Render()
 
 	valueBuffer->Get()[0] = (int)acted;
 	valueBuffer->SetPS(8);
-	body->Render();
+
 	if (status.teamNum == TurnManager::Get()->GetCurPlayer() && !IsActing() && !acted)
 		actCylinder->Render();
 }
@@ -146,9 +127,14 @@ void Character::SetWeapon(Weapon* weapon, int boneNum)
 		this->weapon->SetOwner(nullptr);
 	}
 
+	if (weapon == nullptr) {
+		weaponBoneNum = -1;
+		return;
+	}
+
+	weaponBoneNum = boneNum;
 	this->weapon = weapon;
-	
-	this->weapon->SetOwner(body, boneNum);
+	this->weapon->SetOwner(weaponOwner);
 	this->weapon->SetActive(true);
 }
 
@@ -158,7 +144,6 @@ void Character::SetAttackAnim()
 		SetAnimState(SWORD_ATTACK);
 		return;
 	}
-	
 	
 	switch (weapon->GetType())
 	{
@@ -180,6 +165,32 @@ int Character::CalcAttack()
 		result += weapon->GetPower();
 	
 	return result;
+}
+
+void Character::SetInstanging(ModelAnimatorInstancing* instancing)
+{
+	this->instancing = instancing;
+	index = instancing->GetTransformNum();
+	bodyTransform = instancing->Add();
+	bodyTransform->Scale() *= 0.1f;
+	bodyTransform->Pos().y = bodyTransform->Scale().y + 0.8f;
+	bodyTransform->SetParent(this);
+
+	motion = instancing->GetMotion(index);
+	totalEvents.resize(instancing->GetClipSize());
+	eventIters.resize(instancing->GetClipSize());
+
+	SetEvent(SWORD_ATTACK, bind(&Character::AttackHit, this), 0.5f);
+	SetEvent(SWORD_ATTACK, bind(&Character::AttackEnd, this), 0.8f);
+	SetEvent(BOW_ATTACK, bind(&Character::AttackEnd, this), 0.8f);
+	SetEvent(BOW_ATTACK, bind(&Character::AttackHit, this), 0.6f);
+	SetEvent(HIT, bind(&Character::SetAnimState, this, IDLE), 0.9f);
+	SetEvent(DIE, bind(&Character::Die, this), 0.9f);
+
+	for (UINT i = 0; i < totalEvents.size(); i++)
+		eventIters[animState] = totalEvents[animState].begin();
+
+	instancing->PlayClip(index, IDLE);
 }
 
 bool Character::IsMoving()
@@ -219,7 +230,8 @@ void Character::SetAnimState(AnimState state)
 		return;
 
 	animState = state;
-	body->PlayClip(state);
+	instancing->PlayClip(index, animState);
+	eventIters[animState] = totalEvents[animState].begin();
 }
 
 void Character::AttackEnd()
@@ -262,4 +274,27 @@ void Character::UpdateHPBar()
 	hpBar->Scale() = { 70.0f / dist, 125.0f / dist, 1.0f };
 	
 	hpBar->UpdateWorld();
+}
+
+void Character::SetEvent(int clip, Event event, float timeRatio)
+{
+	if (totalEvents[clip].count(timeRatio) > 0)
+		return;
+
+	totalEvents[clip][timeRatio] = event;
+}
+
+void Character::ExecuteEvent()
+{
+	int index = animState;
+
+	if (totalEvents[index].empty()) return;						//현재 클립에 실행할 게 없다
+	if (eventIters[index] == totalEvents[index].end()) return;	//남은 이벤트가 없다
+
+	float ratio = motion->runningTime / motion->duration;
+
+	if (eventIters[index]->first > ratio) return;
+
+	eventIters[index]->second();
+	eventIters[index]++;
 }

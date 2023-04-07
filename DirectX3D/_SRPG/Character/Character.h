@@ -10,7 +10,7 @@ private:
 		IDLE, RUN, HIT, DIE, SWORD_ATTACK, BOW_ATTACK
 	};
 
-	Character(string type = "Soldier");
+	Character(ModelAnimatorInstancing* instancing);
 	~Character();
 public:
 	enum Team {
@@ -61,6 +61,8 @@ public:
 	void SetAttackAnim();
 
 	int CalcAttack();
+
+	void SetInstanging(ModelAnimatorInstancing* instancing);
 private:
 	bool IsMoving();
 	void Move();
@@ -74,11 +76,25 @@ private:
 	void Die();
 
 	void UpdateHPBar();
-private:
-	ModelAnimator* body;
-	AnimState animState = IDLE;				//현재 애니메이션
 
+	void SetEvent(int clip, Event event, float timeRatio);
+	void ExecuteEvent();
+
+private:
+	AnimState animState = IDLE;				//현재 애니메이션
+	//인스턴싱 관련
+	int index = -1;
+	Transform* bodyTransform = nullptr;
+	ModelAnimatorInstancing* instancing = nullptr;
+	ModelAnimatorInstancing::Motion* motion;
+	vector<map<float, Event>> totalEvents;
+	vector<map<float, Event>::iterator> eventIters;
+
+	//무기
+	Transform* weaponOwner;
+	int weaponBoneNum = -1;
 	Weapon* weapon = nullptr;
+
 
 	Cylinder* actCylinder;
 	ProgressBar* hpBar;

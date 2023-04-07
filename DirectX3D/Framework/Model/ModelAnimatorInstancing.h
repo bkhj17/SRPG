@@ -46,6 +46,7 @@ public:
         return &frameInstancingBuffer->Get().motions[instanceID]; 
     }
 
+    int GetTransformNum() { return transforms.size(); }
     UINT GetClipSize() { return (UINT)clips.size(); }
 protected:
     void UpdateFrame(UINT instanceID, Motion& motion);

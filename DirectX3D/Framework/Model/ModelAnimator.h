@@ -32,7 +32,7 @@ protected:
 
 public:
 	ModelAnimator(string name);
-	~ModelAnimator();
+	virtual ~ModelAnimator();
 
 	void Update();
 	void Render();

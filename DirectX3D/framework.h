@@ -9,7 +9,7 @@
 
 #define MAX_LIGHT 10
 #define MAX_BONE 512	//적으면 추후 수정
-#define MAX_FRAME 4096	//적으면 추후 수정
+#define MAX_FRAME 8172	//적으면 추후 수정
 #define MAX_INSTANCE 128
 
 #define CENTER_X (WIN_WIDTH * 0.5f)

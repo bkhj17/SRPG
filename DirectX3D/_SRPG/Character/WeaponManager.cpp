@@ -4,7 +4,7 @@
 WeaponManager::WeaponManager()
 {
 	LoadDatas();
-
+	
 	weaponPool.resize(50);
 	for (auto& weapon : weaponPool) {
 		weapon = new Weapon;
@@ -14,15 +14,11 @@ WeaponManager::WeaponManager()
 
 WeaponManager::~WeaponManager()
 {
-	datas.clear();
+	for (auto& weapon : weaponPool)
+		delete weapon;
 
 	for (auto& instance : instances)
 		delete instance.second;
-	instances.clear();
-
-	for (auto& weapon : weaponPool)
-		delete weapon;
-	weaponPool.clear();
 }
 
 void WeaponManager::Update()

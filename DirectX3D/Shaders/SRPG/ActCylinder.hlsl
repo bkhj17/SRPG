@@ -17,12 +17,7 @@ PixelInput VS(VertexUV input)
     return output;
 }
 
-cbuffer SelectedBuffer : register(b9)
-{
-    float4 color;
-};
-
 float4 PS(PixelInput input) : SV_TARGET
 {
-    return color;
+    return float4(0.8, 1.0, 0.8, 0.9);
 }

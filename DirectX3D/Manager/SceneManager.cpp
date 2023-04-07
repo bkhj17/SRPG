@@ -7,6 +7,9 @@ SceneManager::SceneManager()
 
 SceneManager::~SceneManager()
 {
+	curScenes.clear();
+	addScenes.clear();
+	removeScenes.clear();
 	for (auto& scene : scenes)
 		delete scene.second;
 	scenes.clear();

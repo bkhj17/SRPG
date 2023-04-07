@@ -9,8 +9,9 @@ Weapon::~Weapon()
 
 void Weapon::Update()
 {
-	if (owner)
-		SetWorld(owner->GetTransformByNode(boneNum));
+	if (owner) {
+		SetWorld(owner->GetWorld());
+	}
 	else
 		UpdateWorld();
 
@@ -30,4 +31,5 @@ void Weapon::SetModelTransform(string tag, Transform* transform)
 		transform->SetParent(this);
 		transform->SetActive(true);
 	}
+	modelTransform = transform;
 }

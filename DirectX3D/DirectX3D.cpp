@@ -4,6 +4,10 @@
 #include "framework.h"
 #include "DirectX3D.h"
 
+
+#include <dxgidebug.h>
+#pragma comment(lib, "dxguid.lib")
+
 #define MAX_LOADSTRING 100
 
 // 전역 변수:
