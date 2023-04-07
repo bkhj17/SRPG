@@ -17,6 +17,10 @@ CharacterManager::CharacterManager()
 		}
 	}
 
+	for(auto& p : v)
+		instances[p.first] = new ModelAnimatorInstancing(p.second);
+
+
 	Observer::Get()->AddEvent("CharacterUnhold", bind(&CharacterManager::CharacterUnhold, this));
 	Observer::Get()->AddParamEvent("CharacterAttackHit", bind(&CharacterManager::AttackHit, this, placeholders::_1));
 	Observer::Get()->AddParamEvent("CharacterAttackEnd", bind(&CharacterManager::AttackEnd, this, placeholders::_1));
@@ -29,9 +33,11 @@ CharacterManager::~CharacterManager()
 	for (auto& pool : characterPool) {
 		for (auto character : pool.second)
 			delete character;
-		pool.second.clear();
-	}	
-	characterPool.clear();
+	}
+
+	for (auto& p : instances) {
+		delete p.second;
+	}
 }
 
 void CharacterManager::Update()

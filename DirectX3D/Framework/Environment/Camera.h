@@ -27,6 +27,12 @@ public:
     bool ContainSphere(Vector3 center, float radius);
 
     ViewBuffer* GetViewBuffer() { return viewBuffer; }
+
+    void SetRotX(float rotX) { this->rotX = rotX; }
+    void SetRotY(float rotY) { this->rotY = rotY; }
+    void SetHeight(float height) { this->height = height; }
+    void SetFollowDistance(float distance) { this->distance = distance; }
+    void SetFollowImmadiately(bool value) { followImmadiately = value; }
 private:
     void FreeMode();
     void FollowMode();
@@ -51,8 +57,9 @@ private:
     float height = 20.0f;
     float moveDamping = 5.0f;
     float rotDamping = 1.0f;
+    bool followImmadiately = false;
 
-    float rotY = 0;
+    float rotX = 0.0f, rotY = 0.0f;
 
     float destRot = 0.0f;
     Vector3 destPos;

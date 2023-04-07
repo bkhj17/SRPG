@@ -24,7 +24,6 @@ public:
     void Render();
     void PostRender();
 
-    //void CharacterHold(Character* character) { holded = character; }
     void CharacterHold(Character* character, int w, int h) { holded = character; holdedW = w; holdedH = h; }
     Character* HoldedCharacter() { return holded; }
     void CharacterUnhold();
@@ -69,4 +68,5 @@ private:
     queue<Attack> attacks;
 
     map<int, vector<Character*>> characterPool;
+    map<int, ModelAnimatorInstancing*> instances;
 };

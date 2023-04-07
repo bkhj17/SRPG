@@ -27,12 +27,16 @@ SRPGScene::SRPGScene()
 	TurnManager::Get();
 
 	ParticleManager::Get()->Add("Hit", "TextData/Particles/Hit.fx", 10);
+
+	battleCamera = new BattleCameraMan;
+	battleCamera->Pos() = mapCursor->GlobalPos();
 }
 
 SRPGScene::~SRPGScene()
 {
 	delete terrain;
 	delete mapCursor;
+	delete battleCamera;
 
 	CharacterManager::Delete();
 	WeaponManager::Delete();
@@ -76,6 +80,12 @@ void SRPGScene::Update()
 	if (!CharacterManager::Get()->IsActing())
 		Control();
 
+	if (CharacterManager::Get()->IsBattle()) {
+		battleCamera->Pos() = CharacterManager::Get()->HoldedCharacter()->GlobalPos();
+		battleCamera->Rot() = CharacterManager::Get()->HoldedCharacter()->Rot();
+		battleCamera->Update();
+	}
+
 	ParticleManager::Get()->Update();
 }
 
@@ -85,6 +95,9 @@ void SRPGScene::PreRender()
 
 void SRPGScene::Render()
 {
+	if (CharacterManager::Get()->IsBattle())
+		battleCamera->SetView();
+
 	terrain->Render();
 
 	CharacterManager::Get()->Render();
@@ -93,15 +106,15 @@ void SRPGScene::Render()
 	if (!CharacterManager::Get()->IsActing() && state == PLAYING)
 		mapCursor->Render();
 
-
 	ParticleManager::Get()->Render();
 }
 
 void SRPGScene::PostRender()
 {
+	
 	CharacterManager::Get()->PostRender();
-	SRPGUIManager::Get()->Render();
 
+	SRPGUIManager::Get()->Render();
 }
 
 void SRPGScene::GUIRender()

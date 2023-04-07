@@ -232,6 +232,8 @@ using namespace GameMath;
 #include "_SRPG/Controller/EnemyController.h"
 #include "_SRPG/Controller/TurnManager.h"
 
+#include "_SRPG/Cam/BattleCameraMan.h"
+
 #include "Scenes/Scene.h"
 #include "Manager/SceneManager.h"
 #include "Manager/GameManager.h"

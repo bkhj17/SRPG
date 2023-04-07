@@ -75,8 +75,7 @@ private:
 
 	void UpdateHPBar();
 private:
-
-	ModelAnimator* body;					//위치 테스트 용. 추후 모델 애니메이터로 변경
+	ModelAnimator* body;
 	AnimState animState = IDLE;				//현재 애니메이션
 
 	Weapon* weapon = nullptr;

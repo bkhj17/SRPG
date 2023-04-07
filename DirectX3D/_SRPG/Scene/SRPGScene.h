@@ -32,5 +32,7 @@ private:
 	int inputMode = 0;
 
 	SceneState state = PLAYING;
+
+	BattleCameraMan* battleCamera;
 };
 

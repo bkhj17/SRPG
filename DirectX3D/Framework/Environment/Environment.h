@@ -24,6 +24,9 @@ public:
 
     LightBuffer::Light* AddLight();
 
+    void SetCurCamera(Camera* camera) { curCamera = camera; }
+    Camera* GetCurCamera() { return curCamera; }
+
     Camera* GetMainCamera() { return mainCamera; }
 
     Matrix GetProjection() { return perspective; }
@@ -36,6 +39,8 @@ private:
 private:
     MatrixBuffer* orthoBuffer;
     MatrixBuffer* projectionBuffer;
+
+    Camera* curCamera = nullptr;
     Camera* mainCamera;
     LightBuffer* lightBuffer;
     ViewBuffer* uiViewBuffer;

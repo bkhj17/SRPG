@@ -10,7 +10,7 @@ void FloatingDamage::Spawn(Vector3 pos, int damage)
 {
 	isActive = true;
 	SetValue(damage);
-	Pos() = CAM->WorldToScreen(pos);
+	Pos() = Environment::Get()->GetCurCamera()->WorldToScreen(pos);
 	UpdateWorld();
 
 	startY = Pos().y;

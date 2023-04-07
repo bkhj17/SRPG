@@ -3,8 +3,8 @@
 
 ParticleScene::ParticleScene()
 {
-	//particle = new Sprite(L"Textures/Effect/fire_8x2.png", 5, 20, 8, 2);
-	particle = new Spark(L"Textures/Effect/Snow.png", true);
+	particle = new Sprite(L"Textures/Effect/fire_8x2.png", 5, 20, 8, 2);
+	//particle = new Spark(L"Textures/Effect/Snow.png", true);
 	//particle = new Rain();
 	//particle = new Snow();
 	particle->Play(Vector3());

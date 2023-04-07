@@ -256,9 +256,9 @@ void Character::Die()
 void Character::UpdateHPBar()
 {
 	hpBar->SetAmount((float)status.curHp / status.maxHp);
-	hpBar->Pos() = CAM->WorldToScreen(GlobalPos());
+	hpBar->Pos() = Environment::Get()->GetCurCamera()->WorldToScreen(GlobalPos());
 
-	float dist = (GlobalPos() - CAM->GlobalPos()).Length();
+	float dist = (GlobalPos() - Environment::Get()->GetCurCamera()->GlobalPos()).Length();
 	hpBar->Scale() = { 70.0f / dist, 125.0f / dist, 1.0f };
 	
 	hpBar->UpdateWorld();

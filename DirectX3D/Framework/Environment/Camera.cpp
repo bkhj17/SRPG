@@ -73,6 +73,8 @@ void Camera::SetView()
     viewBuffer->SetPS(1);
     viewBuffer->SetHS(1);
     viewBuffer->SetDS(1);
+
+    Environment::Get()->SetCurCamera(this);
 }
 
 Vector3 Camera::ScreenToWorld(Vector3 screenPos)
@@ -163,15 +165,19 @@ void Camera::FreeMode()
 
 void Camera::FollowMode()
 {
-    destRot = Lerp(destRot, target->Rot().y, rotDamping * DELTA);
+    destRot = followImmadiately ? target->Rot().y : Lerp(destRot, target->Rot().y, rotDamping * DELTA);
+
     rotMatrix = XMMatrixRotationY(destRot + rotY);
+    rotMatrix *= XMMatrixRotationZ(rotX);
 
     Vector3 forward = XMVector3TransformNormal(Vector3::Forward(), rotMatrix);
+
+    //follow
 
     destPos = target->GlobalPos() + forward * -distance;
     destPos.y += height;
 
-    Pos() = Lerp(Pos(), destPos, moveDamping * DELTA);
+    Pos() = followImmadiately ? destPos : Lerp(Pos(), destPos, moveDamping * DELTA);
 
     Vector3 offset = XMVector3TransformCoord(focusOffset, rotMatrix);
     Vector3 targetPos = target->GlobalPos() + offset;
