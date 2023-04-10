@@ -582,6 +582,12 @@
     <ClInclude Include="_SRPG\Cam\BattleCameraMan.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="_SRPG\Character\SRPGObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="_SRPG\Character\Obstacle.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX3D.cpp">
@@ -1122,6 +1128,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="_SRPG\Cam\BattleCameraMan.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="_SRPG\Character\SRPGObject.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="_SRPG\Character\Obstacle.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,19 +1,13 @@
 #include "framework.h"
-#include "Character.h"
-#include "../UI/SRPGUIManager.h"
 
 Character::Character(ModelAnimatorInstancing* instancing)
 {
-	SetInstanging(instancing);
-
-	hpBar = new ProgressBar(L"Textures/UI/hp_bar.png", L"Textures/UI/hp_bar_BG.png");
+	SetInstancing(instancing);
 
 	actCylinder = new Cylinder(10.0f, 1.0f);
 	actCylinder->GetMaterial()->SetShader(L"SRPG/ActCylinder.hlsl");
 	actCylinder->Pos().y += 2.0f;
 	actCylinder->SetParent(this);
-
-	valueBuffer = new IntValueBuffer;
 
 	weaponOwner = new Transform;
 }
@@ -21,8 +15,6 @@ Character::Character(ModelAnimatorInstancing* instancing)
 Character::~Character()
 {
 	delete actCylinder;
-	delete hpBar;
-	delete valueBuffer;
 
 	if (weapon) weapon->SetOwner(nullptr);
 	weapon = nullptr;
@@ -30,19 +22,11 @@ Character::~Character()
 	delete weaponOwner;
 }
 
-void Character::Init()
-{
-	SetActive(true);
-	status.curHp = status.maxHp;
-}
-
 void Character::Update()
 {
 	if (!Active())
 		return;
-
-	Move();
-	UpdateWorld();
+	__super::Update();
 
 	if (animState <= RUN)
 		SetAnimState(IsMoving() ? RUN : IDLE);
@@ -50,7 +34,6 @@ void Character::Update()
 	ExecuteEvent();
 
 	actCylinder->UpdateWorld();
-	UpdateHPBar();
 
 	if (weapon) {
 		weaponOwner->SetWorld(instancing->GetTransformByNode(index, weaponBoneNum));
@@ -63,19 +46,8 @@ void Character::Render()
 	if (!Active())
 		return;
 
-	valueBuffer->Get()[0] = (int)acted;
-	valueBuffer->SetPS(8);
-
 	if (status.teamNum == TurnManager::Get()->GetCurPlayer() && !IsActing() && !acted)
 		actCylinder->Render();
-}
-
-void Character::PostRender()
-{
-	if (!Active())
-		return;
-
-	hpBar->Render();
 }
 
 bool Character::IsActing()
@@ -89,35 +61,11 @@ bool Character::IsActing()
 	return acting;
 }
 
-void Character::TurnStart()
-{
-	acted = moved = false;
-	originPos = Pos();
-}
-
 void Character::SetMovePath(vector<Vector3>& path)
 {
 	lerpValue = 0.0f;
 	movePath.resize(path.size());
 	copy(path.begin(), path.end(), movePath.begin());
-}
-
-void Character::SetDir(Vector3 dir)
-{
-	this->dir = dir.GetNormalized();
-	Rot().y = atan2f(dir.x, dir.z) + XM_PI;
-}
-
-void Character::CancelMove()
-{
-	if (acted || !moved)
-		return;
-
-	moved = false;
-	Pos() = originPos;
-	UpdateWorld();
-
-	Observer::Get()->ExcuteParamEvent("FocusPos", &originPos);
 }
 
 void Character::SetWeapon(Weapon* weapon, int boneNum)
@@ -167,7 +115,19 @@ int Character::CalcAttack()
 	return result;
 }
 
-void Character::SetInstanging(ModelAnimatorInstancing* instancing)
+void Character::AttackStart(SRPGObject* defender)
+{
+	//공격 아직 시작 안 됨 -> 시작명령
+	//공격 방향
+	Vector3 dir = defender->GlobalPos() - GlobalPos();
+	dir.y = 0.0f;
+	SetDir(dir);
+	//defender->SetDir(-dir); //기습 당하는 느낌인게 좋겠다 싶어 제외
+
+	SetAttackAnim();
+}
+
+void Character::SetInstancing(ModelAnimatorInstancing* instancing)
 {
 	this->instancing = instancing;
 	index = instancing->GetTransformNum();
@@ -193,37 +153,6 @@ void Character::SetInstanging(ModelAnimatorInstancing* instancing)
 	instancing->PlayClip(index, IDLE);
 }
 
-bool Character::IsMoving()
-{
-	return !movePath.empty(); 
-}
-
-void Character::Move()
-{
-	if (movePath.empty())
-		return;
-
-	lerpValue += DELTA * moveSpeed;
-	Pos() = Lerp(Pos(), movePath.back(), lerpValue);
-
-	Vector3 velocity = movePath.back() - Pos();
-
-	if (velocity.Length() <= 0.1f) {
-		Pos() = movePath.back();
-		movePath.pop_back();
-		lerpValue = 0.0f;
-
-		//이동 종료
-		if (movePath.empty()) {
-			moved = true;
-			Observer::Get()->ExcuteParamEvent("CharacterMoveEnd", this);
-		}
-	}
-	else {
-		SetDir(velocity);
-	}
-}
-
 void Character::SetAnimState(AnimState state)
 {
 	if (animState == state)
@@ -240,18 +169,10 @@ void Character::AttackEnd()
 	Observer::Get()->ExcuteParamEvent("CharacterAttackEnd", this);
 }
 
-void Character::AttackHit()
-{
-	Observer::Get()->ExcuteParamEvent("CharacterAttackHit", this);
-}
-
 void Character::Damaged(int damage)
 {
-	status.curHp -= damage;
-
+	__super::Damaged(damage);
 	SetAnimState(status.curHp <= 0 ? DIE : HIT);
-
-	SRPGUIManager::Get()->SpawnDamage(Pos(), damage);
 }
 
 void Character::Die()
@@ -263,17 +184,6 @@ void Character::Die()
 		weapon->SetOwner(nullptr); 
 		weapon = nullptr;
 	}
-}
-
-void Character::UpdateHPBar()
-{
-	hpBar->SetAmount((float)status.curHp / status.maxHp);
-	hpBar->Pos() = Environment::Get()->GetCurCamera()->WorldToScreen(GlobalPos());
-
-	float dist = (GlobalPos() - Environment::Get()->GetCurCamera()->GlobalPos()).Length();
-	hpBar->Scale() = { 70.0f / dist, 125.0f / dist, 1.0f };
-	
-	hpBar->UpdateWorld();
 }
 
 void Character::SetEvent(int clip, Event event, float timeRatio)

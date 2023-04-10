@@ -1,5 +1,4 @@
 #include "framework.h"
-#include "GridedTerrain.h"
 
 GridedTerrain::GridedTerrain()
 {
@@ -50,6 +49,10 @@ GridedTerrain::GridedTerrain()
 			cubes[index]->SetActive(check);
 		}
 	}
+
+
+	tileDataBuffer = new TileDataBuffer;
+	onCharacterBuffer = new IntValueBuffer;
 	tileColorBuffer = new ColorBuffer;
 
 	Observer::Get()->AddEvent("BattleEnd", bind(&GridedTerrain::Reselect, this));
@@ -68,9 +71,12 @@ GridedTerrain::~GridedTerrain()
 
 	for (auto cube : cubes)
 		delete cube;
+
 	cubes.clear();
 	cubes.shrink_to_fit();
-
+	
+	delete tileDataBuffer;
+	delete onCharacterBuffer;
 	delete tileColorBuffer;
 
 	objects.clear();
@@ -122,7 +128,7 @@ void GridedTerrain::Render()
 	if (CharacterManager::Get()->HoldedCharacter())
 		isEnemy = CharacterManager::Get()->HoldedCharacter()->GetStatus().teamNum == Character::Team::ENEMY;
 	else {
-		auto selectedCharacter = (Character*)ObjectOnIndex(selected);
+		auto selectedCharacter = dynamic_cast<Character*>(ObjectOnIndex(selected));
 		if (selectedCharacter)
 			isEnemy = selectedCharacter->GetStatus().teamNum == Character::Team::ENEMY;
 	}
@@ -131,6 +137,12 @@ void GridedTerrain::Render()
 	for (int i = 0; i < cubes.size(); i++) {
 		if (!cubes[i]->Active())
 			continue;
+
+		auto characterOnIndex = dynamic_cast<Character*>(ObjectOnIndex(i));
+		tileDataBuffer->SetOn(characterOnIndex != nullptr);
+		if (characterOnIndex)
+			tileDataBuffer->SetColor(characterOnIndex->GetStatus().teamNum == SRPGObject::Team::PLAYER ? Float4(0, 0, 1, 1) : Float4(1, 0, 0, 1));		
+
 		if (holded && standingAttack) {
 			auto coord = IndexToCoord(i);
 			//큐브 위치가 사거리 안인지 확인
@@ -143,13 +155,15 @@ void GridedTerrain::Render()
 				tileColorBuffer->Get() = Float4(1.0f, 1.0f, 1.0f, 0.2f);
 		}
 		else {
-			if (!isEnemy && movables.find(i) != movables.end())
-				tileColorBuffer->Get() = Float4(0.0f, 0.0f, 1.0f, 0.7f);
+			if (movables.find(i) != movables.end())
+				tileColorBuffer->Get() = isEnemy ? Float4(1.0f, 0.0f, 0.0f, 0.7f) : Float4(0.0f, 0.0f, 1.0f, 0.7f);
 			else if (attackables.find(i) != attackables.end())
 				tileColorBuffer->Get() = Float4(1.0f, 0.0f, 0.0f, 0.7f);
 			else
 				tileColorBuffer->Get() = Float4(1.0f, 1.0f, 1.0f, 0.2f);
 		}
+
+		tileDataBuffer->SetPS(8);
 		tileColorBuffer->SetPS(9);
 		cubes[i]->Render();
 	}
@@ -257,7 +271,7 @@ void GridedTerrain::CheckMovableArea()
 	pair<int, int> attackRange = { 0, 0 };
 
 	if (objectsOnIndex.find(selected) != objectsOnIndex.end()) {
-		Character* character = (Character*)objectsOnIndex[selected];
+		Character* character = dynamic_cast<Character*>(objectsOnIndex[selected]);
 		if (character) {
 			moveRange = character->GetMaxMove();
 			team = character->GetStatus().teamNum;
@@ -500,19 +514,19 @@ void GridedTerrain::SelectAttack(int w, int h)
 
 bool GridedTerrain::IsActiveCoord(int w, int h)
 {
-	if (w < 0 || w >= col || h < 0 || h >= row)
+	if (w < 0 || w >= (int)col || h < 0 || h >= (int)row)
 		return false;
 
 	return cubes[CoordToIndex(w, h)]->Active();
 }
 
-vector<pair<Character*, pair<int, int>>> GridedTerrain::AttackableCharacters(int targetTeam)
+vector<pair<SRPGObject*, pair<int, int>>> GridedTerrain::AttackableCharacters(int targetTeam)
 {
 	//attackables 기준으로 공격범위 내의 targetTeam 캐릭터를 받는다
 
-	vector<pair<Character*, pair<int, int>>> result;
+	vector<pair<SRPGObject*, pair<int, int>>> result;
 	for (auto object : objects) {
-		auto character = (Character*)object;
+		auto character = (SRPGObject*)object;
 		if (!character->Active())
 			continue;
 
@@ -527,7 +541,7 @@ vector<pair<Character*, pair<int, int>>> GridedTerrain::AttackableCharacters(int
 		result.push_back(make_pair(character, attackables[index]));
 	}
 	//이동거리 순으로 정렬
-	sort(result.begin(), result.end(), [](const pair<Character*, pair<int, int>>& l, const pair<Character*, pair<int, int>>& r) -> bool {
+	sort(result.begin(), result.end(), [](const pair<SRPGObject*, pair<int, int>>& l, const pair<SRPGObject*, pair<int, int>>& r) -> bool {
 		return l.second.first < r.second.first;
 	});
 

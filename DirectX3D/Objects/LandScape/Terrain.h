@@ -6,8 +6,7 @@ protected:
 	const float MAX_HEIGHT = 20.0f;
 public:
 	Terrain();
-	Terrain(string mapFile);
-	~Terrain();
+	virtual ~Terrain();
 
 	void Render();
 

@@ -3,7 +3,7 @@
 
 ModelAnimationScene::ModelAnimationScene()
 {
-	modelAnimator = new ModelAnimator("Enemy");
+	modelAnimator = new ModelAnimator("Soldier");
 	v = {
 		{"SpearIdle", 0},
 		{"SpearAttack", 0},
@@ -22,7 +22,7 @@ ModelAnimationScene::ModelAnimationScene()
 
 	string weaponTag = "Bow";
 
-	handNode = 37;
+	handNode = 12;
 	hand = new Transform;
 	weapon = new Model(weaponTag);
 	weapon->SetTag(weaponTag);

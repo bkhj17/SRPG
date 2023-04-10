@@ -1,5 +1,5 @@
 #pragma once
-#include "MapSelectUI.h"
+
 class AttackSelectUI :
     public MapSelectUI
 {

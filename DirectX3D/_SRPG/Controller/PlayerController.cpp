@@ -1,5 +1,4 @@
 #include "framework.h"
-#include "PlayerController.h"
 
 void PlayerController::Control(void* pack)
 {

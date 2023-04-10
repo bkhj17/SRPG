@@ -15,8 +15,8 @@ private:
     struct Attack {
         int damage;
 
-        Character* attacker;
-        Character* hit;
+        SRPGObject* attacker;
+        SRPGObject* hit;
     };
 
 public:
@@ -31,12 +31,12 @@ public:
     bool IsActing();
 
     //출현
-    Character* Spawn(int teamNum);
-    Character* Spawn(class GridedTerrain* terrain, int teamNum, int w, int h);
-    Character* Spawn(string name, int teamNum, class GridedTerrain* terrain, int w, int h);
+    SRPGObject* Spawn(int teamNum);
+    SRPGObject* Spawn(class GridedTerrain* terrain, int teamNum, int w, int h);
+    SRPGObject* Spawn(string name, int teamNum, class GridedTerrain* terrain, int w, int h);
 
     bool IsBattle() { return isBattle; }
-    void BattleStart(Character* offense, Character* defense);
+    void BattleStart(SRPGObject* offense, SRPGObject* defense);
 
     void TurnStart();
         
@@ -55,19 +55,19 @@ private:
     void AttackHit(void* ptr);
     void AttackEnd(void* ptr);
 
-    int CalcDamage(Character* attacker, Character* defender);
+    int CalcDamage(Character* attacker, SRPGObject* defender);
 private:
     Character* holded = nullptr;    
     int holdedW = -1, holdedH = -1;
    
     //전투 중인 캐릭터들 : 배틀은 따로 뺄 수도 있을 것 같다만
     bool isBattle = false; 
-    Character* curOffense = nullptr;
-    Character* curDefense = nullptr;
+    SRPGObject* curOffense = nullptr;
+    SRPGObject* curDefense = nullptr;
     //공방 순서
     queue<Attack> attacks;
 
-    map<int, vector<Character*>> characterPool;
+    map<int, vector<SRPGObject*>> objectPool;
 
     map<int, ModelAnimatorInstancing*> instances;
 };

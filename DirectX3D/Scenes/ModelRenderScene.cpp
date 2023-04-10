@@ -3,7 +3,7 @@
 
 ModelRenderScene::ModelRenderScene()
 {
-	model = new Model("Axe");
+	model = new Model("Box01");
 }
 
 ModelRenderScene::~ModelRenderScene()

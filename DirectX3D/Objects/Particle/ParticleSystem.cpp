@@ -55,7 +55,7 @@ void ParticleSystem::Render()
     blendState[1]->SetState();
     depthState[1]->SetState();
 
-    DC->DrawIndexedInstanced(6, instances.size(), 0, 0, 0);
+    DC->DrawIndexedInstanced(6, (UINT)instances.size(), 0, 0, 0);
 
     blendState[0]->SetState();
     depthState[0]->SetState();

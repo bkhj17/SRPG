@@ -3,7 +3,7 @@
 
 ModelExportScene::ModelExportScene()
 {
-	string name = "Soldier";
+	string name = "Box01";
 	string file = "Models/FBX/" + name + ".fbx";
 	ModelExporter* exporter = nullptr;
 	
@@ -22,7 +22,7 @@ ModelExportScene::ModelExportScene()
 //		"SwordIdle",
 //		"SwordAttack",
 //		"Death",
-		"BowAttack"
+//		"BowAttack"
 	};
 	
 	for (const auto& clipName : clipNames) {

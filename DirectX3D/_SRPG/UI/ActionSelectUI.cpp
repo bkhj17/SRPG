@@ -4,7 +4,7 @@ ActionSelectUI::ActionSelectUI(Vector3 pos)
 	: SelectUI({ 200.0f, 200.0f }, pos)
 {
 	text = { "이동", "공격", "행동종료", "취소" };
-	maxCursor = text.size();
+	maxCursor = (int)text.size();
 }
 
 void ActionSelectUI::Close()

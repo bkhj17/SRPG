@@ -5,21 +5,21 @@ typedef VertexUVNormalTangentBlend ModelVertex;
 struct MeshData
 {
 	string name;
-	UINT materialIndex;
+	UINT materialIndex = 0;
 
 	vector<ModelVertex> vertices;
 	vector<UINT> indices;
 };
 
 struct NodeData {
-	int index;
+	int index = 0;
 	string name;
-	int parent;
+	int parent = -1;
 	Matrix transform = {};
 };
 
 struct BoneData {
-	int index;
+	int index = 0;
 	string name;
 	Matrix offset = {};
 };
@@ -50,13 +50,13 @@ struct VertexWeights
 };
 
 struct KeyVector {
-	float time;
-	Float3 value;
+	float time = 0.0f;
+	Float3 value = {};
 };
 
 struct KeyQuat {
-	float time;
-	Float4 value;
+	float time = 0.0f;
+	Float4 value = {};
 };
 
 struct KeyData {
@@ -67,9 +67,9 @@ struct KeyData {
 
 struct KeyTransform
 {
-	Float3 scale;
-	Float4 rot;
-	Float3 pos;
+	Float3 scale = {};
+	Float4 rot = {};
+	Float3 pos = {};
 };
 
 struct KeyFrame {
@@ -84,8 +84,8 @@ struct ClipNode {
 
 struct Clip {
 	string name;
-	UINT frameCount;
-	float tickPerSecond;
+	UINT frameCount = 0;
+	float tickPerSecond = 0.0f;
 
 	vector<KeyFrame*> keyFrame;
 };

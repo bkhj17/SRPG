@@ -1,5 +1,4 @@
 #include "framework.h"
-#include "TurnManager.h"
 
 TurnManager::TurnManager()
 {

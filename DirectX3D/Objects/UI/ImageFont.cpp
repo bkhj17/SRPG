@@ -5,7 +5,7 @@ ImageFont::ImageFont(wstring textureFile, float interval)
 	: interval(interval)
 {
 	quads.resize(MAX_LENGTH);
-	for (auto i = 0; i < MAX_LENGTH; i++) {
+	for (UINT i = 0; i < MAX_LENGTH; i++) {
 		quads[i] = new Quad(textureFile, Vector2(), Vector2(0.1f, 1.0f));
 		quads[i]->SetParent(this);
 		quads[i]->GetMaterial()->SetShader(L"UI/ImageFont.hlsl");
@@ -54,7 +54,7 @@ void ImageFont::Render()
 {
 	for (UINT i = 0; i < strValue.size(); i++) {
 		int num = strValue[i] - '0';
-		int index = strValue.size() - i - 1;
+		int index = (int)(strValue.size() - i - 1);
 		valueBuffer->Get()[0] = num;
 		valueBuffer->SetPS(1);
 

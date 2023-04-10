@@ -136,7 +136,7 @@ bool QuadTreeTerrain::IsTriangleContained(UINT index, float x, float z, float si
 UINT QuadTreeTerrain::ContainTriangleCount(float x, float z, float size)
 {
     UINT count = 0;
-    for (int i = 0; i < triangleCount; i++) {
+    for (UINT i = 0; i < triangleCount; i++) {
         if (IsTriangleContained(i, x, z, size))
             count++;
     }
@@ -175,7 +175,7 @@ void QuadTreeTerrain::CreateTreeNode(Node* node, float x, float z, float size)
     vertices.resize(vertexCount);
 
     UINT index = 0, vertexIndex = 0;
-    for (int i = 0; i < triangleCount; i++) {
+    for (UINT i = 0; i < triangleCount; i++) {
         if (IsTriangleContained(i, x, z, size)) {
             vertexIndex = i * 3;
             vertices[index] = this->vertices[vertexIndex];

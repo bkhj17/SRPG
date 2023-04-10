@@ -138,6 +138,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="_SRPG\Character\Obstacle.h" />
+    <ClInclude Include="_SRPG\Character\SRPGObject.h" />
     <ClInclude Include="_SRPG\Cam\BattleCameraMan.h" />
     <ClInclude Include="Objects\UI\ImageFont.h" />
     <ClInclude Include="_SRPG\Character\WeaponManager.h" />
@@ -329,6 +331,8 @@
     <ClInclude Include="_SRPG\UI\UIWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="_SRPG\Character\Obstacle.cpp" />
+    <ClCompile Include="_SRPG\Character\SRPGObject.cpp" />
     <ClCompile Include="_SRPG\Cam\BattleCameraMan.cpp" />
     <ClCompile Include="Objects\UI\ImageFont.cpp" />
     <ClCompile Include="_SRPG\Character\WeaponManager.cpp" />

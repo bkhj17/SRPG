@@ -30,6 +30,7 @@ public:
 	float GetHit() { return data ? data->hit : 0; }
 	pair<int, int> GetRange() { return data ? data->range : make_pair(1, 1); }
 	Type GetType() { return data ? data->type : SWORD; }
+	string GetTypeString();
 
 	void SetData(WeaponData* data) { this->data = data; }
 

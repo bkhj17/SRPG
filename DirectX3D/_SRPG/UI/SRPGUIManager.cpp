@@ -20,7 +20,6 @@ SRPGUIManager::SRPGUIManager()
 
 	Observer::Get()->AddEvent("BattleEnd", bind(&SRPGUIManager::CloseAll, this));
 	Observer::Get()->AddParamEvent("SetInfo", bind(&SRPGUIManager::SetInfo, this, placeholders::_1));
-
 }
 
 SRPGUIManager::~SRPGUIManager()
@@ -130,20 +129,20 @@ bool SRPGUIManager::IsMapControl()
 
 void SRPGUIManager::SetInfo(void* characterPtr)
 {
-	auto character = (Character*)characterPtr;
-	if (character != nullptr && !character->Active())
-		character = nullptr;
+	auto srpgObject = reinterpret_cast<SRPGObject*>(characterPtr);
+	if (srpgObject != nullptr && !srpgObject->Active())
+		srpgObject = nullptr;
 
 	auto info1 = (InfoUI*)totalUI["Info1"];
 	auto info2 = (InfoUI*)totalUI["Info2"];
 
 	auto holded = CharacterManager::Get()->HoldedCharacter();
-	if (holded && holded != character) {
-		info1->SetCharacter(holded);
-		info2->SetCharacter(character);
+	if (holded && holded != srpgObject) {
+		info1->SetObject(holded);
+		info2->SetObject(srpgObject);
 	}
 	else {
-		info1->SetCharacter(character);
-		info2->SetCharacter(nullptr);
+		info1->SetObject(srpgObject);
+		info2->SetObject(nullptr);
 	}
 }

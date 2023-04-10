@@ -17,6 +17,12 @@ PixelInput VS(VertexUV input)
     return output;
 }
 
+cbuffer TileDataBuffer : register(b8)
+{
+    float4 teamColor;
+    int onCharacter;
+}
+
 cbuffer SelectedBuffer : register(b9)
 {
     float4 color;
@@ -24,12 +30,24 @@ cbuffer SelectedBuffer : register(b9)
 
 float4 PS(PixelInput input) : SV_TARGET
 {
+    
+    float edgeWeight = 0.01f;
+    float4 edgeColor = float4(color.xyz, 1.0f);
+    if (onCharacter)
+    {
+        edgeWeight = 0.1f;
+        edgeColor = teamColor;
+    }
+    
     float u = input.uv.x;
     float v = input.uv.y;
-    
+           
     [branch]
-    if(u < 0.01 || u > 0.99 || v < 0.01 || v > 0.99)
-        return float4(color.xyz, 1.0f);
-    else 
+    if (u < edgeWeight || u > 1 - edgeWeight || v < edgeWeight || v > 1 - edgeWeight)
+    {        
+        return edgeColor;
+    }
+    else
         return color;
+    
 }

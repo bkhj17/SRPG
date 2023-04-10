@@ -78,8 +78,8 @@ struct VertexUVNormalTangentBlend
     Float3 normal = {};
     Float3 tangent = {};
     
-    Float4 indices;
-    Float4 weights;
+    Float4 indices = {};
+    Float4 weights = {};
 };
 
 struct InstanceData {

@@ -1,5 +1,4 @@
 #include "framework.h"
-#include "WeaponManager.h"
 
 WeaponManager::WeaponManager()
 {
@@ -10,11 +9,16 @@ WeaponManager::WeaponManager()
 		weapon = new Weapon;
 		weapon->SetActive(false);
 	}
+
+	typeString[Weapon::Type::SWORD] = "°Ë";
+	typeString[Weapon::Type::SPEAR] = "Ã¢";
+	typeString[Weapon::Type::AXE] = "µµ³¢";
+	typeString[Weapon::Type::BOW] = "È°";
 }
 
 WeaponManager::~WeaponManager()
 {
-	for (auto& weapon : weaponPool)
+	for (auto weapon : weaponPool)
 		delete weapon;
 
 	for (auto& instance : instances)
@@ -97,4 +101,17 @@ Weapon::WeaponData* WeaponManager::GetData(string key)
 		return nullptr;
 
 	return &datas[key];
+}
+
+string WeaponManager::GetTypeName(Weapon::Type type)
+{
+	if (typeString.find(type) == typeString.end())
+		return "";
+
+	return typeString[type];
+}
+
+string WeaponManager::GetTypeName(Weapon* weapon)
+{
+	return GetTypeName(weapon->GetType());
 }

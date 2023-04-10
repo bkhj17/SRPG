@@ -1,11 +1,5 @@
 #include "framework.h"
 #include "SRPGScene.h"
-#include "../Field/GridedTerrain.h"
-#include "../Field/MapCursor.h"
-#include "../Character/Character.h"
-#include "../Character/CharacterManager.h"
-#include "../UI/SRPGUIManager.h"
-#include "../UI/UIWindow.h"
 
 SRPGScene::SRPGScene()
 {
@@ -16,18 +10,19 @@ SRPGScene::SRPGScene()
 	
 	WeaponManager::Get();
 	CharacterManager::Get();
-
+	
 	Observer::Get()->AddParamEvent("CharacterMoveEnd", bind(&SRPGScene::CharacterMoveEnd, this, placeholders::_1));
-
+	
 	Observer::Get()->AddEvent("InputAction", bind(&SRPGScene::InputAction, this));
 	Observer::Get()->AddEvent("InputAttack", bind(&SRPGScene::InputAttackAction, this));
-
+	
 	SRPGUIManager::Get()->OpenUI("TurnChangeUI", Vector3(CENTER_X, CENTER_Y));
-
+	
 	TurnManager::Get();
-
+	
 	ParticleManager::Get()->Add("Hit", "TextData/Particles/Hit.fx", 10);
-
+	ParticleManager::Get()->Add("Hit", "TextData/Particles/ObstacleBreak.fx", 10);
+	
 	battleCamera = new BattleCameraMan;
 	battleCamera->Pos() = mapCursor->GlobalPos();
 }
@@ -37,35 +32,54 @@ SRPGScene::~SRPGScene()
 	delete terrain;
 	delete mapCursor;
 	delete battleCamera;
-
+	
 	CharacterManager::Delete();
 	WeaponManager::Delete();
-
+	
 	SRPGUIManager::Delete();
-
+	
 	TurnManager::Delete();
-
+	
 	ParticleManager::Delete();
 }
 
 void SRPGScene::Start()
 {
-	//예뻐지긴 했는데 나중에 뭔가 더 해야할 것 같다
-	Character* character = CharacterManager::Get()->Spawn("test1", Character::Team::PLAYER, terrain, 3, 3);
+	//장애물 세팅
+	CharacterManager::Get()->Spawn("Box", Character::Team::NONE, terrain, 3, 6);
+	CharacterManager::Get()->Spawn("Box", Character::Team::NONE, terrain, 4, 6);
+	CharacterManager::Get()->Spawn("Box", Character::Team::NONE, terrain, 5, 6);
+	CharacterManager::Get()->Spawn("Box", Character::Team::NONE, terrain, 6, 6);
+	CharacterManager::Get()->Spawn("Box", Character::Team::NONE, terrain, 7, 6);
+	CharacterManager::Get()->Spawn("Box", Character::Team::NONE, terrain, 8, 7);
+	CharacterManager::Get()->Spawn("Box", Character::Team::NONE, terrain, 9, 7);
+
+	//캐릭터 세팅
+	//데이터화...는 딱히?
+	Character* character = (Character*)CharacterManager::Get()->Spawn("Soldier1", Character::Team::PLAYER, terrain, 3, 5);
 	character->SetWeapon(WeaponManager::Get()->Pop("Axe"));
 	
-	character = CharacterManager::Get()->Spawn("test1-1", Character::Team::PLAYER, terrain, 4, 3);
+	character = (Character*)CharacterManager::Get()->Spawn("Soldier2", Character::Team::PLAYER, terrain, 4, 3);
 	character->SetWeapon(WeaponManager::Get()->Pop("Sword"));
 	
-	character = CharacterManager::Get()->Spawn("test1-2", Character::Team::PLAYER, terrain, 3, 10);
+	character = (Character*)CharacterManager::Get()->Spawn("Soldier3", Character::Team::PLAYER, terrain, 3, 3);
 	character->SetWeapon(WeaponManager::Get()->Pop("Bow"), 12);
-	
-	character = CharacterManager::Get()->Spawn("test2", Character::Team::ENEMY, terrain, 7, 10);
+
+	character = (Character*)CharacterManager::Get()->Spawn("Soldier2", Character::Team::PLAYER, terrain, 4, 4);
 	character->SetWeapon(WeaponManager::Get()->Pop("Sword"));
 
-	character = CharacterManager::Get()->Spawn("test2-1", Character::Team::ENEMY, terrain, 9, 10);
+	character = (Character*)CharacterManager::Get()->Spawn("Enemy1", Character::Team::ENEMY, terrain, 7, 10);
 	character->SetWeapon(WeaponManager::Get()->Pop("Sword"));
 
+	character = (Character*)CharacterManager::Get()->Spawn("Enemy2", Character::Team::ENEMY, terrain, 9, 10);
+	character->SetWeapon(WeaponManager::Get()->Pop("Sword"));
+
+	character = (Character*)CharacterManager::Get()->Spawn("Enemy3", Character::Team::ENEMY, terrain, 8, 9);
+	character->SetWeapon(WeaponManager::Get()->Pop("Axe"));
+
+	character = (Character*)CharacterManager::Get()->Spawn("Enemy4", Character::Team::ENEMY, terrain, 6, 9);
+	character->SetWeapon(WeaponManager::Get()->Pop("Sword"));
+	//커서 초기 위치
 	mapCursor->SetPosCoord(5, 6, true);
 }
 
@@ -74,7 +88,6 @@ void SRPGScene::Update()
 	terrain->Update();
 	CharacterManager::Get()->Update();
 	WeaponManager::Get()->Update();
-
 
 	SRPGUIManager::Get()->Update();
 	if (!CharacterManager::Get()->IsActing())
@@ -111,7 +124,6 @@ void SRPGScene::Render()
 
 void SRPGScene::PostRender()
 {
-	
 	CharacterManager::Get()->PostRender();
 
 	SRPGUIManager::Get()->Render();

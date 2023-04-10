@@ -133,8 +133,8 @@ void Terrain::MakeMesh()
 	vector<VertexType>& vertices = mesh->GetVertices();
 
 	vertices.reserve((size_t)width * height);
-	for (int z = 0; z < height; z++) {
-		for (int x = 0; x < width; x++) {
+	for (int z = 0; z < (int)height; z++) {
+		for (int x = 0; x < (int)width; x++) {
 			VertexType vertex;
 			UINT index = width * z + x;
 			//vertex.pos = { (float)x,  pixels[index].x * MAX_HEIGHT, (float)z };
@@ -156,8 +156,8 @@ void Terrain::MakeMesh()
 
 	vector<UINT>& indices = mesh->GetIndices();
 	indices.reserve((size_t)(width - 1) * (height - 1) * 6);
-	for (int z = 0; z < height - 1; z++) {
-		for (int x = 0; x < width - 1; x++) {
+	for (int z = 0; z < (int)height - 1; z++) {
+		for (int x = 0; x < (int)width - 1; x++) {
 			for (int i = 0; i < 6; i++)
 				indices.push_back(width * (z + dxz[i].second) + x + dxz[i].first);
 		}

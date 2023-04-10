@@ -19,6 +19,11 @@ void Weapon::Update()
 		modelTransform->UpdateWorld();
 }
 
+string Weapon::GetTypeString()
+{
+	return string();
+}
+
 void Weapon::SetModelTransform(string tag, Transform* transform)
 {
 	if (modelTransform) {

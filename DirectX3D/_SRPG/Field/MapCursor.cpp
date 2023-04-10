@@ -1,6 +1,4 @@
 #include "framework.h"
-#include "MapCursor.h"
-#include "GridedTerrain.h"
 
 MapCursor::MapCursor()
 {

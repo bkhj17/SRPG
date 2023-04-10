@@ -8,8 +8,6 @@ Model::Model(string name)
 	ReadMesh();
 
 	worldBuffer = new WorldBuffer();
-
-
 }
 
 Model::~Model()

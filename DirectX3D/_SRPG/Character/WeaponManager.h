@@ -12,6 +12,9 @@ public:
 
 	Weapon* Pop(string key);
 	Weapon::WeaponData* GetData(string key);
+
+	string GetTypeName(Weapon::Type type);
+	string GetTypeName(Weapon* weapon);
 private:
 	void LoadDatas();
 
@@ -20,5 +23,7 @@ private:
 	map<string, ModelInstancing*> instances;
 
 	vector<Weapon*> weaponPool;
+
+	map<Weapon::Type, string> typeString;
 };
 

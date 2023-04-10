@@ -66,7 +66,7 @@ void ModelAnimator::ReadClip(string clipName, UINT clipNum, string lockBone)
     clip->tickPerSecond = reader->Float();
 
     UINT boneCount = reader->UInt();
-    for(int i = 0; i < boneCount; i++)
+    for(UINT i = 0; i < boneCount; i++)
     {
         KeyFrame* keyFrame = new KeyFrame();
         keyFrame->boneName = reader->String();
@@ -130,7 +130,7 @@ Matrix ModelAnimator::GetTransformByNode(int nodeIndex)
 
 void ModelAnimator::CreateTexture()
 {
-    UINT clipCount = clips.size();
+    UINT clipCount = (UINT)clips.size();
 
     clipTransforms = new ClipTransform[clipCount];
     nodeTransforms = new ClipTransform[clipCount];
@@ -151,7 +151,7 @@ void ModelAnimator::CreateTexture()
     UINT pitchSize = MAX_BONE * sizeof(Matrix);
     UINT pageSize = pitchSize * MAX_FRAME;
 
-    void* p = VirtualAlloc(nullptr, pageSize * clipCount,
+    void* p = VirtualAlloc(nullptr, (SIZE_T)pageSize * clipCount,
         MEM_RESERVE, PAGE_READWRITE);
 
     for(UINT i = 0; i < clipCount; i++)

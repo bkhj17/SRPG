@@ -54,7 +54,7 @@ public:
 	Vector3 GetTileSize() { return Vector3((float)tileWidth, 0.0f, (float)tileHeight); }
 
 	int GetSelectedIndex() { return selected; }
-	vector<pair<class Character*, pair<int, int>>> AttackableCharacters(int targetTeam);
+	vector<pair<class SRPGObject*, pair<int, int>>> AttackableCharacters(int targetTeam);
 
 private:
 	void CalledPosToCoord(void* pack);
@@ -62,15 +62,35 @@ private:
 private:
 	void Reselect();
 private:
-	FloatValueBuffer* widthHeightBuffer;
+	class TileDataBuffer : public ConstBuffer 
+	{
+	public:
+		struct Data {
+			Float4 color;
+			int onCharacter;
+			float padding[3];
+		};
+		
+		TileDataBuffer() : ConstBuffer(&data, sizeof(Data)) {}
+
+		void SetOn(bool on) { data.onCharacter = (int)on; }
+		void SetColor(const Float4& color) { data.color = color; }
+	private:
+		Data data;
+	};
 
 	vector<Cube*> cubes;
+	FloatValueBuffer* widthHeightBuffer;
+	TileDataBuffer* tileDataBuffer;
 
+private:
 	UINT tileWidth = DEFAULT_TILE_SIZE, tileHeight = DEFAULT_TILE_SIZE;
 	UINT row, col;
 
 	int selected = -1;
 
+
+	IntValueBuffer* onCharacterBuffer;
 	ColorBuffer* tileColorBuffer;
 
 	//필드 위 오브젝트는 등록하는 방식으로 

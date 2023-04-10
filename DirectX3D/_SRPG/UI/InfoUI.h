@@ -11,8 +11,8 @@ public:
 
 	void Close() override {}	//»ó½Ã ¶ç¿ï Ã¢
 
-	void SetCharacter(Character* character);
+	void SetObject(SRPGObject* object);
 private:
-	Character* character = nullptr;
+	SRPGObject* object = nullptr;
 };
 

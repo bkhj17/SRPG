@@ -18,9 +18,9 @@ private:
 	string name;
 	string lockBone;
 
-	UINT frameCount;
-	float tickPerSecond;
-	float duration;
+	UINT frameCount = 0;
+	float tickPerSecond = 0.0f;
+	float duration = 0.0f;
 
 	float playTime = 0.0f;
 

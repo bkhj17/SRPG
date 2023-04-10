@@ -8,8 +8,8 @@
 #define WIN_HEIGHT 720
 
 #define MAX_LIGHT 10
-#define MAX_BONE 512	//적으면 추후 수정
-#define MAX_FRAME 8172	//적으면 추후 수정
+#define MAX_BONE 256	//적으면 추후 수정
+#define MAX_FRAME 512	//적으면 추후 수정
 #define MAX_INSTANCE 128
 
 #define CENTER_X (WIN_WIDTH * 0.5f)
@@ -209,9 +209,11 @@ using namespace GameMath;
 #include "_SRPG/Field/GridedTerrain.h"
 #include "_SRPG/Field/MapCursor.h"
 
+#include "_SRPG/Character/SRPGObject.h"
 #include "_SRPG/Character/Weapon.h"
 #include "_SRPG/Character/WeaponManager.h"
 #include "_SRPG/Character/Character.h"
+#include "_SRPG/Character/Obstacle.h"
 #include "_SRPG/Character/CharacterManager.h"
 
 #include "_SRPG/UI/UIWindow.h"

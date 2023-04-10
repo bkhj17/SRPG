@@ -112,7 +112,7 @@ void ParticleToolScene::GUIRender()
 void ParticleToolScene::UpdatePhysical()
 {
 	drawCount = 0;
-	for (int i = 0; i < data.count; i++) {
+	for (UINT i = 0; i < data.count; i++) {
 		if (particleInfos[i].startTime > lifeTime) continue;
 		
 		particleInfos[i].velocity += particleInfos[i].accelation * DELTA;

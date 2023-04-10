@@ -65,8 +65,8 @@ void TerrainLOD::GUIRender()
 
 void TerrainLOD::MakeMesh()
 {
-    width = heightMap->GetSize().x;
-    height = heightMap->GetSize().y;
+    width = (UINT)heightMap->GetSize().x;
+    height = (UINT)heightMap->GetSize().y;
 
     cellUV = { 1.0f / width, 1.0f / height };
 
