@@ -23,17 +23,17 @@ cbuffer LightProjection : register(b12)
     matrix lightProjection;
 }
 
-PixelInput VS(VertexUVNormalTangentBlend input)
+PixelInput VS(VertexInstancing input)
 {
     PixelInput output;
     matrix transform;
     
     [branch]
     if (animType)
-        transform = mul(SkinWorld(input.indices, input.weights), world);
+        transform = mul(SkinWorld(input.index, input.indices, input.weights), input.transform);
     else
-        transform = world;
-        
+        transform = input.transform;
+    
     output.pos = mul(input.pos, transform);
     
     output.viewPos = invView._41_42_43; //forward
@@ -57,26 +57,24 @@ PixelInput VS(VertexUVNormalTangentBlend input)
 Texture2D depthMap : register(t10);
 
 float4 PS(PixelInput input) : SV_TARGET
-{    
+{
     Material material;
     material.normal = NormalMapping(input.tangent,
         input.binormal, input.normal, input.uv);
-    
     material.diffuseColor = diffuseMap.Sample(samp, input.uv);
     material.specularIntensity = specularMap.Sample(samp, input.uv);
     material.viewPos = input.viewPos;
     material.worldPos = input.worldPos;
     
     //각 라이트 컬러를 합산
-
     float4 color = 0;
+    
     [unroll(MAX_LIGHT)] //반복 횟수 제한 
     for (int i = 0; i < lightCount; i++)
     {
         [flatten]
         if (!lights[i].active)
             continue;
-        
         [flatten]
         if (lights[i].type == 0)
             color += CalcDirectional(material, lights[i]);
@@ -98,13 +96,12 @@ float4 PS(PixelInput input) : SV_TARGET
     uv.y = -uv.y;
     uv = uv * 0.5f + 0.5f;
     
-    if(uv.x < 0.0f || uv.x > 1.0f || uv.y < 0.0f || uv.y > 1.0f)
+    if (uv.x < 0.0f || uv.x > 1.0f || uv.y < 0.0f || uv.y > 1.0f)
         return color;
     
     float shadowDepth = depthMap.Sample(samp, uv).r;
     float currentDepth = input.clipPos.z / input.clipPos.w;
     
-    //이론 상 같은 지점이라면 같은 값이어야 한다
     if (currentDepth > shadowDepth + 0.0001f)
         return color * 0.5f;
     

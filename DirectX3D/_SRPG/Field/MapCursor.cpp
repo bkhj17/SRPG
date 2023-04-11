@@ -41,9 +41,9 @@ void MapCursor::UpdateWorld()
 	__super::UpdateWorld();
 
 	//커서 올라간 칸에 오브젝트가 있다면 커서 오브젝트 높이 올리기
-	Transform* inPoint = terrain->ObjectOnIndex(terrain->CoordToIndex({ w, h }));
+	SRPGObject* inPoint = terrain->ObjectOnIndex(terrain->CoordToIndex({ w, h }));
 	if (inPoint)
-		objectPos.y = ON_OBJECT_Y;
+		objectPos.y = inPoint->GetCursorHeight();
 
 	object->Pos() = (isMoving) ? Lerp(object->Pos(), objectPos, MOVE_SPEED * DELTA) : objectPos;
 	object->UpdateWorld();
@@ -112,12 +112,13 @@ void MapCursor::CamMove()
 	Vector3 cursorScreen = CAM->WorldToScreen(GlobalPos());
 
 	if (cursorScreen.x <= WIN_WIDTH * CAM_MOVE_VALUE)
-		camMove.x -= 1.0f;
+		camMove -= CAM->Right();
 	if (cursorScreen.x >= WIN_WIDTH * (1 - CAM_MOVE_VALUE))
-		camMove.x += 1.0f;
+		camMove += CAM->Right();
 	if (cursorScreen.y <= WIN_HEIGHT * CAM_MOVE_VALUE)
-		camMove.z -= 1.0f;
+		camMove -= CAM->Up();
 	if (cursorScreen.y >= WIN_HEIGHT * (1 - CAM_MOVE_VALUE))
-		camMove.z += 1.0f;
+		camMove += CAM->Up();
+	camMove.y = 0.0f;
 	CAM->Pos() += camMove * 3.0f * MOVE_SPEED * DELTA;
 }

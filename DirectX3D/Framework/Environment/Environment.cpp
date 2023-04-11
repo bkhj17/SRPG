@@ -11,8 +11,6 @@ Environment::Environment()
     lightBuffer = new LightBuffer;
 
     uiViewBuffer = new ViewBuffer;
-
-
 }
 
 Environment::~Environment()

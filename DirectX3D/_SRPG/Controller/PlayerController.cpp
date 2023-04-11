@@ -15,7 +15,7 @@ void PlayerController::Control(void* pack)
 		}
 	}
 	else {
-		if (KEY_DOWN('A')) {
+		if (KEY_DOWN('C')) {
 			SRPGUIManager::Get()->OpenUI("MainSelect");
 		}
 		if (KEY_DOWN('Z')) {

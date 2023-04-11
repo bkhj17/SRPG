@@ -11,7 +11,8 @@ ModelInstancing::ModelInstancing(string name)
 ModelInstancing::~ModelInstancing()
 {
     delete instanceBuffer;
-    for (Transform* transform : transforms)
+
+    for (auto transform : transforms)
         delete transform;
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 
+class SRPGObject;
 class GridedTerrain : public Terrain
 {
 public:
@@ -28,7 +29,7 @@ public:
 	pair<int, int> IndexToCoord(int index);
 	pair<int, int> PosToCoord(Vector3 pos);
 
-	void AddObject(Transform* object);
+	void AddObject(SRPGObject* object);
 
 	void SetSelected(int w, int h, bool forced = false);
 	int GetSelected() { return selected; }
@@ -42,7 +43,7 @@ public:
 	UINT Row() { return row; }
 	UINT Col() { return col; }
 
-	Transform* ObjectOnIndex(int index);
+	SRPGObject* ObjectOnIndex(int index);
 
 	void SelectCharacter(int w, int h);
 	void SelectMove(int w, int h);
@@ -54,7 +55,7 @@ public:
 	Vector3 GetTileSize() { return Vector3((float)tileWidth, 0.0f, (float)tileHeight); }
 
 	int GetSelectedIndex() { return selected; }
-	vector<pair<class SRPGObject*, pair<int, int>>> AttackableCharacters(int targetTeam);
+	vector<pair<SRPGObject*, pair<int, int>>> AttackableCharacters(int targetTeam);
 
 private:
 	void CalledPosToCoord(void* pack);
@@ -94,7 +95,7 @@ private:
 	ColorBuffer* tileColorBuffer;
 
 	//필드 위 오브젝트는 등록하는 방식으로 
-	vector<Transform*> objects;
+	vector<SRPGObject*> objects;
 	
 	//행동 범위 저장 : 이동, 공격
 	unordered_map<int, MovableInfo> movables;

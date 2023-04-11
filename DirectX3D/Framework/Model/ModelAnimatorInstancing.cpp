@@ -8,6 +8,8 @@ ModelAnimatorInstancing::ModelAnimatorInstancing(string name)
 
     instanceBuffer = new VertexBuffer(instanceDatas, sizeof(InstanceData), MAX_INSTANCE);
     frameInstancingBuffer =  new FrameInstancingBuffer();
+
+	worldBuffer->SetType(1);
 }
 
 ModelAnimatorInstancing::~ModelAnimatorInstancing()
@@ -32,6 +34,7 @@ void ModelAnimatorInstancing::Render()
     frameInstancingBuffer->SetVS(4);
     DC->VSSetShaderResources(0, 1, &srv);
 
+	worldBuffer->SetVS(0);
     for (auto mesh : meshes)
         mesh->RenderInstanced(drawCount);
 }

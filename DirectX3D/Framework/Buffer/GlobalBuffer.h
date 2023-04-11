@@ -22,7 +22,6 @@ class WorldBuffer : public ConstBuffer
 private:
     struct Data {
         Matrix world = XMMatrixIdentity();
-
         int type = 0;
 
         float padding[3] = {};
@@ -139,7 +138,6 @@ public:
 private:
     Data data;
 };
-
 
 class WeatherBuffer : public ConstBuffer
 {

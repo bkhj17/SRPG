@@ -58,7 +58,6 @@ Texture* Texture::Add(wstring file)
     assert(SUCCEEDED(result));
 
     ID3D11ShaderResourceView* srv;
-
     CreateShaderResourceView(DEVICE, image.GetImages(), image.GetImageCount(),
         image.GetMetadata(), &srv);
 
@@ -93,7 +92,6 @@ Texture* Texture::Add(wstring file, wstring key)
 
     textures[key] = new Texture(srv, image, file);
     textures[key]->isReferanced = false;
-
     return textures[key];
 }
 

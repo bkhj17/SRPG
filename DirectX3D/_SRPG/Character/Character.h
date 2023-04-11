@@ -6,6 +6,8 @@ class Character : public SRPGObject
 private:
 	friend class CharacterManager;
 
+	const float CURSOR_HEIGHT = 20.0f;
+
 	enum AnimState {
 		IDLE, RUN, HIT, DIE, SWORD_ATTACK, BOW_ATTACK
 	};
@@ -32,6 +34,7 @@ public:
 
 	void SetInstancing(ModelAnimatorInstancing* instancing);
 
+	virtual float GetCursorHeight() override { return CURSOR_HEIGHT; }
 private:
 	void SetAnimState(AnimState state);
 	void AttackEnd();

@@ -15,9 +15,6 @@ void InfoUI::Render()
 	float x = Pos().x - Half().x + 20.0f;
 	float y = Pos().y + Half().y - 25.0f;
 
-	wstring hpText = L"HP : " + to_wstring(object->GetStatus().curHp) + L"/" + to_wstring(object->GetStatus().maxHp);
-	wstring moveText = L"이동 : " + to_wstring(object->GetStatus().move);
-
 	//이름
 	Font::Get()->RenderTextLeft(object->GetStatus().name, { x, y });
 	//팀
@@ -25,13 +22,16 @@ void InfoUI::Render()
 	Font::Get()->RenderText(team, { Pos().x + Half().x - 20.0f, y});
 	
 	//hp
+	wstring hpText = L"HP : " + to_wstring(object->GetStatus().curHp) + L"/" + to_wstring(object->GetStatus().maxHp);
 	Font::Get()->RenderTextLeft(hpText, {x , y - 30.0f});
-
-	Font::Get()->RenderTextLeft(moveText, {x,  y - 30.0f * 2.0f});
 
 	//캐릭터일 경우 무기 종류
 	Character* character = dynamic_cast<Character*>(object);
 	if (character) {
+		//이동거리
+		wstring moveText = L"이동 : " + to_wstring(object->GetStatus().move);
+		Font::Get()->RenderTextLeft(moveText, { x,  y - 30.0f * 2.0f });
+
 		Weapon* weapon = character->GetWeapon();
 		if (weapon) {
 			//무기 이름

@@ -4,7 +4,7 @@ WeaponManager::WeaponManager()
 {
 	LoadDatas();
 	
-	weaponPool.resize(50);
+	weaponPool.resize(20);
 	for (auto& weapon : weaponPool) {
 		weapon = new Weapon;
 		weapon->SetActive(false);
@@ -114,4 +114,10 @@ string WeaponManager::GetTypeName(Weapon::Type type)
 string WeaponManager::GetTypeName(Weapon* weapon)
 {
 	return GetTypeName(weapon->GetType());
+}
+
+void WeaponManager::SetShader(wstring shader)
+{
+	for (auto& instance : instances)
+		instance.second->SetShader(shader);
 }

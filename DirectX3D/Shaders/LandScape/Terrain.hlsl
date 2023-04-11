@@ -24,9 +24,9 @@ LightPixelInput VS(VertexUVNormalTangent input)
     return output;
 }
 
-Texture2D alphaMap : register(t10); //¾ËÆÄ¸Ê : Æ¯Á¤ ¸Ê°ú ¼¯À» º¸°£¿ë ¸Ê
-Texture2D secondMap : register(t11);
-Texture2D thirdMap : register(t12);
+Texture2D alphaMap : register(t11); //¾ËÆÄ¸Ê : Æ¯Á¤ ¸Ê°ú ¼¯À» º¸°£¿ë ¸Ê
+Texture2D secondMap : register(t12);
+Texture2D thirdMap : register(t13);
 
 Material GetMaterialToTerrain(LightPixelInput input)
 {
@@ -54,7 +54,7 @@ Material GetMaterialToTerrain(LightPixelInput input)
 float4 PS(LightPixelInput input) : SV_TARGET
 {    
     Material material = GetMaterialToTerrain(input);
-    GetMaterial(input);
+    //GetMaterial(input);
     
     float4 directional = CalcDirectional(material, lights[0]);
     float4 ambient = CalcAmbient(material);

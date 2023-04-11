@@ -1196,6 +1196,9 @@
     <FxCompile Include="Shaders\LandScape\Scattering.hlsl" />
     <FxCompile Include="Shaders\UI\ImageFont.hlsl" />
     <FxCompile Include="Shaders\SRPG\ActCylinder.hlsl" />
+    <FxCompile Include="Shaders\Model\ModelInstanceShadow.hlsl" />
+    <FxCompile Include="Shaders\Light\DepthMapInstance.hlsl" />
+    <FxCompile Include="Shaders\LandScape\TerrainShadow.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\VertexHeader.hlsli" />

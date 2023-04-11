@@ -4,9 +4,20 @@
 SRPGScene::SRPGScene()
 {
 	terrain = new GridedTerrain;
-	
+
 	mapCursor = new MapCursor;
 	mapCursor->SetGridTerrain(terrain);
+	
+	battleCamera = new BattleCameraMan;
+	battleCamera->Pos() = mapCursor->GlobalPos();
+
+	shadow = new Shadow;
+	shadow->SetTargetPos(Vector3(terrain->GetSize().x, 0, terrain->GetSize().y));
+	
+	LightBuffer::Light* light = Environment::Get()->GetLight(0);
+	light->type = 0;
+	light->pos = { 70, 110, -12 };
+	light->range = 10000.0f;
 	
 	WeaponManager::Get();
 	CharacterManager::Get();
@@ -22,9 +33,6 @@ SRPGScene::SRPGScene()
 	
 	ParticleManager::Get()->Add("Hit", "TextData/Particles/Hit.fx", 10);
 	ParticleManager::Get()->Add("Hit", "TextData/Particles/ObstacleBreak.fx", 10);
-	
-	battleCamera = new BattleCameraMan;
-	battleCamera->Pos() = mapCursor->GlobalPos();
 }
 
 SRPGScene::~SRPGScene()
@@ -32,15 +40,18 @@ SRPGScene::~SRPGScene()
 	delete terrain;
 	delete mapCursor;
 	delete battleCamera;
+	delete shadow;
+
+	WeaponManager::Delete();
 	
 	CharacterManager::Delete();
-	WeaponManager::Delete();
 	
 	SRPGUIManager::Delete();
 	
 	TurnManager::Delete();
 	
 	ParticleManager::Delete();
+	
 }
 
 void SRPGScene::Start()
@@ -104,16 +115,33 @@ void SRPGScene::Update()
 
 void SRPGScene::PreRender()
 {
+	shadow->SetRenderTarget();
+
+	CharacterManager::Get()->SetCharacterShader(L"Light/DepthMapInstance.hlsl");
+	CharacterManager::Get()->SetObjectShader(L"Light/DepthMap.hlsl");
+	CharacterManager::Get()->Render(true);
+
+	WeaponManager::Get()->SetShader(L"Light/DepthMapInstance.hlsl");
+	WeaponManager::Get()->Render();
 }
 
 void SRPGScene::Render()
 {
+	shadow->SetRender();
+
 	if (CharacterManager::Get()->IsBattle())
 		battleCamera->SetView();
 
+	terrain->GetMaterial()->SetShader(L"LandScape/TerrainShadow.hlsl");
 	terrain->Render();
 
+	shadow->SetRender();
+
+	CharacterManager::Get()->SetCharacterShader(L"Model/ModelAnimationInstance.hlsl");
+	CharacterManager::Get()->SetObjectShader(L"Light/Light.hlsl");
 	CharacterManager::Get()->Render();
+
+	WeaponManager::Get()->SetShader(L"Model/ModelInstancing.hlsl");
 	WeaponManager::Get()->Render();
 	
 	if (!CharacterManager::Get()->IsActing() && state == PLAYING)
@@ -127,11 +155,12 @@ void SRPGScene::PostRender()
 	CharacterManager::Get()->PostRender();
 
 	SRPGUIManager::Get()->Render();
+
+	//shadow->PostRender();
 }
 
 void SRPGScene::GUIRender()
 {
-	terrain->GUIRender();
 }
 
 void SRPGScene::Control()
@@ -173,7 +202,7 @@ void SRPGScene::InputAttackAction()
 }
 
 void SRPGScene::CharacterMoveEnd(void* characterPtr)
-{
+{	
 	auto character = (Character*)characterPtr;
 	if (!character) //wrong call
 		return;

@@ -21,7 +21,7 @@ private:
 
 public:
     void Update();
-    void Render();
+    void Render(bool shadow = false);
     void PostRender();
 
     void CharacterHold(Character* character, int w, int h) { holded = character; holdedW = w; holdedH = h; }
@@ -48,6 +48,9 @@ public:
     Character* GetActableCharacter(Character::Team team);
 
     int NumActiveCharactersByTeam(Character::Team team);
+
+    void SetCharacterShader(wstring shader);
+    void SetObjectShader(wstring shader);
 private:
     void BattleUpdate();
     void BattleEnd();

@@ -34,5 +34,7 @@ private:
 	SceneState state = PLAYING;
 
 	BattleCameraMan* battleCamera;
+
+	Shadow* shadow;
 };
 

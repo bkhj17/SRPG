@@ -10,12 +10,13 @@ public:
 	void PostRender();
 	void GUIRender();
 
+	void SetTargetPos(Vector3 pos) { targetPos = pos; }
 private:
 	void SetViewProjection();
 
 private:
 	UINT width, height;
-	float scale = 1.0f;
+	float scale = 100.0f;
 
 	RenderTarget* renderTarget;
 	DepthStencil* depthStencil;
@@ -24,5 +25,7 @@ private:
 	MatrixBuffer* projectionBuffer;
 
 	class Quad* quad;
+
+	Vector3 targetPos = {};
 };
 

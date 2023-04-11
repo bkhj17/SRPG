@@ -15,6 +15,8 @@ public:
 
 	string GetTypeName(Weapon::Type type);
 	string GetTypeName(Weapon* weapon);
+
+	void SetShader(wstring shader);
 private:
 	void LoadDatas();
 

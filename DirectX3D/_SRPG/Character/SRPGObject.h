@@ -2,6 +2,8 @@
 
 class SRPGObject : public Transform
 {
+private:
+	const float CURSOR_HEIGHT = 3.0f;
 public:
 	friend class CharacterManager;
 
@@ -45,6 +47,8 @@ public:
 	virtual bool IsActing() { return Active() && IsMoving(); }
 
 	const Status& GetStatus() { return status; }
+
+	virtual float GetCursorHeight() { return CURSOR_HEIGHT; }
 protected:
 	bool IsMoving();
 	void Move();

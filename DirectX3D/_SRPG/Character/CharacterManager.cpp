@@ -59,14 +59,20 @@ void CharacterManager::Update()
 		BattleUpdate();
 }
 
-void CharacterManager::Render()
+void CharacterManager::Render(bool shadow)
 {
 	for (auto& instance : instances)
 		instance.second->Render();
 
-	for (auto& pool : objectPool)
-		for (auto object : pool.second)
+	if (shadow) {
+		for (auto object : objectPool[SRPGObject::NONE])
 			object->Render();
+	}
+	else {
+		for (auto& pool : objectPool)
+			for (auto object : pool.second)
+				object->Render();
+	}
 }
 
 void CharacterManager::PostRender()
@@ -232,6 +238,20 @@ int CharacterManager::NumActiveCharactersByTeam(Character::Team team)
 		cnt++;
 	}
 	return cnt;
+}
+
+void CharacterManager::SetCharacterShader(wstring shader)
+{
+	for (auto& instance : instances)
+		instance.second->SetShader(shader);
+}
+
+void CharacterManager::SetObjectShader(wstring shader)
+{
+	for (auto object : objectPool[SRPGObject::NONE]) {
+		auto obstacle = (Obstacle*)object;
+		obstacle->SetShader(shader);
+	}
 }
 
 void CharacterManager::BattleUpdate()

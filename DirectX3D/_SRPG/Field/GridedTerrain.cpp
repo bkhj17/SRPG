@@ -199,7 +199,7 @@ pair<int, int> GridedTerrain::PosToCoord(Vector3 pos)
 	return { x, y };
 }
 
-void GridedTerrain::AddObject(Transform* object)
+void GridedTerrain::AddObject(SRPGObject* object)
 {
 	for (auto o : objects) {
 		if (o == object)
@@ -387,7 +387,7 @@ void GridedTerrain::CheckAttackableArea(int minRange, int maxRange, bool isStand
 	}
 }
 
-Transform* GridedTerrain::ObjectOnIndex(int index)
+SRPGObject* GridedTerrain::ObjectOnIndex(int index)
 {
 	for (auto object : objects) {
 		if (!object->Active())
