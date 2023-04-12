@@ -4,7 +4,7 @@ class Texture
 {
 private:
     Texture(ID3D11ShaderResourceView* srv, ScratchImage& image, wstring file);
-    ~Texture();
+    virtual ~Texture();
 
 public:
     void PSSet(UINT slot = 0);

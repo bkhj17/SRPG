@@ -49,10 +49,19 @@ void SRPGUIManager::Update()
 	totalUI["Info1"]->UpdateWorld();
 	totalUI["Info2"]->UpdateWorld();
 	totalUI["Turn"]->UpdateWorld();
+
+#if DEBUG_MODE
+	if (KEY_DOWN('0'))
+		renderOn = !renderOn;
+#endif
 }
 
 void SRPGUIManager::Render()
 {
+#if DEBUG_MODE
+	if (!renderOn)
+		return;
+#endif
 	for (auto d : floatingDamages)
 		d->Render();
 
@@ -62,7 +71,6 @@ void SRPGUIManager::Render()
 
 	if (!openned.empty())
 		openned.back()->Render();
-
 }
 
 void SRPGUIManager::SpawnDamage(Vector3 pos, int damage)

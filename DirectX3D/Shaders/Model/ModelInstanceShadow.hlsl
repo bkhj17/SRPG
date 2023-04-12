@@ -67,29 +67,7 @@ float4 PS(PixelInput input) : SV_TARGET
     material.worldPos = input.worldPos;
     
     //각 라이트 컬러를 합산
-    float4 color = 0;
-    
-    [unroll(MAX_LIGHT)] //반복 횟수 제한 
-    for (uint i = 0; i < lightCount; i++)
-    {
-        [flatten]
-        if (!lights[i].active)
-            continue;
-        [flatten]
-        if (lights[i].type == 0)
-            color += CalcDirectional(material, lights[i]);
-        else if (lights[i].type == 1)
-            color += CalcPoint(material, lights[i]);
-        else if (lights[i].type == 2)
-            color += CalcSpot(material, lights[i]);
-        else if (lights[i].type == 3)
-            color += CalcCapsule(material, lights[i]);
-    }
-    
-    float4 ambient = CalcAmbient(material);
-    float4 emissive = mEmissive;
-    
-    color = color + ambient + emissive;
+    float4 color = CalcLights(material);
     
     //그림자 처리
     float2 uv = input.clipPos.xy / input.clipPos.w;

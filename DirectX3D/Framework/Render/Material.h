@@ -23,7 +23,9 @@ public:
 			float padding[2] = {};
 		};
 	public:
-		MaterialBuffer() : ConstBuffer(&data, sizeof(Data)) {}
+		MaterialBuffer() : ConstBuffer(&data, sizeof(Data)) {
+			SetDebugName("MaterialBuffer");
+		}
 
 		Data& Get() { return data; }
 	private:
@@ -32,7 +34,7 @@ public:
 
 public:
 	Material(wstring shaderFile = L"Light/Light.hlsl");
-	~Material();
+	virtual ~Material();
 
 	void Set();
 

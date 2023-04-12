@@ -32,11 +32,17 @@ Device::Device()
         nullptr,
         &deviceContext
     );
+    swapChain->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof("Device"), "Device");
 
     ID3D11Texture2D* backBuffer;
     swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer);
     device->CreateRenderTargetView(backBuffer, nullptr, &renderTargetView);
-    backBuffer->Release();       
+
+
+    backBuffer->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof("Device"), "Device");
+
+    SAFE_RELEASE(backBuffer);
+    
 
     ID3D11Texture2D* depthBuffer;
 
@@ -57,15 +63,17 @@ Device::Device()
     depthViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 
     device->CreateDepthStencilView(depthBuffer, &depthViewDesc, &depthStencilView);
+    SAFE_RELEASE(depthBuffer);
 }
 
 Device::~Device()
 {
-    device->Release();
-    deviceContext->Release();
+    SAFE_RELEASE(renderTargetView);
+    SAFE_RELEASE(depthStencilView);
+    SAFE_RELEASE(swapChain);
 
-    swapChain->Release();
-    renderTargetView->Release();
+    deviceContext->Release();
+    device->Release();
 }
 
 void Device::Clear()

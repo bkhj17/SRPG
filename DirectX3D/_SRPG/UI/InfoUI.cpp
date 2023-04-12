@@ -4,6 +4,9 @@ InfoUI::InfoUI(Vector3 pos)
 	: UIWindow(Vector2(200.0f, 150.0f), pos)
 {
 	isActive = true;
+
+	teamTexts[SRPGObject::Team::PLAYER] = L"Player";
+	teamTexts[SRPGObject::Team::ENEMY] = L"Enemy";
 }
 
 void InfoUI::Render()
@@ -18,8 +21,9 @@ void InfoUI::Render()
 	//ÀÌ¸§
 	Font::Get()->RenderTextLeft(object->GetStatus().name, { x, y });
 	//ÆÀ
-	wstring team = object->GetStatus().teamNum == Character::Team::PLAYER ? L"Player" : L"Enemy";
-	Font::Get()->RenderText(team, { Pos().x + Half().x - 20.0f, y});
+	if (teamTexts.find(object->GetStatus().teamNum) != teamTexts.end()) {
+		Font::Get()->RenderText(teamTexts[object->GetStatus().teamNum], { Pos().x + Half().x - 20.0f, y });
+	}
 	
 	//hp
 	wstring hpText = L"HP : " + to_wstring(object->GetStatus().curHp) + L"/" + to_wstring(object->GetStatus().maxHp);

@@ -10,6 +10,7 @@ public:
 
     void Update(void* data, UINT count);
 
+    void SetDebugName(string name = "");
 private:
     ID3D11Buffer* buffer;
 };

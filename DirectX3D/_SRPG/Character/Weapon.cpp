@@ -9,9 +9,8 @@ Weapon::~Weapon()
 
 void Weapon::Update()
 {
-	if (owner) {
+	if (owner)
 		SetWorld(owner->GetWorld());
-	}
 	else
 		UpdateWorld();
 
@@ -30,7 +29,6 @@ void Weapon::SetModelTransform(string tag, Transform* transform)
 		modelTransform->SetParent(nullptr);
 		modelTransform->SetActive(false);
 	}
-
 	if (transform) {
 		transform->Load(tag);
 		transform->SetParent(this);

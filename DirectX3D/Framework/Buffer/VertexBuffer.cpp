@@ -12,11 +12,13 @@ VertexBuffer::VertexBuffer(void* data, UINT stride, UINT count)
     initData.pSysMem = data;//&vertices[0]
 
     DEVICE->CreateBuffer(&bufferDesc, &initData, &buffer);
+
+    SetDebugName();
 }
 
 VertexBuffer::~VertexBuffer()
 {
-    buffer->Release();
+    SAFE_RELEASE(buffer);
 }
 
 void VertexBuffer::Set(D3D11_PRIMITIVE_TOPOLOGY type)
@@ -34,4 +36,10 @@ void VertexBuffer::Set(UINT slot, D3D11_PRIMITIVE_TOPOLOGY type)
 void VertexBuffer::Update(void* data, UINT count)
 {
     DC->UpdateSubresource(buffer, 0, nullptr, data, stride, count);
+}
+
+void VertexBuffer::SetDebugName(string name)
+{
+    string debugName = name + "->VertexBuffer";
+    buffer->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof(debugName), debugName.c_str());
 }

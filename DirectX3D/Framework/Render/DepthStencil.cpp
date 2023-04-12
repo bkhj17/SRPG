@@ -10,9 +10,9 @@ DepthStencil::DepthStencil(UINT width, UINT height, bool isStencil)
 
 DepthStencil::~DepthStencil()
 {
-	dsvTexture->Release();
-	dsv->Release();
-    srv->Release();
+	SAFE_RELEASE(dsvTexture);
+	SAFE_RELEASE(dsv);
+    SAFE_RELEASE(srv);
 }
 
 void DepthStencil::Clear()

@@ -4,7 +4,7 @@ unordered_map<wstring, Shader*> Shader::shaders;
 
 Shader::~Shader()
 {
-    blob->Release();
+    SAFE_RELEASE(blob);
 }
 
 VertexShader* Shader::AddVS(wstring file)
@@ -89,4 +89,6 @@ void Shader::Delete()
 {
     for (pair<wstring, Shader*> shader : shaders)
         delete shader.second;
+
+    shaders.clear();
 }

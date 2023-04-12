@@ -3,7 +3,7 @@
 ActionSelectUI::ActionSelectUI(Vector3 pos)
 	: SelectUI({ 200.0f, 200.0f }, pos)
 {
-	text = { "이동", "공격", "행동종료", "취소" };
+	text = { "이동", "공격", "대기", "취소" };
 	maxCursor = (int)text.size();
 }
 

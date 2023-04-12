@@ -4,7 +4,7 @@ Character::Character(ModelAnimatorInstancing* instancing)
 {
 	SetInstancing(instancing);
 
-	actCylinder = new Cylinder(10.0f, 1.0f);
+	actCylinder = new Cylinder(5.0f, 1.0f);
 	actCylinder->GetMaterial()->SetShader(L"SRPG/ActCylinder.hlsl");
 	actCylinder->Pos().y += 2.0f;
 	actCylinder->SetParent(this);
@@ -20,6 +20,10 @@ Character::~Character()
 	weapon = nullptr;
 
 	delete weaponOwner;
+
+	bodyTransform = nullptr;
+	instancing = nullptr;
+	motion = nullptr;
 }
 
 void Character::Update()

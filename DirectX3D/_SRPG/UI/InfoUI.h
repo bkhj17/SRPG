@@ -14,5 +14,7 @@ public:
 	void SetObject(SRPGObject* object);
 private:
 	SRPGObject* object = nullptr;
+
+	map<int, wstring> teamTexts;
 };
 

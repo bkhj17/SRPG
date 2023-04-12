@@ -4,7 +4,7 @@ class Mesh
 {
 public:
 	Mesh() = default;
-	~Mesh();
+	virtual ~Mesh();
 
 	void Draw(D3D11_PRIMITIVE_TOPOLOGY type = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	void DrawInstanced(UINT instanceCount, D3D11_PRIMITIVE_TOPOLOGY type = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -19,6 +19,7 @@ public:
 	VertexBuffer* GetVertexBuffer() { return vertexBuffer; }
 	IndexBuffer* GetIndexBuffer() { return indexBuffer; }
 
+	void SetDebugName(string name = "");
 private:
 	VertexBuffer* vertexBuffer = nullptr;
 	IndexBuffer* indexBuffer = nullptr;
@@ -71,10 +72,18 @@ inline void Mesh<T>::DrawInstanced(UINT instanceCount, D3D11_PRIMITIVE_TOPOLOGY 
 template<typename T>
 inline void Mesh<T>::CreateMesh()
 {
-	if(vertices.size() > 0)
+	if (vertices.size() > 0) {
+		if (vertexBuffer)
+			delete vertexBuffer;
 		vertexBuffer = new VertexBuffer(vertices.data(), sizeof(T), (UINT)vertices.size());
-	if(indices.size() > 0)
+	}
+	if (indices.size() > 0) {
+		if (indexBuffer)
+			delete indexBuffer;
 		indexBuffer = new IndexBuffer(indices.data(), (UINT)indices.size());
+	}
+
+	SetDebugName();
 }
 
 template<typename T>
@@ -87,4 +96,13 @@ template<typename T>
 inline void Mesh<T>::UpdateIndex()
 {
 	indexBuffer->Update(indices.data(), (UINT)indices.size());
+}
+
+template<typename T>
+inline void Mesh<T>::SetDebugName(string name)
+{
+	if(vertexBuffer)
+		vertexBuffer->SetDebugName(name + "->Mesh");
+	if(indexBuffer)
+		indexBuffer->SetDebugName(name + "->Mesh");
 }

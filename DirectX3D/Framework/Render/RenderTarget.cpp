@@ -10,9 +10,9 @@ RenderTarget::RenderTarget(UINT width, UINT height, DXGI_FORMAT format)
 
 RenderTarget::~RenderTarget()
 {
-    rtvTexture->Release();
-    rtv->Release();
-    srv->Release();
+    SAFE_RELEASE(rtvTexture);
+    SAFE_RELEASE(rtv);
+    SAFE_RELEASE(srv);
 }
 
 void RenderTarget::Set(DepthStencil* depthStencil, Float4 clearColor)

@@ -5,7 +5,7 @@ private:
     friend class Shader;
 
     HullShader(wstring file);
-    ~HullShader();
+    virtual ~HullShader();
 
 public:
     virtual void Set() override;

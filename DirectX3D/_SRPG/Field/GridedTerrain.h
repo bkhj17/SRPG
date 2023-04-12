@@ -90,7 +90,6 @@ private:
 
 	int selected = -1;
 
-
 	IntValueBuffer* onCharacterBuffer;
 	ColorBuffer* tileColorBuffer;
 

@@ -15,13 +15,17 @@ VertexShader::VertexShader(wstring file)
         blob->GetBufferSize(), nullptr, &shader);
 
     CreateInputLayout();
+
+    string name = ToString(file);
+    shader->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof(name), name.c_str());
 }
 
 VertexShader::~VertexShader()
 {
-    shader->Release();
-    inputLayout->Release();
-    reflection->Release();
+
+    SAFE_RELEASE(shader);
+    SAFE_RELEASE(inputLayout);
+    SAFE_RELEASE(reflection);
 }
 
 void VertexShader::Set()

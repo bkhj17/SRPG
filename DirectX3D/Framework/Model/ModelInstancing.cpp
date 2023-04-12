@@ -5,6 +5,8 @@ ModelInstancing::ModelInstancing(string name)
     : Model(name)
 {
     instanceBuffer = new VertexBuffer(instanceDatas, sizeof(InstanceData), MAX_INSTANCE);
+    instanceBuffer->SetDebugName("ModelInstancing");
+
     SetShader(L"Model/ModelInstancing.hlsl");
 }
 

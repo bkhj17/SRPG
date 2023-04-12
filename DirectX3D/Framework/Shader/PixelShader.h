@@ -6,7 +6,7 @@ private:
     friend class Shader;
 
     PixelShader(wstring file);
-    ~PixelShader();
+    virtual ~PixelShader();
 
 public:
     virtual void Set() override;

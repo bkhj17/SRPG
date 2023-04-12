@@ -38,6 +38,9 @@ GBuffer::~GBuffer()
 
 	for (auto quad : quads)
 		delete quad;
+
+	for (int i = 0; i < 4; i++)
+		SAFE_RELEASE(srvs[i]);
 }
 
 void GBuffer::PostRender()

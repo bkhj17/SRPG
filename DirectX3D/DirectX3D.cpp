@@ -65,9 +65,25 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             gameManager->Render();
         }
     }
-
     delete gameManager;
 
+#if DEBUG_MODE
+    {
+        HMODULE dxgidebugdll = GetModuleHandleW(L"dxgidebug.dll");
+        decltype(&DXGIGetDebugInterface) GetDebugInterface = reinterpret_cast<decltype(&DXGIGetDebugInterface)>(GetProcAddress(dxgidebugdll, "DXGIGetDebugInterface"));
+
+        IDXGIDebug* debug;
+
+        GetDebugInterface(IID_PPV_ARGS(&debug));
+
+        OutputDebugStringW(L"▽▽▽▽▽▽▽▽▽▽ Direct3D Object ref count 메모리 누수 체크 ▽▽▽▽▽▽▽▽▽▽▽\r\n");
+        debug->ReportLiveObjects(DXGI_DEBUG_D3D11, DXGI_DEBUG_RLO_DETAIL);
+        OutputDebugStringW(L"△△△△△△△△△△ 반환되지 않은 IUnknown 객체가 있을경우 위에 나타납니다. △△△△△△△△△△△△\r\n");
+
+        debug->Release();
+    }
+#endif // !DEBUG
+    
     return (int) msg.wParam;
 }
 

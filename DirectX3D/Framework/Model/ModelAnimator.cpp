@@ -20,8 +20,8 @@ ModelAnimator::~ModelAnimator()
     delete[] clipTransforms;
     delete[] nodeTransforms;
 
-    if(texture) texture->Release();
-    if(srv) srv->Release();
+    SAFE_RELEASE(texture);
+    SAFE_RELEASE(srv);
 }
 
 void ModelAnimator::Update()
@@ -179,8 +179,8 @@ void ModelAnimator::CreateTexture()
     }
 
     DEVICE->CreateTexture2D(&desc, subResource, &texture);
-
     delete[] subResource;
+
     VirtualFree(p, 0, MEM_RELEASE);
 
     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};

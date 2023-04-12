@@ -15,20 +15,21 @@ Environment::Environment()
 
 Environment::~Environment()
 {
-    delete projectionBuffer;
+    delete uiViewBuffer;
+    delete lightBuffer;
 
     mainCamera->Save();
     delete mainCamera;
-
-    delete lightBuffer;
 
     delete samplerState;
     delete raterizerState[0];
     delete raterizerState[1];
     delete blendState[0];
     delete blendState[1];
+    delete depthStencilState[0];
+    delete depthStencilState[1];
 
-    delete uiViewBuffer;
+    delete projectionBuffer;
 }
 
 void Environment::Update()

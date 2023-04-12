@@ -4,7 +4,7 @@ class GeometryShader : public Shader
 private:
 	friend class Shader;
 	GeometryShader(wstring file);
-	~GeometryShader();
+	virtual ~GeometryShader();
 
 public:
 	virtual void Set() override;

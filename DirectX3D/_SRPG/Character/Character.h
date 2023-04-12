@@ -51,7 +51,7 @@ private:
 	int index = -1;
 	Transform* bodyTransform = nullptr;
 	ModelAnimatorInstancing* instancing = nullptr;
-	ModelAnimatorInstancing::Motion* motion;
+	ModelAnimatorInstancing::Motion* motion = nullptr;
 	vector<map<float, Event>> totalEvents;
 	vector<map<float, Event>::iterator> eventIters;
 

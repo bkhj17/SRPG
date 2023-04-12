@@ -5,6 +5,8 @@ Obstacle::Obstacle()
 	model = new Model("Box01");
 	model->Load();
 	model->SetParent(this);
+
+	status.move = 0;
 }
 
 Obstacle::~Obstacle()

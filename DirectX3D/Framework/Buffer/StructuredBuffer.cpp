@@ -14,11 +14,11 @@ StructuredBuffer::StructuredBuffer(void* inputData, UINT inputStride, UINT input
 
 StructuredBuffer::~StructuredBuffer()
 {
-	input->Release();
-	srv->Release();
-	output->Release();
-	uav->Release();
-	result->Release();
+	SAFE_RELEASE(input);
+	SAFE_RELEASE(srv);
+	SAFE_RELEASE(output);
+	SAFE_RELEASE(uav);
+	SAFE_RELEASE(result);
 }
 
 void StructuredBuffer::Copy(void* data, UINT size)

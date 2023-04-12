@@ -20,8 +20,7 @@ BlendState::BlendState()
 
 BlendState::~BlendState()
 {
-    if (state != nullptr)
-        state->Release();
+    state->Release();
 }
 
 void BlendState::SetState()

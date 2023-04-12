@@ -12,7 +12,7 @@ GameManager::GameManager()
 {
     Create();
 
-    SceneManager::Get()->Create("Grid", new GridScene());
+    //SceneManager::Get()->Create("Grid", new GridScene());
 
     //SceneManager::Get()->Create("ModelExport", new ModelExportScene);
     //SceneManager::Get()->Create("Start", new ModelRenderScene);
@@ -20,7 +20,7 @@ GameManager::GameManager()
         
     SceneManager::Get()->Create("Start", new SRPGScene);
     
-    SceneManager::Get()->Add("Grid");
+    //SceneManager::Get()->Add("Grid");
     SceneManager::Get()->Add("Start");
 }
 
@@ -56,12 +56,12 @@ void GameManager::Render()
     Font::Get()->GetDC()->BeginDraw();
     SceneManager::Get()->PostRender();
 
+#if DEBUG_MODE
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
     
     //CAM->GUIRender();
-    
     static bool isActive = true;
     if (isActive) {
         ImGui::Begin("Inspector", &isActive);
@@ -75,16 +75,17 @@ void GameManager::Render()
     string fps = "FPS : " + to_string(Timer::Get()->GetFPS());
     Font::Get()->RenderText(fps, { 100, WIN_HEIGHT - 10 });
 
-    Font::Get()->GetDC()->EndDraw();    
-    
+#endif // !DEBUG_MODE
+
+    Font::Get()->GetDC()->EndDraw();
     Device::Get()->Present();
 }
 
 void GameManager::Create()
 {
+    Device::Get();
     Keyboard::Get();
     Timer::Get();
-    Device::Get();
     Environment::Get();
     Observer::Get();
     Audio::Get();
@@ -107,19 +108,20 @@ void GameManager::Create()
 void GameManager::Delete()
 {
     SceneManager::Delete();
+    Font::Delete();
 
+    Observer::Delete();
+    Audio::Delete();
     Keyboard::Delete();
     Timer::Delete();
-    Device::Delete();
-    Shader::Delete();
+
     Environment::Delete();
+    Shader::Delete();
     Texture::Delete();
-    Observer::Delete();
-    Font::Delete();
-    Audio::Delete();
 
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
-
     ImGui::DestroyContext();
+
+    Device::Delete();
 }

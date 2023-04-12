@@ -7,6 +7,7 @@ BoxCollider::BoxCollider(Vector3 size)
 
 	MakeMesh();
 	mesh->CreateMesh();
+	mesh->SetDebugName("BoxCollider");
 }
 
 bool BoxCollider::IsRayCollision(IN Ray ray, OUT Contact* contact)

@@ -14,7 +14,7 @@ ComputeShader::ComputeShader(wstring file)
 
 ComputeShader::~ComputeShader()
 {
-	shader->Release();
+    SAFE_RELEASE(shader);
 }
 
 void ComputeShader::Set()

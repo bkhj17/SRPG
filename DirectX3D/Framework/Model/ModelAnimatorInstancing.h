@@ -31,7 +31,7 @@ private:
     };
 public:
 	ModelAnimatorInstancing(string name);
-	~ModelAnimatorInstancing();
+	virtual ~ModelAnimatorInstancing();
 
     virtual void Update();
     virtual void Render();

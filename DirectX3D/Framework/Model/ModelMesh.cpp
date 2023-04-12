@@ -9,6 +9,9 @@ ModelMesh::ModelMesh(string name)
 ModelMesh::~ModelMesh()
 {
 	delete mesh;
+	material = nullptr;
+
+
 }
 
 void ModelMesh::Render()
@@ -33,4 +36,6 @@ void ModelMesh::CreateMesh(void* vertexData, UINT vertexCount, void* indexData, 
 	memcpy(mesh->GetIndices().data(), indexData, sizeof(UINT) * indexCount);
 
 	mesh->CreateMesh();
+
+	mesh->SetDebugName("ModelMesh");
 }

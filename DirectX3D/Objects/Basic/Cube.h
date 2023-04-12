@@ -14,6 +14,8 @@ public:
 	virtual void Render();
 
 	class BoxCollider* GetCollider() { return collider; }
+
+	void SetDebugName(string name = "");
 private:
 	void MakeMesh();
 private:

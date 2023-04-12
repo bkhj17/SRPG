@@ -8,6 +8,7 @@ GameObject::GameObject(wstring shaderFile)
 
 GameObject::~GameObject()
 { 
+    delete material;
     delete worldBuffer;
 }
 

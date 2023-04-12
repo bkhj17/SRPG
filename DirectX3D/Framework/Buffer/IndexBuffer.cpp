@@ -11,6 +11,9 @@ IndexBuffer::IndexBuffer(void* data, UINT count)
     initData.pSysMem = data;
 
     DEVICE->CreateBuffer(&bufferDesc, &initData, &buffer);
+
+
+    SetDebugName();
 }
 
 IndexBuffer::~IndexBuffer()
@@ -26,4 +29,10 @@ void IndexBuffer::Set()
 void IndexBuffer::Update(void* data, UINT count)
 {
     DC->UpdateSubresource(buffer, 0, nullptr, data, sizeof(UINT), count);
+}
+
+void IndexBuffer::SetDebugName(string name)
+{
+    string debugName = name + "->IndexBuffer";
+    buffer->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof(debugName), debugName.c_str());
 }

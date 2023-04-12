@@ -12,6 +12,7 @@ Camera::Camera()
 
 Camera::~Camera()
 {
+    target = nullptr;
     delete viewBuffer;
 }
 

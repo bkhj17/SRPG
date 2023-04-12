@@ -3,7 +3,7 @@ class ModelMesh
 {
 public:
 	ModelMesh(string name);
-	~ModelMesh();
+	virtual ~ModelMesh();
 
 	void Render();
 	void RenderInstanced(UINT instanceCount);

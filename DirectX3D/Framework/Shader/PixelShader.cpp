@@ -14,7 +14,7 @@ PixelShader::PixelShader(wstring file)
 
 PixelShader::~PixelShader()
 {
-    shader->Release();
+    SAFE_RELEASE(shader);
 }
 
 void PixelShader::Set()

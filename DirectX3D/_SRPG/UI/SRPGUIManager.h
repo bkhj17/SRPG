@@ -31,4 +31,7 @@ private:
 	unordered_map<string, UIWindow*> totalUI;
 	list<UIWindow*> openned;
 
+#if DEBUG_MODE
+	bool renderOn = true;
+#endif
 };

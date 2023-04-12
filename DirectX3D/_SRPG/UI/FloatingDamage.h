@@ -17,4 +17,3 @@ private:
 
 	float speed = 3.0f;
 };
-

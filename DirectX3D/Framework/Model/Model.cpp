@@ -16,7 +16,6 @@ Model::~Model()
 		delete material;
 	for (ModelMesh* mesh : meshes)
 		delete mesh;
-
 	delete worldBuffer;
 }
 
@@ -106,6 +105,10 @@ void Model::ReadMesh()
 		reader->Byte((void**)&indices, sizeof(UINT) * indexCount);
 
 		mesh->CreateMesh(vertices, vertexCount, indices, indexCount);
+
+		delete[] vertices;
+		delete[] indices;
+
 		meshes.push_back(mesh);
 	}
 

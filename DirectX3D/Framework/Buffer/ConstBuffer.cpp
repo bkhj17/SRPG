@@ -15,7 +15,7 @@ ConstBuffer::ConstBuffer(void* data, UINT dataSize)
 
 ConstBuffer::~ConstBuffer()
 {
-    buffer->Release();
+    SAFE_RELEASE(buffer);
 }
 
 void ConstBuffer::SetVS(UINT slot)
@@ -73,4 +73,9 @@ void ConstBuffer::SetDS(UINT slot)
     DC->Unmap(buffer, 0);
 
     DC->DSSetConstantBuffers(slot, 1, &buffer);
+}
+
+void ConstBuffer::SetDebugName(string name)
+{
+    buffer->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof(name), name.c_str());
 }

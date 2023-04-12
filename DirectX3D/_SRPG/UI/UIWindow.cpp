@@ -41,14 +41,6 @@ void UIWindow::Update()
 	if (!Active())
 		return;
 
-	if (renderCursor) {
-		if (KEY_DOWN(VK_DOWN))
-			cursor = (++cursor) % maxCursor;
-
-		if (KEY_DOWN(VK_UP))
-			cursor = cursor == 0 ? maxCursor - 1 : cursor - 1;
-	}
-
 	Control();
 	UpdateWorld();
 }
@@ -76,11 +68,17 @@ void UIWindow::Close()
 
 void UIWindow::Control()
 {
+	if (renderCursor) {
+		if (KEY_DOWN(VK_DOWN))
+			cursor = (++cursor) % maxCursor;
+		if (KEY_DOWN(VK_UP))
+			cursor = cursor == 0 ? maxCursor - 1 : cursor - 1;
+	}
+
 	if (KEY_DOWN('Z'))
 		ActiveFunc();
 	if (KEY_DOWN('X'))
 		CancelFunc();
-		return;
 }
 
 void UIWindow::SetShaderInfo()

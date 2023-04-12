@@ -15,7 +15,7 @@ HullShader::HullShader(wstring file)
 
 HullShader::~HullShader()
 {
-    shader->Release();
+    SAFE_RELEASE(shader);
 }
 
 void HullShader::Set()

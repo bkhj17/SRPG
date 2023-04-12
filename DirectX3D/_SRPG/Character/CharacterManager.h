@@ -18,7 +18,6 @@ private:
         SRPGObject* attacker;
         SRPGObject* hit;
     };
-
 public:
     void Update();
     void Render(bool shadow = false);

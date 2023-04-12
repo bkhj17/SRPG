@@ -3,7 +3,7 @@ class ModelInstancing : public Model
 {
 public:
 	ModelInstancing(string name);
-	~ModelInstancing();
+	virtual ~ModelInstancing();
 
 	void Update();
 	void Render();

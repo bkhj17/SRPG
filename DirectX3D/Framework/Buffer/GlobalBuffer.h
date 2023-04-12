@@ -29,6 +29,7 @@ private:
 public:
     WorldBuffer() : ConstBuffer(&data, sizeof(Data))
     {
+        SetDebugName("WorldBuffer");
     }
 
     void Set(Matrix value)
@@ -55,6 +56,8 @@ public:
     {
         data.view = XMMatrixIdentity();
         data.invView = XMMatrixIdentity();
+
+        SetDebugName("ViewBuffer");
     }
 
     void Set(Matrix view, Matrix invView)
@@ -71,6 +74,7 @@ class ColorBuffer : public ConstBuffer
 public:
     ColorBuffer() : ConstBuffer(&color, sizeof(Float4))
     {
+        SetDebugName("ColorBuffer");
     }
 
     Float4& Get() { return color; }
@@ -84,6 +88,7 @@ class IntValueBuffer : public ConstBuffer
 public:
     IntValueBuffer() : ConstBuffer(values, sizeof(int) * 4)
     {
+        SetDebugName("IntValueBuffer");
     }
 
     int* Get() { return values; }
@@ -97,6 +102,7 @@ class FloatValueBuffer : public ConstBuffer
 public:
     FloatValueBuffer() : ConstBuffer(values, sizeof(float) * 4)
     {
+        SetDebugName("FloatValueBuffer");
     }
 
     float* Get() { return values; }
@@ -132,6 +138,7 @@ public:
 public:
     LightBuffer() : ConstBuffer(&data, sizeof(Data))
     {
+        SetDebugName("LightValueBuffer");
     }
 
     Data& Get() { return data; }
@@ -158,6 +165,7 @@ private:
 public:
     WeatherBuffer() : ConstBuffer(&data, sizeof(Data))
     {
+        SetDebugName("WeatherValueBuffer");
     }
 
     Data& Get() { return data; }
@@ -180,6 +188,7 @@ private:
 public:
     FogBuffer() : ConstBuffer(&data, sizeof(Data))
     {
+        SetDebugName("FogValueBuffer");
     }
 
     Data& Get() { return data; }
@@ -207,6 +216,7 @@ private:
 public:
     WaterBuffer() : ConstBuffer(&data, sizeof(Data))
     {
+        SetDebugName("WaterValueBuffer");
     }
 
     Data& Get() { return data; }

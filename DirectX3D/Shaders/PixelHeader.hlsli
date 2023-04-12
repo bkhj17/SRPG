@@ -251,10 +251,8 @@ float4 CalcCapsule(Material material, Light light)
     return finalColor * material.diffuseColor * attention;
 }
 
-float4 CalcLights(LightPixelInput input)
+float4 CalcLights(Material material)
 {
-    Material material = GetMaterial(input);
-    
     //각 라이트 컬러를 합산
     float4 color = 0;
     
@@ -262,7 +260,7 @@ float4 CalcLights(LightPixelInput input)
     for (uint i = 0; i < lightCount; i++)
     {
         [flatten]
-        if(!lights[i].active)
+        if (!lights[i].active)
             continue;
         [flatten]
         if (lights[i].type == 0)
@@ -272,15 +270,21 @@ float4 CalcLights(LightPixelInput input)
         else if (lights[i].type == 2)
             color += CalcSpot(material, lights[i]);
         else if (lights[i].type == 3)
-            color += CalcCapsule(material, lights[i]);        
+            color += CalcCapsule(material, lights[i]);
     }
     
     float4 ambient = CalcAmbient(material);
     //float4 emissive = CalcEmissive(material);
-    float4 emissive = mEmissive;    //자체발광
+    float4 emissive = mEmissive; //자체발광
     
     return color + ambient + emissive;
 }
+
+float4 CalcLights(LightPixelInput input)
+{
+    return CalcLights(GetMaterial(input));
+}
+
 
 GBufferOutput PackGBuffer(float3 baseColor, float3 normal, float specularIntensity)
 {

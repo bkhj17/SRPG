@@ -43,15 +43,10 @@ SRPGScene::~SRPGScene()
 	delete shadow;
 
 	WeaponManager::Delete();
-	
 	CharacterManager::Delete();
-	
 	SRPGUIManager::Delete();
-	
 	TurnManager::Delete();
-	
 	ParticleManager::Delete();
-	
 }
 
 void SRPGScene::Start()
@@ -92,6 +87,9 @@ void SRPGScene::Start()
 	character->SetWeapon(WeaponManager::Get()->Pop("Sword"));
 	//커서 초기 위치
 	mapCursor->SetPosCoord(5, 6, true);
+
+	CAM->Pos().y = 130.0f;
+	CAM->Rot() = { XMConvertToRadians(75.0f), 0.0f, 0.0f };
 }
 
 void SRPGScene::Update()

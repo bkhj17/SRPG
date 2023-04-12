@@ -2,7 +2,7 @@
 class ModelExporter {
 public:
 	ModelExporter(string name, string file);
-	~ModelExporter();
+	virtual ~ModelExporter();
 
 	void ExportMaterial();
 	void ExportMesh();

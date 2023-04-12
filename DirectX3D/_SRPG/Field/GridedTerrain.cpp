@@ -47,13 +47,17 @@ GridedTerrain::GridedTerrain()
 				}
 			}
 			cubes[index]->SetActive(check);
+
+			cubes[index]->SetDebugName("GridedTerrain" + to_string(index));
 		}
 	}
 
-
 	tileDataBuffer = new TileDataBuffer;
+	tileDataBuffer->SetDebugName("GridedTerrain");
 	onCharacterBuffer = new IntValueBuffer;
+	onCharacterBuffer->SetDebugName("GridedTerrain");
 	tileColorBuffer = new ColorBuffer;
+	tileColorBuffer->SetDebugName("GridedTerrain");
 
 	Observer::Get()->AddEvent("BattleEnd", bind(&GridedTerrain::Reselect, this));
 
@@ -67,14 +71,10 @@ GridedTerrain::GridedTerrain()
 
 GridedTerrain::~GridedTerrain()
 {
-	delete widthHeightBuffer;
-
 	for (auto cube : cubes)
 		delete cube;
-
-	cubes.clear();
-	cubes.shrink_to_fit();
-	
+		
+	delete widthHeightBuffer;
 	delete tileDataBuffer;
 	delete onCharacterBuffer;
 	delete tileColorBuffer;

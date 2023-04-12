@@ -9,6 +9,7 @@ Cube::Cube(Vector3 size)
 	mesh = new Mesh<VertexType>;
 	MakeMesh();
 	mesh->CreateMesh();
+	SetDebugName();
 
 	collider = new BoxCollider(size);
 	collider->SetParent(this);
@@ -41,6 +42,12 @@ void Cube::Render()
 	
 	SetRender();
 	mesh->Draw();
+}
+
+void Cube::SetDebugName(string name)
+{
+	if (mesh)
+		mesh->SetDebugName(name + ".Cube");
 }
 
 void Cube::MakeMesh()

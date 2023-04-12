@@ -5,7 +5,7 @@ private:
 	friend class ModelAnimatorInstancing;
 
 	ModelClip() = default;
-	~ModelClip();
+	virtual ~ModelClip();
 
 	void Init();
 	void Execute();

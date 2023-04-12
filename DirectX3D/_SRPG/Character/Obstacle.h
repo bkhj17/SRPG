@@ -3,10 +3,12 @@
 class Obstacle : public SRPGObject
 {
 private:
+	friend class CharacterManager;
+
 	const float CURSOR_HEIGHT = 25.0f;
-public:
 	Obstacle();
 	~Obstacle();
+public:
 
 	void Update();
 	void Render();

@@ -34,6 +34,7 @@ ModelExporter::ModelExporter(string name, string file)
 
 ModelExporter::~ModelExporter()
 {
+    delete scene;
     delete importer;
 }
 
@@ -52,7 +53,7 @@ void ModelExporter::ExportMesh()
 
 void ModelExporter::ExportClip(string clipName)
 {
-    FOR(scene->mNumAnimations)
+    FOR((int)scene->mNumAnimations)
     {
         Clip* clip = ReadClip(scene->mAnimations[i]);
         WriterClip(clip, clipName, i);
@@ -242,13 +243,13 @@ void ModelExporter::ReadNode(aiNode* node, int index, int parent)
 
     nodes.push_back(nodeData);
 
-    FOR(node->mNumChildren)
+    FOR((int)node->mNumChildren)
         ReadNode(node->mChildren[i], (int)nodes.size(), index);
 }
 
 void ModelExporter::ReadBone(aiMesh* mesh, vector<VertexWeights>& vertexWeights)
 {
-    FOR(mesh->mNumBones)
+    FOR((int)mesh->mNumBones)
     {
         UINT boneIndex = 0;
         string name = mesh->mBones[i]->mName.C_Str();
@@ -340,7 +341,7 @@ Clip* ModelExporter::ReadClip(aiAnimation* animation)
 
     vector<ClipNode> clipNodes;
     clipNodes.reserve(animation->mNumChannels);
-    FOR(animation->mNumChannels)
+    FOR((int)animation->mNumChannels)
     {
         aiNodeAnim* srcNode = animation->mChannels[i];
 
@@ -401,7 +402,7 @@ void ModelExporter::ReadKeyFrame(Clip* clip, aiNode* node, vector<ClipNode>& cli
     KeyFrame* keyFrame = new KeyFrame();
     keyFrame->boneName = node->mName.C_Str();
     keyFrame->transforms.reserve(clip->frameCount);
-    FOR(clip->frameCount)
+    FOR((int)clip->frameCount)
     {
         ClipNode* clipNode = nullptr;
         for (ClipNode& temp : clipNodes)
@@ -435,7 +436,7 @@ void ModelExporter::ReadKeyFrame(Clip* clip, aiNode* node, vector<ClipNode>& cli
 
     clip->keyFrame.push_back(keyFrame);
 
-    FOR(node->mNumChildren)
+    FOR((int)node->mNumChildren)
         ReadKeyFrame(clip, node->mChildren[i], clipNodes);
 }
 
@@ -451,7 +452,7 @@ void ModelExporter::WriterClip(Clip* clip, string clipName, UINT index)
     writer->UInt(clip->frameCount);
     writer->Float(clip->tickPerSecond);
 
-    writer->UInt(clip->keyFrame.size());
+    writer->UInt((UINT)clip->keyFrame.size());
     for (KeyFrame* keyFrame : clip->keyFrame)
     {
         writer->String(keyFrame->boneName);
@@ -474,7 +475,7 @@ void ModelExporter::SetClipNode(const KeyData& keyData, const UINT& frameCount, 
     UINT rotCount = 0;
     UINT scaleCount = 0;
 
-    FOR(frameCount)
+    FOR((int)frameCount)
     {
         clipNode.transforms[i].pos = CalcInterpolationVector(keyData.positions, posCount, i);
         clipNode.transforms[i].rot = CalcInterpolationQuat(keyData.rotations, rotCount, i);

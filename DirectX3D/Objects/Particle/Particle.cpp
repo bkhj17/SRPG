@@ -18,7 +18,7 @@ Particle::~Particle()
 	delete material;
 	if (vertexBuffer)
 		delete vertexBuffer;
-	
+
 	delete blendState[0];
 	delete blendState[1];
 

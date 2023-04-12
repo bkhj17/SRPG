@@ -13,7 +13,7 @@ GeometryShader::GeometryShader(wstring file)
 
 GeometryShader::~GeometryShader()
 {
-	shader->Release();
+    SAFE_RELEASE(shader);
 }
 
 void GeometryShader::Set()

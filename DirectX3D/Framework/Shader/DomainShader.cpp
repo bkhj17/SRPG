@@ -16,7 +16,7 @@ DomainShader::DomainShader(wstring file)
 
 DomainShader::~DomainShader()
 {
-    shader->Release();
+    SAFE_RELEASE(shader);
 }
 
 void DomainShader::Set()

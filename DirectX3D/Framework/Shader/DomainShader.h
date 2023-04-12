@@ -6,7 +6,7 @@ private:
     friend class Shader;
 
     DomainShader(wstring file);
-    ~DomainShader();
+    virtual ~DomainShader();
 
 public:
     virtual void Set() override;

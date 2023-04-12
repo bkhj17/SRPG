@@ -8,8 +8,8 @@
 #define WIN_HEIGHT 720
 
 #define MAX_LIGHT 10
-#define MAX_BONE 256	//적으면 추후 수정
-#define MAX_FRAME 512	//적으면 추후 수정
+#define MAX_BONE 128	//추후 조정
+#define MAX_FRAME 256	//추후 조정
 #define MAX_INSTANCE 128
 
 #define CENTER_X (WIN_WIDTH * 0.5f)
@@ -28,6 +28,12 @@
 #define DIALOG ImGuiFileDialog::Instance()
 
 #define FOR(n) for(int i = 0; i < n; i++)
+
+#define SAFE_RELEASE(r) { if(r) r->Release(); r = nullptr; }
+
+
+#define DEBUG_MODE 0
+
 
 #include <windows.h>
 #include <string>

@@ -12,7 +12,6 @@ SceneManager::~SceneManager()
 	removeScenes.clear();
 	for (auto& scene : scenes)
 		delete scene.second;
-	scenes.clear();
 }
 
 void SceneManager::Update()

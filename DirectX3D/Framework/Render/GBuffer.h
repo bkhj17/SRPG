@@ -3,7 +3,7 @@ class GBuffer
 {
 public:
 	GBuffer();
-	~GBuffer();
+	virtual ~GBuffer();
 
 	void SetMultiRenderTarget();
 	void PostRender();

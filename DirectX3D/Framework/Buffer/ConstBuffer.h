@@ -4,7 +4,7 @@ class ConstBuffer
 {
 public:
     ConstBuffer(void* data, UINT dataSize);
-    ~ConstBuffer();
+    virtual ~ConstBuffer();
 
     void SetVS(UINT slot);
     void SetPS(UINT slot);
@@ -12,9 +12,10 @@ public:
     void SetGS(UINT slot);
     void SetHS(UINT slot);
     void SetDS(UINT slot);
+
+    void SetDebugName(string name);
 private:
     ID3D11Buffer* buffer;
-
     void* data;
     UINT dataSize;
 

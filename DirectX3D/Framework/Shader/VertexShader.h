@@ -6,7 +6,7 @@ private:
     friend class Shader;
 
     VertexShader(wstring file);
-    ~VertexShader();
+    virtual ~VertexShader();
 
 public:
     virtual void Set() override;
