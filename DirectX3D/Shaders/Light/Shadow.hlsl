@@ -37,7 +37,7 @@ PixelInput VS(VertexUVNormalTangentBlend input)
     output.pos = mul(input.pos, transform);
     
     output.viewPos = invView._41_42_43; //forward
-    output.worldPos = output.pos;
+    output.worldPos = output.pos.xyz;
     
     output.clipPos = mul(output.pos, lightView);
     output.clipPos = mul(output.clipPos, lightProjection);
@@ -71,7 +71,7 @@ float4 PS(PixelInput input) : SV_TARGET
 
     float4 color = 0;
     [unroll(MAX_LIGHT)] //반복 횟수 제한 
-    for (int i = 0; i < lightCount; i++)
+    for (uint i = 0; i < lightCount; i++)
     {
         [flatten]
         if (!lights[i].active)

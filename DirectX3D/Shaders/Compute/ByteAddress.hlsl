@@ -11,7 +11,7 @@ RWByteAddressBuffer output : register(u0);
 [numthreads(10, 8, 3)]
 void CS(ComputeInput input)
 {
-    uint index = input.groupID * 10 * 8 * 3 + input.groupIndex;
+    uint index = input.groupID.r * 10 * 8 * 3 + input.groupIndex;
     uint address = index * 10 * 4;
     
     output.Store3(address + 0, input.groupID);

@@ -94,7 +94,7 @@ float4 PS(PixelInput input) : SV_TARGET
     float4 color = float4(0, 0, 0, 1);
     
     [unroll(MAX_LIGHT)] //반복 횟수 제한 
-    for (int i = 0; i < lightCount; i++)
+    for (uint i = 0; i < lightCount; i++)
     {
         [flatten]
         if (!lights[i].active)

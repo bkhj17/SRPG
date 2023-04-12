@@ -187,20 +187,6 @@ using namespace GameMath;
 #include "Objects/LandScape/TerrainLOD.h"
 #include "Objects/LandScape/Scattering.h"
 
-#include "Objects/MineCraft/BlockManager.h"
-#include "Objects/MineCraft/MineUI.h"
-#include "Objects/MineCraft/Steve.h"
-
-#include "Objects/Weapon/Crowbar.h"
-#include "Objects/Weapon/Kunai.h"
-
-#include "Objects/Character/Human.h"
-#include "Objects/Character/Naruto.h"
-#include "Objects/Character/Robot.h"
-#include "Objects/Character/Fox.h"
-
-#include "Objects/Manager/KunaiManager.h"
-#include "Objects/Manager/RobotManager.h"
 #include "Objects/Manager/ParticleManager.h"
 
 #include "Objects/UI/ImageFont.h"

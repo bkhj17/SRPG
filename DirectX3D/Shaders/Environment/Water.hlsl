@@ -20,7 +20,7 @@ PixelInput VS(VertexUV input)
     PixelInput output;
     output.pos = mul(input.pos, world);
 	
-    output.worldPos = output.pos;
+    output.worldPos = output.pos.xyz;
     output.reflectionPos = mul(output.pos, reflectionView);
     output.reflectionPos = mul(output.reflectionPos, projection);
 	

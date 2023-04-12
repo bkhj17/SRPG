@@ -1,45 +1,10 @@
 #include "Framework.h"
-//#include "Scenes/TutorialScene.h"
-//#include "Scenes/CubeScene.h"
 #include "Scenes/GridScene.h"
-//#include "Scenes/TerrainScene.h"
-//#include "Scenes/SphereScene.h"
 #include "Scenes/TerrainEditorScene.h"
-//#include "Scenes/LightScene.h"
-//#include "Scenes/CollisionScene.h"
-//#include "Scenes/MineCraftScene.h"
 #include "Scenes/ModelExportScene.h"
 #include "Scenes/ModelRenderScene.h"
 #include "Scenes/ModelAnimationScene.h"
-#include "Scenes/ActionScene.h"
-//#include "Scenes/InstancingScene.h"
-#include "Scenes/GameScene.h"
-#include "Scenes/RenderTargetScene.h"
-#include "Scenes/DeferredScene.h"
-#include "Scenes/ShadowScene.h"
-#include "Scenes/AStarScene.h"
-#include "Scenes/BillboardScene.h"
-#include "Scenes/ParticleScene.h"
 #include "Scenes/ParticleToolScene.h"
-#include "Scenes/WaterScene.h"
-#include "Scenes/QuadTreeScene.h"
-#include "Scenes/TessellationScene.h"
-#include "Scenes/TerrainLODScene.h"
-#include "Scenes/ScatteringScene.h"
-
-//#include "Homework/230221/Scene230221.h"
-//#include "Homework/230222/GridScene230222.h"
-//#include "Homework/230222/TerrainScene230222.h"
-//#include "Homework/230223/Scene230223.h"
-//#include "Homework/230224/Scene230224.h"
-//#include "Homework/230227/Scene230227.h"
-//#include "Homework/230302/Scene230302.h"
-//#include "Homework/230303/Scene230303.h"
-//#include "Homework/230306/Scene230306.h"
-//#include "Homework/230308/Scene230308.h"
-#include "Homework/230313/Scene230313.h"
-#include "Homework/230308/TerrainScene230308.h"
-#include "Homework/230313/TerrainScene230313.h"
 
 #include "_SRPG/Scene/SRPGScene.h"
 
@@ -52,50 +17,11 @@ GameManager::GameManager()
     //SceneManager::Get()->Create("ModelExport", new ModelExportScene);
     //SceneManager::Get()->Create("Start", new ModelRenderScene);
     //SceneManager::Get()->Create("Start", new ModelAnimationScene);
-
-    //SceneManager::Get()->Create("Start", new TutorialScene());
-    //SceneManager::Get()->Create("Start", new CubeScene());
-    //SceneManager::Get()->Create("Start", new TerrainScene);
-    //SceneManager::Get()->Create("Start", new TerrainEditorScene);
-    //SceneManager::Get()->Create("Start", new LightScene);
-    //SceneManager::Get()->Create("Start", new CollisionScene);
-    //SceneManager::Get()->Create("Start", new MineCraftScene);
-    //SceneManager::Get()->Create("Start", new InstancingScene);
-    //SceneManager::Get()->Create("Start", new ActionScene);
-    //SceneManager::Get()->Create("Game", new GameScene);
-    //SceneManager::Get()->Create("Start", new RenderTargetScene);
-    //SceneManager::Get()->Create("Start", new DeferredScene);
-    //SceneManager::Get()->Create("Start", new ShadowScene);
-    //SceneManager::Get()->Create("Start", new AStarScene);
-    //SceneManager::Get()->Create("Start", new BillboardScene);
-    //SceneManager::Get()->Create("Start", new ParticleScene);
-    //SceneManager::Get()->Create("Start", new ParticleToolScene);
-    //SceneManager::Get()->Create("Start", new WaterScene);
-    //SceneManager::Get()->Create("Start", new QuadTreeScene);
-    //SceneManager::Get()->Create("Start", new TessellationScene);
-    //SceneManager::Get()->Create("Start", new TerrainLODScene);
-    //SceneManager::Get()->Create("Start", new ScatteringScene);
-    
-    //SceneManager::Get()->Create("Grid", new GridScene230222());
-    //SceneManager::Get()->Create("Start", new SphereScene);
-    //SceneManager::Get()->Create("Start", new Scene230221());
-    //SceneManager::Get()->Create("Start", new Scene230223);
-    //SceneManager::Get()->Create("Start", new Scene230224);
-    //SceneManager::Get()->Create("Start", new Scene230227);
-    //SceneManager::Get()->Create("Start", new Scene230302);
-    //SceneManager::Get()->Create("Start", new Scene230303);
-    //SceneManager::Get()->Create("Start", new Scene230306);
-    //SceneManager::Get()->Create("Terrain", new TerrainScene230308);
-    //SceneManager::Get()->Create("Start", new Scene230308);
-    //SceneManager::Get()->Create("Terrain", new TerrainScene230313);
-    //SceneManager::Get()->Create("Start", new Scene230313);
-    
+        
     SceneManager::Get()->Create("Start", new SRPGScene);
     
     SceneManager::Get()->Add("Grid");
-    //SceneManager::Get()->Add("Terrain");
     SceneManager::Get()->Add("Start");
-    //SceneManager::Get()->Add("Game");
 }
 
 GameManager::~GameManager()

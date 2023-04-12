@@ -59,8 +59,8 @@ float4 PS(PixelInput input) : SV_Target
     float temp = dot(sunDirection, input.oPosition) / length(input.oPosition);
     float temp2 = temp * temp;
     
-    float3 rSamples = rayleighMap.Sample(samp, input.uv);
-    float3 mSamples = mieMap.Sample(samp, input.uv);
+    float3 rSamples = rayleighMap.Sample(samp, input.uv).xyz;
+    float3 mSamples = mieMap.Sample(samp, input.uv).xyz;
     
     float3 color = 0;
     color = GetRayleighPhase(temp2) * rSamples + GetMiePhase(temp, temp2) * mSamples;

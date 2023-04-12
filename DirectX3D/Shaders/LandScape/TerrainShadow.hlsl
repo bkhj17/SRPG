@@ -82,10 +82,10 @@ float4 PS(PixelInput input) : SV_TARGET
     Material material = GetMaterialToTerrain(input);
     
     //각 라이트 컬러를 합산
-    float4 color = 0;
+    float4 color = float4(0, 0, 0, 1);
     
     [unroll(MAX_LIGHT)] //반복 횟수 제한 
-    for (int i = 0; i < lightCount; i++)
+    for (uint i = 0; i < lightCount; i++)
     {
         [flatten]
         if (!lights[i].active)

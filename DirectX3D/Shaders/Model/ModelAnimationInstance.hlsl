@@ -9,7 +9,7 @@ LightPixelInput VS(VertexInstancing input)
     output.pos = mul(input.pos, transform);
     
     output.viewPos = invView._41_42_43; //forward
-    output.worldPos = output.pos;
+    output.worldPos = output.pos.xyz;
     
     output.pos = mul(output.pos, view);
     output.pos = mul(output.pos, projection);
