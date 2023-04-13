@@ -71,7 +71,7 @@ protected:
 
 	float lerpValue = 0.0f;					//위치 이동 선형 보간을 위한 저장값. 칸 여러개를 거쳐야 하기에 비선형은 부자연스럽다
 	Vector3 curPos = {};					//이전 위치
-	float moveSpeed = 3.0f;				//이동 속도(보간값 변화) 
+	float moveSpeed = 3.0f;					//이동 속도(보간값 변화) 
 	Vector3 dir = { 0, 0, -1 };				//보고 있는 방향
 	vector<Vector3> movePath;
 };
