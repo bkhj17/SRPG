@@ -18,8 +18,6 @@ public:
 	void Update() override;
 	void Render() override;
 
-	void SetMovePath(vector<Vector3>& path);
-
 	bool IsActing();
 	int GetMaxMove() { return IsMovable() ? status.move : 0; }
 	pair<int, int> GetAttackRange() { return acted ? make_pair(0, 0) : (weapon ? weapon->GetRange() : status.attackRange); }
@@ -59,7 +57,7 @@ private:
 	Transform* weaponOwner;
 	int weaponBoneNum = -1;
 	Weapon* weapon = nullptr;
-
+	//행동 표시
 	Cylinder* actCylinder;
 
 };

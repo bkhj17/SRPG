@@ -27,7 +27,6 @@ public:
 	SRPGObject();
 	virtual ~SRPGObject();
 public:
-
 	virtual void Init();
 	
 	virtual void Update();
@@ -39,6 +38,8 @@ public:
 	virtual bool IsActed() { return acted; }
 
 	void SetDir(Vector3 dir);
+
+	void SetMovePath(vector<Vector3>& path);
 
 	bool IsMoved() { return moved; }
 	bool IsMovable() { return !acted && !moved; }
@@ -69,7 +70,8 @@ protected:
 	Vector3 originPos = {};					//행동 선택 전의 위치
 
 	float lerpValue = 0.0f;					//위치 이동 선형 보간을 위한 저장값. 칸 여러개를 거쳐야 하기에 비선형은 부자연스럽다
-	float moveSpeed = 0.2f;					//이동 속도(보간값 변화) 
+	Vector3 curPos = {};					//이전 위치
+	float moveSpeed = 3.0f;				//이동 속도(보간값 변화) 
 	Vector3 dir = { 0, 0, -1 };				//보고 있는 방향
 	vector<Vector3> movePath;
 };

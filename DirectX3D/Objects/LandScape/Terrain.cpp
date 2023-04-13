@@ -155,7 +155,7 @@ void Terrain::MakeMesh()
 	};
 
 	vector<UINT>& indices = mesh->GetIndices();
-	indices.reserve((size_t)(width - 1) * (height - 1) * 6);
+	indices.reserve((size_t)(width - 1) * (size_t)(height - 1) * 6);
 	for (int z = 0; z < (int)height - 1; z++) {
 		for (int x = 0; x < (int)width - 1; x++) {
 			for (int i = 0; i < 6; i++)
@@ -169,9 +169,9 @@ void Terrain::MakeNormal()
 	vector<VertexType>& vertices = mesh->GetVertices();
 	const vector<UINT>& indices = mesh->GetIndices();
 	for (UINT i = 0; i < indices.size() / 3; i++) {
-		UINT index0 = indices[i * 3 + 0];
-		UINT index1 = indices[i * 3 + 1];
-		UINT index2 = indices[i * 3 + 2];
+		UINT index0 = indices[(size_t)i * 3 + 0];
+		UINT index1 = indices[(size_t)i * 3 + 1];
+		UINT index2 = indices[(size_t)i * 3 + 2];
 
 		Vector3 v0 = vertices[index0].pos;
 		Vector3 v1 = vertices[index1].pos;

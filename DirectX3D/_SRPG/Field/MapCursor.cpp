@@ -34,6 +34,12 @@ void MapCursor::Update()
 {
 	Move();
 	UpdateWorld();
+
+#if DEBUG_MODE
+	if (KEY_DOWN('9')) {
+		camMoveOn = !camMoveOn;
+	}
+#endif
 }
 
 void MapCursor::UpdateWorld()
@@ -108,6 +114,12 @@ void MapCursor::Move()
 
 void MapCursor::CamMove()
 {
+#if DEBUG_MODE
+	if (!camMoveOn)
+		return;
+#endif // DEBUG_MODE
+
+
 	Vector3 camMove = {};
 	Vector3 cursorScreen = CAM->WorldToScreen(GlobalPos());
 

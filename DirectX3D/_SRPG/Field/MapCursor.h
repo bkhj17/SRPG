@@ -40,5 +40,9 @@ private:
 	SphereCollider* object;
 
 	GridedTerrain* terrain = nullptr;
+
+#if DEBUG_MODE
+	bool camMoveOn = true;
+#endif
 };
 

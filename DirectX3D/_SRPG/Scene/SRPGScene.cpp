@@ -85,6 +85,20 @@ void SRPGScene::Start()
 
 	character = (Character*)CharacterManager::Get()->Spawn("Enemy4", Character::Team::ENEMY, terrain, 6, 9);
 	character->SetWeapon(WeaponManager::Get()->Pop("Sword"));
+	
+	/*
+	CharacterManager::Get()->Spawn("Box", Character::Team::NONE, terrain, 3, 4);
+	CharacterManager::Get()->Spawn("Box", Character::Team::NONE, terrain, 4, 3);
+	CharacterManager::Get()->Spawn("Box", Character::Team::NONE, terrain, 5, 5);
+	CharacterManager::Get()->Spawn("Box", Character::Team::NONE, terrain, 6, 6);
+
+	Character* character = (Character*)CharacterManager::Get()->Spawn("Soldier1", Character::Team::PLAYER, terrain, 4, 5);
+	character->SetWeapon(WeaponManager::Get()->Pop("Axe"));
+
+	character = (Character*)CharacterManager::Get()->Spawn("Enemy1", Character::Team::ENEMY, terrain, 5, 8);
+	character->SetWeapon(WeaponManager::Get()->Pop("Sword"));
+	*/
+
 	//커서 초기 위치
 	mapCursor->SetPosCoord(5, 6, true);
 

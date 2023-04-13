@@ -31,6 +31,9 @@ void SRPGObject::PostRender()
 	if (!Active())
 		return;
 
+	if (!CAM->ContainSphere(GlobalPos(), 10.0f))
+		return;
+
 	hpBar->Render();
 }
 
@@ -44,6 +47,14 @@ void SRPGObject::SetDir(Vector3 dir)
 {
 	this->dir = dir.GetNormalized();
 	Rot().y = atan2f(dir.x, dir.z) + XM_PI;
+}
+
+void SRPGObject::SetMovePath(vector<Vector3>& path)
+{
+	curPos = originPos;
+	lerpValue = 0.0f;
+	movePath.resize(path.size());
+	copy(path.begin(), path.end(), movePath.begin());
 }
 
 void SRPGObject::CancelMove()
@@ -69,12 +80,12 @@ void SRPGObject::Move()
 		return;
 
 	lerpValue += DELTA * moveSpeed;
-	Pos() = Lerp(Pos(), movePath.back(), lerpValue);
+	Pos() = Lerp(curPos, movePath.back(), lerpValue);
 
 	Vector3 velocity = movePath.back() - Pos();
 
 	if (velocity.Length() <= 0.1f) {
-		Pos() = movePath.back();
+		curPos = Pos() = movePath.back();
 		movePath.pop_back();
 		lerpValue = 0.0f;
 
@@ -96,9 +107,9 @@ void SRPGObject::AttackHit()
 
 void SRPGObject::Damaged(int damage)
 {
+	SRPGUIManager::Get()->SpawnDamage(Pos(), damage);
 	status.curHp -= damage;
 
-	SRPGUIManager::Get()->SpawnDamage(Pos(), damage);
 }
 
 void SRPGObject::Die()

@@ -65,12 +65,6 @@ bool Character::IsActing()
 	return acting;
 }
 
-void Character::SetMovePath(vector<Vector3>& path)
-{
-	lerpValue = 0.0f;
-	movePath.resize(path.size());
-	copy(path.begin(), path.end(), movePath.begin());
-}
 
 void Character::SetWeapon(Weapon* weapon, int boneNum)
 {

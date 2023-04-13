@@ -190,7 +190,6 @@ void CharacterManager::BattleStart(SRPGObject* offense, SRPGObject* defense)
 	curOffense = offense;
 	curDefense = defense;
 
-
 	//카메라 설정
 }
 
@@ -278,7 +277,7 @@ void CharacterManager::BattleEnd()
 	while(!attacks.empty())
 		attacks.pop();
 
-	//카메라 설정
+	//전투 종료 알림
 	Observer::Get()->ExcuteEvent("BattleEnd");
 	CharacterUnhold();
 }
