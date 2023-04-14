@@ -26,5 +26,6 @@ PixelInput VS(VertexUVNormalTangentBlend input)
 float4 PS(PixelInput input) : SV_TARGET
 {
     float depth = input.pos.z / input.pos.w; //w로 나눈다 == 정규화
+    //
     return float4(depth.xxx, 1);
 }

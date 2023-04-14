@@ -57,7 +57,7 @@ PixelInput VS(VertexUVNormalTangentBlend input)
 Texture2D depthMap : register(t10);
 
 float4 PS(PixelInput input) : SV_TARGET
-{    
+{
     Material material;
     material.normal = NormalMapping(input.tangent,
         input.binormal, input.normal, input.uv);
@@ -71,7 +71,7 @@ float4 PS(PixelInput input) : SV_TARGET
     
     //그림자 처리
     float2 uv = input.clipPos.xy / input.clipPos.w;
-    uv.y = -uv.y;
+    uv.y = -uv.y; //좌표 맞추기
     uv = uv * 0.5f + 0.5f;
     
     if(uv.x < 0.0f || uv.x > 1.0f || uv.y < 0.0f || uv.y > 1.0f)
