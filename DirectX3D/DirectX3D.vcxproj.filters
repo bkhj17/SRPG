@@ -165,9 +165,6 @@
     <ClInclude Include="Framework\State\BlendState.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\MineCraft\MineUI.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Framework\State\DepthStencilState.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -507,12 +504,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Framework\Collision\CapsuleCollider.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\MineCraft\BlockManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\MineCraft\Steve.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Objects\Basic\Quad.cpp">

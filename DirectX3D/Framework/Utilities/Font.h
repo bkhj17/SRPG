@@ -2,10 +2,11 @@
 
 class Font : public Singleton<Font>
 {
-public:
+protected:
+    friend class Singleton;
     Font();
     ~Font();
-
+public:
     void AddColor(string key, float r, float g, float b);
     void AddStyle(string key, wstring font, float size = 20.0f,
         DWRITE_FONT_WEIGHT weight = DWRITE_FONT_WEIGHT_NORMAL,

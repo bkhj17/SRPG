@@ -31,7 +31,7 @@
 
 #define SAFE_RELEASE(r) { if(r) r->Release(); r = nullptr; }
 
-#define DEBUG_MODE 1
+#define DEBUG_MODE 0
 
 #include <windows.h>
 #include <string>

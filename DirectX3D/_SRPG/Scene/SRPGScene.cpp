@@ -51,7 +51,7 @@ SRPGScene::~SRPGScene()
 
 void SRPGScene::Start()
 {
-	/*
+	
 	//장애물 세팅
 	CharacterManager::Get()->Spawn("Box", Character::Team::NONE, terrain, 3, 6);
 	CharacterManager::Get()->Spawn("Box", Character::Team::NONE, terrain, 4, 6);
@@ -86,8 +86,8 @@ void SRPGScene::Start()
 
 	character = (Character*)CharacterManager::Get()->Spawn("Enemy4", Character::Team::ENEMY, terrain, 6, 9);
 	character->SetWeapon(WeaponManager::Get()->Pop("Sword"));
-	*/
 	
+	/*
 	CharacterManager::Get()->Spawn("Box", Character::Team::NONE, terrain, 5, 4);
 
 	Character* character = (Character*)CharacterManager::Get()->Spawn("Soldier1", Character::Team::PLAYER, terrain, 4, 5);
@@ -95,7 +95,7 @@ void SRPGScene::Start()
 
 	character = (Character*)CharacterManager::Get()->Spawn("Enemy1", Character::Team::ENEMY, terrain, 6, 5);
 	character->SetWeapon(WeaponManager::Get()->Pop("Sword"));
-
+	*/
 	//커서 초기 위치
 	mapCursor->SetPosCoord(5, 6, true);
 

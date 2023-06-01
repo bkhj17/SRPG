@@ -4,7 +4,6 @@
 #include "framework.h"
 #include "DirectX3D.h"
 
-
 #include <dxgidebug.h>
 #pragma comment(lib, "dxguid.lib")
 
@@ -44,6 +43,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     {
         return FALSE;
     }
+
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_DIRECTX3D));
 
